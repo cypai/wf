@@ -16,6 +16,18 @@ public class BattleMapCell {
 		this.neighbors = new EnumMap<Direction, BattleMapCell>(Direction.class);
 	}
 	
+	public void setNeighbor(BattleMapCell cell, Direction dir) {
+		this.neighbors.put(dir, cell);
+	}
+	
+	public void setWall(boolean wall, Direction dir) {
+		this.walls.put(dir, wall);
+	}
+	
+	public void setSolid(boolean solid) {
+		this.solid = solid;
+	}
+	
 	public boolean isEmpty() {
 		if (this.solid) {
 			return false;
