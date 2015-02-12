@@ -1,6 +1,7 @@
-package com.pipai.wf.battle;
+package com.pipai.wf.battle.map;
 
 import java.util.EnumMap;
+import com.pipai.wf.battle.Agent;
 
 public class BattleMapCell {
 	
@@ -9,6 +10,7 @@ public class BattleMapCell {
 	private boolean solid;
 	private EnumMap<Direction, Boolean> walls;
 	private EnumMap<Direction, BattleMapCell> neighbors;
+	private Agent agent;
 	
 	public BattleMapCell() {
 		this.solid = false;
@@ -28,11 +30,30 @@ public class BattleMapCell {
 		this.solid = solid;
 	}
 	
+	public void setAgent(Agent agent) {
+		agent.setCell(this);
+		this.agent = agent;
+	}
+	
+	public void removeAgent() {
+		if (this.agent != null) {
+			Agent temp = this.agent;
+			this.agent = null;
+			temp.removeFromCell();
+		}
+	}
+	
+	public Agent getAgent() {
+		return this.agent;
+	}
+	
+	public boolean isSolid() { return this.solid; }
+	public boolean hasAgent() { return this.agent != null; }
+	
 	public boolean isEmpty() {
-		if (this.solid) {
+		if (this.solid || this.agent != null) {
 			return false;
 		}
-		// TODO: check for unit
 		return true;
 	}
 	
