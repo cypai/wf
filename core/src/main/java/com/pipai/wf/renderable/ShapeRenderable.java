@@ -1,0 +1,9 @@
+package com.pipai.wf.renderable;
+
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
+public interface ShapeRenderable {
+	
+	public void renderShape(ShapeRenderer batch);
+	
+}
