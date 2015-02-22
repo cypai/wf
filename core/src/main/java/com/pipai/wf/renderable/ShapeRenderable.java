@@ -4,6 +4,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public interface ShapeRenderable {
 	
-	public void renderShape(ShapeRenderer batch);
+	public void renderShape(ShapeRenderer batch, int width, int height);
 	
 }

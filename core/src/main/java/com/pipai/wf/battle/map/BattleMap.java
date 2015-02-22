@@ -26,7 +26,7 @@ public class BattleMap {
 			this.getCell(pos).setSolid(true);
 		}
 		for (Position pos : mapString.getAgentPositions()) {
-			this.getCell(pos).setAgent(new Agent(this));
+			this.addAgentAtPos(pos);
 		}
 	}
 	
@@ -40,8 +40,9 @@ public class BattleMap {
 		this.cellMap = new HashMap<String, BattleMapCell>();
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
-				BattleMapCell cell = new BattleMapCell();
-				this.cellMap.put(this.coordinatesToKey(new Position(i, j)), cell);
+				Position cellPos = new Position(i, j);
+				BattleMapCell cell = new BattleMapCell(cellPos);
+				this.cellMap.put(this.coordinatesToKey(cellPos), cell);
 				if (i > 0) {
 					BattleMapCell west = this.getCell(new Position(i-1, j));
 					west.setNeighbor(cell, BattleMapCell.Direction.E);
@@ -66,6 +67,12 @@ public class BattleMap {
 	
 	public Agent getAgentAtPos(Position pos) {
 		return this.getCell(pos).getAgent();
+	}
+	
+	public void addAgentAtPos(Position pos) {
+		Agent agent = new Agent(this);
+		this.getCell(pos).setAgent(agent);
+		this.agents.add(agent);
 	}
 	
 	public ArrayList<Agent> getAgents() {

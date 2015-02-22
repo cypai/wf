@@ -11,8 +11,10 @@ public class BattleMapCell {
 	private EnumMap<Direction, Boolean> walls;
 	private EnumMap<Direction, BattleMapCell> neighbors;
 	private Agent agent;
+	private Position position;
 	
-	public BattleMapCell() {
+	public BattleMapCell(Position position) {
+		this.position = position;
 		this.solid = false;
 		this.walls = new EnumMap<Direction, Boolean>(Direction.class);
 		this.neighbors = new EnumMap<Direction, BattleMapCell>(Direction.class);
@@ -31,7 +33,7 @@ public class BattleMapCell {
 	}
 	
 	public void setAgent(Agent agent) {
-		agent.setCell(this);
+		agent.setCell(this, this.position);
 		this.agent = agent;
 	}
 	
