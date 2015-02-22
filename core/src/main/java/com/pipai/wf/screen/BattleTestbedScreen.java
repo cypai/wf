@@ -9,6 +9,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pipai.wf.WFGame;
+import com.pipai.wf.battle.Agent;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.Position;
@@ -30,7 +31,8 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
         this.height = 600;
         this.camera.setToOrtho(false, width, height);
         BattleMap map = new BattleMap(12, 10);
-        map.addAgentAtPos(new Position(1, 1));
+        map.addAgentAtPos(new Position(1, 1), Agent.Team.PLAYER);
+        map.addAgentAtPos(new Position(5, 8), Agent.Team.ENEMY);
         this.gui = new BattleTestGUI(new BattleController(map));
         this.heldKeys = new HashMap<Integer, Boolean>();
         Gdx.input.setInputProcessor(this);
@@ -60,6 +62,12 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
 
         this.camera.update();
 	}
+	
+	private Position resolveScreenPosition(int screenX, int screenY) {
+		int x = (int)this.camera.position.x - this.width/2 + screenX;
+		int y = (int)this.camera.position.y + this.height/2 - screenY;
+		return new Position(x, y);
+	}
 
 	@Override
 	public void show() {
@@ -78,6 +86,8 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
 
 	@Override
 	public void resize(int width, int height) {
+		this.width = width;
+		this.height = height;
 		this.camera.setToOrtho(false, width, height);
 	}
 
@@ -123,7 +133,8 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
+		System.out.println(this.resolveScreenPosition(screenX, screenY));
+		return true;
 	}
 
 	@Override

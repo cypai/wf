@@ -49,11 +49,13 @@ public class BattleTestGUI implements ShapeRenderable {
 	private void drawAgents(ShapeRenderer batch, float gridX, float gridY, BattleMap map) {
 		batch.begin(ShapeType.Filled);
 		for (Agent agent : map.getAgents()) {
-			batch.setColor(0, 0.8f, 0, 1);
+			if (agent.getTeam() == Agent.Team.PLAYER) 
+				batch.setColor(0, 0.8f, 0, 1);
+			else
+				batch.setColor(0.8f, 0, 0, 1);
 			batch.circle(agent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, agent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 		}
 		batch.end();
-		
 	}
 
 }

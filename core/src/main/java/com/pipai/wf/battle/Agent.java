@@ -8,17 +8,22 @@ import com.pipai.wf.battle.map.Position;
 public class Agent {
 	
 	public enum State {NEUTRAL, KO};
+	public enum Team {PLAYER, ENEMY}
 	
+	protected Team team;
 	protected int ap;
 	protected int mobility;
 	protected BattleMap map;
 	protected BattleMapCell containingCell;
 	protected Position position;
 	
-	public Agent(BattleMap map) {
+	public Agent(BattleMap map, Team team) {
 		this.map = map;
+		this.team = team;
 	}
 	
+	public Team getTeam() { return this.team; }
+	public void setTeam(Team team) { this.team = team; }
 	public int getAP() { return this.ap; }
 	public void setAP(int ap) { this.ap = ap; }
 	

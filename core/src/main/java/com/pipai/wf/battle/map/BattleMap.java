@@ -26,7 +26,7 @@ public class BattleMap {
 			this.getCell(pos).setSolid(true);
 		}
 		for (Position pos : mapString.getAgentPositions()) {
-			this.addAgentAtPos(pos);
+			this.addAgentAtPos(pos, Agent.Team.PLAYER);
 		}
 	}
 	
@@ -69,8 +69,8 @@ public class BattleMap {
 		return this.getCell(pos).getAgent();
 	}
 	
-	public void addAgentAtPos(Position pos) {
-		Agent agent = new Agent(this);
+	public void addAgentAtPos(Position pos, Agent.Team team) {
+		Agent agent = new Agent(this, team);
 		this.getCell(pos).setAgent(agent);
 		this.agents.add(agent);
 	}
