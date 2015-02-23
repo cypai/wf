@@ -3,7 +3,7 @@ package com.pipai.wf.battle;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
-import com.pipai.wf.battle.map.Position;
+import com.pipai.wf.battle.map.GridPosition;
 
 public class Agent {
 	
@@ -15,7 +15,7 @@ public class Agent {
 	protected int mobility;
 	protected BattleMap map;
 	protected BattleMapCell containingCell;
-	protected Position position;
+	protected GridPosition position;
 	
 	public Agent(BattleMap map, Team team) {
 		this.map = map;
@@ -27,9 +27,9 @@ public class Agent {
 	public int getAP() { return this.ap; }
 	public void setAP(int ap) { this.ap = ap; }
 	
-	public Position getPosition() { return this.position; }
+	public GridPosition getPosition() { return this.position; }
 	
-	public void setCell(BattleMapCell cell, Position position) {
+	public void setCell(BattleMapCell cell, GridPosition position) {
 		this.containingCell = cell;
 		this.position = position;
 	}

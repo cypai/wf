@@ -15,7 +15,7 @@ public class MapString {
 	private String header;
 	private String map;
 	private int m, n;
-	private ArrayList<Position> solidPosList, agentPosList;
+	private ArrayList<GridPosition> solidPosList, agentPosList;
 	
 	public MapString(String mapString) {
 		this.header = mapString.substring(0, mapString.indexOf("\n"));
@@ -41,7 +41,7 @@ public class MapString {
 		this.map = "";
 		for (int x = 0; x < map.getCols(); x++) {
 			for (int y = 0; y < map.getRows(); y++) {
-				BattleMapCell cell = map.getCell(new Position(x, y));
+				BattleMapCell cell = map.getCell(new GridPosition(x, y));
 				if (cell.isSolid()) {
 					this.map += "s " + Integer.toString(x) + " " + Integer.toString(y) + "\n";
 				} else if (cell.hasAgent()) {
@@ -52,16 +52,16 @@ public class MapString {
 	}
 	
 	private void parseForPositions() {
-		this.solidPosList = new ArrayList<Position>();
-		this.agentPosList = new ArrayList<Position>();
+		this.solidPosList = new ArrayList<GridPosition>();
+		this.agentPosList = new ArrayList<GridPosition>();
 		String lines[] = this.map.split("\n");
 		for (String line : lines) {
 			String params[] = line.split(" ");
 			String type = params[0];
 			if (type.equals("s")) {
-				this.solidPosList.add(new Position(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
+				this.solidPosList.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
 			} else if (type.equals("a")) {
-				this.agentPosList.add(new Position(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
+				this.agentPosList.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
 			}
 		}
 	}
@@ -69,11 +69,11 @@ public class MapString {
 	public int getRows() { return this.m; }
 	public int getCols() { return this.n; }
 	
-	public ArrayList<Position> getSolidPositions() {
+	public ArrayList<GridPosition> getSolidPositions() {
 		return this.solidPosList;
 	}
 	
-	public ArrayList<Position> getAgentPositions() {
+	public ArrayList<GridPosition> getAgentPositions() {
 		return this.agentPosList;
 	}
 	

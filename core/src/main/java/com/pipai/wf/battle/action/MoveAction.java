@@ -2,13 +2,13 @@ package com.pipai.wf.battle.action;
 
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.Agent;
-import com.pipai.wf.battle.map.Position;
+import com.pipai.wf.battle.map.GridPosition;
 
 public class MoveAction extends Action {
 	
-	protected Position newPos;
+	protected GridPosition newPos;
 	
-	public MoveAction(Agent performerAgent, BattleMap map, Position pos) {
+	public MoveAction(Agent performerAgent, BattleMap map, GridPosition pos) {
 		super(performerAgent, map);
 		this.newPos = pos;
 	}

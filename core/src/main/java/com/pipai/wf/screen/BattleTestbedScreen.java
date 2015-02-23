@@ -12,7 +12,7 @@ import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.Agent;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.Position;
+import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.renderable.gui.BattleTestGUI;
 
 public class BattleTestbedScreen implements Screen, InputProcessor {
@@ -31,8 +31,8 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
         this.height = 600;
         this.camera.setToOrtho(false, width, height);
         BattleMap map = new BattleMap(12, 10);
-        map.addAgentAtPos(new Position(1, 1), Agent.Team.PLAYER);
-        map.addAgentAtPos(new Position(5, 8), Agent.Team.ENEMY);
+        map.addAgentAtPos(new GridPosition(1, 1), Agent.Team.PLAYER);
+        map.addAgentAtPos(new GridPosition(5, 8), Agent.Team.ENEMY);
         this.gui = new BattleTestGUI(new BattleController(map));
         this.heldKeys = new HashMap<Integer, Boolean>();
         Gdx.input.setInputProcessor(this);
@@ -63,10 +63,10 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
         this.camera.update();
 	}
 	
-	private Position resolveScreenPosition(int screenX, int screenY) {
+	private GridPosition resolveScreenPosition(int screenX, int screenY) {
 		int x = (int)this.camera.position.x - this.width/2 + screenX;
 		int y = (int)this.camera.position.y + this.height/2 - screenY;
-		return new Position(x, y);
+		return new GridPosition(x, y);
 	}
 
 	@Override

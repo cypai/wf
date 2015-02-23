@@ -21,11 +21,11 @@ public class BattleMap {
 		this.m = mapString.getRows();
 		this.n = mapString.getCols();
 		initializeMap(this.m, this.n);
-		for (Position pos : mapString.getSolidPositions()) {
+		for (GridPosition pos : mapString.getSolidPositions()) {
 			//System.out.println(pos);
 			this.getCell(pos).setSolid(true);
 		}
-		for (Position pos : mapString.getAgentPositions()) {
+		for (GridPosition pos : mapString.getAgentPositions()) {
 			this.addAgentAtPos(pos, Agent.Team.PLAYER);
 		}
 	}
@@ -40,16 +40,16 @@ public class BattleMap {
 		this.cellMap = new HashMap<String, BattleMapCell>();
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
-				Position cellPos = new Position(i, j);
+				GridPosition cellPos = new GridPosition(i, j);
 				BattleMapCell cell = new BattleMapCell(cellPos);
 				this.cellMap.put(this.coordinatesToKey(cellPos), cell);
 				if (i > 0) {
-					BattleMapCell west = this.getCell(new Position(i-1, j));
+					BattleMapCell west = this.getCell(new GridPosition(i-1, j));
 					west.setNeighbor(cell, BattleMapCell.Direction.E);
 					cell.setNeighbor(west, BattleMapCell.Direction.W);
 				}
 				if (j > 0) {
-					BattleMapCell south = this.getCell(new Position(i, j-1));
+					BattleMapCell south = this.getCell(new GridPosition(i, j-1));
 					south.setNeighbor(cell, BattleMapCell.Direction.N);
 					cell.setNeighbor(south, BattleMapCell.Direction.S);
 				}
@@ -57,19 +57,19 @@ public class BattleMap {
 		}
 	}
 	
-	public String coordinatesToKey(Position pos) {
+	public String coordinatesToKey(GridPosition pos) {
 		return pos.toString();
 	}
 	
-	public BattleMapCell getCell(Position pos) {
+	public BattleMapCell getCell(GridPosition pos) {
 		return this.cellMap.get(this.coordinatesToKey(pos));
 	}
 	
-	public Agent getAgentAtPos(Position pos) {
+	public Agent getAgentAtPos(GridPosition pos) {
 		return this.getCell(pos).getAgent();
 	}
 	
-	public void addAgentAtPos(Position pos, Agent.Team team) {
+	public void addAgentAtPos(GridPosition pos, Agent.Team team) {
 		Agent agent = new Agent(this, team);
 		this.getCell(pos).setAgent(agent);
 		this.agents.add(agent);

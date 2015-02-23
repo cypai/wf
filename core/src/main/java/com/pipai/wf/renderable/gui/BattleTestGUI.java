@@ -16,13 +16,20 @@ public class BattleTestGUI implements ShapeRenderable {
 	public static final int SQUARE_SIZE = 40;
 	
 	private BattleController battle;
+	private Agent selectedAgent;
 	
 	public BattleTestGUI(BattleController battle) {
 		this.battle = battle;
 	}
 	
+	public void onClick(int screenX, int screenY, int gameX, int gameY) {
+		for (Agent agent : this.battle.getBattleMap().getAgents()) {
+			
+		}
+	}
+	
 	public void renderShape(ShapeRenderer batch, int width, int height) {
-		BattleMap map = battle.getBattleMap();
+		BattleMap map = this.battle.getBattleMap();
 		
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawAgents(batch, 0, 0, map);
@@ -49,12 +56,16 @@ public class BattleTestGUI implements ShapeRenderable {
 	private void drawAgents(ShapeRenderer batch, float gridX, float gridY, BattleMap map) {
 		batch.begin(ShapeType.Filled);
 		for (Agent agent : map.getAgents()) {
-			if (agent.getTeam() == Agent.Team.PLAYER) 
+			if (agent.getTeam() == Agent.Team.PLAYER) {
 				batch.setColor(0, 0.8f, 0, 1);
-			else
+			} else {
 				batch.setColor(0.8f, 0, 0, 1);
+			}
 			batch.circle(agent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, agent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 		}
+		batch.end();
+		batch.begin(ShapeType.Line);
+		//batch.circle(this.selectedAgent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, this.selectedAgent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 		batch.end();
 	}
 
