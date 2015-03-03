@@ -33,16 +33,11 @@ public class BattleMapCell {
 	}
 	
 	public void setAgent(Agent agent) {
-		agent.setCell(this, this.position);
 		this.agent = agent;
 	}
 	
 	public void removeAgent() {
-		if (this.agent != null) {
-			Agent temp = this.agent;
-			this.agent = null;
-			temp.removeFromCell();
-		}
+		this.agent = null;
 	}
 	
 	public Agent getAgent() {

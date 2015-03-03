@@ -56,8 +56,8 @@ public class BattleTest {
 		BattleMap map = new BattleMap(new MapString(rawMapString));
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
-		MoveAction move = new MoveAction(agent, map, new GridPosition(3, 2));
-		agent.performAction(move);
+		MoveAction move = new MoveAction(agent, new GridPosition(3, 2));
+		move.perform();
 		assertTrue(map.getAgentAtPos(new GridPosition(1, 0)) == null);
 		assertFalse(map.getAgentAtPos(new GridPosition(3, 2)) == null);
 		//Check to see if they are the same object

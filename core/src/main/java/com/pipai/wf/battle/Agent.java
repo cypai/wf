@@ -1,8 +1,6 @@
 package com.pipai.wf.battle;
 
-import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.GridPosition;
 
 public class Agent {
@@ -14,36 +12,27 @@ public class Agent {
 	protected int ap;
 	protected int mobility;
 	protected BattleMap map;
-	protected BattleMapCell containingCell;
 	protected GridPosition position;
 	
-	public Agent(BattleMap map, Team team) {
+	public Agent(BattleMap map, Team team, GridPosition pos) {
 		this.map = map;
 		this.team = team;
+		this.position = pos;
 	}
 	
 	public Team getTeam() { return this.team; }
-	public void setTeam(Team team) { this.team = team; }
+	protected void setTeam(Team team) { this.team = team; }
 	public int getAP() { return this.ap; }
-	public void setAP(int ap) { this.ap = ap; }
+	protected void setAP(int ap) { this.ap = ap; }
 	
 	public GridPosition getPosition() { return this.position; }
 	
-	public void setCell(BattleMapCell cell, GridPosition position) {
-		this.containingCell = cell;
-		this.position = position;
-	}
-	
-	public void removeFromCell() {
-		if (this.containingCell != null) {
-			BattleMapCell temp = this.containingCell;
-			this.containingCell = null;
-			temp.removeAgent();
-		}
-	}
-	
-	public void performAction(Action action) {
-		action.perform();
+	public void move(GridPosition pos) {
+		this.map.getCell(this.position).removeAgent();
+		//Map Call: Generate curve from current to new position for overwatch check
+		//Map Call: Check various points along the curve for overwatch, perform animation
+		this.map.getCell(pos).setAgent(this);
+		this.setAP(this.ap - 1);
 	}
 	
 	

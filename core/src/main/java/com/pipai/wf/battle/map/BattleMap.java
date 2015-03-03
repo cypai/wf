@@ -70,7 +70,7 @@ public class BattleMap {
 	}
 	
 	public void addAgentAtPos(GridPosition pos, Agent.Team team) {
-		Agent agent = new Agent(this, team);
+		Agent agent = new Agent(this, team, pos);
 		this.getCell(pos).setAgent(agent);
 		this.agents.add(agent);
 	}
