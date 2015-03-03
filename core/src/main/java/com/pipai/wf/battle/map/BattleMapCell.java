@@ -11,10 +11,8 @@ public class BattleMapCell {
 	private EnumMap<Direction, Boolean> walls;
 	private EnumMap<Direction, BattleMapCell> neighbors;
 	private Agent agent;
-	private GridPosition position;
 	
-	public BattleMapCell(GridPosition position) {
-		this.position = position;
+	public BattleMapCell() {
 		this.solid = false;
 		this.walls = new EnumMap<Direction, Boolean>(Direction.class);
 		this.neighbors = new EnumMap<Direction, BattleMapCell>(Direction.class);
