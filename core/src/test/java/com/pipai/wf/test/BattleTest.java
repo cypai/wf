@@ -62,10 +62,32 @@ public class BattleTest {
 		assertFalse(map.getAgentAtPos(new GridPosition(3, 2)) == null);
 		//Check to see if they are the same object
 		assertTrue(agent == map.getAgentAtPos(new GridPosition(3, 2)));
-		new MoveAction(agent, new GridPosition(1, 1)).perform();
+		new MoveAction(agent, new GridPosition(0, 1)).perform();
 		assertTrue(map.getAgentAtPos(new GridPosition(1, 0)) == null);
 		assertTrue(map.getAgentAtPos(new GridPosition(3, 2)) == null);
-		assertFalse(map.getAgentAtPos(new GridPosition(1, 1)) == null);
+		assertFalse(map.getAgentAtPos(new GridPosition(0, 1)) == null);
+	}
+	
+	@Test
+	public void testAgentIllegalMoveAction() {
+		/*
+		 * Map looks like:
+		 * 0 1 1 0
+		 * 0 1 0 0
+		 * 0 A 0 0
+		 */
+		String rawMapString = "3 4\n"
+				+ "s 1 1\n"
+				+ "s 1 2\n"
+				+ "s 2 2\n"
+				+ "a 1 0";
+		BattleMap map = new BattleMap(new MapString(rawMapString));
+		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
+		assertFalse(agent == null);
+		MoveAction move = new MoveAction(agent, new GridPosition(1, 1));
+		move.perform();
+		assertTrue(map.getAgentAtPos(new GridPosition(1, 1)) == null);
+		assertFalse(map.getAgentAtPos(new GridPosition(1, 0)) == null);
 	}
 
 }

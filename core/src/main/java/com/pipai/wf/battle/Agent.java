@@ -28,12 +28,16 @@ public class Agent {
 	public GridPosition getPosition() { return this.position; }
 	
 	public void move(GridPosition pos) {
-		this.map.getCell(this.position).removeAgent();
-		//Map Call: Generate curve from current to new position for overwatch check
-		//Map Call: Check various points along the curve for overwatch, perform animation
-		this.map.getCell(pos).setAgent(this);
-		this.position = pos;
-		this.setAP(this.ap - 1);
+		if (this.map.getCell(pos) != null) {
+			if (this.map.getCell(pos).isEmpty()) {
+				this.map.getCell(this.position).removeAgent();
+				//Map Call: Generate curve from current to new position for overwatch check
+				//Map Call: Check various points along the curve for overwatch, perform animation
+				this.map.getCell(pos).setAgent(this);
+				this.position = pos;
+				this.setAP(this.ap - 1);
+			}
+		}
 	}
 	
 	
