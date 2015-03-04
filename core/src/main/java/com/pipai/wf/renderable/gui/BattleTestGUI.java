@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.battle.Agent;
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.map.BattleMap;
+import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.renderable.ShapeRenderable;
 
 /*
@@ -22,10 +24,31 @@ public class BattleTestGUI implements ShapeRenderable {
 		this.battle = battle;
 	}
 	
-	public void onClick(int screenX, int screenY, int gameX, int gameY) {
+	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
-			
+			if (agent.getTeam() == Agent.Team.PLAYER && this.withinCircularBounds(agent.getPosition(), gameX, gameY)) {
+				this.selectedAgent = agent;
+				break;
+			}
 		}
+	}
+	
+	public void onRightClick(int screenX, int screenY, int gameX, int gameY) {
+		if (this.selectedAgent != null) {
+			GridPosition moveSquare = this.gamePosToGridPos(gameX, gameY);
+			MoveAction move = new MoveAction(this.selectedAgent, moveSquare);
+			move.perform();
+		}
+	}
+	
+	private boolean withinCircularBounds(GridPosition pos, int gameX, int gameY) {
+		return (gameX > pos.x * SQUARE_SIZE) && (gameX < (pos.x+1) * SQUARE_SIZE) && (gameY > pos.y * SQUARE_SIZE) && (gameY < (pos.y+1) * SQUARE_SIZE);
+	}
+	
+	private GridPosition gamePosToGridPos(int gameX, int gameY) {
+		int x_offset = gameX % SQUARE_SIZE;
+		int y_offset = gameY % SQUARE_SIZE;
+		return new GridPosition((gameX - x_offset)/SQUARE_SIZE, (gameY - y_offset)/SQUARE_SIZE);
 	}
 	
 	public void renderShape(ShapeRenderer batch, int width, int height) {
@@ -64,9 +87,12 @@ public class BattleTestGUI implements ShapeRenderable {
 			batch.circle(agent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, agent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 		}
 		batch.end();
-		batch.begin(ShapeType.Line);
-		//batch.circle(this.selectedAgent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, this.selectedAgent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
-		batch.end();
+		if (this.selectedAgent != null) {
+			batch.begin(ShapeType.Line);
+			batch.setColor(1, 1, 0, 1);
+			batch.circle(this.selectedAgent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, this.selectedAgent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
+			batch.end();
+		}
 	}
 
 }

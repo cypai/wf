@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -32,7 +33,9 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
         this.camera.setToOrtho(false, width, height);
         BattleMap map = new BattleMap(12, 10);
         map.addAgentAtPos(new GridPosition(1, 1), Agent.Team.PLAYER);
+        map.addAgentAtPos(new GridPosition(4, 1), Agent.Team.PLAYER);
         map.addAgentAtPos(new GridPosition(5, 8), Agent.Team.ENEMY);
+        map.addAgentAtPos(new GridPosition(9, 10), Agent.Team.ENEMY);
         this.gui = new BattleTestGUI(new BattleController(map));
         this.heldKeys = new HashMap<Integer, Boolean>();
         Gdx.input.setInputProcessor(this);
@@ -133,7 +136,12 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		System.out.println(this.resolveScreenPosition(screenX, screenY));
+		GridPosition graphicPos = this.resolveScreenPosition(screenX, screenY);
+		if (button == Buttons.LEFT) {
+			this.gui.onLeftClick(screenX, screenY, graphicPos.x, graphicPos.y);
+		} else if (button == Buttons.RIGHT) {
+			this.gui.onRightClick(screenX, screenY, graphicPos.x, graphicPos.y);
+		}
 		return true;
 	}
 
