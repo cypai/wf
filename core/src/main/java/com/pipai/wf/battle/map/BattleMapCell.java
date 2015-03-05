@@ -11,12 +11,16 @@ public class BattleMapCell {
 	private EnumMap<Direction, Boolean> walls;
 	private EnumMap<Direction, BattleMapCell> neighbors;
 	private Agent agent;
+	private GridPosition position;
 	
-	public BattleMapCell() {
+	public BattleMapCell(GridPosition pos) {
 		this.solid = false;
 		this.walls = new EnumMap<Direction, Boolean>(Direction.class);
 		this.neighbors = new EnumMap<Direction, BattleMapCell>(Direction.class);
+		this.position = pos;
 	}
+	
+	public GridPosition getPosition() { return this.position; }
 	
 	public void setNeighbor(BattleMapCell cell, Direction dir) {
 		this.neighbors.put(dir, cell);

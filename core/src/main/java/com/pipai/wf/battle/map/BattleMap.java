@@ -41,7 +41,7 @@ public class BattleMap {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				GridPosition cellPos = new GridPosition(i, j);
-				BattleMapCell cell = new BattleMapCell();
+				BattleMapCell cell = new BattleMapCell(cellPos);
 				this.cellMap.put(this.coordinatesToKey(cellPos), cell);
 				if (i > 0) {
 					BattleMapCell west = this.getCell(new GridPosition(i-1, j));
