@@ -2,6 +2,9 @@ package com.pipai.wf.battle.map;
 
 import java.util.ArrayList;
 
+import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.exception.BadStateStringException;
+
 /*
  * A MapString is the interface between the string representation of a map and the BattleMap
  * Layout:
@@ -15,23 +18,24 @@ public class MapString {
 	private String header;
 	private String map;
 	private int m, n;
-	private ArrayList<GridPosition> solidPosList, agentPosList;
+	private ArrayList<GridPosition> solidPosList;
+	private ArrayList<AgentState> agentStateList;
 	
-	public MapString(String mapString) {
+	public MapString(String mapString) throws BadStateStringException {
 		this.header = mapString.substring(0, mapString.indexOf("\n"));
 		this.map = mapString.substring(mapString.indexOf("\n") + 1);
 		String dimensions[] = this.header.split(" ");
 		this.m = Integer.parseInt(dimensions[0]);
 		this.n = Integer.parseInt(dimensions[1]);
-		this.parseForPositions();
+		this.parse();
 	}
 	
-	public MapString(int m, int n, String mapOnlyString) {
+	public MapString(int m, int n, String mapOnlyString) throws BadStateStringException {
 		this.header = Integer.toString(m) + " " + Integer.toString(n);
 		this.map = mapOnlyString;
 		this.m = m;
 		this.n = n;
-		this.parseForPositions();
+		this.parse();
 	}
 	
 	public MapString(BattleMap map) {
@@ -51,9 +55,9 @@ public class MapString {
 		}
 	}
 	
-	private void parseForPositions() {
+	private void parse() throws BadStateStringException {
 		this.solidPosList = new ArrayList<GridPosition>();
-		this.agentPosList = new ArrayList<GridPosition>();
+		this.agentStateList = new ArrayList<AgentState>();
 		String lines[] = this.map.split("\n");
 		for (String line : lines) {
 			String params[] = line.split(" ");
@@ -61,7 +65,7 @@ public class MapString {
 			if (type.equals("s")) {
 				this.solidPosList.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
 			} else if (type.equals("a")) {
-				this.agentPosList.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
+				this.agentStateList.add(new AgentState(line));
 			}
 		}
 	}
@@ -73,8 +77,8 @@ public class MapString {
 		return this.solidPosList;
 	}
 	
-	public ArrayList<GridPosition> getAgentPositions() {
-		return this.agentPosList;
+	public ArrayList<AgentState> getAgentStates() {
+		return this.agentStateList;
 	}
 	
 	public String toString() {

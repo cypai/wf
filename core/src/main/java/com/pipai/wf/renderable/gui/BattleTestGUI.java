@@ -38,7 +38,7 @@ public class BattleTestGUI implements Renderable {
 	}
 	
 	private void runPathfinding() {
-		MapGraph graph = new MapGraph(this.battle.getBattleMap(), this.selectedAgent.getPosition(), 3, 1);
+		MapGraph graph = new MapGraph(this.battle.getBattleMap(), this.selectedAgent.getPosition(), this.selectedAgent.getMobility(), 1);
 		this.selectedMapGraph = graph;
 	}
 	

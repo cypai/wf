@@ -9,21 +9,31 @@ public class Agent {
 	public enum Team {PLAYER, ENEMY}
 	
 	protected Team team;
-	protected int ap;
+	protected int maxHP, maxAP, hp, ap;
 	protected int mobility;
 	protected BattleMap map;
 	protected GridPosition position;
 	
-	public Agent(BattleMap map, Team team, GridPosition pos) {
+	public Agent(BattleMap map, AgentState state) {
 		this.map = map;
-		this.team = team;
-		this.position = pos;
+		team = state.team;
+		position = state.position;
+		maxHP = state.maxHP;
+		hp = state.hp;
+		maxAP = state.maxAP;
+		ap = state.ap;
+		mobility = state.mobility;
 	}
 	
 	public Team getTeam() { return this.team; }
-	protected void setTeam(Team team) { this.team = team; }
+	public void setTeam(Team team) { this.team = team; }
 	public int getAP() { return this.ap; }
-	protected void setAP(int ap) { this.ap = ap; }
+	public void setAP(int ap) { this.ap = ap; }
+	public int getMaxAP() { return this.maxAP; }
+	public int getHP() { return this.hp; }
+	public void setHP(int hp) { this.hp = hp; }
+	public int getMaxHP() { return this.maxHP; }
+	public int getMobility() { return this.mobility; }
 	
 	public GridPosition getPosition() { return this.position; }
 	

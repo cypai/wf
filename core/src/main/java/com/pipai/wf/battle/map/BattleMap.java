@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.AgentState;
 
 public class BattleMap {
 	
@@ -25,8 +26,8 @@ public class BattleMap {
 			//System.out.println(pos);
 			this.getCell(pos).setSolid(true);
 		}
-		for (GridPosition pos : mapString.getAgentPositions()) {
-			this.addAgentAtPos(pos, Agent.Team.PLAYER);
+		for (AgentState state : mapString.getAgentStates()) {
+			this.addAgent(state);
 		}
 	}
 	
@@ -69,9 +70,9 @@ public class BattleMap {
 		return this.getCell(pos).getAgent();
 	}
 	
-	public void addAgentAtPos(GridPosition pos, Agent.Team team) {
-		Agent agent = new Agent(this, team, pos);
-		this.getCell(pos).setAgent(agent);
+	public void addAgent(AgentState state) {
+		Agent agent = new Agent(this, state);
+		this.getCell(agent.getPosition()).setAgent(agent);
 		this.agents.add(agent);
 	}
 	

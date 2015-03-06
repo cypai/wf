@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.exception.BadStateStringException;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.MapString;
@@ -23,7 +24,12 @@ public class BattleTest {
 		String rawMapString = "2 3\n"
 				+ "s 1 1\n"
 				+ "s 2 1";
-		BattleMap map = new BattleMap(new MapString(rawMapString));
+		BattleMap map = null;
+		try {
+			map = new BattleMap(new MapString(rawMapString));
+		} catch (BadStateStringException e) {
+			fail(e.getMessage());
+		}
 		//Testing cell solids
 		assertTrue(map.getCell(new GridPosition(0, 0)).isEmpty());
 		assertTrue(map.getCell(new GridPosition(1, 0)).isEmpty());
@@ -53,7 +59,12 @@ public class BattleTest {
 				+ "s 1 2\n"
 				+ "s 2 2\n"
 				+ "a 1 0";
-		BattleMap map = new BattleMap(new MapString(rawMapString));
+		BattleMap map = null;
+		try {
+			map = new BattleMap(new MapString(rawMapString));
+		} catch (BadStateStringException e) {
+			fail(e.getMessage());
+		}
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
 		MoveAction move = new MoveAction(agent, new GridPosition(3, 2));
@@ -81,7 +92,12 @@ public class BattleTest {
 				+ "s 1 2\n"
 				+ "s 2 2\n"
 				+ "a 1 0";
-		BattleMap map = new BattleMap(new MapString(rawMapString));
+		BattleMap map = null;
+		try {
+			map = new BattleMap(new MapString(rawMapString));
+		} catch (BadStateStringException e) {
+			fail(e.getMessage());
+		}
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
 		MoveAction move = new MoveAction(agent, new GridPosition(1, 1));
