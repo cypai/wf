@@ -144,4 +144,9 @@ public class MapGraph {
 		}
 		return pathList;
 	}
+	
+	public boolean canMoveTo(GridPosition pos) {
+		return this.getNode(pos).isVisited();
+	}
+	
 }

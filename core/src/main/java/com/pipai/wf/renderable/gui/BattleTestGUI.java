@@ -1,5 +1,9 @@
 package com.pipai.wf.renderable.gui;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.battle.Agent;
@@ -7,6 +11,7 @@ import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.renderable.ShapeRenderable;
 
 /*
@@ -19,15 +24,22 @@ public class BattleTestGUI implements ShapeRenderable {
 	
 	private BattleController battle;
 	private Agent selectedAgent;
+	private MapGraph selectedMapGraph;
 	
 	public BattleTestGUI(BattleController battle) {
 		this.battle = battle;
+	}
+	
+	private void runPathfinding() {
+		MapGraph graph = new MapGraph(this.battle.getBattleMap(), this.selectedAgent.getPosition(), 3, 1);
+		this.selectedMapGraph = graph;
 	}
 	
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			if (agent.getTeam() == Agent.Team.PLAYER && this.withinCircularBounds(agent.getPosition(), gameX, gameY)) {
 				this.selectedAgent = agent;
+				this.runPathfinding();
 				break;
 			}
 		}
@@ -36,8 +48,11 @@ public class BattleTestGUI implements ShapeRenderable {
 	public void onRightClick(int screenX, int screenY, int gameX, int gameY) {
 		if (this.selectedAgent != null) {
 			GridPosition moveSquare = this.gamePosToGridPos(gameX, gameY);
-			MoveAction move = new MoveAction(this.selectedAgent, moveSquare);
-			move.perform();
+			if (this.selectedMapGraph.canMoveTo(moveSquare)) {
+				MoveAction move = new MoveAction(this.selectedAgent, moveSquare);
+				move.perform();
+				this.runPathfinding();
+			}
 		}
 	}
 	
@@ -55,6 +70,7 @@ public class BattleTestGUI implements ShapeRenderable {
 		BattleMap map = this.battle.getBattleMap();
 		
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
+		this.drawMovableTiles(batch);
 		this.drawAgents(batch, 0, 0, map);
 	}
 	
@@ -92,6 +108,25 @@ public class BattleTestGUI implements ShapeRenderable {
 			batch.setColor(1, 1, 0, 1);
 			batch.circle(this.selectedAgent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, this.selectedAgent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 			batch.end();
+		}
+	}
+	
+	private void shadeSquare(ShapeRenderer batch, GridPosition pos, float r, float g, float b, float alpha) {
+		Gdx.gl.glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		batch.begin(ShapeType.Filled);
+		batch.setColor(r, g, b, alpha);
+		batch.rect(pos.x * SQUARE_SIZE, pos.y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+		batch.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
+	}
+	
+	private void drawMovableTiles(ShapeRenderer batch) {
+		if (this.selectedMapGraph != null) {
+			ArrayList<GridPosition> tileList = this.selectedMapGraph.getMovableCellPositions();
+			for (GridPosition pos : tileList) {
+				this.shadeSquare(batch, pos, 0.5f, 0.5f, 1, 0.5f);
+			}
 		}
 	}
 
