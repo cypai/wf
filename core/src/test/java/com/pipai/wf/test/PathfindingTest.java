@@ -76,7 +76,6 @@ public class PathfindingTest {
 		req.add(new GridPosition(2, 1));
 		req.add(new GridPosition(3, 1));
 		req.add(new GridPosition(3, 2));
-		System.out.println(movableList);
 		for (GridPosition r : req) {
 			assertTrue("Does not contain " + r, movableList.contains(r));
 		}
@@ -132,5 +131,30 @@ public class PathfindingTest {
 		LinkedList<GridPosition> path = graph.getPath(end);
 		assertTrue("Invalid path", checkPathingList(path, start, end));
 		assertTrue("Path too long: Expected 1 but got " + String.valueOf(path.size()), path.size() == 1);
+	}
+	
+	@Test
+	public void testCannotMoveToNonEmpty() {
+		String rawMapString = "4 4\n"
+				+ "s 3 0\n"
+				+ "a 1 1\n"
+				+ "a 2 1\n";
+		BattleMap map = new BattleMap(new MapString(rawMapString));
+		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1);
+		assertFalse("Failed to return false on moving to solid tile", graph.canMoveTo(new GridPosition(3, 0)));
+		assertFalse("Failed to return false on moving to tile with other agent", graph.canMoveTo(new GridPosition(2, 1)));
+	}
+	
+	@Test
+	public void testIllegalSquares() {
+		String rawMapString = "4 4\n"
+				+ "s 3 0\n"
+				+ "a 1 1\n"
+				+ "a 2 1\n";
+		BattleMap map = new BattleMap(new MapString(rawMapString));
+		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1);
+		GridPosition illegal = new GridPosition(4, 1);
+		assertFalse("Failed to return false on moving to tile outside map", graph.canMoveTo(illegal));
+		assertTrue("Failed to return null on path to tile outside map", graph.getPath(illegal) == null);
 	}
 }

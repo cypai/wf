@@ -141,7 +141,7 @@ public class MapGraph {
 	}
 	
 	public LinkedList<GridPosition> getPath(GridPosition destinationPos) {
-		if (!this.getNode(destinationPos).isVisited()) { return null; }
+		if (this.getNode(destinationPos) == null || !this.getNode(destinationPos).isVisited()) { return null; }
 		LinkedList<GridPosition> pathList = new LinkedList<GridPosition>();
 		Node path = this.getNode(destinationPos);
 		while (path != null) {
@@ -152,7 +152,7 @@ public class MapGraph {
 	}
 	
 	public boolean canMoveTo(GridPosition pos) {
-		return this.getNode(pos).isVisited();
+		return this.getNode(pos) != null && this.getNode(pos).isVisited();
 	}
 	
 }
