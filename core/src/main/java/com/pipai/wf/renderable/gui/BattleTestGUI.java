@@ -3,6 +3,7 @@ package com.pipai.wf.renderable.gui;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -21,10 +22,13 @@ import com.pipai.wf.renderable.ShapeRenderable;
 public class BattleTestGUI implements ShapeRenderable {
     
 	public static final int SQUARE_SIZE = 40;
+	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
+	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 	
 	private BattleController battle;
 	private Agent selectedAgent;
 	private MapGraph selectedMapGraph;
+	
 	
 	public BattleTestGUI(BattleController battle) {
 		this.battle = battle;
@@ -118,17 +122,17 @@ public class BattleTestGUI implements ShapeRenderable {
 			for (int y=0; y<map.getRows(); y++) {
 				GridPosition pos = new GridPosition(x, y);
 				if (map.getCell(pos).isSolid()) {
-					this.shadeSquare(batch, pos, 0, 0, 0, 1f);
+					this.shadeSquare(batch, pos, SOLID_COLOR);
 				}
 			}
 		}
 	}
 	
-	private void shadeSquare(ShapeRenderer batch, GridPosition pos, float r, float g, float b, float alpha) {
+	private void shadeSquare(ShapeRenderer batch, GridPosition pos, Color color) {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.begin(ShapeType.Filled);
-		batch.setColor(r, g, b, alpha);
+		batch.setColor(color);
 		batch.rect(pos.x * SQUARE_SIZE, pos.y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
 		batch.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -138,7 +142,7 @@ public class BattleTestGUI implements ShapeRenderable {
 		if (this.selectedMapGraph != null) {
 			ArrayList<GridPosition> tileList = this.selectedMapGraph.getMovableCellPositions();
 			for (GridPosition pos : tileList) {
-				this.shadeSquare(batch, pos, 0.5f, 0.5f, 1, 0.5f);
+				this.shadeSquare(batch, pos, MOVE_COLOR);
 			}
 		}
 	}
