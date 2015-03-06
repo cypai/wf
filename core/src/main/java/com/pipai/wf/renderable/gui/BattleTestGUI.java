@@ -70,6 +70,7 @@ public class BattleTestGUI implements ShapeRenderable {
 		BattleMap map = this.battle.getBattleMap();
 		
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
+		this.drawWalls(batch, map);
 		this.drawMovableTiles(batch);
 		this.drawAgents(batch, 0, 0, map);
 	}
@@ -108,6 +109,18 @@ public class BattleTestGUI implements ShapeRenderable {
 			batch.setColor(1, 1, 0, 1);
 			batch.circle(this.selectedAgent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, this.selectedAgent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 			batch.end();
+		}
+	}
+	
+	private void drawWalls(ShapeRenderer batch, BattleMap map) {
+		// Needs optimization later
+		for (int x=0; x<map.getCols(); x++) {
+			for (int y=0; y<map.getRows(); y++) {
+				GridPosition pos = new GridPosition(x, y);
+				if (map.getCell(pos).isSolid()) {
+					this.shadeSquare(batch, pos, 0, 0, 0, 1f);
+				}
+			}
 		}
 	}
 	

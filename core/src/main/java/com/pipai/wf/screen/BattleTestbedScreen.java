@@ -36,6 +36,7 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
         map.addAgentAtPos(new GridPosition(4, 1), Agent.Team.PLAYER);
         map.addAgentAtPos(new GridPosition(5, 8), Agent.Team.ENEMY);
         map.addAgentAtPos(new GridPosition(9, 10), Agent.Team.ENEMY);
+        map.getCell(new GridPosition(5, 5)).setSolid(true);
         this.gui = new BattleTestGUI(new BattleController(map));
         this.heldKeys = new HashMap<Integer, Boolean>();
         Gdx.input.setInputProcessor(this);
