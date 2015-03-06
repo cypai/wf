@@ -14,6 +14,7 @@ import com.pipai.wf.battle.Agent;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.gui.BattleTestGUI;
 
 public class BattleTestbedScreen implements Screen, InputProcessor {
@@ -22,6 +23,7 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
 	private OrthographicCamera camera;
 	private BattleTestGUI gui;
 	private int width, height;
+	private BatchHelper batch;
 	
 	private HashMap<Integer, Boolean> heldKeys;
 	
@@ -40,6 +42,7 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
         this.gui = new BattleTestGUI(new BattleController(map));
         this.heldKeys = new HashMap<Integer, Boolean>();
         Gdx.input.setInputProcessor(this);
+        this.batch = new BatchHelper(game.sprBatch, game.shapeBatch, game.font);
 	}
 	
 	private boolean checkKey(int key) {
@@ -84,8 +87,9 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         this.updateCamera();
-        this.game.batch.setProjectionMatrix(camera.combined);
-        this.gui.renderShape(this.game.batch, this.width, this.height);
+        this.game.shapeBatch.setProjectionMatrix(camera.combined);
+        this.game.sprBatch.setProjectionMatrix(camera.combined);
+        this.gui.render(this.batch, this.width, this.height);
 	}
 
 	@Override

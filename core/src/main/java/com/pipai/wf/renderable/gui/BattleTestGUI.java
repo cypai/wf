@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.battle.Agent;
@@ -13,13 +14,14 @@ import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
-import com.pipai.wf.renderable.ShapeRenderable;
+import com.pipai.wf.renderable.BatchHelper;
+import com.pipai.wf.renderable.Renderable;
 
 /*
  * Simple 2D GUI for rendering a BattleMap
  */
 
-public class BattleTestGUI implements ShapeRenderable {
+public class BattleTestGUI implements Renderable {
     
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
@@ -70,7 +72,11 @@ public class BattleTestGUI implements ShapeRenderable {
 		return new GridPosition((gameX - x_offset)/SQUARE_SIZE, (gameY - y_offset)/SQUARE_SIZE);
 	}
 	
-	public void renderShape(ShapeRenderer batch, int width, int height) {
+	public void render(BatchHelper batch, int width, int height) {
+		renderShape(batch.getShapeRenderer(), width, height);
+	}
+	
+	private void renderShape(ShapeRenderer batch, int width, int height) {
 		BattleMap map = this.battle.getBattleMap();
 		
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
@@ -110,7 +116,7 @@ public class BattleTestGUI implements ShapeRenderable {
 		batch.end();
 		if (this.selectedAgent != null) {
 			batch.begin(ShapeType.Line);
-			batch.setColor(1, 1, 0, 1);
+			batch.setColor(0.8f, 0.8f, 0, 1);
 			batch.circle(this.selectedAgent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, this.selectedAgent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 			batch.end();
 		}
