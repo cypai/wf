@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -73,16 +74,27 @@ public class BattleTestGUI implements Renderable {
 	}
 	
 	public void render(BatchHelper batch, int width, int height) {
-		renderShape(batch.getShapeRenderer(), width, height);
+		renderShape(batch.getShapeRenderer());
+		renderText(batch.getSpriteBatch(), batch.getFont());
 	}
 	
-	private void renderShape(ShapeRenderer batch, int width, int height) {
+	private void renderText(SpriteBatch batch, BitmapFont font) {
 		BattleMap map = this.battle.getBattleMap();
-		
+		batch.begin();
+		font.setColor(Color.BLACK);
+		for (Agent agent : map.getAgents()) {
+			GridPosition pos = agent.getPosition();
+			font.draw(batch, String.valueOf(agent.getAP()), pos.x*SQUARE_SIZE, (pos.y+1)*SQUARE_SIZE);
+		}
+		batch.end();
+	}
+	
+	private void renderShape(ShapeRenderer batch) {
+		BattleMap map = this.battle.getBattleMap();
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
-		this.drawWalls(batch, map);
+		this.drawWalls(batch);
 		this.drawMovableTiles(batch);
-		this.drawAgents(batch, 0, 0, map);
+		this.drawAgents(batch, 0, 0);
 	}
 	
 	private void drawGrid(ShapeRenderer batch, float x, float y, float width, float height, int numCols, int numRows) {
@@ -103,9 +115,9 @@ public class BattleTestGUI implements Renderable {
 		batch.end();
 	}
 	
-	private void drawAgents(ShapeRenderer batch, float gridX, float gridY, BattleMap map) {
+	private void drawAgents(ShapeRenderer batch, float gridX, float gridY) {
 		batch.begin(ShapeType.Filled);
-		for (Agent agent : map.getAgents()) {
+		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			if (agent.getTeam() == Agent.Team.PLAYER) {
 				batch.setColor(0, 0.8f, 0, 1);
 			} else {
@@ -122,7 +134,8 @@ public class BattleTestGUI implements Renderable {
 		}
 	}
 	
-	private void drawWalls(ShapeRenderer batch, BattleMap map) {
+	private void drawWalls(ShapeRenderer batch) {
+		BattleMap map = this.battle.getBattleMap();
 		// Needs optimization later
 		for (int x=0; x<map.getCols(); x++) {
 			for (int y=0; y<map.getRows(); y++) {
