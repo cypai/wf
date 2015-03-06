@@ -1,4 +1,4 @@
-package com.pipai.wf.battle;
+package com.pipai.wf.battle.agent;
 
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;

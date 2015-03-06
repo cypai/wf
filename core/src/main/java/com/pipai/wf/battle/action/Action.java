@@ -1,6 +1,6 @@
 package com.pipai.wf.battle.action;
 
-import com.pipai.wf.battle.Agent;
+import com.pipai.wf.battle.agent.Agent;
 
 public abstract class Action {
 	

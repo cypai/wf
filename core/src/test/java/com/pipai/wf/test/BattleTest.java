@@ -5,11 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.pipai.wf.battle.action.MoveAction;
+import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.Agent;
 
 public class BattleTest {
 

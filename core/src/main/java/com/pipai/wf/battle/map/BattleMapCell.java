@@ -1,7 +1,8 @@
 package com.pipai.wf.battle.map;
 
 import java.util.EnumMap;
-import com.pipai.wf.battle.Agent;
+
+import com.pipai.wf.battle.agent.Agent;
 
 public class BattleMapCell {
 	

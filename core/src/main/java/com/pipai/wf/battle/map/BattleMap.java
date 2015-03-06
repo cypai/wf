@@ -3,7 +3,7 @@ package com.pipai.wf.battle.map;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-import com.pipai.wf.battle.Agent;
+import com.pipai.wf.battle.agent.Agent;
 
 public class BattleMap {
 	
