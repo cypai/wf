@@ -65,29 +65,33 @@ public class MapGraph {
 	}
 	
 	public MapGraph(BattleMap map, GridPosition start, int mobility, int jumpHeight) {
-		initialize(map.getCols(), map.getRows(), start);
+		initialize(map, start);
 		runDijkstra(mobility, jumpHeight);
 	}
 	
-	private void initialize(int width, int height, GridPosition rootPos) {
+	private void initialize(BattleMap map, GridPosition rootPos) {
+		int width = map.getCols();
+		int height = map.getRows();
 		this.nodeMap = new HashMap<String, Node>();
 		for (int x=0; x<width; x++) {
 			for (int y=0; y<height; y++) {
 				GridPosition cellPos = new GridPosition(x, y);
-				Node cell = new Node(cellPos);
-				this.nodeMap.put(cellPos.toString(), cell);
-				if (x > 0) {
+				if (map.getCell(cellPos).isEmpty() || cellPos.equals(rootPos)) {
+					Node cell = new Node(cellPos);
+					this.nodeMap.put(cellPos.toString(), cell);
 					Node west = this.getNode(new GridPosition(x-1, y));
-					west.addEdge(cell);	//Will add height-weights later
-					cell.addEdge(west);
-				}
-				if (y > 0) {
+					if (west != null) {
+						west.addEdge(cell);	//Will add height-weights later
+						cell.addEdge(west);
+					}
 					Node south = this.getNode(new GridPosition(x, y-1));
-					south.addEdge(cell);
-					cell.addEdge(south);
-				}
-				if (rootPos != null && x == rootPos.x && y == rootPos.y) {
-					this.root = cell;
+					if (south != null) {
+						south.addEdge(cell);
+						cell.addEdge(south);
+					}
+					if (rootPos != null && x == rootPos.x && y == rootPos.y) {
+						this.root = cell;
+					}
 				}
 			}
 		}
@@ -102,7 +106,9 @@ public class MapGraph {
 		PriorityQueue<Node> pqueue = new PriorityQueue<Node>(mobility*mobility, new NodeComparator());
 		Node current = this.root;
 		while (current != null) {
-			this.reachableList.add(current.getPosition());
+			if (!current.getPosition().equals(this.root.getPosition())) {
+				this.reachableList.add(current.getPosition());
+			}
 			current.visit();
 			for (Node node : current.getNeighbors()) {
 				if (!node.isVisited() && !node.isAdded()) {

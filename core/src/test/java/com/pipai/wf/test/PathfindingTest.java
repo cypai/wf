@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.battle.map.MapString;
 
 public class PathfindingTest {
 	
@@ -19,7 +20,6 @@ public class PathfindingTest {
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 1, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
-		req.add(new GridPosition(1, 1));
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(1, 0));
 		req.add(new GridPosition(1, 2));
@@ -27,7 +27,7 @@ public class PathfindingTest {
 		for (GridPosition r : req) {
 			assertTrue("Does not contain " + r, movableList.contains(r));
 		}
-		assertTrue(movableList.size() == 5);
+		assertTrue(movableList.size() == req.size());
 	}
 	
 	@Test
@@ -36,7 +36,6 @@ public class PathfindingTest {
 		MapGraph graph = new MapGraph(map, new GridPosition(0, 1), 2, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
-		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(0, 0));
 		req.add(new GridPosition(0, 2));
 		req.add(new GridPosition(0, 3));
@@ -47,7 +46,41 @@ public class PathfindingTest {
 		for (GridPosition r : req) {
 			assertTrue("Does not contain " + r, movableList.contains(r));
 		}
-		assertTrue(movableList.size() == 8);
+		assertTrue(movableList.size() == req.size());
+	}
+	
+	@Test
+	public void testObstacleMovableList() {
+		/*
+		 * Map looks like:
+		 * 0 0 0 0
+		 * 0 1 1 0
+		 * 0 A 0 0
+		 * 0 0 0 1
+		 */
+		String rawMapString = "4 4\n"
+				+ "s 3 0\n"
+				+ "s 1 2\n"
+				+ "s 2 2\n"
+				+ "a 1 1";
+		BattleMap map = new BattleMap(new MapString(rawMapString));
+		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 3, 1);
+		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
+		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		req.add(new GridPosition(0, 0));
+		req.add(new GridPosition(0, 1));
+		req.add(new GridPosition(0, 2));
+		req.add(new GridPosition(0, 3));
+		req.add(new GridPosition(1, 0));
+		req.add(new GridPosition(2, 0));
+		req.add(new GridPosition(2, 1));
+		req.add(new GridPosition(3, 1));
+		req.add(new GridPosition(3, 2));
+		System.out.println(movableList);
+		for (GridPosition r : req) {
+			assertTrue("Does not contain " + r, movableList.contains(r));
+		}
+		assertTrue(movableList.size() == req.size());
 	}
 	
 	/*
