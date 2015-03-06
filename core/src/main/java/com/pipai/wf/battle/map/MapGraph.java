@@ -15,6 +15,7 @@ public class MapGraph {
 	private Node root;
 	private HashMap<String, Node> nodeMap;
 	private ArrayList<GridPosition> reachableList;
+	private boolean DEBUG;
 	
 	private class Node {
 		private GridPosition pos;
@@ -54,17 +55,35 @@ public class MapGraph {
 		public ArrayList<Node> getNeighbors() {
 			return this.edges;
 		}
-		
+
+		public String toString() {
+			String s = "Node: " + this.pos + " Edges [ ";
+			for (Node node : this.edges) {
+				s += "{" + node.getPosition() + " " + String.valueOf(node.isVisited()) + " " + String.valueOf(node.isAdded()) + "} ";
+			}
+			s += "]";
+			return s;
+		}
 	}
 	
 	private class NodeComparator implements Comparator<Node> {
 	    @Override
 	    public int compare(Node x, Node y) {
+	    	if (x.totalCost > y.totalCost) {
+	    		return 1;
+	    	} else if (x.totalCost < y.totalCost) {
+	    		return -1;
+	    	}
 	        return 0;
 	    }
 	}
 	
 	public MapGraph(BattleMap map, GridPosition start, int mobility, int jumpHeight) {
+		this(map, start, mobility, jumpHeight, false);
+	}
+	
+	public MapGraph(BattleMap map, GridPosition start, int mobility, int jumpHeight, boolean debug) {
+		DEBUG = debug;
 		initialize(map, start);
 		runDijkstra(mobility, jumpHeight);
 	}
@@ -110,10 +129,13 @@ public class MapGraph {
 				this.reachableList.add(current.getPosition());
 			}
 			current.visit();
+			if (DEBUG) { System.out.println("Current " + current); }
 			for (Node node : current.getNeighbors()) {
+				if (DEBUG) { System.out.println("Checking " + node.getPosition()); }
 				if (!node.isVisited() && !node.isAdded()) {
 					int totalCost = node.getCost() + current.getTotalCost();
 					if (totalCost <= mobility) {
+						if (DEBUG) { System.out.println("Added " + node.getPosition()); }
 						node.setAdded();
 						node.setTotalCost(totalCost);
 						node.setPath(current);

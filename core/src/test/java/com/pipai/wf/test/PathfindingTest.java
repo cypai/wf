@@ -88,6 +88,24 @@ public class PathfindingTest {
 		assertTrue(movableList.size() == req.size());
 	}
 	
+	@Test
+	public void testFourMobilityMovableList() {
+		BattleMap map = new BattleMap(8, 3);
+		MapGraph graph = new MapGraph(map, new GridPosition(0, 1), 4, 1);
+		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
+		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		System.out.println(movableList);
+		req.add(new GridPosition(0, 0));
+		req.add(new GridPosition(0, 2));
+		req.add(new GridPosition(0, 3));
+		req.add(new GridPosition(0, 4));
+		for (GridPosition r : req) {
+			assertTrue("Does not contain " + r, movableList.contains(r));
+		}
+		//assertTrue(movableList.size() == req.size());
+		System.out.println(movableList.size());
+	}
+	
 	/*
 	 * Checks to see if the list contains a valid path from start to end
 	 */
