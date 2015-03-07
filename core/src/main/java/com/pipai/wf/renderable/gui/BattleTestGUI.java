@@ -1,12 +1,14 @@
 package com.pipai.wf.renderable.gui;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
@@ -30,11 +32,12 @@ public class BattleTestGUI implements Renderable {
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 	
 	private BattleController battle;
-	private Agent selectedAgent;
+	private AgentGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<Renderable> renderables;
 	private ArrayList<LeftClickable> leftClickables;
 	private ArrayList<RightClickable> rightClickables;
+	private boolean animating;
 
 	public static boolean withinGridBounds(GridPosition pos, int gameX, int gameY) {
 		return (gameX > pos.x * SQUARE_SIZE) && (gameX < (pos.x+1) * SQUARE_SIZE) && (gameY > pos.y * SQUARE_SIZE) && (gameY < (pos.y+1) * SQUARE_SIZE);
@@ -46,51 +49,76 @@ public class BattleTestGUI implements Renderable {
 		return new GridPosition((gameX - x_offset)/SQUARE_SIZE, (gameY - y_offset)/SQUARE_SIZE);
 	}
 	
+	public static Vector2 centerOfGridPos(GridPosition pos) {
+		return new Vector2(pos.x*SQUARE_SIZE + SQUARE_SIZE/2, pos.y*SQUARE_SIZE + SQUARE_SIZE/2);
+	}
+	
 	public BattleTestGUI(BattleController battle) {
 		this.battle = battle;
+		this.animating = false;
 		this.renderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable>();
 		this.rightClickables = new ArrayList<RightClickable>();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
-			AgentGUIObject a = new AgentGUIObject(this, agent);
+			GridPosition pos = agent.getPosition();
+			AgentGUIObject a = new AgentGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2);
 			this.renderables.add(a);
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
 		}
 	}
 	
-	public void setSelected(Agent agent) {
+	private void beginAnimation() { animating = true; }
+	public void endAnimation() { animating = false; }
+	
+	public void setSelected(AgentGUIObject agent) {
 		this.selectedAgent = agent;
 		this.runPathfinding();
 	}
 	
 	public void attack(Agent target) {
-		RangeAttackAction atk = new RangeAttackAction(this.selectedAgent, target, new SimpleRangedAttack());
+		RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target, new SimpleRangedAttack());
 		this.battle.performAction(atk);
 	}
 	
 	public void updatePaths() { runPathfinding(); }
 	
 	private void runPathfinding() {
-		MapGraph graph = new MapGraph(this.battle.getBattleMap(), this.selectedAgent.getPosition(), this.selectedAgent.getMobility(), 1);
+		MapGraph graph = new MapGraph(this.battle.getBattleMap(), selectedAgent.getAgent().getPosition(), selectedAgent.getAgent().getMobility(), 1);
 		this.selectedMapGraph = graph;
 	}
 	
+	private LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
+		LinkedList<Vector2> vectorized = new LinkedList<Vector2>();
+		for (GridPosition p : path) {
+			vectorized.add(centerOfGridPos(p));
+		}
+		return vectorized;
+	}
+	
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		for (LeftClickable o : leftClickables) {
-			o.onLeftClick(gameX, gameY);
+		if (!animating) {
+			for (LeftClickable o : leftClickables) {
+				o.onLeftClick(gameX, gameY);
+			}
 		}
 	}
 	
 	public void onRightClick(int screenX, int screenY, int gameX, int gameY) {
-		GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
-		if (this.selectedMapGraph.canMoveTo(clickSquare)) {
-			MoveAction move = new MoveAction(this.selectedAgent, clickSquare);
-			this.battle.performAction(move);
-			this.runPathfinding();
-		}
-		for (RightClickable o : rightClickables) {
-			o.onRightClick(gameX, gameY);
+		if (!animating) {
+			if (this.selectedAgent != null) {
+				GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
+				if (this.selectedMapGraph.canMoveTo(clickSquare)) {
+					MoveAction move = new MoveAction(selectedAgent.getAgent(), clickSquare);
+					this.battle.performAction(move);
+					beginAnimation();
+					selectedAgent.animateMoveSequence(vectorizePath(selectedMapGraph.getPath(clickSquare)));
+					this.runPathfinding();
+				}
+			}
+			for (RightClickable o : rightClickables) {
+				o.onRightClick(gameX, gameY);
+			}
 		}
 	}
 	
@@ -105,7 +133,9 @@ public class BattleTestGUI implements Renderable {
 		BattleMap map = this.battle.getBattleMap();
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawWalls(batch);
-		this.drawMovableTiles(batch);
+		if (!animating) {
+			this.drawMovableTiles(batch);
+		}
 	}
 	
 	private void drawGrid(ShapeRenderer batch, float x, float y, float width, float height, int numCols, int numRows) {
