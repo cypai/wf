@@ -1,5 +1,6 @@
 package com.pipai.wf.battle.agent;
 
+import com.pipai.wf.battle.attack.Attack;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 
@@ -32,6 +33,7 @@ public class Agent {
 	public int getMaxAP() { return this.maxAP; }
 	public int getHP() { return this.hp; }
 	public void setHP(int hp) { this.hp = hp; }
+	public void decrementHP(int amt) { this.setHP(this.getHP() - amt); }
 	public int getMaxHP() { return this.maxHP; }
 	public int getMobility() { return this.mobility; }
 	
@@ -48,6 +50,13 @@ public class Agent {
 				this.setAP(this.ap - 1);
 			}
 		}
+	}
+	
+	public void rangeAttack(Agent other, Attack attack) {
+		if (attack.rollToHit(0)) {
+			other.decrementHP(attack.damageRoll());
+		}
+		this.setAP(0);
 	}
 	
 	
