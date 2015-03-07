@@ -17,7 +17,8 @@ import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
-import com.pipai.wf.guiobject.test.AgentGUIObject;
+import com.pipai.wf.guiobject.test.AgentTestGUIObject;
+import com.pipai.wf.guiobject.test.BulletTestGUIObject;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 
@@ -32,11 +33,11 @@ public class BattleTestGUI implements Renderable {
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 	
 	private BattleController battle;
-	private AgentGUIObject selectedAgent;
+	private AgentTestGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
-	private ArrayList<Renderable> renderables;
-	private ArrayList<LeftClickable> leftClickables;
-	private ArrayList<RightClickable> rightClickables;
+	private ArrayList<Renderable> renderables, renderablesDelBuffer;
+	private ArrayList<LeftClickable> leftClickables, leftClickablesDelBuffer;
+	private ArrayList<RightClickable> rightClickables, rightClickablesDelBuffer;
 	private boolean animating;
 
 	public static boolean withinGridBounds(GridPosition pos, int gameX, int gameY) {
@@ -59,9 +60,12 @@ public class BattleTestGUI implements Renderable {
 		this.renderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable>();
 		this.rightClickables = new ArrayList<RightClickable>();
+		this.renderablesDelBuffer = new ArrayList<Renderable>();
+		this.leftClickablesDelBuffer = new ArrayList<LeftClickable>();
+		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			GridPosition pos = agent.getPosition();
-			AgentGUIObject a = new AgentGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2);
+			AgentTestGUIObject a = new AgentTestGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2);
 			this.renderables.add(a);
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
@@ -71,21 +75,54 @@ public class BattleTestGUI implements Renderable {
 	private void beginAnimation() { animating = true; }
 	public void endAnimation() { animating = false; }
 	
-	public void setSelected(AgentGUIObject agent) {
+	public void setSelected(AgentTestGUIObject agent) {
 		this.selectedAgent = agent;
 		this.runPathfinding();
 	}
 	
-	public void attack(Agent target) {
-		RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target, new SimpleRangedAttack());
-		this.battle.performAction(atk);
+	public void attack(AgentTestGUIObject target) {
+		if (selectedAgent != null) {
+			RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
+			this.battle.performAction(atk);
+			BulletTestGUIObject b = new BulletTestGUIObject(this, selectedAgent.x, selectedAgent.y, target.x, target.y, target);
+			renderables.add(b);
+		}
+	}
+	
+	public void remove(Object o) {
+		if (o instanceof Renderable) {
+			renderablesDelBuffer.add((Renderable)o);
+		}
+		if (o instanceof LeftClickable) {
+			leftClickablesDelBuffer.add((LeftClickable)o);
+		}
+		if (o instanceof RightClickable) {
+			rightClickablesDelBuffer.add((RightClickable)o);
+		}
+	}
+	
+	private void cleanDelBuffers() {
+		for (Renderable o : renderablesDelBuffer) {
+			renderables.remove(o);
+		}
+		for (LeftClickable o : leftClickablesDelBuffer) {
+			leftClickables.remove(o);
+		}
+		for (RightClickable o : rightClickablesDelBuffer) {
+			rightClickables.remove(o);
+		}
+		renderablesDelBuffer.clear();
+		leftClickablesDelBuffer.clear();
+		rightClickablesDelBuffer.clear();
 	}
 	
 	public void updatePaths() { runPathfinding(); }
 	
 	private void runPathfinding() {
-		MapGraph graph = new MapGraph(this.battle.getBattleMap(), selectedAgent.getAgent().getPosition(), selectedAgent.getAgent().getMobility(), 1);
-		this.selectedMapGraph = graph;
+		if (selectedAgent != null) {
+			MapGraph graph = new MapGraph(this.battle.getBattleMap(), selectedAgent.getAgent().getPosition(), selectedAgent.getAgent().getMobility(), 1);
+			this.selectedMapGraph = graph;
+		}
 	}
 	
 	private LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
@@ -127,6 +164,7 @@ public class BattleTestGUI implements Renderable {
 		for (Renderable r : this.renderables) {
 			r.render(batch, width, height);
 		}
+		cleanDelBuffers();
 	}
 	
 	private void renderShape(ShapeRenderer batch) {

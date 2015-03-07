@@ -15,12 +15,12 @@ import com.pipai.wf.renderable.gui.BattleTestGUI;
 import com.pipai.wf.renderable.gui.LeftClickable;
 import com.pipai.wf.renderable.gui.RightClickable;
 
-public class AgentGUIObject implements Renderable, LeftClickable, RightClickable {
+public class AgentTestGUIObject implements Renderable, LeftClickable, RightClickable {
 	
 	private BattleTestGUI gui;
 	private Agent agent;
-	private boolean selected;
-	private float x, y;
+	private boolean selected, ko;
+	public float x, y;
 	
 	//Animation variables
 	private boolean animating;
@@ -28,13 +28,14 @@ public class AgentGUIObject implements Renderable, LeftClickable, RightClickable
 	private Vector2 start, dest;
 	private int t;	//Animation time t counter
 	
-	public AgentGUIObject(BattleTestGUI gui, Agent agent, float x, float y) {
+	public AgentTestGUIObject(BattleTestGUI gui, Agent agent, float x, float y) {
 		this.gui = gui;
 		this.agent = agent;
 		this.selected = false;
 		this.x = x;
 		this.y = y;
 		animating = false;
+		ko = false;
 	}
 	
 	public Agent getAgent() { return this.agent; }
@@ -45,6 +46,10 @@ public class AgentGUIObject implements Renderable, LeftClickable, RightClickable
 	}
 	public void deselect() { selected = false; }
 	public boolean isSelected() { return selected; }
+	
+	public void hit() {
+		if (this.agent.isKO()) { ko = true; }
+	}
 	
 	public void animateMoveSequence(LinkedList<Vector2> seq) {
 		animating = true;
@@ -82,7 +87,7 @@ public class AgentGUIObject implements Renderable, LeftClickable, RightClickable
 		update();
 		int SQUARE_SIZE = BattleTestGUI.SQUARE_SIZE;
 		ShapeRenderer r = batch.getShapeRenderer();
-		if (!agent.isKO()) {
+		if (!ko) {
 			r.begin(ShapeType.Filled);
 			if (agent.getTeam() == Agent.Team.PLAYER) {
 				r.setColor(0, 0.8f, 0, 1);
@@ -116,7 +121,7 @@ public class AgentGUIObject implements Renderable, LeftClickable, RightClickable
 	public void onRightClick(int gameX, int gameY) {
 		if (BattleTestGUI.withinGridBounds(agent.getPosition(), gameX, gameY)) {
 			if (agent.getTeam() == Agent.Team.ENEMY) {
-				gui.attack(agent);
+				gui.attack(this);
 				gui.updatePaths();
 			}
 		}
