@@ -1,6 +1,6 @@
 package com.pipai.wf.renderable.gui;
 
-public class ActionClickable implements Clickable {
+public class ActionClickable implements LeftClickable {
 	
 	protected int screenX, screenY, size;
 	
@@ -10,7 +10,7 @@ public class ActionClickable implements Clickable {
 		this.size = size;
 	}
 	
-	public void onClick(int screenX, int screenY) {
+	public void onLeftClick(int gameX, int gameY) {
 		
 	}
 	

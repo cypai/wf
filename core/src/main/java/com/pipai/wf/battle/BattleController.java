@@ -1,5 +1,6 @@
 package com.pipai.wf.battle;
 
+import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.map.BattleMap;
 
 /*
@@ -27,6 +28,10 @@ public class BattleController {
 	
 	public void endTurn() {
 		this.currentTeam = (this.currentTeam + 1) % this.maxTeams;
+	}
+	
+	public void performAction(Action a) {
+		a.perform();
 	}
 	
 }

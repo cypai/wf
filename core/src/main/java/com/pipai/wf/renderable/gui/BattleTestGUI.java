@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.battle.BattleController;
@@ -17,6 +15,7 @@ import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.guiobject.test.AgentGUIObject;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 
@@ -33,11 +32,44 @@ public class BattleTestGUI implements Renderable {
 	private BattleController battle;
 	private Agent selectedAgent;
 	private MapGraph selectedMapGraph;
+	private ArrayList<Renderable> renderables;
+	private ArrayList<LeftClickable> leftClickables;
+	private ArrayList<RightClickable> rightClickables;
+
+	public static boolean withinGridBounds(GridPosition pos, int gameX, int gameY) {
+		return (gameX > pos.x * SQUARE_SIZE) && (gameX < (pos.x+1) * SQUARE_SIZE) && (gameY > pos.y * SQUARE_SIZE) && (gameY < (pos.y+1) * SQUARE_SIZE);
+	}
 	
+	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
+		int x_offset = gameX % SQUARE_SIZE;
+		int y_offset = gameY % SQUARE_SIZE;
+		return new GridPosition((gameX - x_offset)/SQUARE_SIZE, (gameY - y_offset)/SQUARE_SIZE);
+	}
 	
 	public BattleTestGUI(BattleController battle) {
 		this.battle = battle;
+		this.renderables = new ArrayList<Renderable>();
+		this.leftClickables = new ArrayList<LeftClickable>();
+		this.rightClickables = new ArrayList<RightClickable>();
+		for (Agent agent : this.battle.getBattleMap().getAgents()) {
+			AgentGUIObject a = new AgentGUIObject(this, agent);
+			this.renderables.add(a);
+			this.leftClickables.add(a);
+			this.rightClickables.add(a);
+		}
 	}
+	
+	public void setSelected(Agent agent) {
+		this.selectedAgent = agent;
+		this.runPathfinding();
+	}
+	
+	public void attack(Agent target) {
+		RangeAttackAction atk = new RangeAttackAction(this.selectedAgent, target, new SimpleRangedAttack());
+		this.battle.performAction(atk);
+	}
+	
+	public void updatePaths() { runPathfinding(); }
 	
 	private void runPathfinding() {
 		MapGraph graph = new MapGraph(this.battle.getBattleMap(), this.selectedAgent.getPosition(), this.selectedAgent.getMobility(), 1);
@@ -45,57 +77,28 @@ public class BattleTestGUI implements Renderable {
 	}
 	
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		for (Agent agent : this.battle.getBattleMap().getAgents()) {
-			if (agent.getTeam() == Agent.Team.PLAYER && this.withinCircularBounds(agent.getPosition(), gameX, gameY)) {
-				this.selectedAgent = agent;
-				this.runPathfinding();
-				break;
-			}
+		for (LeftClickable o : leftClickables) {
+			o.onLeftClick(gameX, gameY);
 		}
 	}
 	
 	public void onRightClick(int screenX, int screenY, int gameX, int gameY) {
-		if (this.selectedAgent != null) {
-			GridPosition clickSquare = this.gamePosToGridPos(gameX, gameY);
-			if (this.selectedMapGraph.canMoveTo(clickSquare)) {
-				MoveAction move = new MoveAction(this.selectedAgent, clickSquare);
-				move.perform();
-			} else {
-				Agent other = this.battle.getBattleMap().getAgentAtPos(clickSquare);
-				if (other != null && other.getTeam() == Agent.Team.ENEMY) {
-					RangeAttackAction atk = new RangeAttackAction(this.selectedAgent, other, new SimpleRangedAttack());
-					atk.perform();
-				}
-			}
+		GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
+		if (this.selectedMapGraph.canMoveTo(clickSquare)) {
+			MoveAction move = new MoveAction(this.selectedAgent, clickSquare);
+			this.battle.performAction(move);
 			this.runPathfinding();
 		}
-	}
-	
-	private boolean withinCircularBounds(GridPosition pos, int gameX, int gameY) {
-		return (gameX > pos.x * SQUARE_SIZE) && (gameX < (pos.x+1) * SQUARE_SIZE) && (gameY > pos.y * SQUARE_SIZE) && (gameY < (pos.y+1) * SQUARE_SIZE);
-	}
-	
-	private GridPosition gamePosToGridPos(int gameX, int gameY) {
-		int x_offset = gameX % SQUARE_SIZE;
-		int y_offset = gameY % SQUARE_SIZE;
-		return new GridPosition((gameX - x_offset)/SQUARE_SIZE, (gameY - y_offset)/SQUARE_SIZE);
+		for (RightClickable o : rightClickables) {
+			o.onRightClick(gameX, gameY);
+		}
 	}
 	
 	public void render(BatchHelper batch, int width, int height) {
 		renderShape(batch.getShapeRenderer());
-		renderText(batch.getSpriteBatch(), batch.getFont());
-	}
-	
-	private void renderText(SpriteBatch batch, BitmapFont font) {
-		BattleMap map = this.battle.getBattleMap();
-		batch.begin();
-		font.setColor(Color.BLACK);
-		for (Agent agent : map.getAgents()) {
-			GridPosition pos = agent.getPosition();
-			font.draw(batch, String.valueOf(agent.getAP()), pos.x*SQUARE_SIZE, (pos.y+1)*SQUARE_SIZE);
-			font.draw(batch, String.valueOf(agent.getHP()), pos.x*SQUARE_SIZE, (pos.y+0.5f)*SQUARE_SIZE);
+		for (Renderable r : this.renderables) {
+			r.render(batch, width, height);
 		}
-		batch.end();
 	}
 	
 	private void renderShape(ShapeRenderer batch) {
@@ -103,7 +106,6 @@ public class BattleTestGUI implements Renderable {
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawWalls(batch);
 		this.drawMovableTiles(batch);
-		this.drawAgents(batch, 0, 0);
 	}
 	
 	private void drawGrid(ShapeRenderer batch, float x, float y, float width, float height, int numCols, int numRows) {
@@ -122,27 +124,6 @@ public class BattleTestGUI implements Renderable {
 			batch.line(x, vert_pos, x + width, vert_pos);
 		}
 		batch.end();
-	}
-	
-	private void drawAgents(ShapeRenderer batch, float gridX, float gridY) {
-		batch.begin(ShapeType.Filled);
-		for (Agent agent : this.battle.getBattleMap().getAgents()) {
-			if (!agent.isKO()) {
-				if (agent.getTeam() == Agent.Team.PLAYER) {
-					batch.setColor(0, 0.8f, 0, 1);
-				} else {
-					batch.setColor(0.8f, 0, 0, 1);
-				}
-				batch.circle(agent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, agent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
-			}
-		}
-		batch.end();
-		if (this.selectedAgent != null && !this.selectedAgent.isKO()) {
-			batch.begin(ShapeType.Line);
-			batch.setColor(0.8f, 0.8f, 0, 1);
-			batch.circle(this.selectedAgent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, this.selectedAgent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
-			batch.end();
-		}
 	}
 	
 	private void drawWalls(ShapeRenderer batch) {
