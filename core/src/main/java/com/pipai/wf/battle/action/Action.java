@@ -13,6 +13,9 @@ public abstract class Action {
 	public void perform() {
 	}
 	
+	/*
+	 * Returns the minimum AP required to perform the action
+	 */
 	public abstract int getAPRequired();
 	
 }

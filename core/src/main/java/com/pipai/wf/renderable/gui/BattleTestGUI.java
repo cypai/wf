@@ -11,7 +11,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.MoveAction;
+import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
@@ -54,12 +56,18 @@ public class BattleTestGUI implements Renderable {
 	
 	public void onRightClick(int screenX, int screenY, int gameX, int gameY) {
 		if (this.selectedAgent != null) {
-			GridPosition moveSquare = this.gamePosToGridPos(gameX, gameY);
-			if (this.selectedMapGraph.canMoveTo(moveSquare)) {
-				MoveAction move = new MoveAction(this.selectedAgent, moveSquare);
+			GridPosition clickSquare = this.gamePosToGridPos(gameX, gameY);
+			if (this.selectedMapGraph.canMoveTo(clickSquare)) {
+				MoveAction move = new MoveAction(this.selectedAgent, clickSquare);
 				move.perform();
-				this.runPathfinding();
+			} else {
+				Agent other = this.battle.getBattleMap().getAgentAtPos(clickSquare);
+				if (other != null && other.getTeam() == Agent.Team.ENEMY) {
+					RangeAttackAction atk = new RangeAttackAction(this.selectedAgent, other, new SimpleRangedAttack());
+					atk.perform();
+				}
 			}
+			this.runPathfinding();
 		}
 	}
 	
@@ -85,6 +93,7 @@ public class BattleTestGUI implements Renderable {
 		for (Agent agent : map.getAgents()) {
 			GridPosition pos = agent.getPosition();
 			font.draw(batch, String.valueOf(agent.getAP()), pos.x*SQUARE_SIZE, (pos.y+1)*SQUARE_SIZE);
+			font.draw(batch, String.valueOf(agent.getHP()), pos.x*SQUARE_SIZE, (pos.y+0.5f)*SQUARE_SIZE);
 		}
 		batch.end();
 	}
@@ -118,15 +127,17 @@ public class BattleTestGUI implements Renderable {
 	private void drawAgents(ShapeRenderer batch, float gridX, float gridY) {
 		batch.begin(ShapeType.Filled);
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
-			if (agent.getTeam() == Agent.Team.PLAYER) {
-				batch.setColor(0, 0.8f, 0, 1);
-			} else {
-				batch.setColor(0.8f, 0, 0, 1);
+			if (!agent.isKO()) {
+				if (agent.getTeam() == Agent.Team.PLAYER) {
+					batch.setColor(0, 0.8f, 0, 1);
+				} else {
+					batch.setColor(0.8f, 0, 0, 1);
+				}
+				batch.circle(agent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, agent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 			}
-			batch.circle(agent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, agent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 		}
 		batch.end();
-		if (this.selectedAgent != null) {
+		if (this.selectedAgent != null && !this.selectedAgent.isKO()) {
 			batch.begin(ShapeType.Line);
 			batch.setColor(0.8f, 0.8f, 0, 1);
 			batch.circle(this.selectedAgent.getPosition().x * SQUARE_SIZE + SQUARE_SIZE/2, this.selectedAgent.getPosition().y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);

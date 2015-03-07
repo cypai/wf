@@ -1,5 +1,6 @@
 package com.pipai.wf.battle.map;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 
 import com.pipai.wf.battle.agent.Agent;
@@ -11,6 +12,7 @@ public class BattleMapCell {
 	private boolean solid;
 	private EnumMap<Direction, Boolean> walls;
 	private EnumMap<Direction, BattleMapCell> neighbors;
+	private ArrayList<Agent> inactiveAgents;
 	private Agent agent;
 	private GridPosition position;
 	
@@ -19,6 +21,7 @@ public class BattleMapCell {
 		this.walls = new EnumMap<Direction, Boolean>(Direction.class);
 		this.neighbors = new EnumMap<Direction, BattleMapCell>(Direction.class);
 		this.position = pos;
+		this.inactiveAgents = new ArrayList<Agent>();
 	}
 	
 	public GridPosition getPosition() { return this.position; }
@@ -45,6 +48,11 @@ public class BattleMapCell {
 	
 	public Agent getAgent() {
 		return this.agent;
+	}
+	
+	public void makeAgentInactive() {
+		this.inactiveAgents.add(this.agent);
+		this.agent = null;
 	}
 	
 	public boolean isSolid() { return this.solid; }

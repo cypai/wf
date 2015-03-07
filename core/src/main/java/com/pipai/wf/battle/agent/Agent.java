@@ -12,6 +12,7 @@ public class Agent {
 	protected Team team;
 	protected int maxHP, maxAP, hp, ap;
 	protected int mobility;
+	protected State state;
 	protected BattleMap map;
 	protected GridPosition position;
 	
@@ -32,10 +33,20 @@ public class Agent {
 	public void setAP(int ap) { this.ap = ap; }
 	public int getMaxAP() { return this.maxAP; }
 	public int getHP() { return this.hp; }
-	public void setHP(int hp) { this.hp = hp; }
+	public void setHP(int hp) {
+		this.hp = hp;
+		if (this.hp <= 0) {
+			this.hp = 0;
+			this.state = State.KO;
+			this.map.getCell(this.position).makeAgentInactive();
+		} else {
+			this.state = State.NEUTRAL;
+		}
+	}
 	public void decrementHP(int amt) { this.setHP(this.getHP() - amt); }
 	public int getMaxHP() { return this.maxHP; }
 	public int getMobility() { return this.mobility; }
+	public boolean isKO() { return this.state == State.KO; }
 	
 	public GridPosition getPosition() { return this.position; }
 	

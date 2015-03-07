@@ -23,7 +23,7 @@ public class SimpleRangedAttack extends Attack {
 	}
 	
 	public int damageRoll() {
-		return rng.nextInt(getMaxDamage() - getMinDamage()) + getMinDamage();
+		return rng.nextInt(getMaxDamage() - getMinDamage() + 1) + getMinDamage();
 	}
 	
 	public String description() {
