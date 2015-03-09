@@ -17,6 +17,7 @@ import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
 import com.pipai.wf.guiobject.test.AgentTestGUIObject;
 import com.pipai.wf.guiobject.test.BulletTestGUIObject;
 import com.pipai.wf.renderable.BatchHelper;
@@ -30,13 +31,14 @@ public class BattleTestGUI implements Renderable {
     
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
+	private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 	
 	private BattleController battle;
 	private AgentTestGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
-	private ArrayList<Renderable> renderables, renderablesDelBuffer;
-	private ArrayList<LeftClickable> leftClickables, leftClickablesDelBuffer;
+	private ArrayList<Renderable> renderables, renderablesDelBuffer, overlayRenderables;
+	private ArrayList<LeftClickable> leftClickables, leftClickablesDelBuffer, overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesDelBuffer;
 	private boolean animating;
 
@@ -60,6 +62,8 @@ public class BattleTestGUI implements Renderable {
 		this.renderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable>();
 		this.rightClickables = new ArrayList<RightClickable>();
+		this.overlayRenderables = new ArrayList<Renderable>();
+		this.overlayLeftClickables = new ArrayList<LeftClickable>();
 		this.renderablesDelBuffer = new ArrayList<Renderable>();
 		this.leftClickablesDelBuffer = new ArrayList<LeftClickable>();
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
@@ -70,6 +74,9 @@ public class BattleTestGUI implements Renderable {
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
 		}
+		AttackButtonOverlay atkBtn = new AttackButtonOverlay(this);
+		this.overlayRenderables.add(atkBtn);
+		this.overlayLeftClickables.add(atkBtn);
 	}
 	
 	private void beginAnimation() { animating = true; }
@@ -135,8 +142,11 @@ public class BattleTestGUI implements Renderable {
 	
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
 		if (!animating) {
+			for (LeftClickable o : overlayLeftClickables) {
+				o.onLeftClick(screenX, screenY, gameX, gameY);
+			}
 			for (LeftClickable o : leftClickables) {
-				o.onLeftClick(gameX, gameY);
+				o.onLeftClick(screenX, screenY, gameX, gameY);
 			}
 		}
 	}
@@ -164,7 +174,13 @@ public class BattleTestGUI implements Renderable {
 		for (Renderable r : this.renderables) {
 			r.render(batch, width, height);
 		}
+		for (Renderable r : this.overlayRenderables) {
+			r.render(batch, width, height);
+		}
 		cleanDelBuffers();
+	}
+	
+	public void renderOverlay(BatchHelper batch, int width, int height) {
 	}
 	
 	private void renderShape(ShapeRenderer batch) {

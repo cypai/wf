@@ -112,7 +112,7 @@ public class AgentTestGUIObject implements Renderable, LeftClickable, RightClick
 		}
 	}
 
-	public void onLeftClick(int gameX, int gameY) {
+	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
 		if (this.agent.getTeam() == Agent.Team.PLAYER && BattleTestGUI.withinGridBounds(agent.getPosition(), gameX, gameY)) {
 			this.select();
 		}

@@ -21,7 +21,7 @@ import com.pipai.wf.renderable.gui.BattleTestGUI;
 public class BattleTestbedScreen implements Screen, InputProcessor {
 	
 	private WFGame game;
-	private OrthographicCamera camera;
+	private OrthographicCamera camera, overlayCamera;
 	private BattleTestGUI gui;
 	private int width, height;
 	private BatchHelper batch;
@@ -31,9 +31,11 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
 	public BattleTestbedScreen(WFGame game) {
 		this.game = game;
         this.camera = new OrthographicCamera();
+        this.overlayCamera = new OrthographicCamera();
         this.width = 800;
         this.height = 600;
         this.camera.setToOrtho(false, width, height);
+        this.overlayCamera.setToOrtho(false, width, height);
         BattleMap map = new BattleMap(12, 10);
         map.addAgent(new AgentState(new GridPosition(1, 1), Agent.Team.PLAYER, 5));
         map.addAgent(new AgentState(new GridPosition(4, 1), Agent.Team.PLAYER, 5));
@@ -91,6 +93,9 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
         this.game.shapeBatch.setProjectionMatrix(camera.combined);
         this.game.sprBatch.setProjectionMatrix(camera.combined);
         this.gui.render(this.batch, this.width, this.height);
+        this.game.shapeBatch.setProjectionMatrix(overlayCamera.combined);
+        this.game.sprBatch.setProjectionMatrix(overlayCamera.combined);
+        this.gui.renderOverlay(this.batch, width, height);
 	}
 
 	@Override
@@ -98,6 +103,7 @@ public class BattleTestbedScreen implements Screen, InputProcessor {
 		this.width = width;
 		this.height = height;
 		this.camera.setToOrtho(false, width, height);
+		this.overlayCamera.setToOrtho(false, width, height);
 	}
 
 	@Override
