@@ -3,19 +3,21 @@ package com.pipai.wf.guiobject.overlay;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
-import com.pipai.wf.renderable.gui.BattleTestGUI;
+import com.pipai.wf.renderable.gui.GUI;
 import com.pipai.wf.renderable.gui.LeftClickable;
 
-public class AttackButtonOverlay implements Renderable, LeftClickable {
+public class AttackButtonOverlay extends GUIObject implements Renderable, LeftClickable {
 	
 	private final int SQUARE_SIZE = 30;
-	private BattleTestGUI gui;
+	private GUI gui;
 	
 	private int x, y;
 	
-	public AttackButtonOverlay(BattleTestGUI gui) {
+	public AttackButtonOverlay(GUI gui) {
+		super(gui);
 		this.gui = gui;
 	}
 	
@@ -28,8 +30,8 @@ public class AttackButtonOverlay implements Renderable, LeftClickable {
 		y = 30;
 	}
 
-	public void render(BatchHelper batch, int width, int height) {
-		update(width, height);
+	public void render(BatchHelper batch) {
+		update(gui.getScreenWidth(), gui.getScreenHeight());
 		ShapeRenderer r = batch.getShapeRenderer();
 		r.begin(ShapeType.Filled);
 		r.setColor(new Color(0, 0.5f, 0.8f, 1));

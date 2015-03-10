@@ -4,36 +4,41 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
 import com.pipai.wf.guiobject.test.AgentTestGUIObject;
 import com.pipai.wf.guiobject.test.BulletTestGUIObject;
-import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 
 /*
  * Simple 2D GUI for rendering a BattleMap
  */
 
-public class BattleTestGUI implements Renderable {
+public class BattleTestGUI extends GUI {
     
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
-	private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
+	//private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
-	
+
+	private OrthographicCamera camera, overlayCamera;
 	private BattleController battle;
 	private AgentTestGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
@@ -42,10 +47,6 @@ public class BattleTestGUI implements Renderable {
 	private ArrayList<RightClickable> rightClickables, rightClickablesDelBuffer;
 	private boolean animating;
 
-	public static boolean withinGridBounds(GridPosition pos, int gameX, int gameY) {
-		return (gameX > pos.x * SQUARE_SIZE) && (gameX < (pos.x+1) * SQUARE_SIZE) && (gameY > pos.y * SQUARE_SIZE) && (gameY < (pos.y+1) * SQUARE_SIZE);
-	}
-	
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
 		int x_offset = gameX % SQUARE_SIZE;
 		int y_offset = gameY % SQUARE_SIZE;
@@ -56,8 +57,19 @@ public class BattleTestGUI implements Renderable {
 		return new Vector2(pos.x*SQUARE_SIZE + SQUARE_SIZE/2, pos.y*SQUARE_SIZE + SQUARE_SIZE/2);
 	}
 	
-	public BattleTestGUI(BattleController battle) {
-		this.battle = battle;
+	public BattleTestGUI(WFGame game) {
+		super(game);
+        BattleMap map = new BattleMap(12, 10);
+        map.addAgent(new AgentState(new GridPosition(1, 1), Agent.Team.PLAYER, 5));
+        map.addAgent(new AgentState(new GridPosition(4, 1), Agent.Team.PLAYER, 5));
+        map.addAgent(new AgentState(new GridPosition(5, 8), Agent.Team.ENEMY, 5));
+        map.addAgent(new AgentState(new GridPosition(9, 10), Agent.Team.ENEMY, 5));
+        map.getCell(new GridPosition(5, 5)).setSolid(true);
+        camera = new OrthographicCamera();
+        overlayCamera = new OrthographicCamera();
+        camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
+        overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
+		this.battle = new BattleController(map);
 		this.animating = false;
 		this.renderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable>();
@@ -69,7 +81,7 @@ public class BattleTestGUI implements Renderable {
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			GridPosition pos = agent.getPosition();
-			AgentTestGUIObject a = new AgentTestGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2);
+			AgentTestGUIObject a = new AgentTestGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 			this.renderables.add(a);
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
@@ -84,7 +96,7 @@ public class BattleTestGUI implements Renderable {
 	
 	public void setSelected(AgentTestGUIObject agent) {
 		this.selectedAgent = agent;
-		this.runPathfinding();
+		this.updatePaths();
 	}
 	
 	public void attack(AgentTestGUIObject target) {
@@ -96,7 +108,8 @@ public class BattleTestGUI implements Renderable {
 		}
 	}
 	
-	public void remove(Object o) {
+	@Override
+	public void deleteInstance(GUIObject o) {
 		if (o instanceof Renderable) {
 			renderablesDelBuffer.add((Renderable)o);
 		}
@@ -123,9 +136,7 @@ public class BattleTestGUI implements Renderable {
 		rightClickablesDelBuffer.clear();
 	}
 	
-	public void updatePaths() { runPathfinding(); }
-	
-	private void runPathfinding() {
+	public void updatePaths() {
 		if (selectedAgent != null) {
 			MapGraph graph = new MapGraph(this.battle.getBattleMap(), selectedAgent.getAgent().getPosition(), selectedAgent.getAgent().getMobility(), 1);
 			this.selectedMapGraph = graph;
@@ -139,8 +150,17 @@ public class BattleTestGUI implements Renderable {
 		}
 		return vectorized;
 	}
+
+	private Vector2 screenPosToGraphicPos(int screenX, int screenY) {
+		float x = camera.position.x - this.getScreenWidth()/2 + screenX;
+		float y = camera.position.y - this.getScreenHeight()/2 + screenY;
+		return new Vector2(x, y);
+	}
 	
-	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
+	public void onLeftClick(int screenX, int screenY) {
+		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
+		int gameX = (int)gamePos.x;
+		int gameY = (int)gamePos.y;
 		if (!animating) {
 			for (LeftClickable o : overlayLeftClickables) {
 				o.onLeftClick(screenX, screenY, gameX, gameY);
@@ -151,7 +171,10 @@ public class BattleTestGUI implements Renderable {
 		}
 	}
 	
-	public void onRightClick(int screenX, int screenY, int gameX, int gameY) {
+	public void onRightClick(int screenX, int screenY) {
+		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
+		int gameX = (int)gamePos.x;
+		int gameY = (int)gamePos.y;
 		if (!animating) {
 			if (this.selectedAgent != null) {
 				GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
@@ -160,7 +183,7 @@ public class BattleTestGUI implements Renderable {
 					this.battle.performAction(move);
 					beginAnimation();
 					selectedAgent.animateMoveSequence(vectorizePath(selectedMapGraph.getPath(clickSquare)));
-					this.runPathfinding();
+					this.updatePaths();
 				}
 			}
 			for (RightClickable o : rightClickables) {
@@ -169,18 +192,53 @@ public class BattleTestGUI implements Renderable {
 		}
 	}
 	
-	public void render(BatchHelper batch, int width, int height) {
-		renderShape(batch.getShapeRenderer());
-		for (Renderable r : this.renderables) {
-			r.render(batch, width, height);
+	private void globalUpdate() {
+		if (this.checkKey(Keys.ESCAPE)) {
+			Gdx.app.exit();
 		}
-		for (Renderable r : this.overlayRenderables) {
-			r.render(batch, width, height);
-		}
-		cleanDelBuffers();
+		updateCamera();
 	}
 	
-	public void renderOverlay(BatchHelper batch, int width, int height) {
+	private void updateCamera() {
+		if (this.checkKey(Keys.A)) {
+			this.camera.translate(-3, 0);
+		}
+		if (this.checkKey(Keys.D)) {
+			this.camera.translate(3, 0);
+		}
+		if (this.checkKey(Keys.W)) {
+			this.camera.translate(0, 3);
+		}
+		if (this.checkKey(Keys.S)) {
+			this.camera.translate(0, -3);
+		}
+        this.camera.update();
+	}
+	
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		this.camera.setToOrtho(false, width, height);
+		this.overlayCamera.setToOrtho(false, width, height);
+	}
+	
+	@Override
+	public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		globalUpdate();
+        batch.getSpriteBatch().setProjectionMatrix(camera.combined);
+        batch.getShapeRenderer().setProjectionMatrix(camera.combined);
+		renderShape(batch.getShapeRenderer());
+		for (Renderable r : this.renderables) {
+			r.render(batch);
+		}
+        batch.getSpriteBatch().setProjectionMatrix(overlayCamera.combined);
+        batch.getShapeRenderer().setProjectionMatrix(overlayCamera.combined);
+		for (Renderable r : this.overlayRenderables) {
+			r.render(batch);
+		}
+		cleanDelBuffers();
 	}
 	
 	private void renderShape(ShapeRenderer batch) {

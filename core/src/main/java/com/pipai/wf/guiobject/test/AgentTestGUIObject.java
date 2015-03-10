@@ -9,18 +9,20 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 import com.pipai.wf.renderable.gui.BattleTestGUI;
 import com.pipai.wf.renderable.gui.LeftClickable;
 import com.pipai.wf.renderable.gui.RightClickable;
 
-public class AgentTestGUIObject implements Renderable, LeftClickable, RightClickable {
+public class AgentTestGUIObject extends GUIObject implements Renderable, LeftClickable, RightClickable {
 	
 	private BattleTestGUI gui;
 	private Agent agent;
 	private boolean selected, ko;
 	public float x, y;
+	public int radius;
 	
 	//Animation variables
 	private boolean animating;
@@ -28,12 +30,14 @@ public class AgentTestGUIObject implements Renderable, LeftClickable, RightClick
 	private Vector2 start, dest;
 	private int t;	//Animation time t counter
 	
-	public AgentTestGUIObject(BattleTestGUI gui, Agent agent, float x, float y) {
+	public AgentTestGUIObject(BattleTestGUI gui, Agent agent, float x, float y, int radius) {
+		super(gui);
 		this.gui = gui;
 		this.agent = agent;
 		this.selected = false;
 		this.x = x;
 		this.y = y;
+		this.radius = radius;
 		animating = false;
 		ko = false;
 	}
@@ -83,9 +87,8 @@ public class AgentTestGUIObject implements Renderable, LeftClickable, RightClick
 		}
 	}
 
-	public void render(BatchHelper batch, int width, int height) {
+	public void render(BatchHelper batch) {
 		update();
-		int SQUARE_SIZE = BattleTestGUI.SQUARE_SIZE;
 		ShapeRenderer r = batch.getShapeRenderer();
 		if (!ko) {
 			r.begin(ShapeType.Filled);
@@ -94,12 +97,12 @@ public class AgentTestGUIObject implements Renderable, LeftClickable, RightClick
 			} else {
 				r.setColor(0.8f, 0, 0, 1);
 			}
-			r.circle(x, y, SQUARE_SIZE/2);
+			r.circle(x, y, radius);
 			r.end();
 			if (this.selected) {
 				r.begin(ShapeType.Line);
 				r.setColor(0.8f, 0.8f, 0, 1);
-				r.circle(x, y, SQUARE_SIZE/2);
+				r.circle(x, y, radius);
 				r.end();
 			}
 			SpriteBatch spr = batch.getSpriteBatch();
@@ -111,15 +114,19 @@ public class AgentTestGUIObject implements Renderable, LeftClickable, RightClick
 			spr.end();
 		}
 	}
+	
+	private boolean isWithinCircle(int gameX, int gameY) {
+		return Math.pow(gameX - x, 2.0) + Math.pow(gameY - y, 2.0) < radius*radius;
+	}
 
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		if (this.agent.getTeam() == Agent.Team.PLAYER && BattleTestGUI.withinGridBounds(agent.getPosition(), gameX, gameY)) {
+		if (this.agent.getTeam() == Agent.Team.PLAYER && isWithinCircle(gameX, gameY)) {
 			this.select();
 		}
 	}
 
 	public void onRightClick(int gameX, int gameY) {
-		if (BattleTestGUI.withinGridBounds(agent.getPosition(), gameX, gameY)) {
+		if (isWithinCircle(gameX, gameY)) {
 			if (agent.getTeam() == Agent.Team.ENEMY) {
 				gui.attack(this);
 				gui.updatePaths();

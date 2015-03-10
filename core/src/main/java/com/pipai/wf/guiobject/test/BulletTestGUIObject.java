@@ -4,11 +4,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 import com.pipai.wf.renderable.gui.BattleTestGUI;
 
-public class BulletTestGUIObject implements Renderable {
+public class BulletTestGUIObject extends GUIObject implements Renderable {
 	
 	private BattleTestGUI gui;
 	private float x, y, dest_x, dest_y;
@@ -19,6 +20,7 @@ public class BulletTestGUIObject implements Renderable {
 	private static final int SPEED = 16;
 	
 	public BulletTestGUIObject(BattleTestGUI gui, float x, float y, float dest_x, float dest_y, AgentTestGUIObject target) {
+		super(gui);
 		this.gui = gui;
 		this.x = x;
 		this.y = y;
@@ -41,12 +43,12 @@ public class BulletTestGUIObject implements Renderable {
 		} else if (t == final_t) {
 			x = dest_x;
 			y = dest_y;
-			gui.remove(this);
+			gui.deleteInstance(this);
 			target.hit();
 		}
 	}
 	
-	public void render(BatchHelper batch, int width, int height) {
+	public void render(BatchHelper batch) {
 		update();
 		ShapeRenderer r = batch.getShapeRenderer();
 		r.begin(ShapeType.Filled);
