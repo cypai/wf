@@ -45,7 +45,7 @@ public class BattleTestGUI extends GUI {
 	private ArrayList<Renderable> renderables, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable> leftClickables, leftClickablesDelBuffer, overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesDelBuffer;
-	private boolean animating;
+	private boolean animating, overlayClicked;
 
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
 		int x_offset = gameX % SQUARE_SIZE;
@@ -93,6 +93,7 @@ public class BattleTestGUI extends GUI {
 	
 	private void beginAnimation() { animating = true; }
 	public void endAnimation() { animating = false; }
+	public void setOverlayClickedFlag() { overlayClicked = true; }
 	
 	public void setSelected(AgentTestGUIObject agent) {
 		this.selectedAgent = agent;

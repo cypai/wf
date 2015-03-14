@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.guiobject.GUIObjectUtils;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 import com.pipai.wf.renderable.gui.GUI;
@@ -22,7 +23,9 @@ public class AttackButtonOverlay extends GUIObject implements Renderable, LeftCl
 	}
 	
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		
+		if (GUIObjectUtils.isInBoundingBox(x, y, SQUARE_SIZE, SQUARE_SIZE, gameX, gameY)) {
+			System.out.println("hi");
+		}
 	}
 	
 	private void update(int screenW, int screenH) {

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.guiobject.GUIObjectUtils;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 import com.pipai.wf.renderable.gui.BattleTestGUI;
@@ -114,19 +115,15 @@ public class AgentTestGUIObject extends GUIObject implements Renderable, LeftCli
 			spr.end();
 		}
 	}
-	
-	private boolean isWithinCircle(int gameX, int gameY) {
-		return Math.pow(gameX - x, 2.0) + Math.pow(gameY - y, 2.0) < radius*radius;
-	}
 
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		if (this.agent.getTeam() == Agent.Team.PLAYER && isWithinCircle(gameX, gameY)) {
+		if (this.agent.getTeam() == Agent.Team.PLAYER && GUIObjectUtils.isInCircle(x, y, radius, gameX, gameY)) {
 			this.select();
 		}
 	}
 
 	public void onRightClick(int gameX, int gameY) {
-		if (isWithinCircle(gameX, gameY)) {
+		if (GUIObjectUtils.isInCircle(x, y, radius, gameX, gameY)) {
 			if (agent.getTeam() == Agent.Team.ENEMY) {
 				gui.attack(this);
 				gui.updatePaths();
