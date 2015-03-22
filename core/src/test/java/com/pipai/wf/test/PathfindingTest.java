@@ -94,7 +94,6 @@ public class PathfindingTest {
 		MapGraph graph = new MapGraph(map, new GridPosition(0, 1), 4, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
-		System.out.println(movableList);
 		req.add(new GridPosition(0, 0));
 		req.add(new GridPosition(0, 2));
 		req.add(new GridPosition(0, 3));

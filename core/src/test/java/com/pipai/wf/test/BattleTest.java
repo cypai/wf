@@ -2,10 +2,15 @@ package com.pipai.wf.test;
 
 import static org.junit.Assert.*;
 
+import java.util.LinkedList;
+
 import org.junit.Test;
 
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.Agent.State;
+import com.pipai.wf.battle.agent.Agent.Team;
+import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.exception.BadStateStringException;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
@@ -67,20 +72,29 @@ public class BattleTest {
 		}
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
-		MoveAction move = new MoveAction(agent, new GridPosition(3, 2));
+		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		path.add(agent.getPosition());
+		path.add(new GridPosition(2, 0));
+		MoveAction move = new MoveAction(agent, path);
 		move.perform();
 		assertTrue(map.getAgentAtPos(new GridPosition(1, 0)) == null);
-		assertFalse(map.getAgentAtPos(new GridPosition(3, 2)) == null);
+		assertFalse(map.getAgentAtPos(new GridPosition(2, 0)) == null);
 		//Check to see if they are the same object
-		assertTrue(agent == map.getAgentAtPos(new GridPosition(3, 2)));
-		new MoveAction(agent, new GridPosition(0, 1)).perform();
+		assertTrue(agent == map.getAgentAtPos(new GridPosition(2, 0)));
+		LinkedList<GridPosition> path2 = new LinkedList<GridPosition>();
+		path2.add(agent.getPosition());
+		path2.add(new GridPosition(1, 0));
+		path2.add(new GridPosition(0, 0));
+		path2.add(new GridPosition(0, 1));
+		MoveAction move2 = new MoveAction(agent, path2);
+		move2.perform();
 		assertTrue(map.getAgentAtPos(new GridPosition(1, 0)) == null);
-		assertTrue(map.getAgentAtPos(new GridPosition(3, 2)) == null);
+		assertTrue(map.getAgentAtPos(new GridPosition(2, 0)) == null);
 		assertFalse(map.getAgentAtPos(new GridPosition(0, 1)) == null);
 	}
 	
 	@Test
-	public void testAgentIllegalMoveAction() {
+	public void testAgentIllegalDestinationMoveAction() {
 		/*
 		 * Map looks like:
 		 * 0 1 1 0
@@ -100,10 +114,35 @@ public class BattleTest {
 		}
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
-		MoveAction move = new MoveAction(agent, new GridPosition(1, 1));
+		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		path.add(agent.getPosition());
+		path.add(new GridPosition(1, 1));
+		MoveAction move = new MoveAction(agent, path);
 		move.perform();
 		assertTrue(map.getAgentAtPos(new GridPosition(1, 1)) == null);
 		assertFalse(map.getAgentAtPos(new GridPosition(1, 0)) == null);
 	}
+	
+//	@Test
+//	public void testOverwatchActivationOnMove() {
+//		/*
+//		 * Map looks like:
+//		 * 0 1 1 O
+//		 * 0 1 0 0
+//		 * 0 A 0 0
+//		 */
+//		String rawMapString = "3 4\n"
+//				+ "s 1 1\n"
+//				+ "s 1 2\n"
+//				+ "s 2 2";
+//		BattleMap map = null;
+//		try {
+//			map = new BattleMap(new MapString(rawMapString));
+//		} catch (BadStateStringException e) {
+//			fail(e.getMessage());
+//		}
+//		map.addAgent(new AgentState(new GridPosition(1,0), Agent.Team.PLAYER, 1, 1, 2, 2, 5, Agent.State.NEUTRAL));
+//		map.addAgent(new AgentState(new GridPosition(3,2), Agent.Team.ENEMY, 1, 1, 2, 2, 5, Agent.State.OVERWATCH));
+//	}
 
 }

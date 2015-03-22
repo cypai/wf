@@ -1,12 +1,17 @@
 package com.pipai.wf.battle.agent;
 
+import java.util.LinkedList;
+
 import com.pipai.wf.battle.attack.Attack;
+import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.log.BattleEventLoggable;
+import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 
-public class Agent {
+public class Agent implements BattleEventLoggable {
 	
-	public enum State {NEUTRAL, KO};
+	public enum State {NEUTRAL, KO, OVERWATCH};
 	public enum Team {PLAYER, ENEMY}
 	
 	protected Team team;
@@ -15,6 +20,7 @@ public class Agent {
 	protected State state;
 	protected BattleMap map;
 	protected GridPosition position;
+	protected BattleLog log;
 	
 	public Agent(BattleMap map, AgentState state) {
 		this.map = map;
@@ -47,15 +53,16 @@ public class Agent {
 	public int getMaxHP() { return this.maxHP; }
 	public int getMobility() { return this.mobility; }
 	public boolean isKO() { return this.state == State.KO; }
+	public boolean isOverwatching() { return this.state == State.OVERWATCH; }
 	
 	public GridPosition getPosition() { return this.position; }
 	
-	public void move(GridPosition pos) {
+	public void move(LinkedList<GridPosition> path) {
+		GridPosition pos = path.peekLast();
 		if (this.map.getCell(pos) != null) {
 			if (this.map.getCell(pos).isEmpty()) {
+				logEvent(BattleEvent.moveEvent(this, path));
 				this.map.getCell(this.position).removeAgent();
-				//Map Call: Generate curve from current to new position for overwatch check
-				//Map Call: Check various points along the curve for overwatch, perform animation
 				this.map.getCell(pos).setAgent(this);
 				this.position = pos;
 				this.setAP(this.ap - 1);
@@ -64,11 +71,25 @@ public class Agent {
 	}
 	
 	public void rangeAttack(Agent other, Attack attack) {
-		if (attack.rollToHit(0)) {
-			other.decrementHP(attack.damageRoll());
+		boolean hit = attack.rollToHit(0);
+		int dmg = 0;
+		if (hit) {
+			dmg = attack.damageRoll();
+			other.decrementHP(dmg);
 		}
 		this.setAP(0);
+		logEvent(BattleEvent.attackEvent(this, other, attack, hit, dmg));
+	}
+
+	@Override
+	public void register(BattleLog log) {
+		this.log = log;
 	}
 	
+	private void logEvent(BattleEvent ev) {
+		if (log != null) {
+			log.logEvent(ev);
+		}
+	}
 	
 }

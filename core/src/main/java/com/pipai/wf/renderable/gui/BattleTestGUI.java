@@ -180,10 +180,11 @@ public class BattleTestGUI extends GUI {
 			if (this.selectedAgent != null) {
 				GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
 				if (this.selectedMapGraph.canMoveTo(clickSquare)) {
-					MoveAction move = new MoveAction(selectedAgent.getAgent(), clickSquare);
+					LinkedList<GridPosition> path = selectedMapGraph.getPath(clickSquare);
+					MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
 					this.battle.performAction(move);
 					beginAnimation();
-					selectedAgent.animateMoveSequence(vectorizePath(selectedMapGraph.getPath(clickSquare)));
+					selectedAgent.animateMoveSequence(vectorizePath(path));
 					this.updatePaths();
 				}
 			}
