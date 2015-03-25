@@ -70,6 +70,7 @@ public class BattleTest {
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		path.add(agent.getPosition());
 		path.add(new GridPosition(2, 0));
 		MoveAction move = new MoveAction(agent, path);
 		move.perform();
@@ -110,6 +111,7 @@ public class BattleTest {
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		path.add(agent.getPosition());
 		path.add(new GridPosition(1, 1));
 		MoveAction move = new MoveAction(agent, path);
 		move.perform();
@@ -139,6 +141,7 @@ public class BattleTest {
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		path.add(agent.getPosition());
 		path.add(new GridPosition(1, 1));
 		path.add(new GridPosition(0, 1));
 		MoveAction move = new MoveAction(agent, path);
@@ -146,27 +149,5 @@ public class BattleTest {
 		assertTrue(map.getAgentAtPos(new GridPosition(1, 1)) == null);
 		assertFalse(map.getAgentAtPos(new GridPosition(1, 0)) == null);
 	}
-	
-//	@Test
-//	public void testOverwatchActivationOnMove() {
-//		/*
-//		 * Map looks like:
-//		 * 0 1 1 O
-//		 * 0 1 0 0
-//		 * 0 A 0 0
-//		 */
-//		String rawMapString = "3 4\n"
-//				+ "s 1 1\n"
-//				+ "s 1 2\n"
-//				+ "s 2 2";
-//		BattleMap map = null;
-//		try {
-//			map = new BattleMap(new MapString(rawMapString));
-//		} catch (BadStateStringException e) {
-//			fail(e.getMessage());
-//		}
-//		map.addAgent(new AgentState(new GridPosition(1,0), Agent.Team.PLAYER, 1, 1, 2, 2, 5, Agent.State.NEUTRAL));
-//		map.addAgent(new AgentState(new GridPosition(3,2), Agent.Team.ENEMY, 1, 1, 2, 2, 5, Agent.State.OVERWATCH));
-//	}
 
 }

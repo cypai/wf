@@ -22,6 +22,7 @@ public class Agent implements BattleEventLoggable {
 	protected BattleMap map;
 	protected GridPosition position;
 	protected BattleLog log;
+	protected Attack overwatchAttack;
 	
 	public Agent(BattleMap map, AgentState state) {
 		this.map = map;
@@ -59,34 +60,67 @@ public class Agent implements BattleEventLoggable {
 	public GridPosition getPosition() { return this.position; }
 	
 	public void move(LinkedList<GridPosition> path) {
-		boolean successful = true;
+		boolean isValid = true;
+		BattleEvent event = BattleEvent.moveEvent(this, path);
 		for (GridPosition pos : path) {
 			if (pos.equals(this.getPosition())) { continue; }
 			BattleMapCell cell = this.map.getCell(pos);
 			if (cell == null || !cell.isEmpty()) {
-				successful = false;
+				isValid = false;
 				break;
 			}
 		}
-		if (successful) {
-			GridPosition dest = path.peekLast();
-			logEvent(BattleEvent.moveEvent(this, path));
-			this.map.getCell(this.position).removeAgent();
-			this.map.getCell(dest).setAgent(this);
-			this.position = dest;
-			this.setAP(this.ap - 1);
+		if (isValid) {
+			logEvent(event);
+		} else {
+			return;
 		}
+		for (GridPosition pos : path) {
+			for (Agent a : this.map.getAgents()) {
+				if (a.team != this.team && a.isOverwatching() && this.map.lineOfSight(pos, a.getPosition())) {
+					a.activateOverwatch(this, event);
+					if (this.isKO()) {
+						return;
+					}
+				}
+			}
+		}
+		GridPosition dest = path.peekLast();
+		this.map.getCell(this.position).removeAgent();
+		this.map.getCell(dest).setAgent(this);
+		this.position = dest;
+		this.setAP(this.ap - 1);
 	}
 	
 	public void rangeAttack(Agent other, Attack attack) {
-		boolean hit = attack.rollToHit(0);
+		float distance = 0;
+		boolean hit = attack.rollToHit(distance);
 		int dmg = 0;
 		if (hit) {
-			dmg = attack.damageRoll();
+			dmg = attack.damageRoll(distance);
 			other.decrementHP(dmg);
 		}
 		this.setAP(0);
 		logEvent(BattleEvent.attackEvent(this, other, attack, hit, dmg));
+	}
+	
+	public void overwatch(Attack attack) {
+		this.overwatchAttack = attack;
+		this.state = State.OVERWATCH;
+		this.setAP(0);
+		logEvent(BattleEvent.overwatchEvent(this, attack));
+	}
+	
+	public void activateOverwatch(Agent other, BattleEvent activationLogEvent) {
+		float distance = 0;
+		boolean hit = overwatchAttack.rollToHit(distance);
+		this.state = State.NEUTRAL;
+		int dmg = 0;
+		if (hit) {
+			dmg = overwatchAttack.damageRoll(distance);
+			other.decrementHP(dmg);
+		}
+		activationLogEvent.addChainEvent(BattleEvent.overwatchActivationEvent(this, other, overwatchAttack, hit, dmg));
 	}
 
 	@Override

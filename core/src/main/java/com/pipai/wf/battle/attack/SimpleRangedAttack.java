@@ -2,16 +2,16 @@ package com.pipai.wf.battle.attack;
 
 public class SimpleRangedAttack extends Attack {
 	
-	public float getAccuracy(float distance) {
-		return 1f;
+	public float getAccuracy(float distance, float accuracyModifier) {
+		return 1f * accuracyModifier;
 	}
 	
-	public float getCritPercentage(float distance) {
+	public float getCritPercentage(float distance, float critModifier) {
 		return 0f;
 	}
 	
-	public boolean rollToHit(float distance) {
-		return rng.nextFloat() <= getAccuracy(distance);
+	public boolean rollToHit(float distance, float accuracyModifier) {
+		return rng.nextFloat() <= getAccuracy(distance, accuracyModifier);
 	}
 	
 	public int getMinDamage() {
@@ -22,7 +22,7 @@ public class SimpleRangedAttack extends Attack {
 		return 4;
 	}
 	
-	public int damageRoll() {
+	public int damageRoll(float distance, float critModifier) {
 		return rng.nextInt(getMaxDamage() - getMinDamage() + 1) + getMinDamage();
 	}
 	

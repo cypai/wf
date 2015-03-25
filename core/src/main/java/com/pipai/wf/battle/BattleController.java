@@ -36,6 +36,7 @@ public class BattleController {
 	}
 	
 	public BattleEvent performAction(Action a) {
+		log.clear();
 		a.perform();
 		return log.getLastEvent();
 	}
