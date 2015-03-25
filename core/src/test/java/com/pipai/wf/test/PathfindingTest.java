@@ -109,10 +109,10 @@ public class PathfindingTest {
 	 * Checks to see if the list contains a valid path from start to end
 	 */
 	private boolean checkPathingList(LinkedList<GridPosition> list, GridPosition start, GridPosition end) {
-		if (!list.peekFirst().equals(start) || !list.peekLast().equals(end)) {
+		if (!list.peekLast().equals(end)) {
 			return false;
 		}
-		GridPosition prev = null;
+		GridPosition prev = start;
 		for (GridPosition pos : list) {
 			if (prev != null) {
 				if (Math.abs(prev.x - pos.x) > 1 || Math.abs(prev.y - pos.y) > 1) {
@@ -143,17 +143,6 @@ public class PathfindingTest {
 		MapGraph graph = new MapGraph(map, start, 3, 1);
 		LinkedList<GridPosition> path = graph.getPath(end);
 		assertTrue(path == null);
-	}
-	
-	@Test
-	public void testSameSquarePathing() {
-		BattleMap map = new BattleMap(4, 4);
-		GridPosition start = new GridPosition(0, 0);
-		GridPosition end = new GridPosition(0, 0);
-		MapGraph graph = new MapGraph(map, start, 3, 1);
-		LinkedList<GridPosition> path = graph.getPath(end);
-		assertTrue("Invalid path", checkPathingList(path, start, end));
-		assertTrue("Path too long: Expected 1 but got " + String.valueOf(path.size()), path.size() == 1);
 	}
 	
 	@Test

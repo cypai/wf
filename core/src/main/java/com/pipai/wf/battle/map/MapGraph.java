@@ -177,4 +177,8 @@ public class MapGraph {
 		return this.getNode(pos) != null && this.getNode(pos).isVisited();
 	}
 	
+	public GridPosition startingPosition() {
+		return root.getPosition();
+	}
+	
 }

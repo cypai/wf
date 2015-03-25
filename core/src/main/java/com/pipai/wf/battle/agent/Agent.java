@@ -61,6 +61,7 @@ public class Agent implements BattleEventLoggable {
 	public void move(LinkedList<GridPosition> path) {
 		boolean successful = true;
 		for (GridPosition pos : path) {
+			if (pos.equals(this.getPosition())) { continue; }
 			BattleMapCell cell = this.map.getCell(pos);
 			if (cell == null || !cell.isEmpty()) {
 				successful = false;

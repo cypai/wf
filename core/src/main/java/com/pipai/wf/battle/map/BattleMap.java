@@ -6,15 +6,19 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.log.BattleEventLoggable;
+import com.pipai.wf.battle.log.BattleLog;
 
-public class BattleMap {
+public class BattleMap implements BattleEventLoggable {
 
 	private int m, n;	// Size of the map
 	private HashMap<String, BattleMapCell> cellMap;
 	private ArrayList<Agent> agents;
+	private BattleLog log;
 
 	public BattleMap(int m, int n) {
 		this.agents = new ArrayList<Agent>();
+		this.log = null;
 		initializeMap(m, n);
 	}
 
@@ -74,6 +78,7 @@ public class BattleMap {
 	public void addAgent(AgentState state) {
 		Agent agent = new Agent(this, state);
 		this.getCell(agent.getPosition()).setAgent(agent);
+		agent.register(log);
 		this.agents.add(agent);
 	}
 
@@ -195,4 +200,14 @@ public class BattleMap {
 	public boolean lineOfSight(GridPosition a, GridPosition b) {
 		return checkSolidInList(supercover(gridCenter(a), gridCenter(b)));
 	}
+
+	@Override
+	public void register(BattleLog log) {
+		this.log = log;
+		for (Agent a : agents) {
+			a.register(log);
+		}
+	}
+	
+	
 }

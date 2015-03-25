@@ -1,6 +1,7 @@
 package com.pipai.wf.renderable.gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
@@ -18,6 +19,7 @@ import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
+import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
@@ -40,6 +42,7 @@ public class BattleTestGUI extends GUI {
 
 	private OrthographicCamera camera, overlayCamera;
 	private BattleController battle;
+	private HashMap<Agent, AgentTestGUIObject> agentMap;
 	private AgentTestGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<Renderable> renderables, renderablesDelBuffer, overlayRenderables;
@@ -79,9 +82,11 @@ public class BattleTestGUI extends GUI {
 		this.renderablesDelBuffer = new ArrayList<Renderable>();
 		this.leftClickablesDelBuffer = new ArrayList<LeftClickable>();
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
+		this.agentMap = new HashMap<Agent, AgentTestGUIObject>();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			GridPosition pos = agent.getPosition();
 			AgentTestGUIObject a = new AgentTestGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
+			this.agentMap.put(agent, a);
 			this.renderables.add(a);
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
@@ -182,15 +187,26 @@ public class BattleTestGUI extends GUI {
 				if (this.selectedMapGraph.canMoveTo(clickSquare)) {
 					LinkedList<GridPosition> path = selectedMapGraph.getPath(clickSquare);
 					MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
-					this.battle.performAction(move);
-					beginAnimation();
-					selectedAgent.animateMoveSequence(vectorizePath(path));
-					this.updatePaths();
+					BattleEvent event = this.battle.performAction(move);
+					animateEvent(event);
 				}
 			}
 			for (RightClickable o : rightClickables) {
 				o.onRightClick(gameX, gameY);
 			}
+		}
+	}
+	
+	private void animateEvent(BattleEvent event) {
+		switch (event.getType()) {
+		case MOVE:
+			AgentTestGUIObject a = this.agentMap.get(event.getPerformer());
+			beginAnimation();
+			a.animateMoveSequence(vectorizePath(event.getPath()));
+			this.updatePaths();
+			
+		default:
+			break;
 		}
 	}
 	

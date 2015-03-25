@@ -1,6 +1,8 @@
 package com.pipai.wf.battle;
 
 import com.pipai.wf.battle.action.Action;
+import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
 
 /*
@@ -10,10 +12,13 @@ import com.pipai.wf.battle.map.BattleMap;
 public class BattleController {
 	
 	private BattleMap map;
+	private BattleLog log;
 	private int currentTeam, maxTeams;	//Turn system variables
 	
 	public BattleController(BattleMap map) {
+		log = new BattleLog();
 		this.map = map;
+		this.map.register(log);
 		this.currentTeam = 0;
 		this.maxTeams = 2;
 	}
@@ -30,8 +35,13 @@ public class BattleController {
 		this.currentTeam = (this.currentTeam + 1) % this.maxTeams;
 	}
 	
-	public void performAction(Action a) {
+	public BattleEvent performAction(Action a) {
 		a.perform();
+		return log.getLastEvent();
+	}
+	
+	public BattleLog getLog() {
+		return log;
 	}
 	
 }
