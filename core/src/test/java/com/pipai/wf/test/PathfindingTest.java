@@ -102,7 +102,6 @@ public class PathfindingTest {
 			assertTrue("Does not contain " + r, movableList.contains(r));
 		}
 		//assertTrue(movableList.size() == req.size());
-		System.out.println(movableList.size());
 	}
 	
 	/*
