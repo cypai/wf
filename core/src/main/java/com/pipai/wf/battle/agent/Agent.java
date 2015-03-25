@@ -7,6 +7,7 @@ import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
 import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
+import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.GridPosition;
 
 public class Agent implements BattleEventLoggable {
@@ -58,15 +59,21 @@ public class Agent implements BattleEventLoggable {
 	public GridPosition getPosition() { return this.position; }
 	
 	public void move(LinkedList<GridPosition> path) {
-		GridPosition pos = path.peekLast();
-		if (this.map.getCell(pos) != null) {
-			if (this.map.getCell(pos).isEmpty()) {
-				logEvent(BattleEvent.moveEvent(this, path));
-				this.map.getCell(this.position).removeAgent();
-				this.map.getCell(pos).setAgent(this);
-				this.position = pos;
-				this.setAP(this.ap - 1);
+		boolean successful = true;
+		for (GridPosition pos : path) {
+			BattleMapCell cell = this.map.getCell(pos);
+			if (cell == null || !cell.isEmpty()) {
+				successful = false;
+				break;
 			}
+		}
+		if (successful) {
+			GridPosition dest = path.peekLast();
+			logEvent(BattleEvent.moveEvent(this, path));
+			this.map.getCell(this.position).removeAgent();
+			this.map.getCell(dest).setAgent(this);
+			this.position = dest;
+			this.setAP(this.ap - 1);
 		}
 	}
 	

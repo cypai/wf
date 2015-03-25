@@ -8,9 +8,6 @@ import org.junit.Test;
 
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.Agent.State;
-import com.pipai.wf.battle.agent.Agent.Team;
-import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.exception.BadStateStringException;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
@@ -73,7 +70,6 @@ public class BattleTest {
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
-		path.add(agent.getPosition());
 		path.add(new GridPosition(2, 0));
 		MoveAction move = new MoveAction(agent, path);
 		move.perform();
@@ -82,7 +78,6 @@ public class BattleTest {
 		//Check to see if they are the same object
 		assertTrue(agent == map.getAgentAtPos(new GridPosition(2, 0)));
 		LinkedList<GridPosition> path2 = new LinkedList<GridPosition>();
-		path2.add(agent.getPosition());
 		path2.add(new GridPosition(1, 0));
 		path2.add(new GridPosition(0, 0));
 		path2.add(new GridPosition(0, 1));
@@ -115,8 +110,37 @@ public class BattleTest {
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
-		path.add(agent.getPosition());
 		path.add(new GridPosition(1, 1));
+		MoveAction move = new MoveAction(agent, path);
+		move.perform();
+		assertTrue(map.getAgentAtPos(new GridPosition(1, 1)) == null);
+		assertFalse(map.getAgentAtPos(new GridPosition(1, 0)) == null);
+	}
+	
+	@Test
+	public void testAgentIllegalPathMoveAction() {
+		/*
+		 * Map looks like:
+		 * 0 1 1 0
+		 * 0 1 0 0
+		 * 0 A 0 0
+		 */
+		String rawMapString = "3 4\n"
+				+ "s 1 1\n"
+				+ "s 1 2\n"
+				+ "s 2 2\n"
+				+ "a 1 0";
+		BattleMap map = null;
+		try {
+			map = new BattleMap(new MapString(rawMapString));
+		} catch (BadStateStringException e) {
+			fail(e.getMessage());
+		}
+		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
+		assertFalse(agent == null);
+		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		path.add(new GridPosition(1, 1));
+		path.add(new GridPosition(0, 1));
 		MoveAction move = new MoveAction(agent, path);
 		move.perform();
 		assertTrue(map.getAgentAtPos(new GridPosition(1, 1)) == null);
