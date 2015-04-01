@@ -14,4 +14,21 @@ public enum Direction {
 		return l;
 	}
 	
+	public static ArrayList<Direction> getPerpendicular(Direction d) {
+		ArrayList<Direction> l = new ArrayList<Direction>();
+		switch (d) {
+		case N:
+		case S:
+			l.add(E);
+			l.add(W);
+			break;
+		case E:
+		case W:
+			l.add(N);
+			l.add(S);
+			break;
+		}
+		return l;
+	}
+	
 }

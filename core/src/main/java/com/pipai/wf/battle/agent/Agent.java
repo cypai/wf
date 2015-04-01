@@ -9,6 +9,8 @@ import com.pipai.wf.battle.log.BattleEventLoggable;
 import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
+import com.pipai.wf.battle.map.Direction;
+import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
 
 public class Agent implements BattleEventLoggable {
@@ -66,8 +68,33 @@ public class Agent implements BattleEventLoggable {
 		this.position = pos;
 	}
 	
+	public ArrayList<GridPosition> getPeekingSquares() {
+		ArrayList<GridPosition> l = new ArrayList<GridPosition>();
+		l.add(this.getPosition());
+		ArrayList<Direction> coverDirs = DirectionalCoverSystem.getCoverDirections(this.map, this.getPosition());
+		for (Direction coverDir : coverDirs) {
+			ArrayList<Direction> perpendicularDirs = Direction.getPerpendicular(coverDir);
+			for (Direction perpendicular : perpendicularDirs) {
+				BattleMapCell peekSquare = this.map.getCellInDirection(this.getPosition(), perpendicular);
+				if (peekSquare != null) {
+					GridPosition pos = peekSquare.getPosition();
+					BattleMapCell peekCoverSquare = this.map.getCellInDirection(pos, coverDir);
+					if (peekSquare.isEmpty() && peekCoverSquare.isEmpty() && !l.contains(pos)) {
+						l.add(peekSquare.getPosition());
+					}
+				}
+			}
+		}
+		return l;
+	}
+	
 	public boolean canSee(Agent other) {
-		return this.map.lineOfSight(this.getPosition(), other.getPosition());
+		for (GridPosition peekSquare : this.getPeekingSquares()) {
+			if (this.map.lineOfSight(peekSquare, other.getPosition())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public boolean inRange(Agent other) {
