@@ -10,9 +10,9 @@ import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.exception.BadStateStringException;
 import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.map.Direction;
 
 public class BattleTest {
 
@@ -42,10 +42,10 @@ public class BattleTest {
 		
 		//Testing traversable
 		GridPosition checkPos = new GridPosition(1, 0);
-		assertTrue(map.getCell(checkPos).isTraversable(BattleMapCell.Direction.E));
-		assertTrue(map.getCell(checkPos).isTraversable(BattleMapCell.Direction.W));
-		assertFalse(map.getCell(checkPos).isTraversable(BattleMapCell.Direction.N));
-		assertFalse(map.getCell(checkPos).isTraversable(BattleMapCell.Direction.S));
+		assertTrue(map.getCell(checkPos).isTraversable(Direction.E));
+		assertTrue(map.getCell(checkPos).isTraversable(Direction.W));
+		assertFalse(map.getCell(checkPos).isTraversable(Direction.N));
+		assertFalse(map.getCell(checkPos).isTraversable(Direction.S));
 	}
 	
 	@Test

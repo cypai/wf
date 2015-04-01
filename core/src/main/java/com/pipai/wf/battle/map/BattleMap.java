@@ -51,13 +51,13 @@ public class BattleMap implements BattleEventLoggable {
 				this.cellMap.put(this.coordinatesToKey(cellPos), cell);
 				if (i > 0) {
 					BattleMapCell west = this.getCell(new GridPosition(i-1, j));
-					west.setNeighbor(cell, BattleMapCell.Direction.E);
-					cell.setNeighbor(west, BattleMapCell.Direction.W);
+					west.setNeighbor(cell, Direction.E);
+					cell.setNeighbor(west, Direction.W);
 				}
 				if (j > 0) {
 					BattleMapCell south = this.getCell(new GridPosition(i, j-1));
-					south.setNeighbor(cell, BattleMapCell.Direction.N);
-					cell.setNeighbor(south, BattleMapCell.Direction.S);
+					south.setNeighbor(cell, Direction.N);
+					cell.setNeighbor(south, Direction.S);
 				}
 			}
 		}
@@ -69,6 +69,25 @@ public class BattleMap implements BattleEventLoggable {
 
 	public BattleMapCell getCell(GridPosition pos) {
 		return this.cellMap.get(this.coordinatesToKey(pos));
+	}
+	
+	public BattleMapCell getCellInDirection(GridPosition pos, Direction d) {
+		GridPosition cellPos = null;
+		switch (d) {
+		case W:
+			cellPos = new GridPosition(pos.x-1, pos.y);
+			break;
+		case E:
+			cellPos = new GridPosition(pos.x+1, pos.y);
+			break;
+		case N:
+			cellPos = new GridPosition(pos.x, pos.y+1);
+			break;
+		case S:
+			cellPos = new GridPosition(pos.x+1, pos.y-1);
+			break;
+		} 
+		return this.cellMap.get(this.coordinatesToKey(cellPos));
 	}
 
 	public Agent getAgentAtPos(GridPosition pos) {

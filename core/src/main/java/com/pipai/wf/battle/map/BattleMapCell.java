@@ -7,8 +7,6 @@ import com.pipai.wf.battle.agent.Agent;
 
 public class BattleMapCell {
 	
-	public enum Direction {N, S, E, W};
-	
 	private boolean solid;
 	private EnumMap<Direction, Boolean> walls;
 	private EnumMap<Direction, BattleMapCell> neighbors;
