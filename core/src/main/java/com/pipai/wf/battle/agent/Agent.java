@@ -1,5 +1,6 @@
 package com.pipai.wf.battle.agent;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.pipai.wf.battle.attack.Attack;
@@ -59,6 +60,30 @@ public class Agent implements BattleEventLoggable {
 	
 	public GridPosition getPosition() { return this.position; }
 	
+	private void setPosition(GridPosition pos) {
+		this.map.getCell(this.position).removeAgent();
+		this.map.getCell(pos).setAgent(this);
+		this.position = pos;
+	}
+	
+	public boolean canSee(Agent other) {
+		return this.map.lineOfSight(this.getPosition(), other.getPosition());
+	}
+	
+	public boolean inRange(Agent other) {
+		return other.canSee(this);
+	}
+	
+	public ArrayList<Agent> enemiesInRange() {
+		ArrayList<Agent> l = new ArrayList<Agent>();
+		for (Agent a : this.map.getAgents()) {
+			if (a.team != this.team && this.canSee(a)) {
+				l.add(a);
+			}
+		}
+		return l;
+	}
+	
 	public void move(LinkedList<GridPosition> path) {
 		boolean isValid = true;
 		BattleEvent event = BattleEvent.moveEvent(this, path);
@@ -76,8 +101,9 @@ public class Agent implements BattleEventLoggable {
 			return;
 		}
 		for (GridPosition pos : path) {
-			for (Agent a : this.map.getAgents()) {
-				if (a.team != this.team && a.isOverwatching() && this.map.lineOfSight(pos, a.getPosition())) {
+			this.setPosition(pos);
+			for (Agent a : this.enemiesInRange()) {
+				if (a.isOverwatching()) {
 					a.activateOverwatch(this, event);
 					if (this.isKO()) {
 						return;
@@ -86,9 +112,7 @@ public class Agent implements BattleEventLoggable {
 			}
 		}
 		GridPosition dest = path.peekLast();
-		this.map.getCell(this.position).removeAgent();
-		this.map.getCell(dest).setAgent(this);
-		this.position = dest;
+		this.setPosition(dest);
 		this.setAP(this.ap - 1);
 	}
 	
