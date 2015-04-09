@@ -40,9 +40,10 @@ public class BattleTestGUI extends GUI {
 	//private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 
-	private OrthographicCamera camera, overlayCamera;
+	private OrthographicCamera camera, overlayCamera, orthoCamera;
 	private BattleController battle;
 	private HashMap<Agent, AgentTestGUIObject> agentMap;
+	private ArrayList<AgentTestGUIObject> agentList;
 	private AgentTestGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<Renderable> renderables, renderablesDelBuffer, overlayRenderables;
@@ -70,8 +71,10 @@ public class BattleTestGUI extends GUI {
         map.getCell(new GridPosition(5, 5)).setSolid(true);
         camera = new OrthographicCamera();
         overlayCamera = new OrthographicCamera();
+        orthoCamera = new OrthographicCamera();
         camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
         overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
+        orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
 		this.battle = new BattleController(map);
 		this.animating = false;
 		this.renderables = new ArrayList<Renderable>();
@@ -83,10 +86,12 @@ public class BattleTestGUI extends GUI {
 		this.leftClickablesDelBuffer = new ArrayList<LeftClickable>();
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
 		this.agentMap = new HashMap<Agent, AgentTestGUIObject>();
+		this.agentList = new ArrayList<AgentTestGUIObject>();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			GridPosition pos = agent.getPosition();
 			AgentTestGUIObject a = new AgentTestGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 			this.agentMap.put(agent, a);
+			this.agentList.add(a);
 			this.renderables.add(a);
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
@@ -220,23 +225,29 @@ public class BattleTestGUI extends GUI {
 	private void updateCamera() {
 		if (this.checkKey(Keys.A)) {
 			this.camera.translate(-3, 0);
+			this.orthoCamera.translate(-3, 0);
 		}
 		if (this.checkKey(Keys.D)) {
 			this.camera.translate(3, 0);
+			this.orthoCamera.translate(3, 0);
 		}
 		if (this.checkKey(Keys.W)) {
 			this.camera.translate(0, 3);
+			this.orthoCamera.translate(0, 3);
 		}
 		if (this.checkKey(Keys.S)) {
 			this.camera.translate(0, -3);
+			this.orthoCamera.translate(0, -3);
 		}
         this.camera.update();
+        this.orthoCamera.update();
 	}
 	
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		this.camera.setToOrtho(false, width, height);
+		this.orthoCamera.setToOrtho(false, width, height);
 		this.overlayCamera.setToOrtho(false, width, height);
 	}
 	
@@ -251,6 +262,9 @@ public class BattleTestGUI extends GUI {
 		for (Renderable r : this.renderables) {
 			r.render(batch);
 		}
+        batch.getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
+        batch.getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
+		this.drawAllAgentInfo(batch.getShapeRenderer());
         batch.getSpriteBatch().setProjectionMatrix(overlayCamera.combined);
         batch.getShapeRenderer().setProjectionMatrix(overlayCamera.combined);
 		for (Renderable r : this.overlayRenderables) {
@@ -316,6 +330,43 @@ public class BattleTestGUI extends GUI {
 				this.shadeSquare(batch, pos, MOVE_COLOR);
 			}
 		}
+	}
+	
+	private void drawAllAgentInfo(ShapeRenderer batch) {
+		for (AgentTestGUIObject a : this.agentList) {
+			drawAgentInfo(batch, a);
+		}
+	}
+	
+	private void drawAgentInfo(ShapeRenderer batch, AgentTestGUIObject a) {
+		if (a.getAgent().isKO()) {
+			return;
+		}
+		batch.begin(ShapeType.Filled);
+		int bar_width = 40;
+		Vector2 agentPoint = new Vector2(a.x, a.y);
+		Vector2 barLeftTop = new Vector2(a.x + 24, a.y + 24);
+		Vector2 barRightTop = new Vector2(a.x + 24 + bar_width, a.y + 24);
+		Vector2 barLeftBot = new Vector2(a.x + 24, a.y + 18);
+		Vector2 barRightFullBot = new Vector2(a.x + 24 + bar_width, a.y + 18);
+		Vector2 barRightBot = new Vector2(a.x + 24 + bar_width * ((float)a.getAgent().getHP() / (float)a.getAgent().getMaxHP()), a.y + 18);
+		batch.setColor(Color.BLUE);
+		batch.rectLine(agentPoint, barLeftTop, 3);
+		// Health bar background
+		batch.setColor(Color.BLACK);
+		batch.rectLine(barLeftTop, barRightTop, 6);
+		batch.rectLine(barLeftBot, barRightFullBot, 6);
+		// Health bar
+		batch.setColor(Color.GRAY);
+		batch.rectLine(barLeftTop, barRightTop, 6);
+		batch.setColor(Color.GREEN);
+		batch.rectLine(barLeftBot, barRightBot, 6);
+		batch.end();
+		// Health bars outline
+		batch.begin(ShapeType.Line);
+		batch.setColor(Color.BLUE);
+		batch.rect(barLeftTop.x, barLeftTop.y + 3, barRightTop.x - barLeftTop.x, -12);
+		batch.end();
 	}
 
 }
