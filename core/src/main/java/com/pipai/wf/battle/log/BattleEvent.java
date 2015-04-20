@@ -77,4 +77,19 @@ public class BattleEvent {
 		this.chainedEvents.add(event);
 	}
 	
+	@Override
+	public String toString() {
+		String returnStr = type.toString() + ": ";
+		switch (type) {
+		case ATTACK:
+			returnStr += atk.getClass() + " ";
+			returnStr += String.valueOf(hit) + " ";
+			returnStr += damageRoll;
+			break;
+		default:
+			break;
+		}
+		return returnStr;
+	}
+	
 }
