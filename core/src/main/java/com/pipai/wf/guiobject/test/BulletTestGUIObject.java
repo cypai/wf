@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 import com.pipai.wf.renderable.gui.BattleTestGUI;
@@ -16,10 +17,11 @@ public class BulletTestGUIObject extends GUIObject implements Renderable {
 	private int t, final_t;
 	private Vector2 dir;
 	private AgentTestGUIObject target;
+	private int damage;
 	
 	private static final int SPEED = 16;
 	
-	public BulletTestGUIObject(BattleTestGUI gui, float x, float y, float dest_x, float dest_y, AgentTestGUIObject target) {
+	public BulletTestGUIObject(BattleTestGUI gui, float x, float y, float dest_x, float dest_y, AgentTestGUIObject target, int damage) {
 		super(gui);
 		this.gui = gui;
 		this.x = x;
@@ -33,6 +35,7 @@ public class BulletTestGUIObject extends GUIObject implements Renderable {
 			final_t = (int)Math.ceil((dest_y - y)/(SPEED * dir.y));
 		}
 		this.target = target;
+		this.damage = damage;
 	}
 	
 	public void update() {
@@ -43,6 +46,8 @@ public class BulletTestGUIObject extends GUIObject implements Renderable {
 		} else if (t == final_t) {
 			x = dest_x;
 			y = dest_y;
+			TemporaryText dmgTxt = new TemporaryText(gui, x, y, 24.0f, 24.0f, String.valueOf(damage));
+			gui.createInstance(dmgTxt);
 			gui.deleteInstance(this);
 			target.hit();
 		}

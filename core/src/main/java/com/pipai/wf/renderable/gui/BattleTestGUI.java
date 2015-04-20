@@ -46,9 +46,9 @@ public class BattleTestGUI extends GUI {
 	private ArrayList<AgentTestGUIObject> agentList;
 	private AgentTestGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
-	private ArrayList<Renderable> renderables, renderablesDelBuffer, overlayRenderables;
-	private ArrayList<LeftClickable> leftClickables, leftClickablesDelBuffer, overlayLeftClickables;
-	private ArrayList<RightClickable> rightClickables, rightClickablesDelBuffer;
+	private ArrayList<Renderable> renderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
+	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
+	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
 	private boolean animating, overlayClicked;
 
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
@@ -82,6 +82,9 @@ public class BattleTestGUI extends GUI {
 		this.rightClickables = new ArrayList<RightClickable>();
 		this.overlayRenderables = new ArrayList<Renderable>();
 		this.overlayLeftClickables = new ArrayList<LeftClickable>();
+		this.renderablesCreateBuffer = new ArrayList<Renderable>();
+		this.leftClickablesCreateBuffer = new ArrayList<LeftClickable>();
+		this.rightClickablesCreateBuffer = new ArrayList<RightClickable>();
 		this.renderablesDelBuffer = new ArrayList<Renderable>();
 		this.leftClickablesDelBuffer = new ArrayList<LeftClickable>();
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
@@ -113,14 +116,30 @@ public class BattleTestGUI extends GUI {
 	public void attack(AgentTestGUIObject target) {
 		if (selectedAgent != null) {
 			RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
-			this.battle.performAction(atk);
-			BulletTestGUIObject b = new BulletTestGUIObject(this, selectedAgent.x, selectedAgent.y, target.x, target.y, target);
+			BattleEvent outcome = this.battle.performAction(atk);
+			System.out.println(outcome.toString());
+			BulletTestGUIObject b = new BulletTestGUIObject(this, selectedAgent.x, selectedAgent.y, target.x, target.y, target, outcome.getDamageRoll());
 			renderables.add(b);
 		}
 	}
 	
 	@Override
+	public void createInstance(GUIObject o) {
+		super.createInstance(o);
+		if (o instanceof Renderable) {
+			renderablesCreateBuffer.add((Renderable)o);
+		}
+		if (o instanceof LeftClickable) {
+			leftClickablesCreateBuffer.add((LeftClickable)o);
+		}
+		if (o instanceof RightClickable) {
+			rightClickablesCreateBuffer.add((RightClickable)o);
+		}
+	}
+	
+	@Override
 	public void deleteInstance(GUIObject o) {
+		super.deleteInstance(o);
 		if (o instanceof Renderable) {
 			renderablesDelBuffer.add((Renderable)o);
 		}
@@ -130,6 +149,21 @@ public class BattleTestGUI extends GUI {
 		if (o instanceof RightClickable) {
 			rightClickablesDelBuffer.add((RightClickable)o);
 		}
+	}
+	
+	private void cleanCreateBuffers() {
+		for (Renderable o : renderablesCreateBuffer) {
+			renderables.add(o);
+		}
+		for (LeftClickable o : leftClickablesCreateBuffer) {
+			leftClickables.add(o);
+		}
+		for (RightClickable o : rightClickablesCreateBuffer) {
+			rightClickables.add(o);
+		}
+		renderablesCreateBuffer.clear();
+		leftClickablesCreateBuffer.clear();
+		rightClickablesCreateBuffer.clear();
 	}
 	
 	private void cleanDelBuffers() {
@@ -271,6 +305,7 @@ public class BattleTestGUI extends GUI {
 			r.render(batch);
 		}
 		cleanDelBuffers();
+		cleanCreateBuffers();
 	}
 	
 	private void renderShape(ShapeRenderer batch) {
