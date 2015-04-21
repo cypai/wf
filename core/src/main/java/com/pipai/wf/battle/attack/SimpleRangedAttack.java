@@ -1,29 +1,39 @@
 package com.pipai.wf.battle.attack;
 
+import com.pipai.wf.util.UtilFunctions;
+import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.weapon.Weapon;
+
 public class SimpleRangedAttack extends Attack {
 	
-	public float getAccuracy(float distance, float accuracyModifier) {
-		return 1f * accuracyModifier;
+	public int getAccuracy(Agent attacker, Agent target, float distance) {
+		Weapon weapon = attacker.getCurrentWeapon();
+		int total_aim = attacker.getBaseAim() + weapon.flatAimModifier();
+		int acc = UtilFunctions.clamp(1, 100, total_aim);
+		return acc;
 	}
 	
-	public float getCritPercentage(float distance, float critModifier) {
-		return 0f;
+	public int getCritPercentage(Agent attacker, Agent target, float distance) {
+		return 0;
 	}
 	
-	public boolean rollToHit(float distance, float accuracyModifier) {
-		return rng.nextFloat() <= getAccuracy(distance, accuracyModifier);
+	public boolean rollToHit(Agent attacker, Agent target, float distance) {
+		int diceroll = 1 + rng.nextInt(100);
+		return diceroll <= getAccuracy(attacker, target, distance);
 	}
 	
-	public int getMinDamage() {
-		return 2;
+	public int getMinDamage(Agent attacker, Agent target) {
+		return attacker.getCurrentWeapon().minBaseDamage();
 	}
 	
-	public int getMaxDamage() {
-		return 4;
+	public int getMaxDamage(Agent attacker, Agent target) {
+		return attacker.getCurrentWeapon().maxBaseDamage();
 	}
 	
-	public int damageRoll(float distance, float critModifier) {
-		return rng.nextInt(getMaxDamage() - getMinDamage() + 1) + getMinDamage();
+	public int damageRoll(Agent attacker, Agent target, float distance) {
+		int min_dmg = getMinDamage(attacker, target);
+		int max_dmg = getMaxDamage(attacker, target);
+		return rng.nextInt(max_dmg - min_dmg + 1) + min_dmg;
 	}
 	
 	public String description() {

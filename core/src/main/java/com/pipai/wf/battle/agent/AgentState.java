@@ -7,12 +7,13 @@ import com.pipai.wf.battle.map.GridPosition;
 
 public class AgentState {
 	
-	protected Team team;
-	protected int hp, maxHP;
-	protected int ap, maxAP;
-	protected int mobility;
-	protected GridPosition position;
-	protected State state;
+	public Team team;
+	public int hp, maxHP;
+	public int ap, maxAP;
+	public int mobility;
+	public int aim;
+	public GridPosition position;
+	public State state;
 	
 	public AgentState(String agentString) throws BadStateStringException {
 		String split[] = agentString.split(" ");

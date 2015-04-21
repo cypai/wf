@@ -2,40 +2,30 @@ package com.pipai.wf.battle.attack;
 
 import java.util.Random;
 
+import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.weapon.Weapon;
+
 public abstract class Attack {
+	/*
+	 * Note: All accuracies are now calculated using integers for ease of modifying
+	 */
 	
 	public static final Random rng = new Random();
 	
-	public abstract float getAccuracy(float distance, float accuracyModifier);
-	
-	public float getAccuracy(float distance) {
-		return getAccuracy(distance, 1f);
-	}
+	public abstract int getAccuracy(Agent attacker, Agent target, float distance);
 	
 	/*
 	 * Returns the conditional probability P(Crit | Hit)
 	 */
-	public abstract float getCritPercentage(float distance, float critModifier);
+	public abstract int getCritPercentage(Agent attacker, Agent target, float distance);
 	
-	public float getCritPercentage(float distance) {
-		return getCritPercentage(distance, 1f);
-	}
+	public abstract boolean rollToHit(Agent attacker, Agent target, float distance);
 	
-	public abstract boolean rollToHit(float distance, float accuracyModifier);
+	public abstract int getMinDamage(Agent attacker, Agent target);
 	
-	public boolean rollToHit(float distance) {
-		return rollToHit(distance, 1f);
-	}
+	public abstract int getMaxDamage(Agent attacker, Agent target);
 	
-	public abstract int getMinDamage();
-	
-	public abstract int getMaxDamage();
-	
-	public abstract int damageRoll(float distance, float critModifier);
-	
-	public int damageRoll(float distance) {
-		return damageRoll(distance, 1f);
-	}
+	public abstract int damageRoll(Agent attacker, Agent target, float distance);
 	
 	public abstract String description();
 	

@@ -12,6 +12,8 @@ import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.Direction;
 import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.weapon.Pistol;
+import com.pipai.wf.battle.weapon.Weapon;
 
 public class Agent implements BattleEventLoggable {
 	
@@ -20,8 +22,9 @@ public class Agent implements BattleEventLoggable {
 	
 	protected Team team;
 	protected int maxHP, maxAP, hp, ap;
-	protected int mobility;
+	protected int mobility, aim;
 	protected State state;
+	protected Weapon mainWeapon;
 	protected BattleMap map;
 	protected GridPosition position;
 	protected BattleLog log;
@@ -36,6 +39,8 @@ public class Agent implements BattleEventLoggable {
 		maxAP = state.maxAP;
 		ap = state.ap;
 		mobility = state.mobility;
+		aim = 60;
+		mainWeapon = new Pistol();
 	}
 	
 	public Team getTeam() { return this.team; }
@@ -57,6 +62,8 @@ public class Agent implements BattleEventLoggable {
 	public void decrementHP(int amt) { this.setHP(this.getHP() - amt); }
 	public int getMaxHP() { return this.maxHP; }
 	public int getMobility() { return this.mobility; }
+	public int getBaseAim() { return this.aim; }
+	public Weapon getCurrentWeapon() { return this.mainWeapon; }
 	public boolean isKO() { return this.state == State.KO; }
 	public boolean isOverwatching() { return this.state == State.OVERWATCH; }
 	
@@ -145,10 +152,10 @@ public class Agent implements BattleEventLoggable {
 	
 	public void rangeAttack(Agent other, Attack attack) {
 		float distance = 0;
-		boolean hit = attack.rollToHit(distance);
+		boolean hit = attack.rollToHit(this, other, distance);
 		int dmg = 0;
 		if (hit) {
-			dmg = attack.damageRoll(distance);
+			dmg = attack.damageRoll(this, other, distance);
 			other.decrementHP(dmg);
 		}
 		this.setAP(0);
@@ -164,11 +171,11 @@ public class Agent implements BattleEventLoggable {
 	
 	public void activateOverwatch(Agent other, BattleEvent activationLogEvent) {
 		float distance = 0;
-		boolean hit = overwatchAttack.rollToHit(distance);
+		boolean hit = overwatchAttack.rollToHit(this, other, distance);
 		this.state = State.NEUTRAL;
 		int dmg = 0;
 		if (hit) {
-			dmg = overwatchAttack.damageRoll(distance);
+			dmg = overwatchAttack.damageRoll(this, other, distance);
 			other.decrementHP(dmg);
 		}
 		activationLogEvent.addChainEvent(BattleEvent.overwatchActivationEvent(this, other, overwatchAttack, hit, dmg));
