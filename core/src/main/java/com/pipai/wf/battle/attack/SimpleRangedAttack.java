@@ -18,7 +18,7 @@ public class SimpleRangedAttack extends Attack {
 	}
 	
 	public boolean rollToHit(Agent attacker, Agent target, float distance) {
-		int diceroll = 1 + rng.nextInt(100);
+		int diceroll = 1 + UtilFunctions.rng.nextInt(100);
 		return diceroll <= getAccuracy(attacker, target, distance);
 	}
 	
@@ -33,7 +33,7 @@ public class SimpleRangedAttack extends Attack {
 	public int damageRoll(Agent attacker, Agent target, float distance) {
 		int min_dmg = getMinDamage(attacker, target);
 		int max_dmg = getMaxDamage(attacker, target);
-		return rng.nextInt(max_dmg - min_dmg + 1) + min_dmg;
+		return UtilFunctions.rng.nextInt(max_dmg - min_dmg + 1) + min_dmg;
 	}
 	
 	public String description() {

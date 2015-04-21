@@ -1,29 +1,31 @@
 package com.pipai.wf.guiobject.overlay;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.guiobject.GUIObject;
-import com.pipai.wf.guiobject.GUIObjectUtils;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 import com.pipai.wf.renderable.gui.GUI;
 import com.pipai.wf.renderable.gui.LeftClickable;
+import com.pipai.wf.util.UtilFunctions;
 
 public class AttackButtonOverlay extends GUIObject implements Renderable, LeftClickable {
 	
 	private final int SQUARE_SIZE = 30;
-	private GUI gui;
 	
 	private int x, y;
 	
 	public AttackButtonOverlay(GUI gui) {
 		super(gui);
-		this.gui = gui;
 	}
 	
+	public int renderPriority() { return 0; }
+	
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		if (GUIObjectUtils.isInBoundingBox(x, y, SQUARE_SIZE, SQUARE_SIZE, gameX, gameY)) {
+		if (UtilFunctions.isInBoundingBox(x, y, SQUARE_SIZE, SQUARE_SIZE, screenX, screenY)) {
 			System.out.println("hi");
 		}
 	}
@@ -40,6 +42,12 @@ public class AttackButtonOverlay extends GUIObject implements Renderable, LeftCl
 		r.setColor(new Color(0, 0.5f, 0.8f, 1));
 		r.rect(x - SQUARE_SIZE/2, y - SQUARE_SIZE/2, SQUARE_SIZE, SQUARE_SIZE);
 		r.end();
+		SpriteBatch spr = batch.getSpriteBatch();
+		BitmapFont font = batch.getFont();
+		spr.begin();
+		font.setColor(Color.WHITE);
+		font.draw(spr, "A", x - SQUARE_SIZE/4, y + SQUARE_SIZE/4);
+		spr.end();
 	}
 	
 }

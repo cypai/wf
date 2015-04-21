@@ -86,12 +86,14 @@ public abstract class GUI implements Screen, InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		this.heldKeys.put(keycode, true);
+		this.onKeyDown(keycode);
         return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
 		this.heldKeys.put(keycode, false);
+		this.onKeyUp(keycode);
 		return true;
 	}
 
@@ -102,6 +104,9 @@ public abstract class GUI implements Screen, InputProcessor {
 
 	public abstract void onLeftClick(int screenX, int screenY);
 	public abstract void onRightClick(int screenX, int screenY);
+	
+	public abstract void onKeyDown(int keycode);
+	public abstract void onKeyUp(int keycode);
 	
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {

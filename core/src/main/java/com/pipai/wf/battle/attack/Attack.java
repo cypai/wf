@@ -1,16 +1,11 @@
 package com.pipai.wf.battle.attack;
 
-import java.util.Random;
-
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.weapon.Weapon;
 
 public abstract class Attack {
 	/*
 	 * Note: All accuracies are now calculated using integers for ease of modifying
 	 */
-	
-	public static final Random rng = new Random();
 	
 	public abstract int getAccuracy(Agent attacker, Agent target, float distance);
 	

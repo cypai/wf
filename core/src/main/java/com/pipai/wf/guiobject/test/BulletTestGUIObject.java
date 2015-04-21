@@ -4,11 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 import com.pipai.wf.renderable.gui.BattleTestGUI;
+import com.pipai.wf.util.UtilFunctions;
 
 public class BulletTestGUIObject extends GUIObject implements Renderable {
 	
@@ -17,11 +19,11 @@ public class BulletTestGUIObject extends GUIObject implements Renderable {
 	private int t, final_t;
 	private Vector2 dir;
 	private AgentTestGUIObject target;
-	private int damage;
+	private BattleEvent outcome;
 	
 	private static final int SPEED = 16;
 	
-	public BulletTestGUIObject(BattleTestGUI gui, float x, float y, float dest_x, float dest_y, AgentTestGUIObject target, int damage) {
+	public BulletTestGUIObject(BattleTestGUI gui, float x, float y, float dest_x, float dest_y, AgentTestGUIObject target, BattleEvent outcome) {
 		super(gui);
 		this.gui = gui;
 		this.x = x;
@@ -35,8 +37,10 @@ public class BulletTestGUIObject extends GUIObject implements Renderable {
 			final_t = (int)Math.ceil((dest_y - y)/(SPEED * dir.y));
 		}
 		this.target = target;
-		this.damage = damage;
+		this.outcome = outcome;
 	}
+
+	public int renderPriority() { return 0; }
 	
 	public void update() {
 		t += 1;
@@ -46,7 +50,12 @@ public class BulletTestGUIObject extends GUIObject implements Renderable {
 		} else if (t == final_t) {
 			x = dest_x;
 			y = dest_y;
-			TemporaryText dmgTxt = new TemporaryText(gui, x, y, 24.0f, 24.0f, String.valueOf(damage));
+			TemporaryText dmgTxt;
+			if (outcome.isHit()) {
+				dmgTxt = new TemporaryText(gui, x + 12 , y + 16*UtilFunctions.rng.nextFloat() - 12, 24, 24, String.valueOf(outcome.getDamageRoll()));
+			} else {
+				dmgTxt = new TemporaryText(gui, x + 12, y + 16*UtilFunctions.rng.nextFloat() - 12, 64, 24, "Missed");
+			}
 			gui.createInstance(dmgTxt);
 			gui.deleteInstance(this);
 			target.hit();

@@ -10,12 +10,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.guiobject.GUIObject;
-import com.pipai.wf.guiobject.GUIObjectUtils;
 import com.pipai.wf.renderable.BatchHelper;
 import com.pipai.wf.renderable.Renderable;
 import com.pipai.wf.renderable.gui.BattleTestGUI;
 import com.pipai.wf.renderable.gui.LeftClickable;
 import com.pipai.wf.renderable.gui.RightClickable;
+import com.pipai.wf.util.UtilFunctions;
 
 public class AgentTestGUIObject extends GUIObject implements Renderable, LeftClickable, RightClickable {
 	
@@ -42,6 +42,8 @@ public class AgentTestGUIObject extends GUIObject implements Renderable, LeftCli
 		animating = false;
 		ko = false;
 	}
+
+	public int renderPriority() { return 0; }
 	
 	public Agent getAgent() { return this.agent; }
 	
@@ -117,13 +119,13 @@ public class AgentTestGUIObject extends GUIObject implements Renderable, LeftCli
 	}
 
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		if (this.agent.getTeam() == Agent.Team.PLAYER && GUIObjectUtils.isInCircle(x, y, radius, gameX, gameY)) {
+		if (this.agent.getTeam() == Agent.Team.PLAYER && UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
 			this.select();
 		}
 	}
 
 	public void onRightClick(int gameX, int gameY) {
-		if (GUIObjectUtils.isInCircle(x, y, radius, gameX, gameY)) {
+		if (UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
 			if (agent.getTeam() == Agent.Team.ENEMY) {
 				gui.attack(this);
 				gui.updatePaths();

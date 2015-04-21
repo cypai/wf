@@ -11,6 +11,8 @@ import com.pipai.wf.renderable.Renderable;
 import com.pipai.wf.renderable.gui.GUI;
 
 public class TemporaryText extends GUIObject implements Renderable {
+
+	public final boolean foreground = true;
 	
 	private float x, y, w, h;
 	private int destroyAlarm;
@@ -25,6 +27,8 @@ public class TemporaryText extends GUIObject implements Renderable {
 		this.text = text;
 		destroyAlarm = 120;
 	}
+	
+	public int renderPriority() { return -1; }
 	
 	private void update() {
 		destroyAlarm--;

@@ -46,7 +46,7 @@ public class BattleTestGUI extends GUI {
 	private ArrayList<AgentTestGUIObject> agentList;
 	private AgentTestGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
-	private ArrayList<Renderable> renderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
+	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
 	private boolean animating, overlayClicked;
@@ -78,6 +78,7 @@ public class BattleTestGUI extends GUI {
 		this.battle = new BattleController(map);
 		this.animating = false;
 		this.renderables = new ArrayList<Renderable>();
+		this.foregroundRenderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable>();
 		this.rightClickables = new ArrayList<RightClickable>();
 		this.overlayRenderables = new ArrayList<Renderable>();
@@ -118,7 +119,7 @@ public class BattleTestGUI extends GUI {
 			RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
 			BattleEvent outcome = this.battle.performAction(atk);
 			System.out.println(outcome.toString());
-			BulletTestGUIObject b = new BulletTestGUIObject(this, selectedAgent.x, selectedAgent.y, target.x, target.y, target, outcome.getDamageRoll());
+			BulletTestGUIObject b = new BulletTestGUIObject(this, selectedAgent.x, selectedAgent.y, target.x, target.y, target, outcome);
 			renderables.add(b);
 		}
 	}
@@ -153,7 +154,11 @@ public class BattleTestGUI extends GUI {
 	
 	private void cleanCreateBuffers() {
 		for (Renderable o : renderablesCreateBuffer) {
-			renderables.add(o);
+			if (o.renderPriority() == -1) {
+				foregroundRenderables.add(o);
+			} else {
+				renderables.add(o);
+			}
 		}
 		for (LeftClickable o : leftClickablesCreateBuffer) {
 			leftClickables.add(o);
@@ -168,7 +173,9 @@ public class BattleTestGUI extends GUI {
 	
 	private void cleanDelBuffers() {
 		for (Renderable o : renderablesDelBuffer) {
-			renderables.remove(o);
+			if (!renderables.remove(o)) {
+				foregroundRenderables.remove(o);
+			}
 		}
 		for (LeftClickable o : leftClickablesDelBuffer) {
 			leftClickables.remove(o);
@@ -278,6 +285,37 @@ public class BattleTestGUI extends GUI {
 	}
 	
 	@Override
+	public void onKeyDown(int keycode) {
+		if (selectedAgent == null) {
+			return;
+		}
+		switch (keycode) {
+		case Keys.R:
+			// Reload
+			break;
+		case Keys.C:
+			// Ready spell
+			break;
+		case Keys.Y:
+			// Overwatch
+			break;
+		case Keys.K:
+			// Hunker
+			break;
+		case Keys.M:
+			// Recharge mana
+			break;
+		default:
+			break;
+		}
+	}
+	
+	@Override
+	public void onKeyUp(int keycode) {
+		
+	}
+	
+	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		this.camera.setToOrtho(false, width, height);
@@ -299,6 +337,9 @@ public class BattleTestGUI extends GUI {
         batch.getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
         batch.getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
 		this.drawAllAgentInfo(batch.getShapeRenderer());
+		for (Renderable r : this.foregroundRenderables) {
+			r.render(batch);
+		}
         batch.getSpriteBatch().setProjectionMatrix(overlayCamera.combined);
         batch.getShapeRenderer().setProjectionMatrix(overlayCamera.combined);
 		for (Renderable r : this.overlayRenderables) {
