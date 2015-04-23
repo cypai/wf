@@ -1,29 +1,29 @@
-package com.pipai.wf.guiobject.test;
+package com.pipai.wf.guiobject.battle;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.gui.BatchHelper;
+import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
-import com.pipai.wf.renderable.BatchHelper;
-import com.pipai.wf.renderable.Renderable;
-import com.pipai.wf.renderable.gui.BattleTestGUI;
 import com.pipai.wf.util.UtilFunctions;
 
-public class BulletTestGUIObject extends GUIObject implements Renderable {
+public class BulletGUIObject extends GUIObject implements Renderable {
 	
-	private BattleTestGUI gui;
+	private BattleGUI gui;
 	private float x, y, dest_x, dest_y;
 	private int t, final_t;
 	private Vector2 dir;
-	private AgentTestGUIObject target;
+	private AgentGUIObject target;
 	private BattleEvent outcome;
 	
 	private static final int SPEED = 16;
 	
-	public BulletTestGUIObject(BattleTestGUI gui, float x, float y, float dest_x, float dest_y, AgentTestGUIObject target, BattleEvent outcome) {
+	public BulletGUIObject(BattleGUI gui, float x, float y, float dest_x, float dest_y, AgentGUIObject target, BattleEvent outcome) {
 		super(gui);
 		this.gui = gui;
 		this.x = x;

@@ -1,4 +1,4 @@
-package com.pipai.wf.guiobject.test;
+package com.pipai.wf.guiobject.battle;
 
 import java.util.LinkedList;
 
@@ -9,17 +9,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.gui.BatchHelper;
+import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
-import com.pipai.wf.renderable.BatchHelper;
-import com.pipai.wf.renderable.Renderable;
-import com.pipai.wf.renderable.gui.BattleTestGUI;
-import com.pipai.wf.renderable.gui.LeftClickable;
-import com.pipai.wf.renderable.gui.RightClickable;
+import com.pipai.wf.guiobject.LeftClickable;
+import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.RightClickable;
 import com.pipai.wf.util.UtilFunctions;
 
-public class AgentTestGUIObject extends GUIObject implements Renderable, LeftClickable, RightClickable {
+public class AgentGUIObject extends GUIObject implements Renderable, LeftClickable, RightClickable {
 	
-	private BattleTestGUI gui;
+	private BattleGUI gui;
 	private Agent agent;
 	private boolean selected, ko;
 	public float x, y;
@@ -31,7 +31,7 @@ public class AgentTestGUIObject extends GUIObject implements Renderable, LeftCli
 	private Vector2 start, dest;
 	private int t;	//Animation time t counter
 	
-	public AgentTestGUIObject(BattleTestGUI gui, Agent agent, float x, float y, int radius) {
+	public AgentGUIObject(BattleGUI gui, Agent agent, float x, float y, int radius) {
 		super(gui);
 		this.gui = gui;
 		this.agent = agent;

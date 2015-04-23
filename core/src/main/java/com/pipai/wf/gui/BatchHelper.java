@@ -1,4 +1,4 @@
-package com.pipai.wf.renderable;
+package com.pipai.wf.gui;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

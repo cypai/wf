@@ -1,6 +1,6 @@
 package com.pipai.wf.guiobject;
 
-import com.pipai.wf.renderable.gui.GUI;
+import com.pipai.wf.gui.GUI;
 
 public abstract class GUIObject {
 	

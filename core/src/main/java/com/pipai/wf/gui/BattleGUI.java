@@ -1,4 +1,4 @@
-package com.pipai.wf.renderable.gui;
+package com.pipai.wf.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,16 +24,18 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.guiobject.LeftClickable;
+import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.RightClickable;
+import com.pipai.wf.guiobject.battle.AgentGUIObject;
+import com.pipai.wf.guiobject.battle.BulletGUIObject;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
-import com.pipai.wf.guiobject.test.AgentTestGUIObject;
-import com.pipai.wf.guiobject.test.BulletTestGUIObject;
-import com.pipai.wf.renderable.Renderable;
 
 /*
  * Simple 2D GUI for rendering a BattleMap
  */
 
-public class BattleTestGUI extends GUI {
+public class BattleGUI extends GUI {
     
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
@@ -42,9 +44,9 @@ public class BattleTestGUI extends GUI {
 
 	private OrthographicCamera camera, overlayCamera, orthoCamera;
 	private BattleController battle;
-	private HashMap<Agent, AgentTestGUIObject> agentMap;
-	private ArrayList<AgentTestGUIObject> agentList;
-	private AgentTestGUIObject selectedAgent;
+	private HashMap<Agent, AgentGUIObject> agentMap;
+	private ArrayList<AgentGUIObject> agentList;
+	private AgentGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
@@ -61,7 +63,7 @@ public class BattleTestGUI extends GUI {
 		return new Vector2(pos.x*SQUARE_SIZE + SQUARE_SIZE/2, pos.y*SQUARE_SIZE + SQUARE_SIZE/2);
 	}
 	
-	public BattleTestGUI(WFGame game) {
+	public BattleGUI(WFGame game) {
 		super(game);
         BattleMap map = new BattleMap(12, 10);
         map.addAgent(new AgentState(new GridPosition(1, 1), Agent.Team.PLAYER, 5));
@@ -89,11 +91,11 @@ public class BattleTestGUI extends GUI {
 		this.renderablesDelBuffer = new ArrayList<Renderable>();
 		this.leftClickablesDelBuffer = new ArrayList<LeftClickable>();
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
-		this.agentMap = new HashMap<Agent, AgentTestGUIObject>();
-		this.agentList = new ArrayList<AgentTestGUIObject>();
+		this.agentMap = new HashMap<Agent, AgentGUIObject>();
+		this.agentList = new ArrayList<AgentGUIObject>();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			GridPosition pos = agent.getPosition();
-			AgentTestGUIObject a = new AgentTestGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
+			AgentGUIObject a = new AgentGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 			this.agentMap.put(agent, a);
 			this.agentList.add(a);
 			this.renderables.add(a);
@@ -109,17 +111,17 @@ public class BattleTestGUI extends GUI {
 	public void endAnimation() { animating = false; }
 	public void setOverlayClickedFlag() { overlayClicked = true; }
 	
-	public void setSelected(AgentTestGUIObject agent) {
+	public void setSelected(AgentGUIObject agent) {
 		this.selectedAgent = agent;
 		this.updatePaths();
 	}
 	
-	public void attack(AgentTestGUIObject target) {
+	public void attack(AgentGUIObject target) {
 		if (selectedAgent != null) {
 			RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
 			BattleEvent outcome = this.battle.performAction(atk);
 			System.out.println(outcome.toString());
-			BulletTestGUIObject b = new BulletTestGUIObject(this, selectedAgent.x, selectedAgent.y, target.x, target.y, target, outcome);
+			BulletGUIObject b = new BulletGUIObject(this, selectedAgent.x, selectedAgent.y, target.x, target.y, target, outcome);
 			renderables.add(b);
 		}
 	}
@@ -246,7 +248,7 @@ public class BattleTestGUI extends GUI {
 	private void animateEvent(BattleEvent event) {
 		switch (event.getType()) {
 		case MOVE:
-			AgentTestGUIObject a = this.agentMap.get(event.getPerformer());
+			AgentGUIObject a = this.agentMap.get(event.getPerformer());
 			beginAnimation();
 			a.animateMoveSequence(vectorizePath(event.getPath()));
 			this.updatePaths();
@@ -409,12 +411,12 @@ public class BattleTestGUI extends GUI {
 	}
 	
 	private void drawAllAgentInfo(ShapeRenderer batch) {
-		for (AgentTestGUIObject a : this.agentList) {
+		for (AgentGUIObject a : this.agentList) {
 			drawAgentInfo(batch, a);
 		}
 	}
 	
-	private void drawAgentInfo(ShapeRenderer batch, AgentTestGUIObject a) {
+	private void drawAgentInfo(ShapeRenderer batch, AgentGUIObject a) {
 		if (a.getAgent().isKO()) {
 			return;
 		}

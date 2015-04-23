@@ -1,4 +1,4 @@
-package com.pipai.wf.renderable.gui;
+package com.pipai.wf.gui;
 
 import java.util.HashMap;
 
@@ -8,7 +8,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.guiobject.GUIObject;
-import com.pipai.wf.renderable.BatchHelper;
 
 public abstract class GUI implements Screen, InputProcessor {
 	

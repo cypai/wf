@@ -1,4 +1,4 @@
-package com.pipai.wf.renderable.gui;
+package com.pipai.wf.guiobject;
 
 public interface LeftClickable {
 	

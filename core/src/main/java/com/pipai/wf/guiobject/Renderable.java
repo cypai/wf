@@ -1,4 +1,6 @@
-package com.pipai.wf.renderable;
+package com.pipai.wf.guiobject;
+
+import com.pipai.wf.gui.BatchHelper;
 
 public interface Renderable {
 	

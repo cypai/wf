@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.pipai.wf.gui.BatchHelper;
+import com.pipai.wf.gui.GUI;
 import com.pipai.wf.guiobject.GUIObject;
-import com.pipai.wf.renderable.BatchHelper;
-import com.pipai.wf.renderable.Renderable;
-import com.pipai.wf.renderable.gui.GUI;
+import com.pipai.wf.guiobject.Renderable;
 
 public class TemporaryText extends GUIObject implements Renderable {
 
