@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
@@ -41,7 +42,7 @@ import com.pipai.wf.guiobject.overlay.TemporaryText;
  * Simple 2D GUI for rendering a BattleMap
  */
 
-public class BattleGUI extends GUI {
+public class BattleGUI extends GUI implements BattleObserver {
     
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
@@ -85,6 +86,7 @@ public class BattleGUI extends GUI {
         overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
         orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
 		this.battle = new BattleController(map);
+		this.battle.registerObserver(this);
 		this.animating = false;
 		this.allowInput = true;
 		this.renderables = new ArrayList<Renderable>();
@@ -128,21 +130,6 @@ public class BattleGUI extends GUI {
 		if (agent.getAgent().getAP() > 0) {
 			this.selectedAgent = agent;
 			this.updatePaths();
-		}
-	}
-	
-	public void attack(AgentGUIObject target) {
-		if (selectedAgent != null) {
-			if (selectedAgent.getAgent().getCurrentWeapon().currentAmmo() > 0) {
-				RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
-				try {
-					BattleEvent outcome = this.battle.performAction(atk);
-					System.out.println(outcome.toString());
-					this.animateEvent(outcome);
-				} catch (IllegalActionException e) {
-					System.out.println("Illegal move: " + e.getMessage());
-				}
-			}
 		}
 	}
 	
@@ -231,6 +218,11 @@ public class BattleGUI extends GUI {
 		return new Vector2(x, y);
 	}
 	
+	@Override
+	public void notifyBattleEvent(BattleEvent ev) {
+		this.animateEvent(ev);
+	}
+	
 	private void performPostInputChecks() {
 		if (this.selectedAgent.getAgent().getAP() == 0) {
 			this.selectableAgentOrderedList.remove(this.selectedAgent);
@@ -249,6 +241,21 @@ public class BattleGUI extends GUI {
 	
 	public void aiTurnOver() {
 		this.allowInput = true;
+	}
+	
+	public void attack(AgentGUIObject target) {
+		if (selectedAgent != null) {
+			if (selectedAgent.getAgent().getCurrentWeapon().currentAmmo() > 0) {
+				RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
+				try {
+					this.battle.performAction(atk);
+					//System.out.println(outcome.toString());
+					//this.animateEvent(outcome);
+				} catch (IllegalActionException e) {
+					System.out.println("Illegal move: " + e.getMessage());
+				}
+			}
+		}
 	}
 	
 	public void onLeftClick(int screenX, int screenY) {
@@ -283,8 +290,7 @@ public class BattleGUI extends GUI {
 					LinkedList<GridPosition> path = selectedMapGraph.getPath(clickSquare);
 					MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
 					try {
-						BattleEvent event = this.battle.performAction(move);
-						animateEvent(event);
+						this.battle.performAction(move);
 					} catch (IllegalActionException e) {
 						System.out.println("IllegalMoveException detected: " + e.getMessage());
 					}
@@ -380,8 +386,7 @@ public class BattleGUI extends GUI {
 		}
 		if (action != null) {
 			try {
-				BattleEvent outcome = this.battle.performAction(action);
-				this.animateEvent(outcome);
+				this.battle.performAction(action);
 			} catch (IllegalActionException e) {
 				System.out.println("Illegal move: " + e.getMessage());
 			}

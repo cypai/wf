@@ -1,5 +1,7 @@
 package com.pipai.wf.battle;
 
+import java.util.LinkedList;
+
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleLog;
@@ -15,12 +17,14 @@ public class BattleController {
 	private BattleMap map;
 	private BattleLog log;
 	private Team currentTeam;
+	private LinkedList<BattleObserver> observerList;
 	
 	public BattleController(BattleMap map) {
 		log = new BattleLog();
 		this.map = map;
 		this.map.register(log);
 		this.currentTeam = Team.PLAYER;
+		this.observerList = new LinkedList<BattleObserver>();
 	}
 	
 	public BattleMap getBattleMap() {
@@ -31,6 +35,16 @@ public class BattleController {
 		return this.currentTeam;
 	}
 	
+	public void registerObserver(BattleObserver o) {
+		this.observerList.add(o);
+	}
+	
+	private void notifyObservers(BattleEvent ev) {
+		for (BattleObserver o : this.observerList) {
+			o.notifyBattleEvent(ev);
+		}
+	}
+	
 	public void endTurn() {
 		if (this.currentTeam == Team.PLAYER) {
 			this.currentTeam = Team.ENEMY;
@@ -39,10 +53,10 @@ public class BattleController {
 		}
 	}
 	
-	public BattleEvent performAction(Action a) throws IllegalActionException {
+	public void performAction(Action a) throws IllegalActionException {
 		log.clear();
 		a.perform();
-		return log.getLastEvent();
+		this.notifyObservers(log.getLastEvent());
 	}
 	
 	public BattleLog getLog() {

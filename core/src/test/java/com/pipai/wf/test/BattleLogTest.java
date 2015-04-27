@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
@@ -24,6 +25,16 @@ import com.pipai.wf.exception.IllegalActionException;
 
 public class BattleLogTest {
 	
+	private class MockGUIObserver implements BattleObserver {
+		
+		public BattleEvent ev;
+
+		public void notifyBattleEvent(BattleEvent ev) {
+			this.ev = ev;
+		}
+		
+	}
+	
 	@Test
 	public void testMoveLog() {
 		String rawMapString = "3 4\n"
@@ -35,6 +46,8 @@ public class BattleLogTest {
 			fail(e.getMessage());
 		}
 		BattleController battle = new BattleController(map);
+		MockGUIObserver observer = new MockGUIObserver();
+		battle.registerObserver(observer);
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
@@ -42,12 +55,12 @@ public class BattleLogTest {
 		path.add(agent.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(agent, path);
-		BattleEvent ev = null;
 		try {
-			ev = battle.performAction(move);
+			battle.performAction(move);
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
+		BattleEvent ev = observer.ev;
 		assertTrue(ev.getType() == BattleEvent.Type.MOVE);
 		assertTrue(ev.getPerformer() == agent);
 		assertTrue(ev.getPath().peekLast().equals(dest));
@@ -66,6 +79,8 @@ public class BattleLogTest {
 			fail(e.getMessage());
 		}
 		BattleController battle = new BattleController(map);
+		MockGUIObserver observer = new MockGUIObserver();
+		battle.registerObserver(observer);
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
@@ -73,12 +88,12 @@ public class BattleLogTest {
 		path.add(agent.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(agent, path);
-		BattleEvent ev = null;
 		try {
-			ev = battle.performAction(move);
+			battle.performAction(move);
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
+		BattleEvent ev = observer.ev;
 		assertTrue(ev.getType() == BattleEvent.Type.MOVE);
 		assertTrue(ev.getPerformer() == agent);
 		assertTrue(ev.getPath().peekLast().equals(dest));
@@ -87,12 +102,12 @@ public class BattleLogTest {
 		illegalPath.add(agent.getPosition());
 		illegalPath.add(new GridPosition(2, 1));
 		MoveAction badmove = new MoveAction(agent, illegalPath);
-		BattleEvent ev2 = null;
 		try {
-			ev2 = battle.performAction(badmove);
+			battle.performAction(badmove);
 			fail("Expected IllegalMoveException was not thrown");
 		} catch (IllegalActionException e) {
-			assertTrue(ev2 == null);
+			BattleEvent ev2 = observer.ev;
+			assertTrue(ev2 == ev);	// Check that notifyBattleEvent was not called
 		}
 	}
 	
@@ -105,16 +120,18 @@ public class BattleLogTest {
         map.addAgent(new AgentState(playerPos, Team.PLAYER, 5));
         map.addAgent(new AgentState(enemyPos, Team.ENEMY, 5));
 		BattleController battle = new BattleController(map);
+		MockGUIObserver observer = new MockGUIObserver();
+		battle.registerObserver(observer);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
 		RangeAttackAction atk = new RangeAttackAction(player, enemy, new SimpleRangedAttack());
-		BattleEvent ev = null;
 		try {
-			ev = battle.performAction(atk);
+			battle.performAction(atk);
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
+		BattleEvent ev = observer.ev;
 		assertTrue(ev.getType() == BattleEvent.Type.ATTACK);
 		assertTrue(ev.getPerformer() == player);
 		assertTrue(ev.getTarget() == enemy);
@@ -130,16 +147,18 @@ public class BattleLogTest {
         map.addAgent(new AgentState(playerPos, Team.PLAYER, 5));
         map.addAgent(new AgentState(enemyPos, Team.ENEMY, 5));
 		BattleController battle = new BattleController(map);
+		MockGUIObserver observer = new MockGUIObserver();
+		battle.registerObserver(observer);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
 		OverwatchAction ow = new OverwatchAction(enemy, new SimpleRangedAttack());
-		BattleEvent ev = null;
 		try {
-			ev = battle.performAction(ow);
+			battle.performAction(ow);
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
+		BattleEvent ev = observer.ev;
 		assertTrue(ev.getType() == BattleEvent.Type.OVERWATCH);
 		assertTrue(ev.getPerformer() == enemy);
 		assertTrue(ev.getAttack() instanceof SimpleRangedAttack);
@@ -150,12 +169,12 @@ public class BattleLogTest {
 		path.add(player.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(player, path);
-		BattleEvent moveEv = null;
 		try {
-			moveEv = battle.performAction(move);
+			battle.performAction(move);
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
+		BattleEvent moveEv = observer.ev;
 		assertTrue(moveEv.getType() == BattleEvent.Type.MOVE);
 		assertTrue(moveEv.getPerformer() == player);
 		LinkedList<BattleEvent> chain = moveEv.getChainEvents();
@@ -179,13 +198,15 @@ public class BattleLogTest {
 			fail(e.getMessage());
 		}
 		BattleController battle = new BattleController(map);
+		MockGUIObserver observer = new MockGUIObserver();
+		battle.registerObserver(observer);
 		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
-		BattleEvent ev = null;
 		try {
-			ev = battle.performAction(new ReloadAction(agent));
+			battle.performAction(new ReloadAction(agent));
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
+		BattleEvent ev = observer.ev;
 		assertTrue(ev.getType() == BattleEvent.Type.RELOAD);
 		assertTrue(ev.getPerformer() == agent);
 		assertTrue(ev.getChainEvents().size() == 0);
