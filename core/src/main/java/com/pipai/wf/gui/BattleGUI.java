@@ -52,6 +52,7 @@ public class BattleGUI extends GUI {
 	private BattleController battle;
 	private HashMap<Agent, AgentGUIObject> agentMap;
 	private ArrayList<AgentGUIObject> agentList;
+	private LinkedList<AgentGUIObject> selectableAgentOrderedList;
 	private AgentGUIObject selectedAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
@@ -100,11 +101,15 @@ public class BattleGUI extends GUI {
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
 		this.agentMap = new HashMap<Agent, AgentGUIObject>();
 		this.agentList = new ArrayList<AgentGUIObject>();
+		this.selectableAgentOrderedList = new LinkedList<AgentGUIObject>();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			GridPosition pos = agent.getPosition();
 			AgentGUIObject a = new AgentGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 			this.agentMap.put(agent, a);
 			this.agentList.add(a);
+			if (agent.getTeam() == Team.PLAYER) {
+				this.selectableAgentOrderedList.add(a);
+			}
 			this.renderables.add(a);
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
@@ -112,6 +117,7 @@ public class BattleGUI extends GUI {
 		AttackButtonOverlay atkBtn = new AttackButtonOverlay(this);
 		this.overlayRenderables.add(atkBtn);
 		this.overlayLeftClickables.add(atkBtn);
+		this.setSelected(this.selectableAgentOrderedList.getFirst());
 	}
 	
 	private void beginAnimation() { animating = true; }
@@ -119,8 +125,10 @@ public class BattleGUI extends GUI {
 	public void setOverlayClickedFlag() { overlayClicked = true; }
 	
 	public void setSelected(AgentGUIObject agent) {
-		this.selectedAgent = agent;
-		this.updatePaths();
+		if (agent.getAgent().getAP() > 0) {
+			this.selectedAgent = agent;
+			this.updatePaths();
+		}
 	}
 	
 	public void attack(AgentGUIObject target) {
@@ -223,13 +231,20 @@ public class BattleGUI extends GUI {
 		return new Vector2(x, y);
 	}
 	
-	public void checkTurnOver() {
+	private void performPostInputChecks() {
+		if (this.selectedAgent.getAgent().getAP() == 0) {
+			this.selectableAgentOrderedList.remove(this.selectedAgent);
+			if (this.selectableAgentOrderedList.size() > 0) {
+				this.setSelected(this.selectableAgentOrderedList.getFirst());
+			}
+		}
 		for (AgentGUIObject a : this.agentList) {
 			if (a.getAgent().getTeam() == Team.PLAYER && a.getAgent().getAP() > 0) {
 				return;
 			}
 		}
 		this.allowInput = false;
+		this.battle.endTurn();
 	}
 	
 	public void aiTurnOver() {
@@ -250,6 +265,7 @@ public class BattleGUI extends GUI {
 			for (LeftClickable o : leftClickables) {
 				o.onLeftClick(screenX, screenY, gameX, gameY);
 			}
+			this.performPostInputChecks();
 		}
 	}
 	
@@ -277,6 +293,7 @@ public class BattleGUI extends GUI {
 			for (RightClickable o : rightClickables) {
 				o.onRightClick(gameX, gameY);
 			}
+			this.performPostInputChecks();
 		}
 	}
 	
@@ -368,7 +385,7 @@ public class BattleGUI extends GUI {
 			} catch (IllegalActionException e) {
 				System.out.println("Illegal move: " + e.getMessage());
 			}
-			this.checkTurnOver();
+			this.performPostInputChecks();
 		}
 	}
 	
@@ -415,7 +432,7 @@ public class BattleGUI extends GUI {
 		BattleMap map = this.battle.getBattleMap();
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawWalls(batch);
-		if (!animating) {
+		if (!animating && this.battle.getCurrentTeam() == Team.PLAYER) {
 			this.drawMovableTiles(batch);
 		}
 	}
