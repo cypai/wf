@@ -14,7 +14,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
+import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
@@ -32,6 +34,7 @@ import com.pipai.wf.guiobject.RightClickable;
 import com.pipai.wf.guiobject.battle.AgentGUIObject;
 import com.pipai.wf.guiobject.battle.BulletGUIObject;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
+import com.pipai.wf.guiobject.overlay.TemporaryText;
 
 /*
  * Simple 2D GUI for rendering a BattleMap
@@ -271,6 +274,10 @@ public class BattleGUI extends GUI {
 			BulletGUIObject b = new BulletGUIObject(this, a.x, a.y, t.x, t.y, t, event);
 			renderables.add(b);
 			break;
+		case OVERWATCH:
+			a = this.agentMap.get(event.getPerformer());
+			TemporaryText ttext = new TemporaryText(this, a.x, a.y, 80, 24, "Overwatch");
+			this.createInstance(ttext);
 		default:
 			break;
 		}
@@ -309,22 +316,18 @@ public class BattleGUI extends GUI {
 		if (selectedAgent == null) {
 			return;
 		}
+		Action action = null;
 		switch (keycode) {
 		case Keys.R:
 			// Reload
-			ReloadAction action = new ReloadAction(selectedAgent.getAgent());
-			try {
-				BattleEvent outcome = this.battle.performAction(action);
-				this.animateEvent(outcome);
-			} catch (IllegalActionException e) {
-				System.out.println("Illegal move: " + e.getMessage());
-			}
+			action = new ReloadAction(selectedAgent.getAgent());
 			break;
 		case Keys.C:
 			// Ready spell
 			break;
 		case Keys.Y:
 			// Overwatch
+			action = new OverwatchAction(selectedAgent.getAgent(), new SimpleRangedAttack());
 			break;
 		case Keys.K:
 			// Hunker
@@ -334,6 +337,14 @@ public class BattleGUI extends GUI {
 			break;
 		default:
 			break;
+		}
+		if (action != null) {
+			try {
+				BattleEvent outcome = this.battle.performAction(action);
+				this.animateEvent(outcome);
+			} catch (IllegalActionException e) {
+				System.out.println("Illegal move: " + e.getMessage());
+			}
 		}
 	}
 	
