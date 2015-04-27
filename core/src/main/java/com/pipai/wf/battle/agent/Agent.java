@@ -14,6 +14,7 @@ import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.exception.IllegalActionException;
 
 public class Agent implements BattleEventLoggable {
 	
@@ -127,7 +128,7 @@ public class Agent implements BattleEventLoggable {
 		}
 	}
 	
-	public void move(LinkedList<GridPosition> path) {
+	public void move(LinkedList<GridPosition> path) throws IllegalActionException {
 		boolean isValid = true;
 		BattleEvent event = BattleEvent.moveEvent(this, path);
 		for (GridPosition pos : path) {
@@ -141,7 +142,7 @@ public class Agent implements BattleEventLoggable {
 		if (isValid) {
 			logEvent(event);
 		} else {
-			return;
+			throw new IllegalActionException("Move path sequence is not valid");
 		}
 		for (GridPosition pos : path) {
 			this.setPosition(pos);

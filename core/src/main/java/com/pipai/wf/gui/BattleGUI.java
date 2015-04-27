@@ -23,7 +23,7 @@ import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
-import com.pipai.wf.exception.IllegalMoveException;
+import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.Renderable;
@@ -125,7 +125,7 @@ public class BattleGUI extends GUI {
 					BattleEvent outcome = this.battle.performAction(atk);
 					System.out.println(outcome.toString());
 					this.animateEvent(outcome);
-				} catch (IllegalMoveException e) {
+				} catch (IllegalActionException e) {
 					System.out.println("Illegal move: " + e.getMessage());
 				}
 			}
@@ -244,7 +244,7 @@ public class BattleGUI extends GUI {
 					try {
 						BattleEvent event = this.battle.performAction(move);
 						animateEvent(event);
-					} catch (IllegalMoveException e) {
+					} catch (IllegalActionException e) {
 						System.out.println("IllegalMoveException detected: " + e.getMessage());
 					}
 				}

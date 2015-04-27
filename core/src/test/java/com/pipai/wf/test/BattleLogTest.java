@@ -19,7 +19,7 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.BadStateStringException;
-import com.pipai.wf.exception.IllegalMoveException;
+import com.pipai.wf.exception.IllegalActionException;
 
 public class BattleLogTest {
 	
@@ -44,7 +44,7 @@ public class BattleLogTest {
 		BattleEvent ev = null;
 		try {
 			ev = battle.performAction(move);
-		} catch (IllegalMoveException e) {
+		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
 		assertTrue(ev.getType() == BattleEvent.Type.MOVE);
@@ -75,7 +75,7 @@ public class BattleLogTest {
 		BattleEvent ev = null;
 		try {
 			ev = battle.performAction(move);
-		} catch (IllegalMoveException e) {
+		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
 		assertTrue(ev.getType() == BattleEvent.Type.MOVE);
@@ -90,7 +90,7 @@ public class BattleLogTest {
 		try {
 			ev2 = battle.performAction(badmove);
 			fail("Expected IllegalMoveException was not thrown");
-		} catch (IllegalMoveException e) {
+		} catch (IllegalActionException e) {
 			assertTrue(ev2 == null);
 		}
 	}
@@ -111,7 +111,7 @@ public class BattleLogTest {
 		BattleEvent ev = null;
 		try {
 			ev = battle.performAction(atk);
-		} catch (IllegalMoveException e) {
+		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
 		assertTrue(ev.getType() == BattleEvent.Type.ATTACK);
@@ -136,7 +136,7 @@ public class BattleLogTest {
 		BattleEvent ev = null;
 		try {
 			ev = battle.performAction(ow);
-		} catch (IllegalMoveException e) {
+		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
 		assertTrue(ev.getType() == BattleEvent.Type.OVERWATCH);
@@ -152,7 +152,7 @@ public class BattleLogTest {
 		BattleEvent moveEv = null;
 		try {
 			moveEv = battle.performAction(move);
-		} catch (IllegalMoveException e) {
+		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
 		assertTrue(moveEv.getType() == BattleEvent.Type.MOVE);

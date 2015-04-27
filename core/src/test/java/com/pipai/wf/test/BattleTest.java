@@ -13,7 +13,7 @@ import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.Direction;
 import com.pipai.wf.exception.BadStateStringException;
-import com.pipai.wf.exception.IllegalMoveException;
+import com.pipai.wf.exception.IllegalActionException;
 
 public class BattleTest {
 
@@ -76,7 +76,7 @@ public class BattleTest {
 		MoveAction move = new MoveAction(agent, path);
 		try {
 			move.perform();
-		} catch (IllegalMoveException e) {
+		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
 		assertTrue(map.getAgentAtPos(new GridPosition(1, 0)) == null);
@@ -90,7 +90,7 @@ public class BattleTest {
 		MoveAction move2 = new MoveAction(agent, path2);
 		try {
 			move2.perform();
-		} catch (IllegalMoveException e) {
+		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
 		assertTrue(map.getAgentAtPos(new GridPosition(1, 0)) == null);
@@ -125,11 +125,11 @@ public class BattleTest {
 		MoveAction move = new MoveAction(agent, path);
 		try {
 			move.perform();
-		} catch (IllegalMoveException e) {
-			fail(e.getMessage());
+			fail("Expected IllegalMoveException was not thrown");
+		} catch (IllegalActionException e) {
+			assertTrue(map.getAgentAtPos(new GridPosition(1, 1)) == null);
+			assertFalse(map.getAgentAtPos(new GridPosition(1, 0)) == null);
 		}
-		assertTrue(map.getAgentAtPos(new GridPosition(1, 1)) == null);
-		assertFalse(map.getAgentAtPos(new GridPosition(1, 0)) == null);
 	}
 	
 	@Test
@@ -160,11 +160,11 @@ public class BattleTest {
 		MoveAction move = new MoveAction(agent, path);
 		try {
 			move.perform();
-		} catch (IllegalMoveException e) {
-			fail(e.getMessage());
+			fail("Expected IllegalMoveException was not thrown");
+		} catch (IllegalActionException e) {
+			assertTrue(map.getAgentAtPos(new GridPosition(1, 1)) == null);
+			assertFalse(map.getAgentAtPos(new GridPosition(1, 0)) == null);
 		}
-		assertTrue(map.getAgentAtPos(new GridPosition(1, 1)) == null);
-		assertFalse(map.getAgentAtPos(new GridPosition(1, 0)) == null);
 	}
 
 }
