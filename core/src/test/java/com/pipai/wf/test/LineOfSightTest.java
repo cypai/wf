@@ -6,12 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.pipai.wf.battle.BattleController;
-import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.attack.SimpleRangedAttack;
-import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;

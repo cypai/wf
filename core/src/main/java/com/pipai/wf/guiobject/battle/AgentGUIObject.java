@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
@@ -95,7 +96,7 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		ShapeRenderer r = batch.getShapeRenderer();
 		if (!ko) {
 			r.begin(ShapeType.Filled);
-			if (agent.getTeam() == Agent.Team.PLAYER) {
+			if (agent.getTeam() == Team.PLAYER) {
 				r.setColor(0, 0.8f, 0, 1);
 			} else {
 				r.setColor(0.8f, 0, 0, 1);
@@ -119,14 +120,14 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 	}
 
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		if (this.agent.getTeam() == Agent.Team.PLAYER && UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
+		if (this.agent.getTeam() == Team.PLAYER && UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
 			this.select();
 		}
 	}
 
 	public void onRightClick(int gameX, int gameY) {
 		if (UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
-			if (agent.getTeam() == Agent.Team.ENEMY) {
+			if (agent.getTeam() == Team.ENEMY) {
 				gui.attack(this);
 				gui.updatePaths();
 			}

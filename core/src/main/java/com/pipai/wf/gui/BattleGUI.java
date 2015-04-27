@@ -20,6 +20,7 @@ import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
@@ -56,7 +57,7 @@ public class BattleGUI extends GUI {
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
-	private boolean animating, overlayClicked;
+	private boolean animating, overlayClicked, allowInput;
 
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
 		int x_offset = gameX % SQUARE_SIZE;
@@ -71,10 +72,10 @@ public class BattleGUI extends GUI {
 	public BattleGUI(WFGame game) {
 		super(game);
         BattleMap map = new BattleMap(12, 10);
-        map.addAgent(new AgentState(new GridPosition(1, 1), Agent.Team.PLAYER, 5));
-        map.addAgent(new AgentState(new GridPosition(4, 1), Agent.Team.PLAYER, 5));
-        map.addAgent(new AgentState(new GridPosition(5, 8), Agent.Team.ENEMY, 5));
-        map.addAgent(new AgentState(new GridPosition(9, 10), Agent.Team.ENEMY, 5));
+        map.addAgent(new AgentState(new GridPosition(1, 1), Team.PLAYER, 5));
+        map.addAgent(new AgentState(new GridPosition(4, 1), Team.PLAYER, 5));
+        map.addAgent(new AgentState(new GridPosition(5, 8), Team.ENEMY, 5));
+        map.addAgent(new AgentState(new GridPosition(9, 10), Team.ENEMY, 5));
         map.getCell(new GridPosition(5, 5)).setSolid(true);
         camera = new OrthographicCamera();
         overlayCamera = new OrthographicCamera();
@@ -84,6 +85,7 @@ public class BattleGUI extends GUI {
         orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
 		this.battle = new BattleController(map);
 		this.animating = false;
+		this.allowInput = true;
 		this.renderables = new ArrayList<Renderable>();
 		this.foregroundRenderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable>();
@@ -221,7 +223,23 @@ public class BattleGUI extends GUI {
 		return new Vector2(x, y);
 	}
 	
+	public void checkTurnOver() {
+		for (AgentGUIObject a : this.agentList) {
+			if (a.getAgent().getTeam() == Team.PLAYER && a.getAgent().getAP() > 0) {
+				return;
+			}
+		}
+		this.allowInput = false;
+	}
+	
+	public void aiTurnOver() {
+		this.allowInput = true;
+	}
+	
 	public void onLeftClick(int screenX, int screenY) {
+		if (!this.allowInput) {
+			return;
+		}
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
 		int gameX = (int)gamePos.x;
 		int gameY = (int)gamePos.y;
@@ -236,6 +254,9 @@ public class BattleGUI extends GUI {
 	}
 	
 	public void onRightClick(int screenX, int screenY) {
+		if (!this.allowInput) {
+			return;
+		}
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
 		int gameX = (int)gamePos.x;
 		int gameY = (int)gamePos.y;
@@ -291,21 +312,23 @@ public class BattleGUI extends GUI {
 	}
 	
 	private void updateCamera() {
-		if (this.checkKey(Keys.A)) {
-			this.camera.translate(-3, 0);
-			this.orthoCamera.translate(-3, 0);
-		}
-		if (this.checkKey(Keys.D)) {
-			this.camera.translate(3, 0);
-			this.orthoCamera.translate(3, 0);
-		}
-		if (this.checkKey(Keys.W)) {
-			this.camera.translate(0, 3);
-			this.orthoCamera.translate(0, 3);
-		}
-		if (this.checkKey(Keys.S)) {
-			this.camera.translate(0, -3);
-			this.orthoCamera.translate(0, -3);
+		if (this.allowInput) {
+			if (this.checkKey(Keys.A)) {
+				this.camera.translate(-3, 0);
+				this.orthoCamera.translate(-3, 0);
+			}
+			if (this.checkKey(Keys.D)) {
+				this.camera.translate(3, 0);
+				this.orthoCamera.translate(3, 0);
+			}
+			if (this.checkKey(Keys.W)) {
+				this.camera.translate(0, 3);
+				this.orthoCamera.translate(0, 3);
+			}
+			if (this.checkKey(Keys.S)) {
+				this.camera.translate(0, -3);
+				this.orthoCamera.translate(0, -3);
+			}
 		}
         this.camera.update();
         this.orthoCamera.update();
@@ -313,7 +336,7 @@ public class BattleGUI extends GUI {
 	
 	@Override
 	public void onKeyDown(int keycode) {
-		if (selectedAgent == null) {
+		if (!this.allowInput || selectedAgent == null) {
 			return;
 		}
 		Action action = null;
@@ -345,6 +368,7 @@ public class BattleGUI extends GUI {
 			} catch (IllegalActionException e) {
 				System.out.println("Illegal move: " + e.getMessage());
 			}
+			this.checkTurnOver();
 		}
 	}
 	

@@ -1,7 +1,7 @@
 package com.pipai.wf.battle.agent;
 
 import com.pipai.wf.battle.agent.Agent.State;
-import com.pipai.wf.battle.agent.Agent.Team;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.BadStateStringException;
 

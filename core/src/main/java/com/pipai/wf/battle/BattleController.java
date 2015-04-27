@@ -14,26 +14,29 @@ public class BattleController {
 	
 	private BattleMap map;
 	private BattleLog log;
-	private int currentTeam, maxTeams;	//Turn system variables
+	private Team currentTeam;
 	
 	public BattleController(BattleMap map) {
 		log = new BattleLog();
 		this.map = map;
 		this.map.register(log);
-		this.currentTeam = 0;
-		this.maxTeams = 2;
+		this.currentTeam = Team.PLAYER;
 	}
 	
 	public BattleMap getBattleMap() {
 		return this.map;
 	}
 	
-	public int getCurrentTeam() {
+	public Team getCurrentTeam() {
 		return this.currentTeam;
 	}
 	
 	public void endTurn() {
-		this.currentTeam = (this.currentTeam + 1) % this.maxTeams;
+		if (this.currentTeam == Team.PLAYER) {
+			this.currentTeam = Team.ENEMY;
+		} else {
+			this.currentTeam = Team.PLAYER;
+		}
 	}
 	
 	public BattleEvent performAction(Action a) throws IllegalActionException {

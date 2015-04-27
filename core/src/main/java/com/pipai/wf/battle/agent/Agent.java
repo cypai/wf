@@ -3,6 +3,7 @@ package com.pipai.wf.battle.agent;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.attack.Attack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
@@ -19,7 +20,6 @@ import com.pipai.wf.exception.IllegalActionException;
 public class Agent implements BattleEventLoggable {
 	
 	public enum State {NEUTRAL, KO, OVERWATCH};
-	public enum Team {PLAYER, ENEMY}
 	
 	protected Team team;
 	protected int maxHP, maxAP, hp, ap;

@@ -7,13 +7,13 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
@@ -102,8 +102,8 @@ public class BattleLogTest {
 		map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(new AgentState(playerPos, Agent.Team.PLAYER, 5));
-        map.addAgent(new AgentState(enemyPos, Agent.Team.ENEMY, 5));
+        map.addAgent(new AgentState(playerPos, Team.PLAYER, 5));
+        map.addAgent(new AgentState(enemyPos, Team.ENEMY, 5));
 		BattleController battle = new BattleController(map);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
@@ -127,8 +127,8 @@ public class BattleLogTest {
 		map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(new AgentState(playerPos, Agent.Team.PLAYER, 5));
-        map.addAgent(new AgentState(enemyPos, Agent.Team.ENEMY, 5));
+        map.addAgent(new AgentState(playerPos, Team.PLAYER, 5));
+        map.addAgent(new AgentState(enemyPos, Team.ENEMY, 5));
 		BattleController battle = new BattleController(map);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
