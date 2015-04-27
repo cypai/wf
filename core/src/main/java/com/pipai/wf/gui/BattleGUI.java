@@ -121,8 +121,7 @@ public class BattleGUI extends GUI {
 			RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
 			BattleEvent outcome = this.battle.performAction(atk);
 			System.out.println(outcome.toString());
-			BulletGUIObject b = new BulletGUIObject(this, selectedAgent.x, selectedAgent.y, target.x, target.y, target, outcome);
-			renderables.add(b);
+			this.animateEvent(outcome);
 		}
 	}
 	
@@ -246,13 +245,20 @@ public class BattleGUI extends GUI {
 	}
 	
 	private void animateEvent(BattleEvent event) {
+		AgentGUIObject a, t;
 		switch (event.getType()) {
 		case MOVE:
-			AgentGUIObject a = this.agentMap.get(event.getPerformer());
+			a = this.agentMap.get(event.getPerformer());
 			beginAnimation();
 			a.animateMoveSequence(vectorizePath(event.getPath()));
 			this.updatePaths();
-			
+			break;
+		case ATTACK:
+			a = this.agentMap.get(event.getPerformer());
+			t = this.agentMap.get(event.getTarget());
+			BulletGUIObject b = new BulletGUIObject(this, a.x, a.y, t.x, t.y, t, event);
+			renderables.add(b);
+			break;
 		default:
 			break;
 		}
