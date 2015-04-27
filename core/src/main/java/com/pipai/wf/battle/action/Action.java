@@ -12,6 +12,9 @@ public abstract class Action {
 	}
 	
 	public void perform() throws IllegalActionException {
+		if (this.performerAgent.getAP() < this.getAPRequired()) {
+			throw new IllegalActionException("Not enough AP for action");
+		}
 	}
 	
 	/*
