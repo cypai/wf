@@ -3,7 +3,7 @@ package com.pipai.wf.battle.map;
 import java.util.ArrayList;
 
 import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.exception.BadStateStringException;
+import com.pipai.wf.exception.BadStateStringException;
 
 /*
  * A MapString is the interface between the string representation of a map and the BattleMap

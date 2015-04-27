@@ -14,11 +14,12 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
-import com.pipai.wf.battle.exception.BadStateStringException;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.exception.BadStateStringException;
+import com.pipai.wf.exception.IllegalMoveException;
 
 public class BattleLogTest {
 	
@@ -40,7 +41,12 @@ public class BattleLogTest {
 		path.add(agent.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(agent, path);
-		BattleEvent ev = battle.performAction(move);
+		BattleEvent ev = null;
+		try {
+			ev = battle.performAction(move);
+		} catch (IllegalMoveException e) {
+			fail(e.getMessage());
+		}
 		assertTrue(ev.getType() == BattleEvent.Type.MOVE);
 		assertTrue(ev.getPerformer() == agent);
 		assertTrue(ev.getPath().peekLast().equals(dest));
@@ -66,7 +72,12 @@ public class BattleLogTest {
 		path.add(agent.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(agent, path);
-		BattleEvent ev = battle.performAction(move);
+		BattleEvent ev = null;
+		try {
+			ev = battle.performAction(move);
+		} catch (IllegalMoveException e) {
+			fail(e.getMessage());
+		}
 		assertTrue(ev.getType() == BattleEvent.Type.MOVE);
 		assertTrue(ev.getPerformer() == agent);
 		assertTrue(ev.getPath().peekLast().equals(dest));
@@ -75,8 +86,13 @@ public class BattleLogTest {
 		illegalPath.add(agent.getPosition());
 		illegalPath.add(new GridPosition(2, 1));
 		MoveAction badmove = new MoveAction(agent, illegalPath);
-		BattleEvent ev2 = battle.performAction(badmove);
-		assertTrue(ev2 == null);
+		BattleEvent ev2 = null;
+		try {
+			ev2 = battle.performAction(badmove);
+			fail("Expected IllegalMoveException was not thrown");
+		} catch (IllegalMoveException e) {
+			assertTrue(ev2 == null);
+		}
 	}
 	
 	@Test
@@ -92,7 +108,12 @@ public class BattleLogTest {
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
 		RangeAttackAction atk = new RangeAttackAction(player, enemy, new SimpleRangedAttack());
-		BattleEvent ev = battle.performAction(atk);
+		BattleEvent ev = null;
+		try {
+			ev = battle.performAction(atk);
+		} catch (IllegalMoveException e) {
+			fail(e.getMessage());
+		}
 		assertTrue(ev.getType() == BattleEvent.Type.ATTACK);
 		assertTrue(ev.getPerformer() == player);
 		assertTrue(ev.getTarget() == enemy);
@@ -112,7 +133,12 @@ public class BattleLogTest {
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
 		OverwatchAction ow = new OverwatchAction(enemy, new SimpleRangedAttack());
-		BattleEvent ev = battle.performAction(ow);
+		BattleEvent ev = null;
+		try {
+			ev = battle.performAction(ow);
+		} catch (IllegalMoveException e) {
+			fail(e.getMessage());
+		}
 		assertTrue(ev.getType() == BattleEvent.Type.OVERWATCH);
 		assertTrue(ev.getPerformer() == enemy);
 		assertTrue(ev.getAttack() instanceof SimpleRangedAttack);
@@ -123,7 +149,12 @@ public class BattleLogTest {
 		path.add(player.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(player, path);
-		BattleEvent moveEv = battle.performAction(move);
+		BattleEvent moveEv = null;
+		try {
+			moveEv = battle.performAction(move);
+		} catch (IllegalMoveException e) {
+			fail(e.getMessage());
+		}
 		assertTrue(moveEv.getType() == BattleEvent.Type.MOVE);
 		assertTrue(moveEv.getPerformer() == player);
 		LinkedList<BattleEvent> chain = moveEv.getChainEvents();

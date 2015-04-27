@@ -11,11 +11,11 @@ import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
-import com.pipai.wf.battle.exception.BadStateStringException;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.exception.BadStateStringException;
 
 public class LineOfSightTest {
 

@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.exception;
+package com.pipai.wf.exception;
 
 public class BadStateStringException extends Exception {
     public BadStateStringException(String message) {

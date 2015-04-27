@@ -1,6 +1,7 @@
 package com.pipai.wf.battle.action;
 
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.exception.IllegalMoveException;
 
 public abstract class Action {
 	
@@ -10,7 +11,7 @@ public abstract class Action {
 		this.performerAgent = performerAgent;
 	}
 	
-	public void perform() {
+	public void perform() throws IllegalMoveException {
 	}
 	
 	/*

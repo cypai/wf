@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.exception.IllegalMoveException;
 
 public class MoveAction extends Action {
 	
@@ -14,7 +15,7 @@ public class MoveAction extends Action {
 		this.path = path;
 	}
 	
-	public void perform() {
+	public void perform() throws IllegalMoveException {
 		super.perform();
 		this.performerAgent.move(this.path);
 	}

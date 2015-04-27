@@ -7,11 +7,11 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import com.pipai.wf.battle.exception.BadStateStringException;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.battle.map.MapString;
+import com.pipai.wf.exception.BadStateStringException;
 
 public class PathfindingTest {
 	

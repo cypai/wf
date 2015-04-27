@@ -34,4 +34,8 @@ public abstract class Weapon {
 		return currentAmmo;
 	}
 	
+	public void reload() {
+		currentAmmo = baseAmmoCapacity();
+	}
+	
 }

@@ -4,6 +4,7 @@ import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
+import com.pipai.wf.exception.IllegalMoveException;
 
 /*
  * Controls the flow of battle as an interface between the Player/AIs
@@ -35,7 +36,7 @@ public class BattleController {
 		this.currentTeam = (this.currentTeam + 1) % this.maxTeams;
 	}
 	
-	public BattleEvent performAction(Action a) {
+	public BattleEvent performAction(Action a) throws IllegalMoveException {
 		log.clear();
 		a.perform();
 		return log.getLastEvent();

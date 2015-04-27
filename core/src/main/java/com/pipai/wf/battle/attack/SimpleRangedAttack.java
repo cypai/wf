@@ -5,6 +5,10 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.weapon.Weapon;
 
 public class SimpleRangedAttack extends Attack {
+
+	public int requiredAmmo() {
+		return 1;
+	}
 	
 	public int getAccuracy(Agent attacker, Agent target, float distance) {
 		Weapon weapon = attacker.getCurrentWeapon();

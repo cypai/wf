@@ -7,6 +7,11 @@ public abstract class Attack {
 	 * Note: All accuracies are now calculated using integers for ease of modifying
 	 */
 	
+	/*
+	 * How much ammo necessary to perform this attack
+	 */
+	public abstract int requiredAmmo();
+	
 	public abstract int getAccuracy(Agent attacker, Agent target, float distance);
 	
 	/*

@@ -118,6 +118,15 @@ public class Agent implements BattleEventLoggable {
 		return l;
 	}
 	
+	public ArrayList<Agent> targetableEnemies() {
+		ArrayList<Agent> list = new ArrayList<Agent>();
+		if (this.getCurrentWeapon().currentAmmo() == 0) {
+			return list;
+		} else {
+			return this.enemiesInRange();
+		}
+	}
+	
 	public void move(LinkedList<GridPosition> path) {
 		boolean isValid = true;
 		BattleEvent event = BattleEvent.moveEvent(this, path);
@@ -151,6 +160,7 @@ public class Agent implements BattleEventLoggable {
 	}
 	
 	public void rangeAttack(Agent other, Attack attack) {
+		this.getCurrentWeapon().expendAmmo(attack.requiredAmmo());
 		float distance = 0;
 		boolean hit = attack.rollToHit(this, other, distance);
 		int dmg = 0;
@@ -179,6 +189,10 @@ public class Agent implements BattleEventLoggable {
 			other.decrementHP(dmg);
 		}
 		activationLogEvent.addChainEvent(BattleEvent.overwatchActivationEvent(this, other, overwatchAttack, hit, dmg));
+	}
+	
+	public void reload() {
+		this.getCurrentWeapon().reload();
 	}
 
 	@Override

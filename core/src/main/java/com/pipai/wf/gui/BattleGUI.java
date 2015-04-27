@@ -23,6 +23,7 @@ import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.exception.IllegalMoveException;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.Renderable;
@@ -118,10 +119,16 @@ public class BattleGUI extends GUI {
 	
 	public void attack(AgentGUIObject target) {
 		if (selectedAgent != null) {
-			RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
-			BattleEvent outcome = this.battle.performAction(atk);
-			System.out.println(outcome.toString());
-			this.animateEvent(outcome);
+			if (selectedAgent.getAgent().getCurrentWeapon().currentAmmo() > 0) {
+				RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
+				try {
+					BattleEvent outcome = this.battle.performAction(atk);
+					System.out.println(outcome.toString());
+					this.animateEvent(outcome);
+				} catch (IllegalMoveException e) {
+					System.out.println("Illegal move: " + e.getMessage());
+				}
+			}
 		}
 	}
 	
@@ -234,8 +241,12 @@ public class BattleGUI extends GUI {
 				if (this.selectedMapGraph.canMoveTo(clickSquare)) {
 					LinkedList<GridPosition> path = selectedMapGraph.getPath(clickSquare);
 					MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
-					BattleEvent event = this.battle.performAction(move);
-					animateEvent(event);
+					try {
+						BattleEvent event = this.battle.performAction(move);
+						animateEvent(event);
+					} catch (IllegalMoveException e) {
+						System.out.println("IllegalMoveException detected: " + e.getMessage());
+					}
 				}
 			}
 			for (RightClickable o : rightClickables) {
