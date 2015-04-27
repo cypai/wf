@@ -194,6 +194,7 @@ public class Agent implements BattleEventLoggable {
 	
 	public void reload() {
 		this.getCurrentWeapon().reload();
+		logEvent(BattleEvent.reloadEvent(this));
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
+import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.Agent.State;
@@ -165,6 +166,29 @@ public class BattleLogTest {
 		assertTrue(owEv.getTarget() == player);
 		assertTrue(owEv.getAttack() instanceof SimpleRangedAttack);
 		assertTrue(owEv.getChainEvents().size() == 0);
+	}
+	
+	@Test
+	public void testReloadLog() {
+		String rawMapString = "3 4\n"
+				+ "a 1 0";
+		BattleMap map = null;
+		try {
+			map = new BattleMap(new MapString(rawMapString));
+		} catch (BadStateStringException e) {
+			fail(e.getMessage());
+		}
+		BattleController battle = new BattleController(map);
+		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
+		BattleEvent ev = null;
+		try {
+			ev = battle.performAction(new ReloadAction(agent));
+		} catch (IllegalActionException e) {
+			fail(e.getMessage());
+		}
+		assertTrue(ev.getType() == BattleEvent.Type.RELOAD);
+		assertTrue(ev.getPerformer() == agent);
+		assertTrue(ev.getChainEvents().size() == 0);
 	}
 
 }

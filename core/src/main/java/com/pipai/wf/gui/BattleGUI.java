@@ -16,6 +16,7 @@ import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
+import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
@@ -311,6 +312,13 @@ public class BattleGUI extends GUI {
 		switch (keycode) {
 		case Keys.R:
 			// Reload
+			ReloadAction action = new ReloadAction(selectedAgent.getAgent());
+			try {
+				BattleEvent outcome = this.battle.performAction(action);
+				this.animateEvent(outcome);
+			} catch (IllegalActionException e) {
+				System.out.println("Illegal move: " + e.getMessage());
+			}
 			break;
 		case Keys.C:
 			// Ready spell

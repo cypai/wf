@@ -12,7 +12,7 @@ import com.pipai.wf.battle.map.GridPosition;
 public class BattleEvent {
 	
 	public static enum Type {
-		MOVE, ATTACK, OVERWATCH, OVERWATCH_ACTIVATION;
+		MOVE, ATTACK, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD;
 	}
 	
 	private Type type;
@@ -48,6 +48,11 @@ public class BattleEvent {
 		event.atk = atk;
 		event.hit = hit;
 		event.damageRoll = damage;
+		return event;
+	}
+	
+	public static BattleEvent reloadEvent(Agent performer) {
+		BattleEvent event = new BattleEvent(Type.RELOAD, performer, null);
 		return event;
 	}
 	
