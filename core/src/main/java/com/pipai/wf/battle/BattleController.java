@@ -3,6 +3,7 @@ package com.pipai.wf.battle;
 import java.util.LinkedList;
 
 import com.pipai.wf.battle.action.Action;
+import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
@@ -18,6 +19,7 @@ public class BattleController {
 	private BattleLog log;
 	private Team currentTeam;
 	private LinkedList<BattleObserver> observerList;
+	private LinkedList<Agent> playerList, enemyList;
 	
 	public BattleController(BattleMap map) {
 		log = new BattleLog();
@@ -25,6 +27,16 @@ public class BattleController {
 		this.map.register(log);
 		this.currentTeam = Team.PLAYER;
 		this.observerList = new LinkedList<BattleObserver>();
+		this.playerList = new LinkedList<Agent>();
+		this.enemyList = new LinkedList<Agent>();
+
+		for (Agent a : this.map.getAgents()) {
+			if (a.getTeam() == Team.PLAYER) {
+				this.playerList.add(a);
+			} else {
+				this.enemyList.add(a);
+			}
+		}
 	}
 	
 	public BattleMap getBattleMap() {
@@ -48,8 +60,14 @@ public class BattleController {
 	public void endTurn() {
 		if (this.currentTeam == Team.PLAYER) {
 			this.currentTeam = Team.ENEMY;
+			for (Agent a : this.enemyList) {
+				a.setAP(a.getMaxAP());
+			}
 		} else {
 			this.currentTeam = Team.PLAYER;
+			for (Agent a : this.playerList) {
+				a.setAP(a.getMaxAP());
+			}
 		}
 	}
 	
