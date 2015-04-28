@@ -23,6 +23,8 @@ import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.ai.AI;
+import com.pipai.wf.battle.ai.OverwatchAI;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
@@ -60,6 +62,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
 	private boolean animating, overlayClicked, allowInput;
+	private AI ai;
 
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
 		int x_offset = gameX % SQUARE_SIZE;
@@ -87,6 +90,7 @@ public class BattleGUI extends GUI implements BattleObserver {
         orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
 		this.battle = new BattleController(map);
 		this.battle.registerObserver(this);
+		this.ai = new OverwatchAI(battle);
 		this.animating = false;
 		this.allowInput = true;
 		this.renderables = new ArrayList<Renderable>();
@@ -237,9 +241,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 		this.allowInput = false;
 		this.battle.endTurn();
-	}
-	
-	public void aiTurnOver() {
+		this.ai.performTurn();
 		this.allowInput = true;
 	}
 	
