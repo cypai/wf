@@ -148,7 +148,7 @@ public class Agent implements BattleEventLoggable {
 			this.setPosition(pos);
 			for (Agent a : this.enemiesInRange()) {
 				if (a.isOverwatching()) {
-					a.activateOverwatch(this, event);
+					a.activateOverwatch(this, event, pos);
 					if (this.isKO()) {
 						return;
 					}
@@ -180,7 +180,7 @@ public class Agent implements BattleEventLoggable {
 		logEvent(BattleEvent.overwatchEvent(this, attack));
 	}
 	
-	public void activateOverwatch(Agent other, BattleEvent activationLogEvent) {
+	public void activateOverwatch(Agent other, BattleEvent activationLogEvent, GridPosition activatedTile) {
 		float distance = 0;
 		boolean hit = overwatchAttack.rollToHit(this, other, distance);
 		this.state = State.NEUTRAL;
@@ -189,7 +189,7 @@ public class Agent implements BattleEventLoggable {
 			dmg = overwatchAttack.damageRoll(this, other, distance);
 			other.decrementHP(dmg);
 		}
-		activationLogEvent.addChainEvent(BattleEvent.overwatchActivationEvent(this, other, overwatchAttack, hit, dmg));
+		activationLogEvent.addChainEvent(BattleEvent.overwatchActivationEvent(this, other, overwatchAttack, activatedTile, hit, dmg));
 	}
 	
 	public void reload() {

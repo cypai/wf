@@ -15,6 +15,9 @@ public abstract class Action {
 		if (this.performerAgent.getAP() < this.getAPRequired()) {
 			throw new IllegalActionException("Not enough AP for action");
 		}
+		if (this.performerAgent.isKO()) {
+			throw new IllegalActionException("KOed unit cannot act");
+		}
 	}
 	
 	/*

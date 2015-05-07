@@ -127,7 +127,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	private void beginAnimation() { animating = true; }
-	public void endAnimation() { animating = false; }
+	public void endAnimation() {
+		animating = false;
+		this.populateSelectableAgentList();
+		this.performPostInputChecks();
+	}
 	public void setOverlayClickedFlag() { overlayClicked = true; }
 	
 	public void setSelected(AgentGUIObject agent) {
@@ -228,21 +232,30 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	private void performPostInputChecks() {
-		if (this.selectedAgent.getAgent().getAP() == 0) {
+		if (this.selectedAgent.getAgent().getAP() == 0 || this.selectedAgent.getAgent().isKO()) {
 			this.selectableAgentOrderedList.remove(this.selectedAgent);
 			if (this.selectableAgentOrderedList.size() > 0) {
 				this.setSelected(this.selectableAgentOrderedList.getFirst());
 			}
 		}
 		for (AgentGUIObject a : this.agentList) {
-			if (a.getAgent().getTeam() == Team.PLAYER && a.getAgent().getAP() > 0) {
+			if (a.getAgent().getTeam() == Team.PLAYER && (a.getAgent().getAP() > 0 && !a.getAgent().isKO())) {
 				return;
 			}
 		}
 		this.allowInput = false;
 		this.battle.endTurn();
 		this.ai.performTurn();
+		this.populateSelectableAgentList();
 		this.allowInput = true;
+	}
+	
+	private void populateSelectableAgentList() {
+		for (Agent agent : this.battle.getBattleMap().getAgents()) {
+			if (agent.getTeam() == Team.PLAYER && agent.getAP() > 0 && !agent.isKO()) {
+				this.selectableAgentOrderedList.add(this.agentMap.get(agent));
+			}
+		}
 	}
 	
 	public void attack(AgentGUIObject target) {
@@ -305,20 +318,21 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 	}
 	
-	private void animateEvent(BattleEvent event) {
+	public void animateEvent(BattleEvent event) {
 		AgentGUIObject a, t;
 		switch (event.getType()) {
 		case MOVE:
 			a = this.agentMap.get(event.getPerformer());
 			beginAnimation();
-			a.animateMoveSequence(vectorizePath(event.getPath()));
+			a.animateMoveSequence(vectorizePath(event.getPath()), event.getChainEvents());
 			this.updatePaths();
 			break;
 		case ATTACK:
+		case OVERWATCH_ACTIVATION:
 			a = this.agentMap.get(event.getPerformer());
 			t = this.agentMap.get(event.getTarget());
 			BulletGUIObject b = new BulletGUIObject(this, a.x, a.y, t.x, t.y, t, event);
-			renderables.add(b);
+			this.createInstance(b);
 			break;
 		case OVERWATCH:
 			a = this.agentMap.get(event.getPerformer());

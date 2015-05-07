@@ -22,6 +22,7 @@ public class BattleEvent {
 	private boolean hit;
 	private int damageRoll;
 	private LinkedList<BattleEvent> chainedEvents;
+	private GridPosition targetTile;
 	
 	public static BattleEvent moveEvent(Agent performer, LinkedList<GridPosition> path) {
 		BattleEvent event = new BattleEvent(Type.MOVE, performer, null);
@@ -43,11 +44,12 @@ public class BattleEvent {
 		return event;
 	}
 	
-	public static BattleEvent overwatchActivationEvent(Agent performer, Agent target, Attack atk, boolean hit, int damage) {
+	public static BattleEvent overwatchActivationEvent(Agent performer, Agent target, Attack atk, GridPosition targetTile, boolean hit, int damage) {
 		BattleEvent event = new BattleEvent(Type.OVERWATCH_ACTIVATION, performer, target);
 		event.atk = atk;
 		event.hit = hit;
 		event.damageRoll = damage;
+		event.targetTile = targetTile;
 		return event;
 	}
 	
@@ -70,6 +72,7 @@ public class BattleEvent {
 	public Attack getAttack() { return this.atk; }
 	public boolean isHit() { return this.hit; }
 	public int getDamageRoll() { return this.damageRoll; }
+	public GridPosition getTargetTile() { return this.targetTile; }
 	
 	public int getNumChainEvents() { return this.chainedEvents.size(); }
 	

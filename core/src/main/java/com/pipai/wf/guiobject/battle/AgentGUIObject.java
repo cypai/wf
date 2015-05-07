@@ -10,12 +10,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable;
+import com.pipai.wf.util.Alarm;
 import com.pipai.wf.util.UtilFunctions;
 
 public class AgentGUIObject extends GUIObject implements Renderable, LeftClickable, RightClickable {
@@ -27,10 +29,12 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 	public int radius;
 	
 	//Animation variables
-	private boolean animating;
+	private boolean animating, wait;
 	private LinkedList<Vector2> moveSeq;
 	private Vector2 start, dest;
 	private int t;	//Animation time t counter
+	private LinkedList<BattleEvent> chain;
+	private Alarm owAlarm;
 	
 	public AgentGUIObject(BattleGUI gui, Agent agent, float x, float y, int radius) {
 		super(gui);
@@ -41,7 +45,9 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		this.y = y;
 		this.radius = radius;
 		animating = false;
+		wait = false;
 		ko = false;
+		owAlarm = new Alarm();
 	}
 
 	public int renderPriority() { return 0; }
@@ -56,13 +62,37 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 	public boolean isSelected() { return selected; }
 	
 	public void hit() {
-		if (this.agent.isKO()) { ko = true; }
+		if (this.agent.isKO()) {
+			ko = true;
+			if (animating) {
+				gui.endAnimation();
+			}
+		}
 	}
 	
-	public void animateMoveSequence(LinkedList<Vector2> seq) {
+	public void animateMoveSequence(LinkedList<Vector2> seq, LinkedList<BattleEvent> chain) {
 		animating = true;
 		moveSeq = seq;
+		this.chain = chain;
 		animateNextMoveInSeq();
+	}
+	
+	private boolean checkOverwatchActivation() {
+		LinkedList<BattleEvent> removeBuffer = new LinkedList<BattleEvent>();
+		boolean owActive = false;
+		if (chain.size() > 0) {
+			for (BattleEvent ev : chain) {
+				Vector2 owtile = BattleGUI.centerOfGridPos(ev.getTargetTile());
+				if (owtile.epsilonEquals(start, 0.0001f)) {
+					System.out.println("OW");
+					gui.animateEvent(ev);
+					removeBuffer.add(ev);
+					owActive = true;
+				}
+			}
+			chain.removeAll(removeBuffer);
+		}
+		return owActive;
 	}
 	
 	private void animateNextMoveInSeq() {
@@ -77,16 +107,28 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 	}
 
 	public void update() {
-		if (animating) {
-			t += 1;
-			int time = 6;
-			if (t <= time) {
-				float alpha = (float)t/(float)time;
-				x = start.x*(1-alpha) + dest.x*(alpha);
-				y = start.y*(1-alpha) + dest.y*(alpha);
-				if (t == time) {
+		if (!wait) {
+			if (animating) {
+				t += 1;
+				int time = 6;
+				if (t <= time) {
+					float alpha = (float)t/(float)time;
+					x = start.x*(1-alpha) + dest.x*(alpha);
+					y = start.y*(1-alpha) + dest.y*(alpha);
+				}
+				if (t > time) {
+					if (checkOverwatchActivation()) {
+						wait = true;
+						owAlarm.set(60);
+						return;
+					}
 					animateNextMoveInSeq();
 				}
+			}
+		} else {
+			owAlarm.update();
+			if (owAlarm.check()) {
+				wait = false;
 			}
 		}
 	}
