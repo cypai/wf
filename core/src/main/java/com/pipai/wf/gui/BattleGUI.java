@@ -11,7 +11,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
@@ -62,6 +64,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
 	private boolean animating, overlayClicked, allowInput;
+	private float cameraMoveTime = 1;
+	private Vector3 cameraDest = null;
 	private AI ai;
 
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
@@ -137,6 +141,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	public void setSelected(AgentGUIObject agent) {
 		if (agent.getAgent().getAP() > 0) {
 			this.selectedAgent = agent;
+			this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 			this.updatePaths();
 		}
 	}
@@ -350,21 +355,35 @@ public class BattleGUI extends GUI implements BattleObserver {
 		updateCamera();
 	}
 	
+	private void moveCameraToPos(float x, float y) {
+		this.cameraMoveTime = 0;
+		this.cameraDest = new Vector3(x, y, this.camera.position.z);
+	}
+	
 	private void updateCamera() {
+		if (this.cameraMoveTime < 1.0) {
+			this.cameraMoveTime += 0.005;
+			this.camera.position.interpolate(this.cameraDest, this.cameraMoveTime, Interpolation.linear);
+			this.orthoCamera.position.interpolate(this.cameraDest, this.cameraMoveTime, Interpolation.linear);
+		}
 		if (this.allowInput) {
 			if (this.checkKey(Keys.A)) {
+				this.cameraMoveTime = 1;
 				this.camera.translate(-3, 0);
 				this.orthoCamera.translate(-3, 0);
 			}
 			if (this.checkKey(Keys.D)) {
+				this.cameraMoveTime = 1;
 				this.camera.translate(3, 0);
 				this.orthoCamera.translate(3, 0);
 			}
 			if (this.checkKey(Keys.W)) {
+				this.cameraMoveTime = 1;
 				this.camera.translate(0, 3);
 				this.orthoCamera.translate(0, 3);
 			}
 			if (this.checkKey(Keys.S)) {
+				this.cameraMoveTime = 1;
 				this.camera.translate(0, -3);
 				this.orthoCamera.translate(0, -3);
 			}
