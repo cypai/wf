@@ -12,7 +12,7 @@ public abstract class AI implements BattleObserver {
 	
 	protected BattleController battleController;
 	protected BattleMap map;
-	protected LinkedList<Agent> enemyAgents;
+	protected LinkedList<Agent> enemyAgents, toAct;
 	
 	public AI(BattleController battleController) {
 		this.battleController = battleController;
@@ -26,6 +26,15 @@ public abstract class AI implements BattleObserver {
 		}
 	}
 	
-	public abstract void performTurn();
+	@SuppressWarnings("unchecked")
+	public void startTurn() {
+		this.toAct = (LinkedList<Agent>)this.enemyAgents.clone();
+	}
+	
+	public boolean isDone() {
+		return this.toAct.isEmpty();
+	}
+	
+	public abstract void performMove();
 	
 }

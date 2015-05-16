@@ -17,10 +17,14 @@ public class OverwatchAI extends AI {
 	public void notifyBattleEvent(BattleEvent ev) {
 		
 	}
-
+	
 	@Override
-	public void performTurn() {
-		for (Agent a : this.enemyAgents) {
+	public void performMove() {
+		if (this.toAct.isEmpty()) {
+			return;
+		}
+		Agent a = this.toAct.poll();
+		if (a.getAP() > 0) {
 			OverwatchAction ow = new OverwatchAction(a, new SimpleRangedAttack());
 			try {
 				this.battleController.performAction(ow);
@@ -28,7 +32,9 @@ public class OverwatchAI extends AI {
 				System.out.println("AI tried to perform illegal move: " + e.getMessage());
 			}
 		}
-		battleController.endTurn();
+		if (this.toAct.isEmpty()) {
+			this.battleController.endTurn();
+		}
 	}
-
+	
 }

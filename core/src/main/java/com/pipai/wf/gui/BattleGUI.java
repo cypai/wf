@@ -26,6 +26,7 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.ai.AI;
+import com.pipai.wf.battle.ai.AIMoveRunnable;
 import com.pipai.wf.battle.ai.OverwatchAI;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
@@ -52,6 +53,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
 	//private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
+	private static final int AI_MOVE_WAIT_TIME = 60;
 
 	private OrthographicCamera camera, overlayCamera, orthoCamera;
 	private BattleController battle;
@@ -63,7 +65,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
-	private boolean animating, overlayClicked, allowInput;
+	private boolean animating, overlayClicked, allowInput, aiTurn;
+	private int aiMoveWait = 0;
 	private float cameraMoveTime = 1;
 	private Vector3 cameraDest = null;
 	private AI ai;
@@ -97,6 +100,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.ai = new OverwatchAI(battle);
 		this.animating = false;
 		this.allowInput = true;
+		this.aiTurn = false;
 		this.renderables = new ArrayList<Renderable>();
 		this.foregroundRenderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable>();
@@ -234,6 +238,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	@Override
 	public void notifyBattleEvent(BattleEvent ev) {
 		this.animateEvent(ev);
+		this.aiMoveWait = 0;
 	}
 	
 	private void performPostInputChecks() {
@@ -249,10 +254,25 @@ public class BattleGUI extends GUI implements BattleObserver {
 			}
 		}
 		this.allowInput = false;
+		this.aiTurn = true;
+		this.aiMoveWait = 0;
 		this.battle.endTurn();
-		this.ai.performTurn();
-		this.populateSelectableAgentList();
-		this.allowInput = true;
+		this.ai.startTurn();
+	}
+	
+	private void runAiTurn() {
+		this.aiMoveWait += 1;
+		if (this.aiMoveWait == BattleGUI.AI_MOVE_WAIT_TIME) {
+			if (this.ai.isDone()) {
+				this.allowInput = true;
+				this.aiTurn = false;
+				this.populateSelectableAgentList();
+				this.setSelected(this.selectableAgentOrderedList.getFirst());
+				return;
+			}
+			AIMoveRunnable t = new AIMoveRunnable(this.ai);
+			t.run();
+		}
 	}
 	
 	private void populateSelectableAgentList() {
@@ -324,7 +344,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	public void animateEvent(BattleEvent event) {
-		AgentGUIObject a, t;
+		AgentGUIObject a = null, t;
 		switch (event.getType()) {
 		case MOVE:
 			a = this.agentMap.get(event.getPerformer());
@@ -345,6 +365,9 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.createInstance(ttext);
 		default:
 			break;
+		}
+		if (aiTurn && a != null) {
+			this.moveCameraToPos(a.x, a.y);
 		}
 	}
 	
@@ -464,6 +487,9 @@ public class BattleGUI extends GUI implements BattleObserver {
 		for (Renderable r : this.overlayRenderables) {
 			r.render(batch);
 		}
+		if (aiTurn) {
+			runAiTurn();
+		}
 		cleanDelBuffers();
 		cleanCreateBuffers();
 	}
@@ -472,7 +498,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		BattleMap map = this.battle.getBattleMap();
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawWalls(batch);
-		if (!animating && this.battle.getCurrentTeam() == Team.PLAYER) {
+		if (!animating && !aiTurn) {
 			this.drawMovableTiles(batch);
 		}
 	}
