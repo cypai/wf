@@ -289,8 +289,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 				RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
 				try {
 					this.battle.performAction(atk);
-					//System.out.println(outcome.toString());
-					//this.animateEvent(outcome);
 				} catch (IllegalActionException e) {
 					System.out.println("Illegal move: " + e.getMessage());
 				}
@@ -439,6 +437,12 @@ public class BattleGUI extends GUI implements BattleObserver {
 		case Keys.M:
 			// Recharge mana
 			break;
+		case Keys.SHIFT_LEFT:
+			// Select next unit
+			//System.out.println(this.selectableAgentOrderedList.size());
+			this.selectableAgentOrderedList.pop();
+			this.selectableAgentOrderedList.addLast(this.selectedAgent);
+			this.setSelected(this.selectableAgentOrderedList.peek());
 		default:
 			break;
 		}
@@ -448,8 +452,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			} catch (IllegalActionException e) {
 				System.out.println("Illegal move: " + e.getMessage());
 			}
-			this.performPostInputChecks();
 		}
+		this.performPostInputChecks();
 	}
 	
 	@Override
