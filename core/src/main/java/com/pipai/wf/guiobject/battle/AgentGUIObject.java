@@ -84,7 +84,6 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 			for (BattleEvent ev : chain) {
 				Vector2 owtile = BattleGUI.centerOfGridPos(ev.getTargetTile());
 				if (owtile.epsilonEquals(start, 0.0001f)) {
-					System.out.println("OW");
 					gui.animateEvent(ev);
 					removeBuffer.add(ev);
 					owActive = true;
