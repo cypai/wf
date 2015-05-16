@@ -26,9 +26,13 @@ public abstract class AI implements BattleObserver {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void startTurn() {
-		this.toAct = (LinkedList<Agent>)this.enemyAgents.clone();
+		this.toAct = new LinkedList<Agent>();
+		for (Agent a : this.enemyAgents) {
+			if (!a.isKO()) {
+				this.toAct.add(a);
+			}
+		}
 	}
 	
 	public boolean isDone() {
