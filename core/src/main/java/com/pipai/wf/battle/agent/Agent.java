@@ -194,6 +194,7 @@ public class Agent implements BattleEventLoggable {
 	
 	public void reload() {
 		this.getCurrentWeapon().reload();
+		this.setAP(0);
 		logEvent(BattleEvent.reloadEvent(this));
 	}
 
