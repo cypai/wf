@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.armor.Armor;
+import com.pipai.wf.battle.armor.LeatherArmor;
 import com.pipai.wf.battle.attack.Attack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
@@ -26,6 +28,7 @@ public class Agent implements BattleEventLoggable {
 	protected int mobility, aim;
 	protected State state;
 	protected Weapon mainWeapon;
+	protected Armor armor;
 	protected BattleMap map;
 	protected GridPosition position;
 	protected BattleLog log;
@@ -42,6 +45,7 @@ public class Agent implements BattleEventLoggable {
 		mobility = state.mobility;
 		aim = 60;
 		mainWeapon = new Pistol();
+		armor = new LeatherArmor();
 	}
 	
 	public Team getTeam() { return this.team; }
@@ -60,11 +64,15 @@ public class Agent implements BattleEventLoggable {
 			this.state = State.NEUTRAL;
 		}
 	}
-	public void decrementHP(int amt) { this.setHP(this.getHP() - amt); }
+	public void takeDamage(int amt) {
+		int pierceDmg = this.armor.takeDamage(amt);
+		this.setHP(this.getHP() - pierceDmg);
+	}
 	public int getMaxHP() { return this.maxHP; }
 	public int getMobility() { return this.mobility; }
 	public int getBaseAim() { return this.aim; }
 	public Weapon getCurrentWeapon() { return this.mainWeapon; }
+	public Armor getArmor() { return this.armor; }
 	public boolean isKO() { return this.state == State.KO; }
 	public boolean isOverwatching() { return this.state == State.OVERWATCH; }
 	
@@ -167,7 +175,7 @@ public class Agent implements BattleEventLoggable {
 		int dmg = 0;
 		if (hit) {
 			dmg = attack.damageRoll(this, other, distance);
-			other.decrementHP(dmg);
+			other.takeDamage(dmg);
 		}
 		this.setAP(0);
 		logEvent(BattleEvent.attackEvent(this, other, attack, hit, dmg));
@@ -187,7 +195,7 @@ public class Agent implements BattleEventLoggable {
 		int dmg = 0;
 		if (hit) {
 			dmg = overwatchAttack.damageRoll(this, other, distance);
-			other.decrementHP(dmg);
+			other.takeDamage(dmg);
 		}
 		activationLogEvent.addChainEvent(BattleEvent.overwatchActivationEvent(this, other, overwatchAttack, activatedTile, hit, dmg));
 	}

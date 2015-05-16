@@ -567,7 +567,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		int bar_width = 40;
 		Vector2 agentPoint = new Vector2(a.x, a.y);
 		Vector2 barLeftTop = new Vector2(a.x + 24, a.y + 24);
-		Vector2 barRightTop = new Vector2(a.x + 24 + bar_width, a.y + 24);
+		Vector2 barRightFullTop = new Vector2(a.x + 24 + bar_width, a.y + 24);
+		Vector2 barRightTop = new Vector2(a.x + 24 + bar_width * ((float)a.getAgent().getArmor().getHP() / (float)a.getAgent().getArmor().maxHP()), a.y + 24);
 		Vector2 barLeftBot = new Vector2(a.x + 24, a.y + 18);
 		Vector2 barRightFullBot = new Vector2(a.x + 24 + bar_width, a.y + 18);
 		Vector2 barRightBot = new Vector2(a.x + 24 + bar_width * ((float)a.getAgent().getHP() / (float)a.getAgent().getMaxHP()), a.y + 18);
@@ -575,7 +576,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		batch.rectLine(agentPoint, barLeftTop, 3);
 		// Health bar background
 		batch.setColor(Color.BLACK);
-		batch.rectLine(barLeftTop, barRightTop, 6);
+		batch.rectLine(barLeftTop, barRightFullTop, 6);
 		batch.rectLine(barLeftBot, barRightFullBot, 6);
 		// Health bar
 		batch.setColor(Color.GRAY);
@@ -586,7 +587,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		// Health bars outline
 		batch.begin(ShapeType.Line);
 		batch.setColor(Color.BLUE);
-		batch.rect(barLeftTop.x, barLeftTop.y + 3, barRightTop.x - barLeftTop.x, -12);
+		batch.rect(barLeftTop.x, barLeftTop.y + 3, barRightFullTop.x - barLeftTop.x, -12);
 		batch.end();
 	}
 
