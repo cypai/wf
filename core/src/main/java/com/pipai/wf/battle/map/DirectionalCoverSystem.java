@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class DirectionalCoverSystem {
 	
-	public static enum CoverType { FULL, HALF, NONE }
-	
 	public static CoverType getDirectionalCover(BattleMap map, GridPosition pos, Direction dir) {
 		BattleMapCell cell = map.getCellInDirection(pos, dir);
 		if (cell == null) {
@@ -17,13 +15,17 @@ public class DirectionalCoverSystem {
 		return CoverType.NONE;
 	}
 	
-	public static boolean inCover(BattleMap map, GridPosition pos) {
+	public static CoverType getCover(BattleMap map, GridPosition pos) {
+		CoverType best = CoverType.NONE;
 		for (Direction d : Direction.getAllDirections()) {
-			if (getDirectionalCover(map, pos, d) != CoverType.NONE) {
-				return true;
+			if (getDirectionalCover(map, pos, d) == CoverType.FULL) {
+				return CoverType.FULL;
+			}
+			if (getDirectionalCover(map, pos, d) == CoverType.HALF) {
+				best = CoverType.HALF;
 			}
 		}
-		return false;
+		return best;
 	}
 	
 	public static ArrayList<Direction> getCoverDirections(BattleMap map, GridPosition pos) {

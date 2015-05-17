@@ -12,6 +12,7 @@ import com.pipai.wf.battle.log.BattleEventLoggable;
 import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
+import com.pipai.wf.battle.map.CoverType;
 import com.pipai.wf.battle.map.Direction;
 import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
@@ -102,6 +103,10 @@ public class Agent implements BattleEventLoggable {
 			}
 		}
 		return l;
+	}
+	
+	public CoverType getCoverType() {
+		return DirectionalCoverSystem.getCover(this.map, this.getPosition());
 	}
 	
 	public boolean canSee(Agent other) {

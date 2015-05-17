@@ -155,7 +155,19 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 			spr.begin();
 			font.setColor(Color.BLACK);
 			font.draw(spr, String.valueOf(agent.getAP()), x, y+15);
-			font.draw(spr, String.valueOf(agent.getHP()), x, y);
+			String cover = "-";
+			switch (agent.getCoverType()) {
+			case FULL:
+				cover = "F";
+				break;
+			case HALF:
+				cover = "H";
+				break;
+			default:
+				cover = "-";
+				break;
+			}
+			font.draw(spr, cover, x, y);
 			spr.end();
 		}
 	}
