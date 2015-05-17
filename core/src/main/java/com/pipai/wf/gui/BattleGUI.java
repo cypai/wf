@@ -276,6 +276,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	private void populateSelectableAgentList() {
+		this.selectableAgentOrderedList.clear();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			if (agent.getTeam() == Team.PLAYER && agent.getAP() > 0 && !agent.isKO()) {
 				this.selectableAgentOrderedList.add(this.agentMap.get(agent));
@@ -439,8 +440,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case Keys.SHIFT_LEFT:
 			// Select next unit
-			//System.out.println(this.selectableAgentOrderedList.size());
-			this.selectableAgentOrderedList.pop();
+			this.selectableAgentOrderedList.remove(this.selectedAgent);
 			this.selectableAgentOrderedList.addLast(this.selectedAgent);
 			this.setSelected(this.selectableAgentOrderedList.peek());
 		default:
