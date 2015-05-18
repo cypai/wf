@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.pipai.wf.gui.BattleGUI;
+import com.pipai.wf.gui.PartyInfoGUI;
 
 public class WFGame extends Game {
 
@@ -17,7 +17,7 @@ public class WFGame extends Game {
     	this.sprBatch = new SpriteBatch();
     	this.shapeBatch = new ShapeRenderer();
     	this.font = new BitmapFont();
-        this.setScreen(new BattleGUI(this));
+        this.setScreen(new PartyInfoGUI(this));
     }
 
 	@Override
