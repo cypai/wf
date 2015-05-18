@@ -14,13 +14,13 @@ public class UIListItem extends GUIObject implements Renderable, LeftClickable {
 	protected float x, y, width, height;
 	protected Color color;
 	
-	public UIListItem(GUI gui, float x, float y, float width, float height) {
+	public UIListItem(GUI gui, float x, float y, float width, float height, Color color) {
 		super(gui);
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.color = Color.ORANGE;
+		this.color = color;
 	}
 
 	@Override
