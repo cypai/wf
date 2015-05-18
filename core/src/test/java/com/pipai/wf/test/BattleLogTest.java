@@ -37,18 +37,13 @@ public class BattleLogTest {
 	
 	@Test
 	public void testMoveLog() {
-		String rawMapString = "3 4\n"
-				+ "a 1 0";
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
+		BattleMap map = new BattleMap(3, 4);
+		GridPosition playerPos = new GridPosition(1, 0);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
-		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
+		Agent agent = map.getAgentAtPos(playerPos);
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
 		GridPosition dest = new GridPosition(2, 0);
@@ -70,18 +65,19 @@ public class BattleLogTest {
 	@Test
 	public void testIllegalMoveLog() {
 		String rawMapString = "3 4\n"
-				+ "s 2 1\n"
-				+ "a 1 0";
+				+ "s 2 1";
 		BattleMap map = null;
 		try {
 			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
+		GridPosition playerPos = new GridPosition(1, 0);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
-		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
+		Agent agent = map.getAgentAtPos(playerPos);
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
 		GridPosition dest = new GridPosition(1, 1);
@@ -113,12 +109,11 @@ public class BattleLogTest {
 	
 	@Test
 	public void testAttackLog() {
-		BattleMap map = null;
-		map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(new AgentState(playerPos, Team.PLAYER, 5));
-        map.addAgent(new AgentState(enemyPos, Team.ENEMY, 5));
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -140,12 +135,11 @@ public class BattleLogTest {
 	
 	@Test
 	public void testOverwatchLog() {
-		BattleMap map = null;
-		map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(new AgentState(playerPos, Team.PLAYER, 5));
-        map.addAgent(new AgentState(enemyPos, Team.ENEMY, 5));
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -189,18 +183,13 @@ public class BattleLogTest {
 	
 	@Test
 	public void testReloadLog() {
-		String rawMapString = "3 4\n"
-				+ "a 1 0";
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
+		BattleMap map = new BattleMap(3, 4);
+		GridPosition playerPos = new GridPosition(1, 0);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
-		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
+		Agent agent = map.getAgentAtPos(playerPos);
 		try {
 			battle.performAction(new ReloadAction(agent));
 		} catch (IllegalActionException e) {

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
@@ -25,8 +27,7 @@ public class LineOfSightTest {
 		 */
 		String rawMapString = "4 4\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 0 0";
+				+ "s 2 2";
 
 		BattleMap map = null;
 		try {
@@ -55,8 +56,7 @@ public class LineOfSightTest {
 		 */
 		String rawMapString = "4 4\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 0 0";
+				+ "s 2 2";
 
 		BattleMap map = null;
 		try {
@@ -85,8 +85,7 @@ public class LineOfSightTest {
 		 */
 		String rawMapString = "4 4\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 0 0";
+				+ "s 2 2";
 
 		BattleMap map = null;
 		try {
@@ -115,8 +114,7 @@ public class LineOfSightTest {
 		 */
 		String rawMapString = "4 4\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 0 0";
+				+ "s 2 2";
 
 		BattleMap map = null;
 		try {
@@ -145,8 +143,7 @@ public class LineOfSightTest {
 		 */
 		String rawMapString = "4 4\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 0 0";
+				+ "s 2 2";
 
 		BattleMap map = null;
 		try {
@@ -174,8 +171,7 @@ public class LineOfSightTest {
 		 * A 0 1 0
 		 */
 		String rawMapString = "2 4\n"
-				+ "s 2 0\n"
-				+ "a 0 0";
+				+ "s 2 0";
 
 		BattleMap map = null;
 		try {
@@ -193,15 +189,7 @@ public class LineOfSightTest {
 		 * 0 0 0 0
 		 * A 0 0 0
 		 */
-		String rawMapString = "2 4\n"
-				+ "a 0 0";
-
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
+		BattleMap map = new BattleMap(2, 4);
 		assertTrue(map.lineOfSight(new GridPosition(0, 0), new GridPosition(3, 0)));
 	}
 
@@ -213,16 +201,10 @@ public class LineOfSightTest {
 		 * 0 A 0
 		 * 0 0 0
 		 */
-		String rawMapString = "3 3\n"
-				+ "a 1 1";
-
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
-		Agent a = map.getAgentAtPos(new GridPosition(1, 1));
+		BattleMap map = new BattleMap(3, 3);
+		GridPosition playerPos = new GridPosition(1, 1);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
 		assertTrue(peekSquares.size() == 1);
@@ -237,8 +219,7 @@ public class LineOfSightTest {
 		 * 0 0 0
 		 */
 		String rawMapString = "3 3\n"
-				+ "s 1 2\n"
-				+ "a 1 1";
+				+ "s 1 2";
 
 		BattleMap map = null;
 		try {
@@ -246,7 +227,9 @@ public class LineOfSightTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		Agent a = map.getAgentAtPos(new GridPosition(1, 1));
+		GridPosition playerPos = new GridPosition(1, 1);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
 		assertTrue(peekSquares.contains(new GridPosition(0, 1)));
@@ -265,8 +248,7 @@ public class LineOfSightTest {
 		String rawMapString = "3 3\n"
 				+ "s 0 2\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 1 1";
+				+ "s 2 2";
 
 		BattleMap map = null;
 		try {
@@ -274,7 +256,9 @@ public class LineOfSightTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		Agent a = map.getAgentAtPos(new GridPosition(1, 1));
+		GridPosition playerPos = new GridPosition(1, 1);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
 		assertTrue(peekSquares.size() == 1);
@@ -290,8 +274,7 @@ public class LineOfSightTest {
 		 */
 		String rawMapString = "3 3\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 1 1";
+				+ "s 2 2";
 
 		BattleMap map = null;
 		try {
@@ -299,7 +282,9 @@ public class LineOfSightTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		Agent a = map.getAgentAtPos(new GridPosition(1, 1));
+		GridPosition playerPos = new GridPosition(1, 1);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
 		assertTrue(peekSquares.contains(new GridPosition(0, 1)));
@@ -316,8 +301,7 @@ public class LineOfSightTest {
 		 */
 		String rawMapString = "3 3\n"
 				+ "s 1 2\n"
-				+ "s 2 1\n"
-				+ "a 1 1";
+				+ "s 2 1";
 
 		BattleMap map = null;
 		try {
@@ -325,7 +309,9 @@ public class LineOfSightTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		Agent a = map.getAgentAtPos(new GridPosition(1, 1));
+		GridPosition playerPos = new GridPosition(1, 1);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
 		assertTrue(peekSquares.contains(new GridPosition(0, 1)));
@@ -343,8 +329,7 @@ public class LineOfSightTest {
 		 */
 		String rawMapString = "3 3\n"
 				+ "s 1 2\n"
-				+ "s 1 0\n"
-				+ "a 1 1";
+				+ "s 1 0";
 
 		BattleMap map = null;
 		try {
@@ -352,7 +337,9 @@ public class LineOfSightTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		Agent a = map.getAgentAtPos(new GridPosition(1, 1));
+		GridPosition playerPos = new GridPosition(1, 1);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
 		assertTrue(peekSquares.contains(new GridPosition(0, 1)));
@@ -369,8 +356,7 @@ public class LineOfSightTest {
 		 * 0 0 0
 		 */
 		String rawMapString = "3 3\n"
-				+ "s 2 2\n"
-				+ "a 2 1";
+				+ "s 2 2";
 
 		BattleMap map = null;
 		try {
@@ -378,7 +364,9 @@ public class LineOfSightTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		Agent a = map.getAgentAtPos(new GridPosition(2, 1));
+		GridPosition playerPos = new GridPosition(2, 1);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
 		assertTrue(peekSquares.contains(new GridPosition(1, 1)));

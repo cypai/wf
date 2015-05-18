@@ -64,8 +64,8 @@ public class MapString {
 			String type = params[0];
 			if (type.equals("s")) {
 				this.solidPosList.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
-			} else if (type.equals("a")) {
-				this.agentStateList.add(new AgentState(line));
+			} else {
+				throw new BadStateStringException("Unknown line type");
 			}
 		}
 	}

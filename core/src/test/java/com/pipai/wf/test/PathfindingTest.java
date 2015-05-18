@@ -7,6 +7,9 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
+import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
@@ -62,8 +65,7 @@ public class PathfindingTest {
 		String rawMapString = "4 4\n"
 				+ "s 3 0\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 1 1";
+				+ "s 2 2";
 		BattleMap map = null;
 		try {
 			map = new BattleMap(new MapString(rawMapString));
@@ -147,15 +149,15 @@ public class PathfindingTest {
 	@Test
 	public void testCannotMoveToNonEmpty() {
 		String rawMapString = "4 4\n"
-				+ "s 3 0\n"
-				+ "a 1 1\n"
-				+ "a 2 1\n";
+				+ "s 3 0";
 		BattleMap map = null;
 		try {
 			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, new GridPosition(1, 1), 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, new GridPosition(2, 1), 3, 5, 2, 5, 65, 0));
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1);
 		assertFalse("Failed to return false on moving to solid tile", graph.canMoveTo(new GridPosition(3, 0)));
 		assertFalse("Failed to return false on moving to tile with other agent", graph.canMoveTo(new GridPosition(2, 1)));
@@ -163,16 +165,7 @@ public class PathfindingTest {
 	
 	@Test
 	public void testIllegalSquares() {
-		String rawMapString = "4 4\n"
-				+ "s 3 0\n"
-				+ "a 1 1\n"
-				+ "a 2 1\n";
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
+		BattleMap map = new BattleMap(4, 4);
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1);
 		GridPosition illegal = new GridPosition(4, 1);
 		assertFalse("Failed to return false on moving to tile outside map", graph.canMoveTo(illegal));

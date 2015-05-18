@@ -3,78 +3,41 @@ package com.pipai.wf.battle.agent;
 import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.exception.BadStateStringException;
 
 public class AgentState {
 	
 	public Team team;
 	public int hp, maxHP;
+	public int mp, maxMP;
 	public int ap, maxAP;
-	public int mobility;
-	public int aim;
+	public int mobility, aim, defense;
 	public GridPosition position;
 	public State state;
 	
-	public AgentState(String agentString) throws BadStateStringException {
-		String split[] = agentString.split(" ");
-		if (!split[0].equals("a")) {
-			throw new BadStateStringException("StateString must start with 'a': ");
-		}
-		GridPosition pos;
-		try {
-			pos = new GridPosition(Integer.parseInt(split[1]), Integer.parseInt(split[2]));
-		} catch (Exception e) { throw new BadStateStringException("Could not parse position: " + e.getMessage()); }
-		try {
-			if (split.length == 3) {
-				initialize(pos, Team.PLAYER, 3, 3, 2, 2, 7, State.NEUTRAL);
-			} else if (split.length == 4) {
-				initialize(position, Team.PLAYER, 3, 3, 2, 2, Integer.parseInt(split[3]), State.NEUTRAL);
-			} else {
-				Team team = split[3].equals("0") ? Team.PLAYER : Team.ENEMY;
-				if (split.length == 7) {
-					int hp = Integer.parseInt(split[4]);
-					int ap = Integer.parseInt(split[5]);
-					initialize(position, team, hp, hp, ap, ap, Integer.parseInt(split[6]), State.NEUTRAL);
-				} else {
-					int hpMax = Integer.parseInt(split[4]);
-					int hp = Integer.parseInt(split[5]);
-					int apMax = Integer.parseInt(split[6]);
-					int ap = Integer.parseInt(split[7]);
-					initialize(position, team, hpMax, hp, apMax, ap, Integer.parseInt(split[8]), parseState(split[8]));
-				}
-			}
-		} catch (Exception e) { throw new BadStateStringException("Could not parse string: " + e.getMessage()); }
+	public static AgentState statsOnlyState(int hp, int mp, int ap, int mobility, int aim, int defense) {
+		AgentState a = new AgentState();
+		a.maxHP = hp;
+		a.hp = hp;
+		a.maxMP = mp;
+		a.mp = mp;
+		a.maxAP = ap;
+		a.ap = ap;
+		a.mobility = mobility;
+		a.aim = aim;
+		a.defense = defense;
+		return a;
 	}
 	
-	public AgentState(GridPosition position) {
-		initialize(position, Team.PLAYER, 3, 3, 2, 2, 7, State.NEUTRAL);
-	}
-
-	public AgentState(GridPosition position, Team team, int mobility) {
-		initialize(position, team, 3, 3, 2, 2, mobility, State.NEUTRAL);
-	}
-	
-	public AgentState(GridPosition position, Team team, int maxHP, int maxAP, int mobility) {
-		this(position, team, maxHP, maxHP, maxAP, maxAP, mobility, State.NEUTRAL);
-	}
-
-	public AgentState(GridPosition position, Team team, int maxHP, int hp, int maxAP, int ap, int mobility, State state) {
-		initialize(position, team, maxHP, hp, maxAP, ap, mobility, state);
+	public static AgentState newBattleAgentState(Team team, GridPosition position, int hp, int mp, int ap, int mobility, int aim, int defense) {
+		AgentState a = AgentState.statsOnlyState(hp, mp, ap, mobility, aim, defense);
+		a.team = team;
+		a.state = State.NEUTRAL;
+		a.position = position;
+		return a;
 	}
 	
-	private void initialize(GridPosition position, Team team, int maxHP, int hp, int maxAP, int ap, int mobility, State state) {
-		this.team = team;
-		this.maxHP = maxHP;
-		this.hp = hp;
-		this.maxAP = maxAP;
-		this.ap = ap;
-		this.mobility = mobility;
-		this.position = position;
-		this.state = state;
-	}
-	
-	private State parseState(String s) {
-		return s.equals('0') ? State.NEUTRAL : State.KO;
+	public AgentState() {
+		
 	}
 	
 	/*

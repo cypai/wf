@@ -6,8 +6,10 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
@@ -60,15 +62,16 @@ public class BattleTest {
 		String rawMapString = "3 4\n"
 				+ "s 1 1\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 1 0";
+				+ "s 2 2";
 		BattleMap map = null;
 		try {
 			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
+		GridPosition playerPos = new GridPosition(1, 0);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent agent = map.getAgentAtPos(playerPos);
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
 		path.add(agent.getPosition());
@@ -109,15 +112,16 @@ public class BattleTest {
 		String rawMapString = "3 4\n"
 				+ "s 1 1\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 1 0";
+				+ "s 2 2";
 		BattleMap map = null;
 		try {
 			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
+		GridPosition playerPos = new GridPosition(1, 0);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent agent = map.getAgentAtPos(playerPos);
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
 		path.add(agent.getPosition());
@@ -143,15 +147,16 @@ public class BattleTest {
 		String rawMapString = "3 4\n"
 				+ "s 1 1\n"
 				+ "s 1 2\n"
-				+ "s 2 2\n"
-				+ "a 1 0";
+				+ "s 2 2";
 		BattleMap map = null;
 		try {
 			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		Agent agent = map.getAgentAtPos(new GridPosition(1, 0));
+		GridPosition playerPos = new GridPosition(1, 0);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		Agent agent = map.getAgentAtPos(playerPos);
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
 		path.add(agent.getPosition());
