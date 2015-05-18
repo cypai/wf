@@ -371,9 +371,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	private void globalUpdate() {
-		if (this.checkKey(Keys.ESCAPE)) {
-			Gdx.app.exit();
-		}
 		updateCamera();
 	}
 	
@@ -416,6 +413,9 @@ public class BattleGUI extends GUI implements BattleObserver {
 	
 	@Override
 	public void onKeyDown(int keycode) {
+		if (keycode == Keys.ESCAPE) {
+			Gdx.app.exit();
+		}
 		if (!this.allowInput || selectedAgent == null) {
 			return;
 		}
