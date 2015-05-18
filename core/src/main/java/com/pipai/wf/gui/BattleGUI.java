@@ -65,7 +65,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
-	private boolean animating, overlayClicked, allowInput, aiTurn;
+	private boolean animating, allowInput, aiTurn;
 	private int aiMoveWait = 0;
 	private float cameraMoveTime = 1;
 	private Vector3 cameraDest = null;
@@ -140,7 +140,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.populateSelectableAgentList();
 		this.performPostInputChecks();
 	}
-	public void setOverlayClickedFlag() { overlayClicked = true; }
 	
 	public void setSelected(AgentGUIObject agent) {
 		if (agent.getAgent().getAP() > 0) {

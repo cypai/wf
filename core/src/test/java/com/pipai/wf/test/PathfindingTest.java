@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;

@@ -115,21 +115,6 @@ public class BattleMap implements BattleEventLoggable {
 	private Vector2 gridCenter(GridPosition pos) {
 		return new Vector2(pos.x+0.5f, pos.y+0.5f);
 	}
-	private Vector2 gridBottomLeft(GridPosition pos) {
-		return new Vector2(pos.x, pos.y);
-	}
-	private Vector2 gridBottomRight(GridPosition pos) {
-		return new Vector2(pos.x+1, pos.y);
-	}
-	private Vector2 gridTopLeft(GridPosition pos) {
-		return new Vector2(pos.x, pos.y+1);
-	}
-	private Vector2 gridTopRight(GridPosition pos) {
-		return new Vector2(pos.x+1, pos.y+1);
-	}
-	private GridPosition toGridPos(Vector2 v) {
-		return new GridPosition((int)Math.floor(v.x), (int)Math.floor(v.y));
-	}
 
 	public ArrayList<GridPosition> supercover(GridPosition a, GridPosition b) {
 		return supercover(gridCenter(a), gridCenter(b));

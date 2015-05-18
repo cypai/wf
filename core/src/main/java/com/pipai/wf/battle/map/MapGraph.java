@@ -45,13 +45,6 @@ public class MapGraph {
 		public Node getPath() { return this.path; }
 		public GridPosition getPosition() { return this.pos; }
 		
-		public void clear() {
-			this.edges = new ArrayList<Node>();
-			this.visited = false;
-			this.totalCost = 0;
-			this.path = null;
-		}
-		
 		public ArrayList<Node> getNeighbors() {
 			return this.edges;
 		}
@@ -145,15 +138,6 @@ public class MapGraph {
 			}
 			current = pqueue.poll();
 		}
-	}
-	
-	private void clearPathfinding() {
-		for (GridPosition pos : this.reachableList) { 
-			Node node = this.getNode(pos);
-			node.clear();
-		}
-		this.reachableList = null;
-		this.root = null;
 	}
 	
 	public ArrayList<GridPosition> getMovableCellPositions() {
