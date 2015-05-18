@@ -36,7 +36,7 @@ public class AgentState {
 		return a;
 	}
 	
-	public AgentState() {
+	private AgentState() {
 		
 	}
 	
