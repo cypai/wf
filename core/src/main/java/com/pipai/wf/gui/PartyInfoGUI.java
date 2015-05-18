@@ -1,6 +1,7 @@
 package com.pipai.wf.gui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pipai.wf.WFGame;
@@ -34,7 +35,9 @@ public class PartyInfoGUI extends GUI {
 
 	@Override
 	public void onKeyDown(int keycode) {
-		
+		if (keycode == Keys.ESCAPE) { 
+			Gdx.app.exit();
+		}
 	}
 
 	@Override
