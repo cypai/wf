@@ -11,17 +11,22 @@ import com.pipai.wf.gui.GUI;
 
 public class UnitInfoListItem extends UIListItem {
 	
-	public static final int PADDING = 4;
-	public static final int STAT_SPACING = 64;
-	public static final int WIDTH = 2 * PADDING + STAT_SPACING * 6;
-	public static final int HEIGHT = 2 * PADDING + 32;
+//	public static final int PADDING = 4;
+//	public static final int STAT_SPACING = 64;
+//	public static final int WIDTH = 2 * PADDING + STAT_SPACING * 6;
+//	public static final int HEIGHT = 2 * PADDING + 32;
 	
 	protected String name;
 	protected int hp, mp, ap, mobility, aim, defense;
+	protected float width, padding, stat_spacing, height;
 	protected LinkedList<String> statLine;
 	
-	public UnitInfoListItem(GUI gui, AgentState state, float x, float y) {
-		super(gui, x, y, WIDTH, HEIGHT, Color.ORANGE);
+	public UnitInfoListItem(GUI gui, AgentState state, float x, float y, float width, float padding) {
+		super(gui, x, y, width, 2 * padding + 32, Color.ORANGE);
+		this.width = width;
+		this.padding = padding;
+		this.stat_spacing = (width - 2 * padding)/6;
+		this.height = 2 * padding + 32;
 		hp = state.maxHP;
 		mp = state.maxMP;
 		ap = state.maxAP;
@@ -45,14 +50,14 @@ public class UnitInfoListItem extends UIListItem {
 		BitmapFont font = batch.getFont();
 		spr.begin();
 		font.setColor(Color.WHITE);
-		float leftX = x + PADDING;
-		float line1y = y + height - PADDING;
+		float leftX = x + padding;
+		float line1y = y - padding;
 		float line2y = line1y - font.getLineHeight();
 		font.draw(spr, name, leftX, line1y);
 		float textX = leftX;
 		for (String s : statLine) {
 			font.draw(spr, s, textX, line2y);
-			textX += STAT_SPACING;
+			textX += stat_spacing;
 		}
 		spr.end();
 	}
