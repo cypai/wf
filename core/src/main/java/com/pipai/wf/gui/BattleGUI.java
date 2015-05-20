@@ -26,7 +26,7 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.ai.AI;
 import com.pipai.wf.battle.ai.AIMoveRunnable;
-import com.pipai.wf.battle.ai.OverwatchAI;
+import com.pipai.wf.battle.ai.RandomAI;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
@@ -90,7 +90,7 @@ public class BattleGUI extends GUI implements BattleObserver {
         orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
 		this.battle = new BattleController(map);
 		this.battle.registerObserver(this);
-		this.ai = new OverwatchAI(battle);
+		this.ai = new RandomAI(battle);
 		this.animating = false;
 		this.allowInput = true;
 		this.aiTurn = false;
@@ -329,12 +329,14 @@ public class BattleGUI extends GUI implements BattleObserver {
 	
 	public void animateEvent(BattleEvent event) {
 		AgentGUIObject a = null, t;
+		TemporaryText ttext;
 		switch (event.getType()) {
 		case MOVE:
 			a = this.agentMap.get(event.getPerformer());
 			beginAnimation();
 			a.animateMoveSequence(vectorizePath(event.getPath()), event.getChainEvents());
 			this.updatePaths();
+			this.moveCameraToPos(a.x, a.y);
 			break;
 		case ATTACK:
 		case OVERWATCH_ACTIVATION:
@@ -342,11 +344,19 @@ public class BattleGUI extends GUI implements BattleObserver {
 			t = this.agentMap.get(event.getTarget());
 			BulletGUIObject b = new BulletGUIObject(this, a.x, a.y, t.x, t.y, t, event);
 			this.createInstance(b);
+			this.moveCameraToPos((a.x + t.x)/2, (a.y + t.y)/2);
 			break;
 		case OVERWATCH:
 			a = this.agentMap.get(event.getPerformer());
-			TemporaryText ttext = new TemporaryText(this, a.x, a.y, 80, 24, "Overwatch");
+			ttext = new TemporaryText(this, a.x, a.y, 80, 24, "Overwatch");
 			this.createInstance(ttext);
+			this.moveCameraToPos(a.x, a.y);
+			break;
+		case RELOAD:
+			a = this.agentMap.get(event.getPerformer());
+			ttext = new TemporaryText(this, a.x, a.y, 60, 24, "Reload");
+			this.createInstance(ttext);
+			this.moveCameraToPos(a.x, a.y);
 			break;
 		case START_TURN:
 			if (event.getTeam() == Team.PLAYER) {
@@ -358,9 +368,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		default:
 			break;
-		}
-		if (aiTurn && a != null) {
-			this.moveCameraToPos(a.x, a.y);
 		}
 	}
 	
