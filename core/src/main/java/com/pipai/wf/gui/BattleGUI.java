@@ -592,6 +592,13 @@ public class BattleGUI extends GUI implements BattleObserver {
 		batch.setColor(Color.BLUE);
 		batch.rect(barLeftTop.x, barLeftTop.y + 3, barRightFullTop.x - barLeftTop.x, -12);
 		batch.end();
+		// Overwatch Icon
+		if (a.getAgent().isOverwatching()) {
+			batch.begin(ShapeType.Filled);
+			batch.setColor(Color.GRAY);
+			batch.circle(barRightFullTop.x + 8, (barRightFullTop.y + barRightFullBot.y)/2, 6);
+			batch.end();
+		}
 	}
 
 }
