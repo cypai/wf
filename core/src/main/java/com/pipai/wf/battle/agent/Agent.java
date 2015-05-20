@@ -156,7 +156,9 @@ public class Agent implements BattleEventLoggable {
 	
 	public void postTurnReset() {
 		ap = maxAP;
-		state = State.NEUTRAL;
+		if (!isKO()) {
+			state = State.NEUTRAL;
+		}
 	}
 	
 	public void move(LinkedList<GridPosition> path) throws IllegalActionException {
