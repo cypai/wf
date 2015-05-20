@@ -61,12 +61,12 @@ public class BattleController {
 		if (this.currentTeam == Team.PLAYER) {
 			this.currentTeam = Team.ENEMY;
 			for (Agent a : this.enemyList) {
-				a.setAP(a.getMaxAP());
+				a.postTurnReset();
 			}
 		} else {
 			this.currentTeam = Team.PLAYER;
 			for (Agent a : this.playerList) {
-				a.setAP(a.getMaxAP());
+				a.postTurnReset();
 			}
 		}
 	}

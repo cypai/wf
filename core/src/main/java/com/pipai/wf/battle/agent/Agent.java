@@ -141,6 +141,11 @@ public class Agent implements BattleEventLoggable {
 		}
 	}
 	
+	public void postTurnReset() {
+		ap = maxAP;
+		state = State.NEUTRAL;
+	}
+	
 	public void move(LinkedList<GridPosition> path) throws IllegalActionException {
 		boolean isValid = true;
 		BattleEvent event = BattleEvent.moveEvent(this, path);
