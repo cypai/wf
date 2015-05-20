@@ -109,6 +109,19 @@ public class Agent implements BattleEventLoggable {
 		return DirectionalCoverSystem.getCover(this.map, this.getPosition());
 	}
 	
+	public boolean isOpen() {
+		return DirectionalCoverSystem.isOpen(map, this.getPosition());
+	}
+	
+	public boolean isFlanked() {
+		for (Agent a : this.enemiesInRange()) {
+			if (DirectionalCoverSystem.isFlankedBy(map, this.getPosition(), a.getPosition())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean canSee(Agent other) {
 		for (GridPosition peekSquare : this.getPeekingSquares()) {
 			if (this.map.lineOfSight(peekSquare, other.getPosition())) {

@@ -155,6 +155,9 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 			spr.begin();
 			font.setColor(Color.BLACK);
 			font.draw(spr, String.valueOf(agent.getAP()), x, y+15);
+			if (!agent.isOpen() && agent.isFlanked()) {
+				font.setColor(Color.ORANGE);
+			}
 			String cover = "-";
 			switch (agent.getCoverType()) {
 			case FULL:
