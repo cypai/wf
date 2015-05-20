@@ -46,7 +46,7 @@ public class MapString {
 		for (int x = 0; x < map.getCols(); x++) {
 			for (int y = 0; y < map.getRows(); y++) {
 				BattleMapCell cell = map.getCell(new GridPosition(x, y));
-				if (cell.isSolid()) {
+				if (cell.hasTileSightBlocker()) {
 					this.map += "s " + Integer.toString(x) + " " + Integer.toString(y) + "\n";
 				} else if (cell.hasAgent()) {
 					this.map += "a " + Integer.toString(x) + " " + Integer.toString(y) + "\n";

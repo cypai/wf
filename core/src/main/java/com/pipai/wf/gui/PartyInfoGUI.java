@@ -11,6 +11,7 @@ import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.map.BattleMap;
+import com.pipai.wf.battle.map.FullCoverIndestructibleObject;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.Renderable;
@@ -71,7 +72,7 @@ public class PartyInfoGUI extends GUI {
         map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, new GridPosition(4, 1), party.get(1)));
         map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, new GridPosition(5, 8), 3, 5, 2, 5, 65, 0));
         map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, new GridPosition(9, 10), 3, 5, 2, 5, 65, 0));
-        map.getCell(new GridPosition(5, 5)).setSolid(true);
+        map.getCell(new GridPosition(5, 5)).setTileEnvironmentObject(new FullCoverIndestructibleObject());
 		this.game.setScreen(new BattleGUI(this.game, map));
 		this.dispose();
 	}

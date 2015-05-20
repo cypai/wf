@@ -9,10 +9,12 @@ public class DirectionalCoverSystem {
 		if (cell == null) {
 			return CoverType.NONE;
 		}
-		if (cell.isSolid()) {
-			return CoverType.FULL;
+		EnvironmentObject env = cell.getTileEnvironmentObject();
+		if (env != null) {
+			return env.getCoverType();
+		} else {
+			return CoverType.NONE;
 		}
-		return CoverType.NONE;
 	}
 	
 	public static CoverType getCover(BattleMap map, GridPosition pos) {

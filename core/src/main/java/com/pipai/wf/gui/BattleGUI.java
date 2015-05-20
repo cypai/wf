@@ -30,6 +30,7 @@ import com.pipai.wf.battle.ai.RandomAI;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
+import com.pipai.wf.battle.map.EnvironmentObject;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.exception.IllegalActionException;
@@ -532,7 +533,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		for (int x=0; x<map.getCols(); x++) {
 			for (int y=0; y<map.getRows(); y++) {
 				GridPosition pos = new GridPosition(x, y);
-				if (map.getCell(pos).isSolid()) {
+				EnvironmentObject env = map.getCell(pos).getTileEnvironmentObject();
+				if (env != null) {
 					this.shadeSquare(batch, pos, SOLID_COLOR);
 				}
 			}

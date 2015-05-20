@@ -28,8 +28,7 @@ public class BattleMap implements BattleEventLoggable {
 		this.n = mapString.getCols();
 		initializeMap(this.m, this.n);
 		for (GridPosition pos : mapString.getSolidPositions()) {
-			//System.out.println(pos);
-			this.getCell(pos).setSolid(true);
+			this.getCell(pos).setTileEnvironmentObject(new FullCoverIndestructibleObject());
 		}
 		for (AgentState state : mapString.getAgentStates()) {
 			this.addAgent(state);
@@ -190,9 +189,9 @@ public class BattleMap implements BattleEventLoggable {
 		return points;
 	}
 
-	public boolean checkSolidInList(ArrayList<GridPosition> list) {
+	public boolean checkTileSightBlockersInList(ArrayList<GridPosition> list) {
 		for (GridPosition pos : list) {
-			if (getCell(pos).isSolid()) {
+			if (getCell(pos).hasTileSightBlocker()) {
 				return false;
 			}
 		}
@@ -202,7 +201,7 @@ public class BattleMap implements BattleEventLoggable {
 	 * Using the centers/corners to determine line of sight between two GridPositions
 	 */
 	public boolean lineOfSight(GridPosition a, GridPosition b) {
-		return checkSolidInList(supercover(gridCenter(a), gridCenter(b)));
+		return checkTileSightBlockersInList(supercover(gridCenter(a), gridCenter(b)));
 	}
 
 	@Override

@@ -7,16 +7,16 @@ import com.pipai.wf.battle.agent.Agent;
 
 public class BattleMapCell {
 	
-	private boolean solid;
-	private EnumMap<Direction, Boolean> walls;
+	private EnvironmentObject tileObject;
+	private EnumMap<Direction, EnvironmentObject> walls;
 	private EnumMap<Direction, BattleMapCell> neighbors;
 	private ArrayList<Agent> inactiveAgents;
 	private Agent agent;
 	private GridPosition position;
 	
 	public BattleMapCell(GridPosition pos) {
-		this.solid = false;
-		this.walls = new EnumMap<Direction, Boolean>(Direction.class);
+		this.tileObject = null;
+		this.walls = new EnumMap<Direction, EnvironmentObject>(Direction.class);
 		this.neighbors = new EnumMap<Direction, BattleMapCell>(Direction.class);
 		this.position = pos;
 		this.inactiveAgents = new ArrayList<Agent>();
@@ -28,12 +28,12 @@ public class BattleMapCell {
 		this.neighbors.put(dir, cell);
 	}
 	
-	public void setWall(boolean wall, Direction dir) {
+	public void setWallEnvironmentObject(EnvironmentObject wall, Direction dir) {
 		this.walls.put(dir, wall);
 	}
 	
-	public void setSolid(boolean solid) {
-		this.solid = solid;
+	public void setTileEnvironmentObject(EnvironmentObject obj) {
+		this.tileObject = obj;
 	}
 	
 	public void setAgent(Agent agent) {
@@ -53,20 +53,33 @@ public class BattleMapCell {
 		this.agent = null;
 	}
 	
-	public boolean isSolid() { return this.solid; }
 	public boolean hasAgent() { return this.agent != null; }
 	
 	public boolean isEmpty() {
-		if (this.solid || this.agent != null) {
+		if (this.tileObject != null || this.agent != null) {
 			return false;
 		}
 		return true;
 	}
 	
+	public boolean hasTileSightBlocker() {
+		if (this.tileObject != null) {
+			return this.tileObject.getCoverType() == CoverType.FULL;
+		} else {
+			return false;
+		}
+	}
+	
+	public EnvironmentObject getTileEnvironmentObject() {
+		return tileObject;
+	}
+	
 	public boolean hasWall(Direction dir) {
-		Boolean wall = this.walls.get(dir);
-		if (wall == null) { return false; }
-		return wall;
+		return this.walls.get(dir) != null;
+	}
+	
+	public EnvironmentObject getWallEnvironmentObject(Direction dir) {
+		return this.walls.get(dir);
 	}
 	
 	/*
