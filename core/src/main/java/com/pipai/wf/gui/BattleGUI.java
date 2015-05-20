@@ -308,6 +308,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
 		int gameX = (int)gamePos.x;
 		int gameY = (int)gamePos.y;
+		boolean performedMove = false;
 		if (!animating) {
 			if (this.selectedAgent != null) {
 				GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
@@ -316,6 +317,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 					MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
 					try {
 						this.battle.performAction(move);
+						performedMove = true;
 					} catch (IllegalActionException e) {
 						System.out.println("IllegalMoveException detected: " + e.getMessage());
 					}
@@ -324,7 +326,9 @@ public class BattleGUI extends GUI implements BattleObserver {
 			for (RightClickable o : rightClickables) {
 				o.onRightClick(gameX, gameY);
 			}
-			this.performPostInputChecks();
+			if (!performedMove) {
+				this.performPostInputChecks();
+			}
 		}
 	}
 	
