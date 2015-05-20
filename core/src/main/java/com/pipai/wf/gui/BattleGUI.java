@@ -237,6 +237,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	private void performPostInputChecks() {
+		if (this.battle.battleResult() != BattleController.Result.NONE) {
+			this.game.setScreen(new BattleResultsGUI(this.game));
+			this.dispose();
+			return;
+		}
 		if (this.selectedAgent.getAgent().getAP() == 0 || this.selectedAgent.getAgent().isKO()) {
 			this.selectableAgentOrderedList.remove(this.selectedAgent);
 			if (this.selectableAgentOrderedList.size() > 0) {

@@ -15,6 +15,10 @@ import com.pipai.wf.exception.IllegalActionException;
 
 public class BattleController {
 	
+	public enum Result {
+		NONE, VICTORY, DEFEAT;
+	}
+	
 	private BattleMap map;
 	private BattleLog log;
 	private Team currentTeam;
@@ -77,6 +81,28 @@ public class BattleController {
 		log.clear();
 		a.perform();
 		this.notifyObservers(log.getLastEvent());
+	}
+	
+	public Result battleResult() {
+		int ko_amount = 0;
+		for (Agent a : enemyList) {
+			if (a.isKO()) {
+				ko_amount += 1;
+			}
+		}
+		if (ko_amount == enemyList.size()) {
+			return Result.VICTORY;
+		}
+		ko_amount = 0;
+		for (Agent a : playerList) {
+			if (a.isKO()) {
+				ko_amount += 1;
+			}
+		}
+		if (ko_amount == playerList.size()) {
+			return Result.DEFEAT;
+		}
+		return Result.NONE;
 	}
 	
 	public BattleLog getLog() {
