@@ -24,7 +24,6 @@ import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.ai.AI;
 import com.pipai.wf.battle.ai.AIMoveRunnable;
 import com.pipai.wf.battle.ai.OverwatchAI;
@@ -256,13 +255,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private void runAiTurn() {
 		this.aiMoveWait += 1;
 		if (this.aiMoveWait == BattleGUI.AI_MOVE_WAIT_TIME) {
-			if (this.ai.isDone()) {
-				this.allowInput = true;
-				this.aiTurn = false;
-				this.populateSelectableAgentList();
-				this.setSelected(this.selectableAgentOrderedList.getFirst());
-				return;
-			}
 			AIMoveRunnable t = new AIMoveRunnable(this.ai);
 			t.run();
 		}
@@ -355,6 +347,15 @@ public class BattleGUI extends GUI implements BattleObserver {
 			a = this.agentMap.get(event.getPerformer());
 			TemporaryText ttext = new TemporaryText(this, a.x, a.y, 80, 24, "Overwatch");
 			this.createInstance(ttext);
+			break;
+		case START_TURN:
+			if (event.getTeam() == Team.PLAYER) {
+				this.allowInput = true;
+				this.aiTurn = false;
+				this.populateSelectableAgentList();
+				this.setSelected(this.selectableAgentOrderedList.getFirst());
+			}
+			break;
 		default:
 			break;
 		}

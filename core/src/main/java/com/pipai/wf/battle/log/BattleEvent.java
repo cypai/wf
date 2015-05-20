@@ -2,6 +2,7 @@ package com.pipai.wf.battle.log;
 
 import java.util.LinkedList;
 
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.attack.Attack;
 import com.pipai.wf.battle.map.GridPosition;
@@ -12,9 +13,10 @@ import com.pipai.wf.battle.map.GridPosition;
 public class BattleEvent {
 	
 	public static enum Type {
-		MOVE, ATTACK, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD;
+		MOVE, ATTACK, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, START_TURN;
 	}
 	
+	private Team team;
 	private Type type;
 	private Agent performer, target;
 	private LinkedList<GridPosition> path;
@@ -58,6 +60,12 @@ public class BattleEvent {
 		return event;
 	}
 	
+	public static BattleEvent startTurnEvent(Team team) {
+		BattleEvent event = new BattleEvent(Type.START_TURN, null, null);
+		event.team = team;
+		return event;
+	}
+	
 	private BattleEvent(Type type, Agent performer, Agent target) {
 		this.type = type;
 		this.performer = performer;
@@ -65,6 +73,7 @@ public class BattleEvent {
 		this.chainedEvents = new LinkedList<BattleEvent>();
 	}
 	
+	public Team getTeam() { return this.team; }
 	public Type getType() { return this.type; }
 	public Agent getPerformer() { return this.performer; }
 	public Agent getTarget() { return this.target; }

@@ -63,11 +63,13 @@ public class BattleController {
 			for (Agent a : this.enemyList) {
 				a.postTurnReset();
 			}
+			notifyObservers(BattleEvent.startTurnEvent(Team.ENEMY));
 		} else {
 			this.currentTeam = Team.PLAYER;
 			for (Agent a : this.playerList) {
 				a.postTurnReset();
 			}
+			notifyObservers(BattleEvent.startTurnEvent(Team.PLAYER));
 		}
 	}
 	

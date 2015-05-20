@@ -1,44 +1,50 @@
 package com.pipai.wf.battle.ai;
 
-import java.util.LinkedList;
-
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
-import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 
 public abstract class AI implements BattleObserver {
 	
 	protected BattleController battleController;
 	protected BattleMap map;
-	protected LinkedList<Agent> enemyAgents, toAct;
+	protected boolean done;
 	
 	public AI(BattleController battleController) {
 		this.battleController = battleController;
 		this.battleController.registerObserver(this);
 		this.map = battleController.getBattleMap();
-		this.enemyAgents = new LinkedList<Agent>();
-		for (Agent a : this.map.getAgents()) {
-			if (a.getTeam() == Team.ENEMY) {
-				this.enemyAgents.add(a);
-			}
-		}
+		done = false;
 	}
 	
+	/**
+	 * Indicates that the AI may start calculating its turn moves. Initialization starts here
+	 */
 	public void startTurn() {
-		this.toAct = new LinkedList<Agent>();
-		for (Agent a : this.enemyAgents) {
-			if (!a.isKO()) {
-				this.toAct.add(a);
-			}
-		}
+		done = false;
+	}
+	
+	/**
+	 * Called when the AI has finished performing all of its moves.
+	 */
+	protected void endTurn() {
+		done = true;
+		this.battleController.endTurn();
 	}
 	
 	public boolean isDone() {
-		return this.toAct.isEmpty();
+		return done;
 	}
 	
+	/**
+	 * Performs either a single move, or calls endTurn()
+	 */
 	public abstract void performMove();
+	
+	@Override
+	public void notifyBattleEvent(BattleEvent ev) {
+		// Inherited classes can override this if they want to only use information gained through notifications 
+	}
 	
 }
