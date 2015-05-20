@@ -131,8 +131,10 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private void beginAnimation() { animating = true; }
 	public void endAnimation() {
 		animating = false;
-		this.populateSelectableAgentList();
-		this.performPostInputChecks();
+		if (!aiTurn) {
+			this.populateSelectableAgentList();
+			this.performPostInputChecks();
+		}
 	}
 	
 	public void setSelected(AgentGUIObject agent) {

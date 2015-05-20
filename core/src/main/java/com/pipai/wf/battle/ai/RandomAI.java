@@ -47,11 +47,11 @@ public class RandomAI extends AI {
 	
 	@Override
 	public void performMove() {
-		if (this.toAct.isEmpty()) {
+		Agent a = getFirstMovableAgent();
+		if (a == null) {
 			this.endTurn();
 			return;
 		}
-		Agent a = this.toAct.poll();
 		if (a.getAP() > 0) {
 			Action act = generateRandomAction(a);
 			try {
@@ -60,6 +60,18 @@ public class RandomAI extends AI {
 				System.out.println("AI tried to perform illegal move: " + e.getMessage());
 			}
 		}
+	}
+	
+	/*
+	 * Returns null if there are no more Agents with AP
+	 */
+	protected Agent getFirstMovableAgent() {
+		for (Agent a : this.enemyAgents) {
+			if (!a.isKO() && a.getAP() > 0) {
+				return a;
+			}
+		}
+		return null;
 	}
 	
 	protected Action generateRandomAction(Agent a) {
