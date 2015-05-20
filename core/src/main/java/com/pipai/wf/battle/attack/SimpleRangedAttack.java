@@ -12,7 +12,7 @@ public class SimpleRangedAttack extends Attack {
 	
 	public int getAccuracy(Agent attacker, Agent target, float distance) {
 		Weapon weapon = attacker.getCurrentWeapon();
-		int total_aim = attacker.getBaseAim() + weapon.flatAimModifier();
+		int total_aim = attacker.getBaseAim() + weapon.flatAimModifier() - target.getDefense(attacker.getPosition());
 		int acc = UtilFunctions.clamp(1, 100, total_aim);
 		return acc;
 	}

@@ -87,4 +87,16 @@ public class DirectionalCoverSystem {
 		return true;
 	}
 	
+	public static CoverType getBestCoverAgainstAttack(BattleMap map, GridPosition pos, GridPosition attacker) {
+		ArrayList<Direction> neededDirs = getNeededCoverDirections(pos, attacker);
+		CoverType bestCover = CoverType.NONE;
+		for (Direction neededDir : neededDirs) {
+			CoverType cover = getDirectionalCover(map, pos, neededDir);
+			if (cover.getDefense() > bestCover.getDefense()) {
+				bestCover = cover;
+			}
+		}
+		return bestCover;
+	}
+	
 }

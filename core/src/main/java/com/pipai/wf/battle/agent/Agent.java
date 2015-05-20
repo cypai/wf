@@ -26,7 +26,7 @@ public class Agent implements BattleEventLoggable {
 	
 	protected Team team;
 	protected int maxHP, maxAP, hp, ap;
-	protected int mobility, aim;
+	protected int mobility, aim, defense;
 	protected State state;
 	protected Weapon mainWeapon;
 	protected Armor armor;
@@ -45,6 +45,7 @@ public class Agent implements BattleEventLoggable {
 		ap = state.ap;
 		mobility = state.mobility;
 		aim = 60;
+		defense = 0;
 		mainWeapon = new Pistol();
 		armor = new LeatherArmor();
 	}
@@ -120,6 +121,11 @@ public class Agent implements BattleEventLoggable {
 			}
 		}
 		return false;
+	}
+	
+	public int getDefense(GridPosition attackerPos) {
+		int situationalDef = this.defense + DirectionalCoverSystem.getBestCoverAgainstAttack(map, this.getPosition(), attackerPos).getDefense();
+		return situationalDef;
 	}
 	
 	public boolean canSee(Agent other) {
