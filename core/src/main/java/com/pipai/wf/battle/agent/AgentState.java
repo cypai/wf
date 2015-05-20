@@ -36,6 +36,14 @@ public class AgentState {
 		return a;
 	}
 	
+	public static AgentState battleAgentFromStats(Team team, GridPosition position, AgentState stats) {
+		AgentState a = AgentState.statsOnlyState(stats.maxHP, stats.maxMP, stats.maxAP, stats.mobility, stats.aim, stats.defense);
+		a.team = team;
+		a.state = State.NEUTRAL;
+		a.position = position;
+		return a;
+	}
+	
 	private AgentState() {
 		
 	}

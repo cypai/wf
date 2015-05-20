@@ -8,7 +8,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pipai.wf.WFGame;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.map.BattleMap;
+import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
@@ -17,15 +20,16 @@ public class PartyInfoGUI extends GUI {
 
 	private OrthographicCamera camera;
 	private ArrayList<Renderable> renderables, renderablesCreateBuffer, renderablesDelBuffer; 
+	private ArrayList<AgentState> party = new ArrayList<AgentState>();
 
 	public PartyInfoGUI(WFGame game) {
 		super(game);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
-		this.renderables = new ArrayList<Renderable>();
-		this.renderablesCreateBuffer = new ArrayList<Renderable>();
-		this.renderablesDelBuffer = new ArrayList<Renderable>();
-		ArrayList<AgentState> party = new ArrayList<AgentState>();
+		renderables = new ArrayList<Renderable>();
+		renderablesCreateBuffer = new ArrayList<Renderable>();
+		renderablesDelBuffer = new ArrayList<Renderable>();
+		party = new ArrayList<AgentState>();
 		party.add(AgentState.statsOnlyState(3, 5, 2, 5, 65, 0));
 		party.add(AgentState.statsOnlyState(3, 5, 2, 5, 65, 0));
 		this.createInstance(new PartyInfoList(this, party, 4, this.getScreenHeight() - 4, this.getScreenWidth()/2, this.getScreenHeight()/2, Color.CYAN));
@@ -62,7 +66,13 @@ public class PartyInfoGUI extends GUI {
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-		this.game.setScreen(new BattleGUI(this.game));
+        BattleMap map = new BattleMap(12, 10);
+        map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, new GridPosition(1, 1), party.get(0)));
+        map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, new GridPosition(4, 1), party.get(1)));
+        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, new GridPosition(5, 8), 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, new GridPosition(9, 10), 3, 5, 2, 5, 65, 0));
+        map.getCell(new GridPosition(5, 5)).setSolid(true);
+		this.game.setScreen(new BattleGUI(this.game, map));
 		this.dispose();
 	}
 

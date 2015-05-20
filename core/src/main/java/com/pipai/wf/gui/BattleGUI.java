@@ -81,14 +81,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		return new Vector2(pos.x*SQUARE_SIZE + SQUARE_SIZE/2, pos.y*SQUARE_SIZE + SQUARE_SIZE/2);
 	}
 	
-	public BattleGUI(WFGame game) {
+	public BattleGUI(WFGame game, BattleMap map) {
 		super(game);
-        BattleMap map = new BattleMap(12, 10);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, new GridPosition(1, 1), 3, 5, 2, 5, 65, 0));
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, new GridPosition(4, 1), 3, 5, 2, 5, 65, 0));
-        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, new GridPosition(5, 8), 3, 5, 2, 5, 65, 0));
-        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, new GridPosition(9, 10), 3, 5, 2, 5, 65, 0));
-        map.getCell(new GridPosition(5, 5)).setSolid(true);
         camera = new OrthographicCamera();
         overlayCamera = new OrthographicCamera();
         orthoCamera = new OrthographicCamera();
