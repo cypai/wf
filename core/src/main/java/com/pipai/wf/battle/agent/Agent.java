@@ -144,7 +144,7 @@ public class Agent implements BattleEventLoggable {
 	public ArrayList<Agent> enemiesInRange() {
 		ArrayList<Agent> l = new ArrayList<Agent>();
 		for (Agent a : this.map.getAgents()) {
-			if (a.team != this.team && this.canSee(a)) {
+			if (!a.isKO() && a.team != this.team && this.canSee(a)) {
 				l.add(a);
 			}
 		}
