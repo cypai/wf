@@ -101,5 +101,34 @@ public class DirectionalCoverTest {
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 2);
 		assertTrue(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
 	}
+
+	@Test
+	public void testSENonFlank() {
+		/*
+		 * Map looks like:
+		 * 0 A 0 0
+		 * 0 1 0 0
+		 * 0 0 0 E
+		 * 0 0 0 0
+		 */
+		String rawMapString = "4 4\n"
+				+ "s 1 2";
+
+		BattleMap map = null;
+		try {
+			map = new BattleMap(new MapString(rawMapString));
+		} catch (BadStateStringException e) {
+			fail(e.getMessage());
+		}
+		GridPosition playerPos = new GridPosition(1, 3);
+		GridPosition enemyPos = new GridPosition(3, 1);
+		assertFalse(DirectionalCoverSystem.isOpen(map, playerPos));
+		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.S));
+		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).size() == 1);
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.E));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 2);
+		assertFalse(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
+	}
 	
 }
