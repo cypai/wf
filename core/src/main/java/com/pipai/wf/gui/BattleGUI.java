@@ -27,6 +27,7 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.ai.AI;
 import com.pipai.wf.battle.ai.AIMoveRunnable;
 import com.pipai.wf.battle.ai.RandomAI;
+import com.pipai.wf.battle.attack.Attack;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
@@ -40,6 +41,7 @@ import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable;
 import com.pipai.wf.guiobject.battle.AgentGUIObject;
 import com.pipai.wf.guiobject.battle.BulletGUIObject;
+import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
 
@@ -49,9 +51,9 @@ import com.pipai.wf.guiobject.overlay.TemporaryText;
 
 public class BattleGUI extends GUI implements BattleObserver {
 	
-	private enum Mode {
+	public static enum Mode {
 		NONE(true),
-		CONFIRM(true),
+		TARGET_SELECT(true),
 		ANIMATION(false),
 		AI(false);
 		
@@ -68,7 +70,7 @@ public class BattleGUI extends GUI implements BattleObserver {
     
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
-	//private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
+	private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 	private static final int AI_MOVE_WAIT_TIME = 60;
 
@@ -76,8 +78,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private BattleController battle;
 	private HashMap<Agent, AgentGUIObject> agentMap;
 	private ArrayList<AgentGUIObject> agentList;
-	private LinkedList<AgentGUIObject> selectableAgentOrderedList;
-	private AgentGUIObject selectedAgent;
+	private LinkedList<AgentGUIObject> selectableAgentOrderedList, targetAgentList;
+	private AgentGUIObject selectedAgent, targetAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
@@ -88,6 +90,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private float cameraMoveTime = 1;
 	private Vector3 cameraDest = null;
 	private AI ai;
+	private ActionToolTip tooltip;
 
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
 		int x_offset = gameX % SQUARE_SIZE;
@@ -139,10 +142,16 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
 		}
+		this.setSelected(this.selectableAgentOrderedList.getFirst());
+		this.generateOverlays();
+	}
+	
+	private void generateOverlays() {
 		AttackButtonOverlay atkBtn = new AttackButtonOverlay(this);
 		this.overlayRenderables.add(atkBtn);
 		this.overlayLeftClickables.add(atkBtn);
-		this.setSelected(this.selectableAgentOrderedList.getFirst());
+		this.tooltip = new ActionToolTip(this, 0, 120, 320, 120);
+		this.overlayRenderables.add(this.tooltip);
 	}
 	
 	private void beginAnimation() { this.mode = Mode.ANIMATION; }
@@ -155,6 +164,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.performPostInputChecks();
 		}
 	}
+	
+	public Mode getMode() { return this.mode; }
 	
 	public void setSelected(AgentGUIObject agent) {
 		if (agent.getAgent().getAP() > 0) {
@@ -402,6 +413,18 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 	}
 	
+	private void switchToTargetMode(Attack atk) {
+		this.targetAgentList = new LinkedList<AgentGUIObject>();
+		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
+			this.targetAgentList.add(this.agentMap.get(a));
+		}
+		this.mode = Mode.TARGET_SELECT;
+		this.targetAgent = this.targetAgentList.getFirst();
+		int acc = atk.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+		int crit = atk.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+		this.tooltip.setToAttackDescription(atk, acc, crit);
+	}
+	
 	private void globalUpdate() {
 		updateCamera();
 	}
@@ -446,13 +469,21 @@ public class BattleGUI extends GUI implements BattleObserver {
 	@Override
 	public void onKeyDown(int keycode) {
 		if (keycode == Keys.ESCAPE) {
-			Gdx.app.exit();
+			if (this.mode != Mode.TARGET_SELECT) {
+				Gdx.app.exit();
+			} else {
+				this.mode = Mode.NONE;
+				return;
+			}
 		}
 		if (!this.mode.allowsInput() || selectedAgent == null) {
 			return;
 		}
 		Action action = null;
 		switch (keycode) {
+		case Keys.NUM_1:
+			this.switchToTargetMode(new SimpleRangedAttack());
+			break;
 		case Keys.R:
 			// Reload
 			action = new ReloadAction(selectedAgent.getAgent());
@@ -537,6 +568,9 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (this.mode != Mode.ANIMATION && !aiTurn) {
 			this.drawMovableTiles(batch);
 		}
+		if (this.mode == Mode.TARGET_SELECT) {
+			this.drawTargetTiles(batch);
+		}
 	}
 	
 	private void drawGrid(ShapeRenderer batch, float x, float y, float width, float height, int numCols, int numRows) {
@@ -587,6 +621,12 @@ public class BattleGUI extends GUI implements BattleObserver {
 			for (GridPosition pos : tileList) {
 				this.shadeSquare(batch, pos, MOVE_COLOR);
 			}
+		}
+	}
+	
+	private void drawTargetTiles(ShapeRenderer batch) {
+		for (AgentGUIObject target : this.targetAgentList) {
+			this.shadeSquare(batch, target.getAgent().getPosition(), ATTACK_COLOR);
 		}
 	}
 	
