@@ -48,6 +48,23 @@ import com.pipai.wf.guiobject.overlay.TemporaryText;
  */
 
 public class BattleGUI extends GUI implements BattleObserver {
+	
+	private enum Mode {
+		NONE(true),
+		CONFIRM(true),
+		ANIMATION(false),
+		AI(false);
+		
+		private boolean allowInput;
+		
+		private Mode(boolean allowInput) {
+			this.allowInput = allowInput;
+		}
+		
+		public boolean allowsInput() {
+			return allowInput;
+		}
+	}
     
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
@@ -65,7 +82,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
-	private boolean animating, allowInput, aiTurn;
+	private Mode mode;
+	private boolean aiTurn;
 	private int aiMoveWait = 0;
 	private float cameraMoveTime = 1;
 	private Vector3 cameraDest = null;
@@ -92,9 +110,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.battle = new BattleController(map);
 		this.battle.registerObserver(this);
 		this.ai = new RandomAI(battle);
-		this.animating = false;
-		this.allowInput = true;
 		this.aiTurn = false;
+		this.mode = Mode.NONE;
 		this.renderables = new ArrayList<Renderable>();
 		this.foregroundRenderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable>();
@@ -128,10 +145,12 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.setSelected(this.selectableAgentOrderedList.getFirst());
 	}
 	
-	private void beginAnimation() { animating = true; }
+	private void beginAnimation() { this.mode = Mode.ANIMATION; }
 	public void endAnimation() {
-		animating = false;
-		if (!aiTurn) {
+		if (aiTurn) {
+			this.mode = Mode.AI;
+		} else {
+			this.mode = Mode.NONE;
 			this.populateSelectableAgentList();
 			this.performPostInputChecks();
 		}
@@ -253,7 +272,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 				return;
 			}
 		}
-		this.allowInput = false;
+		this.mode = Mode.AI;
 		this.aiTurn = true;
 		this.aiMoveWait = 0;
 		this.battle.endTurn();
@@ -291,13 +310,13 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	public void onLeftClick(int screenX, int screenY) {
-		if (!this.allowInput) {
+		if (!this.mode.allowsInput()) {
 			return;
 		}
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
 		int gameX = (int)gamePos.x;
 		int gameY = (int)gamePos.y;
-		if (!animating) {
+		if (this.mode != Mode.ANIMATION) {
 			for (LeftClickable o : overlayLeftClickables) {
 				o.onLeftClick(screenX, screenY, gameX, gameY);
 			}
@@ -309,14 +328,14 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	public void onRightClick(int screenX, int screenY) {
-		if (!this.allowInput) {
+		if (!this.mode.allowsInput()) {
 			return;
 		}
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
 		int gameX = (int)gamePos.x;
 		int gameY = (int)gamePos.y;
 		boolean performedMove = false;
-		if (!animating) {
+		if (this.mode != Mode.ANIMATION) {
 			if (this.selectedAgent != null) {
 				GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
 				if (this.selectedMapGraph.canMoveTo(clickSquare)) {
@@ -372,7 +391,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case START_TURN:
 			if (event.getTeam() == Team.PLAYER) {
-				this.allowInput = true;
+				this.mode = Mode.NONE;
 				this.aiTurn = false;
 				this.populateSelectableAgentList();
 				this.setSelected(this.selectableAgentOrderedList.getFirst());
@@ -398,7 +417,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.camera.position.interpolate(this.cameraDest, this.cameraMoveTime, Interpolation.linear);
 			this.orthoCamera.position.interpolate(this.cameraDest, this.cameraMoveTime, Interpolation.linear);
 		}
-		if (this.allowInput) {
+		if (this.mode.allowsInput()) {
 			if (this.checkKey(Keys.A)) {
 				this.cameraMoveTime = 1;
 				this.camera.translate(-3, 0);
@@ -429,7 +448,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (keycode == Keys.ESCAPE) {
 			Gdx.app.exit();
 		}
-		if (!this.allowInput || selectedAgent == null) {
+		if (!this.mode.allowsInput() || selectedAgent == null) {
 			return;
 		}
 		Action action = null;
@@ -515,7 +534,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		BattleMap map = this.battle.getBattleMap();
 		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawWalls(batch);
-		if (!animating && !aiTurn) {
+		if (this.mode != Mode.ANIMATION && !aiTurn) {
 			this.drawMovableTiles(batch);
 		}
 	}
