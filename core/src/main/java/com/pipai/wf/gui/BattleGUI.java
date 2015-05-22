@@ -71,6 +71,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
 	private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
+	private static final Color TARGET_COLOR = new Color(1f, 0.8f, 0, 0.5f);
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 	private static final int AI_MOVE_WAIT_TIME = 60;
 
@@ -435,6 +436,10 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 	}
 	
+	public AgentGUIObject getTarget() {
+		return this.targetAgent;
+	}
+	
 	private void globalUpdate() {
 		updateCamera();
 	}
@@ -513,9 +518,15 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case Keys.SHIFT_LEFT:
 			// Select next unit
-			this.selectableAgentOrderedList.remove(this.selectedAgent);
-			this.selectableAgentOrderedList.addLast(this.selectedAgent);
-			this.setSelected(this.selectableAgentOrderedList.peek());
+			if (this.mode == Mode.NONE) {
+				this.selectableAgentOrderedList.remove(this.selectedAgent);
+				this.selectableAgentOrderedList.addLast(this.selectedAgent);
+				this.setSelected(this.selectableAgentOrderedList.peek());
+			} else if (this.mode == Mode.TARGET_SELECT) {
+				this.targetAgentList.remove(this.targetAgent);
+				this.targetAgentList.addLast(this.targetAgent);
+				this.switchTarget(this.targetAgentList.peek());
+			}
 		default:
 			break;
 		}
@@ -636,7 +647,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 	
 	private void drawTargetTiles(ShapeRenderer batch) {
 		for (AgentGUIObject target : this.targetAgentList) {
-			this.shadeSquare(batch, target.getAgent().getPosition(), ATTACK_COLOR);
+			if (target == this.targetAgent) {
+				this.shadeSquare(batch, target.getAgent().getPosition(), TARGET_COLOR);
+			} else {
+				this.shadeSquare(batch, target.getAgent().getPosition(), ATTACK_COLOR);
+			}
 		}
 	}
 	
