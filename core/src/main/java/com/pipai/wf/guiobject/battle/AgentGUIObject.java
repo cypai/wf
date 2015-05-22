@@ -176,8 +176,12 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 	}
 
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		if (this.agent.getTeam() == Team.PLAYER && UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
-			this.select();
+		if (UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
+			if (this.agent.getTeam() == Team.PLAYER) {
+				this.select();
+			} else {
+				this.gui.switchTarget(this);
+			}
 		}
 	}
 

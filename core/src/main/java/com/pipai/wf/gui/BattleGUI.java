@@ -91,6 +91,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private Vector3 cameraDest = null;
 	private AI ai;
 	private ActionToolTip tooltip;
+	private Attack targetModeAttack;
 
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
 		int x_offset = gameX % SQUARE_SIZE;
@@ -414,15 +415,24 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	private void switchToTargetMode(Attack atk) {
+		this.targetModeAttack = atk;
 		this.targetAgentList = new LinkedList<AgentGUIObject>();
 		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
 			this.targetAgentList.add(this.agentMap.get(a));
 		}
 		this.mode = Mode.TARGET_SELECT;
-		this.targetAgent = this.targetAgentList.getFirst();
-		int acc = atk.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-		int crit = atk.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-		this.tooltip.setToAttackDescription(atk, acc, crit);
+		this.switchTarget(this.targetAgentList.getFirst());
+	}
+	
+	public void switchTarget(AgentGUIObject target) {
+		if (this.mode == Mode.TARGET_SELECT) {
+			if (this.targetAgentList.contains(target)) {
+				this.targetAgent = target;
+				int acc = this.targetModeAttack.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+				int crit = this.targetModeAttack.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+				this.tooltip.setToAttackDescription(this.targetModeAttack, acc, crit);
+			}
+		}
 	}
 	
 	private void globalUpdate() {
