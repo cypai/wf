@@ -320,6 +320,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 				}
 			}
 		}
+		this.updatePaths();
+		this.mode = Mode.NONE;
 	}
 	
 	public void onLeftClick(int screenX, int screenY) {
@@ -415,7 +417,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 	}
 	
-	private void switchToTargetMode(Attack atk) {
+	public void switchToTargetMode(Attack atk) {
 		this.targetModeAttack = atk;
 		this.targetAgentList = new LinkedList<AgentGUIObject>();
 		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
@@ -432,6 +434,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 				int acc = this.targetModeAttack.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
 				int crit = this.targetModeAttack.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
 				this.tooltip.setToAttackDescription(this.targetModeAttack, acc, crit);
+				this.moveCameraToPos((this.selectedAgent.x + target.x)/2, (this.selectedAgent.y + target.y)/2);
 			}
 		}
 	}
@@ -497,8 +500,14 @@ public class BattleGUI extends GUI implements BattleObserver {
 		Action action = null;
 		switch (keycode) {
 		case Keys.NUM_1:
-			this.switchToTargetMode(new SimpleRangedAttack());
+			if (this.mode == Mode.NONE) {
+				this.switchToTargetMode(new SimpleRangedAttack());
+			}
 			break;
+		case Keys.ENTER:
+			if (this.mode == Mode.TARGET_SELECT) {
+				this.attack(this.targetAgent);
+			}
 		case Keys.R:
 			// Reload
 			action = new ReloadAction(selectedAgent.getAgent());

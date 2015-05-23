@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
@@ -180,6 +181,7 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 			if (this.agent.getTeam() == Team.PLAYER) {
 				this.select();
 			} else {
+				this.gui.switchToTargetMode(new SimpleRangedAttack());
 				this.gui.switchTarget(this);
 			}
 		}
@@ -187,9 +189,8 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 
 	public void onRightClick(int gameX, int gameY) {
 		if (UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
-			if (agent.getTeam() == Team.ENEMY) {
-				gui.attack(this);
-				gui.updatePaths();
+			if (this == this.gui.getTarget()) {
+				this.gui.attack(this);
 			}
 		}
 	}
