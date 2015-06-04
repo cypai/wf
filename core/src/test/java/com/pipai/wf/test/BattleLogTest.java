@@ -9,9 +9,11 @@ import org.junit.Test;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.action.CastTargetAction;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
+import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
@@ -20,6 +22,7 @@ import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.spell.FireballSpell;
 import com.pipai.wf.exception.BadStateStringException;
 import com.pipai.wf.exception.IllegalActionException;
 
@@ -198,6 +201,53 @@ public class BattleLogTest {
 		BattleEvent ev = observer.ev;
 		assertTrue(ev.getType() == BattleEvent.Type.RELOAD);
 		assertTrue(ev.getPerformer() == agent);
+		assertTrue(ev.getChainEvents().size() == 0);
+	}
+	
+	@Test
+	public void testReadyFireballLog() {
+		BattleMap map = new BattleMap(3, 4);
+		GridPosition playerPos = new GridPosition(1, 0);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map);
+		MockGUIObserver observer = new MockGUIObserver();
+		battle.registerObserver(observer);
+		Agent agent = map.getAgentAtPos(playerPos);
+		try {
+			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
+		} catch (IllegalActionException e) {
+			fail(e.getMessage());
+		}
+		BattleEvent ev = observer.ev;
+		assertTrue(ev.getType() == BattleEvent.Type.READY);
+		assertTrue(ev.getPerformer() == agent);
+		assertTrue(ev.getSpell() instanceof FireballSpell);
+		assertTrue(ev.getChainEvents().size() == 0);
+	}
+	
+	@Test
+	public void testCastFireballLog() {
+		BattleMap map = new BattleMap(3, 4);
+		GridPosition playerPos = new GridPosition(1, 0);
+		GridPosition enemyPos = new GridPosition(2, 2);
+        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map);
+		MockGUIObserver observer = new MockGUIObserver();
+		battle.registerObserver(observer);
+		Agent agent = map.getAgentAtPos(playerPos);
+		Agent target = map.getAgentAtPos(enemyPos);
+		try {
+			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
+			battle.performAction(new CastTargetAction(agent, target));
+		} catch (IllegalActionException e) {
+			fail(e.getMessage());
+		}
+		BattleEvent ev = observer.ev;
+		assertTrue(ev.getType() == BattleEvent.Type.CAST_TARGET);
+		assertTrue(ev.getPerformer() == agent);
+		assertTrue(ev.getTarget() == target);
+		assertTrue(ev.getSpell() instanceof FireballSpell);
 		assertTrue(ev.getChainEvents().size() == 0);
 	}
 
