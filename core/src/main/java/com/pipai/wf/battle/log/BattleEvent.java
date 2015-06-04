@@ -6,6 +6,7 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.attack.Attack;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.spell.Spell;
 
 /*
  * For use in BattleLog and reporting back to a GUI on battle events/actions/outcomes
@@ -13,7 +14,7 @@ import com.pipai.wf.battle.map.GridPosition;
 public class BattleEvent {
 	
 	public static enum Type {
-		MOVE, ATTACK, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, START_TURN;
+		MOVE, ATTACK, READY, CAST_TARGET, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, START_TURN;
 	}
 	
 	private Team team;
@@ -21,6 +22,7 @@ public class BattleEvent {
 	private Agent performer, target;
 	private LinkedList<GridPosition> path;
 	private Attack atk;
+	private Spell spell;
 	private boolean hit;
 	private int damageRoll;
 	private LinkedList<BattleEvent> chainedEvents;
@@ -35,6 +37,20 @@ public class BattleEvent {
 	public static BattleEvent attackEvent(Agent performer, Agent target, Attack atk, boolean hit, int damage) {
 		BattleEvent event = new BattleEvent(Type.ATTACK, performer, target);
 		event.atk = atk;
+		event.hit = hit;
+		event.damageRoll = damage;
+		return event;
+	}
+	
+	public static BattleEvent readySpellEvent(Agent performer, Spell spell) {
+		BattleEvent event = new BattleEvent(Type.READY, performer, null);
+		event.spell = spell;
+		return event;
+	}
+	
+	public static BattleEvent castTargetEvent(Agent performer, Agent target, Spell spell, boolean hit, int damage) {
+		BattleEvent event = new BattleEvent(Type.CAST_TARGET, performer, target);
+		event.spell = spell;
 		event.hit = hit;
 		event.damageRoll = damage;
 		return event;
@@ -79,6 +95,7 @@ public class BattleEvent {
 	public Agent getTarget() { return this.target; }
 	public LinkedList<GridPosition> getPath() { return this.path; }
 	public Attack getAttack() { return this.atk; }
+	public Spell getSpell() { return this.spell; }
 	public boolean isHit() { return this.hit; }
 	public int getDamageRoll() { return this.damageRoll; }
 	public GridPosition getTargetTile() { return this.targetTile; }

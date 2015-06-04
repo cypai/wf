@@ -16,6 +16,7 @@ import com.pipai.wf.battle.map.CoverType;
 import com.pipai.wf.battle.map.Direction;
 import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
@@ -34,6 +35,7 @@ public class Agent implements BattleEventLoggable {
 	protected GridPosition position;
 	protected BattleLog log;
 	protected Attack overwatchAttack;
+	protected Spell readiedSpell;
 	
 	public Agent(BattleMap map, AgentState state) {
 		this.map = map;
@@ -75,7 +77,9 @@ public class Agent implements BattleEventLoggable {
 	public int getMaxHP() { return this.maxHP; }
 	public int getMP() { return this.mp; }
 	public void setMP(int mp) { this.mp = mp; }
+	public void useMP(int mp) { this.mp -= mp; }
 	public int getMaxMP() { return this.maxMP; }
+	public Spell getReadiedSpell() { return this.readiedSpell; }
 	public int getMobility() { return this.mobility; }
 	public int getBaseAim() { return this.aim; }
 	public Weapon getCurrentWeapon() { return this.mainWeapon; }
@@ -254,7 +258,32 @@ public class Agent implements BattleEventLoggable {
 		this.setAP(0);
 		logEvent(BattleEvent.reloadEvent(this));
 	}
-
+	
+	public void readySpell(Spell spell) throws IllegalActionException {
+		if (this.mp < spell.requiredMP()) {
+			throw new IllegalActionException("Not enough mp to cast " + spell.name());
+		}
+		this.useMP(spell.requiredMP());
+		this.setAP(this.ap - 1);
+		this.readiedSpell = spell;
+		logEvent(BattleEvent.readySpellEvent(this, spell));
+	}
+	
+	public void castReadiedSpell(Agent other) throws IllegalActionException {
+		if (!this.readiedSpell.canTargetAgent()) {
+			throw new IllegalActionException("Cannot target with " + this.readiedSpell.name());
+		}
+		float distance = 0;
+		boolean hit = this.readiedSpell.rollToHit(this, other, distance);
+		int dmg = 0;
+		if (hit) {
+			dmg = this.readiedSpell.damageRoll();
+			other.takeDamage(dmg);
+		}
+		this.setAP(0);
+		logEvent(BattleEvent.castTargetEvent(this, other, this.readiedSpell, hit, dmg));
+	}
+	
 	@Override
 	public void register(BattleLog log) {
 		this.log = log;
