@@ -25,7 +25,7 @@ public class Agent implements BattleEventLoggable {
 	public enum State {NEUTRAL, KO, OVERWATCH};
 	
 	protected Team team;
-	protected int maxHP, maxAP, hp, ap;
+	protected int maxHP, maxAP, maxMP, hp, ap, mp;
 	protected int mobility, aim, defense;
 	protected State state;
 	protected Weapon mainWeapon;
@@ -42,6 +42,8 @@ public class Agent implements BattleEventLoggable {
 		maxHP = state.maxHP;
 		hp = state.hp;
 		maxAP = state.maxAP;
+		mp = state.mp;
+		maxMP = state.maxMP;
 		ap = state.ap;
 		mobility = state.mobility;
 		aim = 60;
@@ -71,6 +73,9 @@ public class Agent implements BattleEventLoggable {
 		this.setHP(this.getHP() - pierceDmg);
 	}
 	public int getMaxHP() { return this.maxHP; }
+	public int getMP() { return this.mp; }
+	public void setMP(int mp) { this.mp = mp; }
+	public int getMaxMP() { return this.maxMP; }
 	public int getMobility() { return this.mobility; }
 	public int getBaseAim() { return this.aim; }
 	public Weapon getCurrentWeapon() { return this.mainWeapon; }
