@@ -189,7 +189,7 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 
 	public void onRightClick(int gameX, int gameY) {
 		if (UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
-			if (this == this.gui.getTarget()) {
+			if (this.gui.getMode() == BattleGUI.Mode.TARGET_SELECT && this == this.gui.getTarget()) {
 				this.gui.attack(this);
 			}
 		}
