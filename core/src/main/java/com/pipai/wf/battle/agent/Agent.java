@@ -97,7 +97,8 @@ public class Agent implements BattleEventLoggable {
 				if (peekSquare != null) {
 					GridPosition pos = peekSquare.getPosition();
 					BattleMapCell peekCoverSquare = this.map.getCellInDirection(pos, coverDir);
-					if (peekSquare.isEmpty() && peekCoverSquare.isEmpty() && !l.contains(pos)) {
+					
+					if (peekSquare.isEmpty() && !peekCoverSquare.hasTileSightBlocker() && !l.contains(pos)) {
 						l.add(peekSquare.getPosition());
 					}
 				}
@@ -116,7 +117,17 @@ public class Agent implements BattleEventLoggable {
 	
 	public boolean isFlanked() {
 		for (Agent a : this.enemiesInRange()) {
-			if (DirectionalCoverSystem.isFlankedBy(map, this.getPosition(), a.getPosition())) {
+			if (this.isFlankedBy(a)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isFlankedBy(Agent other) {
+		ArrayList<GridPosition> otherPosList = other.getPeekingSquares();
+		for (GridPosition otherPos : otherPosList) {
+			if (DirectionalCoverSystem.isFlankedBy(map, this.getPosition(), otherPos)) {
 				return true;
 			}
 		}
@@ -130,8 +141,10 @@ public class Agent implements BattleEventLoggable {
 	
 	public boolean canSee(Agent other) {
 		for (GridPosition peekSquare : this.getPeekingSquares()) {
-			if (this.map.lineOfSight(peekSquare, other.getPosition())) {
-				return true;
+			for (GridPosition otherPeekSquare : other.getPeekingSquares()) {
+				if (this.map.lineOfSight(peekSquare, otherPeekSquare)) {
+					return true;
+				}
 			}
 		}
 		return false;
