@@ -41,7 +41,7 @@ public class SimpleRangedAttack extends Attack {
 	}
 	
 	public String description() {
-		return "A simple ranged attack for testing purposes";
+		return "Attack with the selected weapon";
 	}
 	
 }
