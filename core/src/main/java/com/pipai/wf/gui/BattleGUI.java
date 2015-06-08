@@ -431,9 +431,13 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (this.mode == Mode.TARGET_SELECT) {
 			if (this.targetAgentList.contains(target)) {
 				this.targetAgent = target;
-				int acc = this.targetModeAttack.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-				int crit = this.targetModeAttack.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-				this.tooltip.setToAttackDescription(this.targetModeAttack, acc, crit);
+				if (this.selectedAgent.getAgent().getCurrentWeapon().currentAmmo() < this.targetModeAttack.requiredAmmo()) {
+					this.tooltip.setToGeneralDescription("Attack", "Not enough ammunition");
+				} else {
+					int acc = this.targetModeAttack.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+					int crit = this.targetModeAttack.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+					this.tooltip.setToAttackDescription(this.targetModeAttack, acc, crit);
+				}
 				this.moveCameraToPos((this.selectedAgent.x + target.x)/2, (this.selectedAgent.y + target.y)/2);
 			}
 		}

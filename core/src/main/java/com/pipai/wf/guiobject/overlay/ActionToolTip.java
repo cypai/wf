@@ -16,7 +16,12 @@ import com.pipai.wf.guiobject.Renderable;
 
 public class ActionToolTip extends GUIObject implements Renderable {
 	
+	public enum Mode {
+		ATTACK, GENERAL;
+	}
+	
 	protected BattleGUI gui;
+	private Mode mode;
 	private final int PADDING = 6;
 	private float x, y, width, height;
 	private String title, description;
@@ -34,7 +39,14 @@ public class ActionToolTip extends GUIObject implements Renderable {
 	@Override
 	public int renderPriority() { return 0;	}
 	
+	public void setToGeneralDescription(String title, String description) {
+		mode = Mode.GENERAL;
+		this.title = title;
+		this.description = description;
+	}
+	
 	public void setToAttackDescription(Attack atk, int accuracy, int critProb) {
+		mode = Mode.ATTACK;
 		title = "Attack";
 		description = atk.description();
 		this.accuracy = accuracy;
@@ -60,8 +72,10 @@ public class ActionToolTip extends GUIObject implements Renderable {
 		f.setColor(Color.WHITE);
 		f.draw(spr, title, (x + width)/2, y - f.getLineHeight(), 0, Align.center, true);
 		f.draw(spr, description, (x + width)/2, y - 2.5f * f.getLineHeight(), 0, Align.center, true);
-		f.draw(spr, "Acc: " + String.valueOf(accuracy) + "%", x + PADDING, y - height + f.getLineHeight());
-		f.draw(spr, "Crit: " + String.valueOf(critProb) + "%", x + width - PADDING, y - height + f.getLineHeight(), 0, Align.right, true);
+		if (this.mode == Mode.ATTACK) {
+			f.draw(spr, "Acc: " + String.valueOf(accuracy) + "%", x + PADDING, y - height + f.getLineHeight());
+			f.draw(spr, "Crit: " + String.valueOf(critProb) + "%", x + width - PADDING, y - height + f.getLineHeight(), 0, Align.right, true);
+		}
 		spr.end();
 	}
 	
