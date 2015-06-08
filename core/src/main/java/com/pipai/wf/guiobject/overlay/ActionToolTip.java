@@ -47,7 +47,7 @@ public class ActionToolTip extends GUIObject implements Renderable {
 	
 	public void setToAttackDescription(Attack atk, int accuracy, int critProb) {
 		mode = Mode.ATTACK;
-		title = "Attack";
+		title = atk.name();
 		description = atk.description();
 		this.accuracy = accuracy;
 		this.critProb = critProb;

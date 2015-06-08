@@ -27,6 +27,8 @@ public abstract class Attack {
 	
 	public abstract int damageRoll(Agent attacker, Agent target, float distance);
 	
+	public abstract String name();
+	
 	public abstract String description();
 	
 }

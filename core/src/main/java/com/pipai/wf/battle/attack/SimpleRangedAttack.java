@@ -40,8 +40,12 @@ public class SimpleRangedAttack extends Attack {
 		return UtilFunctions.rng.nextInt(max_dmg - min_dmg + 1) + min_dmg;
 	}
 	
+	public String name() {
+		return "Attack";
+	}
+	
 	public String description() {
-		return "Attack with the selected weapon";
+		return "Attack with the selected ranged weapon";
 	}
 	
 }
