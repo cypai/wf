@@ -24,6 +24,7 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 	protected BattleGUI gui;
 	private float x, y, width, height;
 	private ArrayList<Weapon> weapons;
+	private AgentGUIObject agent;
 
 	public WeaponIndicator(BattleGUI gui, float x, float y, float width, float height) {
 		super(gui);
@@ -36,6 +37,7 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 	
 	public void updateToAgent(AgentGUIObject a) {
 		weapons = a.getAgent().getWeapons();
+		agent = a;
 	}
 
 	@Override
@@ -59,7 +61,6 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 		r.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		spr.begin();
-		f.setColor(Color.WHITE);
 		int line = 1;
 		for (Weapon weapon : weapons) {
 			String weaponInfo;
@@ -73,6 +74,11 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 				}
 			} else {
 				weaponInfo = weapon.name() + "   " + String.valueOf(weapon.currentAmmo()) + "/" + String.valueOf(weapon.baseAmmoCapacity());
+			}
+			if (weapon == agent.getAgent().getCurrentWeapon()) {
+				f.setColor(Color.ORANGE);
+			} else {
+				f.setColor(Color.WHITE);
 			}
 			f.draw(spr, weaponInfo, x + f.getLineHeight(), y - f.getLineHeight() * line, 0, Align.left, true);
 			line += 1;
