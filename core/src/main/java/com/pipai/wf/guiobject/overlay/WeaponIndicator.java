@@ -1,5 +1,7 @@
 package com.pipai.wf.guiobject.overlay;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
+import com.pipai.wf.battle.spell.Spell;
+import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
@@ -19,7 +23,7 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 	
 	protected BattleGUI gui;
 	private float x, y, width, height;
-	private Weapon primary;
+	private ArrayList<Weapon> weapons;
 
 	public WeaponIndicator(BattleGUI gui, float x, float y, float width, float height) {
 		super(gui);
@@ -31,7 +35,7 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 	}
 	
 	public void updateToAgent(AgentGUIObject a) {
-		primary = a.getAgent().getCurrentWeapon();
+		weapons = a.getAgent().getWeapons();
 	}
 
 	@Override
@@ -56,8 +60,23 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		spr.begin();
 		f.setColor(Color.WHITE);
-		String primaryInfo = primary.name() + "   " + String.valueOf(primary.currentAmmo()) + "/" + String.valueOf(primary.baseAmmoCapacity());
-		f.draw(spr, primaryInfo, x + f.getLineHeight(), y - f.getLineHeight(), 0, Align.left, true);
+		int line = 1;
+		for (Weapon weapon : weapons) {
+			String weaponInfo;
+			if (weapon instanceof SpellWeapon) {
+				weaponInfo = weapon.name() + "   ";
+				Spell spell = ((SpellWeapon) weapon).getSpell();
+				if (spell == null) {
+					weaponInfo += "-";
+				} else {
+					weaponInfo += spell.name();
+				}
+			} else {
+				weaponInfo = weapon.name() + "   " + String.valueOf(weapon.currentAmmo()) + "/" + String.valueOf(weapon.baseAmmoCapacity());
+			}
+			f.draw(spr, weaponInfo, x + f.getLineHeight(), y - f.getLineHeight() * line, 0, Align.left, true);
+			line += 1;
+		}
 		spr.end();
 	}
 

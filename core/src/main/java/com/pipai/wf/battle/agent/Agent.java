@@ -18,6 +18,7 @@ import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.Pistol;
+import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 
@@ -29,7 +30,8 @@ public class Agent implements BattleEventLoggable {
 	protected int maxHP, maxAP, maxMP, hp, ap, mp;
 	protected int mobility, aim, defense;
 	protected State state;
-	protected Weapon mainWeapon;
+	protected ArrayList<Weapon> weapons;
+	protected int weaponIndex;
 	protected Armor armor;
 	protected BattleMap map;
 	protected GridPosition position;
@@ -50,7 +52,10 @@ public class Agent implements BattleEventLoggable {
 		mobility = state.mobility;
 		aim = 60;
 		defense = 0;
-		mainWeapon = new Pistol();
+		weapons = new ArrayList<Weapon>();
+		weapons.add(new Pistol());
+		weapons.add(new SpellWeapon());
+		weaponIndex = 0;
 		armor = new LeatherArmor();
 	}
 	
@@ -82,10 +87,13 @@ public class Agent implements BattleEventLoggable {
 	public Spell getReadiedSpell() { return this.readiedSpell; }
 	public int getMobility() { return this.mobility; }
 	public int getBaseAim() { return this.aim; }
-	public Weapon getCurrentWeapon() { return this.mainWeapon; }
+	public Weapon getCurrentWeapon() { return this.weapons.get(this.weaponIndex); }
 	public Armor getArmor() { return this.armor; }
 	public boolean isKO() { return this.state == State.KO; }
 	public boolean isOverwatching() { return this.state == State.OVERWATCH; }
+
+	@SuppressWarnings("unchecked")
+	public ArrayList<Weapon> getWeapons() { return (ArrayList<Weapon>) this.weapons.clone(); }
 	
 	public GridPosition getPosition() { return this.position; }
 	
