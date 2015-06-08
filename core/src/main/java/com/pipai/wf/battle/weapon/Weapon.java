@@ -38,4 +38,6 @@ public abstract class Weapon {
 		currentAmmo = baseAmmoCapacity();
 	}
 	
+	public abstract String name();
+	
 }

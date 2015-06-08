@@ -41,5 +41,10 @@ public class Pistol extends Weapon {
 	public int baseAmmoCapacity() {
 		return 2;
 	}
+	
+	@Override
+	public String name() {
+		return "Pistol";
+	}
 
 }

@@ -44,6 +44,7 @@ import com.pipai.wf.guiobject.battle.BulletGUIObject;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
+import com.pipai.wf.guiobject.overlay.WeaponIndicator;
 
 /*
  * Simple 2D GUI for rendering a BattleMap
@@ -92,6 +93,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private Vector3 cameraDest = null;
 	private AI ai;
 	private ActionToolTip tooltip;
+	private WeaponIndicator weaponIndicator;
 	private Attack targetModeAttack;
 
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
@@ -144,8 +146,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
 		}
-		this.setSelected(this.selectableAgentOrderedList.getFirst());
 		this.generateOverlays();
+		this.setSelected(this.selectableAgentOrderedList.getFirst());
 	}
 	
 	private void generateOverlays() {
@@ -153,7 +155,9 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.overlayRenderables.add(atkBtn);
 		this.overlayLeftClickables.add(atkBtn);
 		this.tooltip = new ActionToolTip(this, 0, 120, 320, 120);
+		this.weaponIndicator = new WeaponIndicator(this, this.getScreenWidth() - 120, 80, 120, 80);
 		this.overlayRenderables.add(this.tooltip);
+		this.overlayRenderables.add(this.weaponIndicator);
 	}
 	
 	private void beginAnimation() { this.mode = Mode.ANIMATION; }
@@ -172,6 +176,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	public void setSelected(AgentGUIObject agent) {
 		if (agent.getAgent().getAP() > 0) {
 			this.selectedAgent = agent;
+			this.weaponIndicator.updateToAgent(agent);
 			this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 			this.updatePaths();
 		}
