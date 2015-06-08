@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
 import com.pipai.wf.battle.attack.Attack;
+import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
@@ -49,6 +50,14 @@ public class ActionToolTip extends GUIObject implements Renderable {
 		mode = Mode.ATTACK;
 		title = atk.name();
 		description = atk.description();
+		this.accuracy = accuracy;
+		this.critProb = critProb;
+	}
+	
+	public void setToTargetableSpellDescription(Spell spell, int accuracy, int critProb) {
+		mode = Mode.ATTACK;
+		title = spell.name();
+		description = spell.description();
 		this.accuracy = accuracy;
 		this.critProb = critProb;
 	}

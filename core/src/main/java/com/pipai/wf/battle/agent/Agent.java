@@ -37,7 +37,6 @@ public class Agent implements BattleEventLoggable {
 	protected GridPosition position;
 	protected BattleLog log;
 	protected Attack overwatchAttack;
-	protected Spell readiedSpell;
 	
 	public Agent(BattleMap map, AgentState state) {
 		this.map = map;
@@ -84,7 +83,6 @@ public class Agent implements BattleEventLoggable {
 	public void setMP(int mp) { this.mp = mp; }
 	public void useMP(int mp) { this.mp -= mp; }
 	public int getMaxMP() { return this.maxMP; }
-	public Spell getReadiedSpell() { return this.readiedSpell; }
 	public int getMobility() { return this.mobility; }
 	public int getBaseAim() { return this.aim; }
 	public Weapon getCurrentWeapon() { return this.weapons.get(this.weaponIndex); }
@@ -279,25 +277,35 @@ public class Agent implements BattleEventLoggable {
 		if (this.mp < spell.requiredMP()) {
 			throw new IllegalActionException("Not enough mp to cast " + spell.name());
 		}
+		if (!(this.getCurrentWeapon() instanceof SpellWeapon)) {
+			throw new IllegalActionException("Currently selected weapon is not a spell weapon");
+		}
 		this.useMP(spell.requiredMP());
 		this.setAP(this.ap - 1);
-		this.readiedSpell = spell;
+		((SpellWeapon)this.getCurrentWeapon()).ready(spell);
 		logEvent(BattleEvent.readySpellEvent(this, spell));
 	}
 	
 	public void castReadiedSpell(Agent other) throws IllegalActionException {
-		if (!this.readiedSpell.canTargetAgent()) {
-			throw new IllegalActionException("Cannot target with " + this.readiedSpell.name());
+		if (!(this.getCurrentWeapon() instanceof SpellWeapon)) {
+			throw new IllegalActionException("Currently selected weapon is not a spell weapon");
+		}
+		Spell readiedSpell = ((SpellWeapon)this.getCurrentWeapon()).getSpell();
+		if (readiedSpell == null) {
+			throw new IllegalActionException("No readied spell available");
+		}
+		if (!readiedSpell.canTargetAgent()) {
+			throw new IllegalActionException("Cannot target with " + readiedSpell.name());
 		}
 		float distance = 0;
-		boolean hit = this.readiedSpell.rollToHit(this, other, distance);
+		boolean hit = readiedSpell.rollToHit(this, other, distance);
 		int dmg = 0;
 		if (hit) {
-			dmg = this.readiedSpell.damageRoll();
+			dmg = readiedSpell.damageRoll();
 			other.takeDamage(dmg);
 		}
 		this.setAP(0);
-		logEvent(BattleEvent.castTargetEvent(this, other, this.readiedSpell, hit, dmg));
+		logEvent(BattleEvent.castTargetEvent(this, other, readiedSpell, hit, dmg));
 	}
 	
 	@Override

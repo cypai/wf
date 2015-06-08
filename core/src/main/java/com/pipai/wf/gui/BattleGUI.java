@@ -21,6 +21,7 @@ import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
+import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.agent.Agent;
@@ -35,6 +36,10 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.EnvironmentObject;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.battle.spell.FireballSpell;
+import com.pipai.wf.battle.spell.Spell;
+import com.pipai.wf.battle.weapon.SpellWeapon;
+import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
@@ -96,6 +101,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private ActionToolTip tooltip;
 	private WeaponIndicator weaponIndicator;
 	private Attack targetModeAttack;
+	private Spell targetModeSpell;
 
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
 		int x_offset = gameX % SQUARE_SIZE;
@@ -411,6 +417,12 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.createInstance(ttext);
 			this.moveCameraToPos(a.x, a.y);
 			break;
+		case READY:
+			a = this.agentMap.get(event.getPerformer());
+			ttext = new TemporaryText(this, a.x, a.y, 120, 24, "Ready: " + event.getSpell().name());
+			this.createInstance(ttext);
+			this.moveCameraToPos(a.x, a.y);
+			break;
 		case START_TURN:
 			if (event.getTeam() == Team.PLAYER) {
 				this.mode = Mode.NONE;
@@ -425,6 +437,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	public void switchToTargetMode(Attack atk) {
+		this.targetModeSpell = null;
 		this.targetModeAttack = atk;
 		this.targetAgentList = new LinkedList<AgentGUIObject>();
 		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
@@ -432,7 +445,22 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 		this.mode = Mode.TARGET_SELECT;
 		if (this.targetAgentList.size() == 0) {
-			this.tooltip.setToGeneralDescription("Attack", "No enemies in range");
+			this.tooltip.setToGeneralDescription(atk.name(), "No enemies in range");
+			return;
+		}
+		this.switchTarget(this.targetAgentList.getFirst());
+	}
+	
+	public void switchToTargetMode(Spell spell) {
+		this.targetModeAttack = null;
+		this.targetModeSpell = spell;
+		this.targetAgentList = new LinkedList<AgentGUIObject>();
+		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
+			this.targetAgentList.add(this.agentMap.get(a));
+		}
+		this.mode = Mode.TARGET_SELECT;
+		if (this.targetAgentList.size() == 0) {
+			this.tooltip.setToGeneralDescription(spell.name(), "No enemies in range");
 			return;
 		}
 		this.switchTarget(this.targetAgentList.getFirst());
@@ -442,12 +470,19 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (this.mode == Mode.TARGET_SELECT) {
 			if (this.targetAgentList.contains(target)) {
 				this.targetAgent = target;
-				if (this.selectedAgent.getAgent().getCurrentWeapon().currentAmmo() < this.targetModeAttack.requiredAmmo()) {
+				Weapon weapon = this.selectedAgent.getAgent().getCurrentWeapon();
+				if (weapon.needsAmmunition() && weapon.currentAmmo() < this.targetModeAttack.requiredAmmo()) {
 					this.tooltip.setToGeneralDescription("Attack", "Not enough ammunition");
 				} else {
-					int acc = this.targetModeAttack.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-					int crit = this.targetModeAttack.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-					this.tooltip.setToAttackDescription(this.targetModeAttack, acc, crit);
+					if (this.targetModeAttack != null) {
+						int acc = this.targetModeAttack.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+						int crit = this.targetModeAttack.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+						this.tooltip.setToAttackDescription(this.targetModeAttack, acc, crit);
+					} else if (this.targetModeSpell != null) {
+						int acc = this.targetModeSpell.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+						int crit = this.targetModeSpell.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
+						this.tooltip.setToTargetableSpellDescription(this.targetModeSpell, acc, crit);
+					}
 				}
 				this.moveCameraToPos((this.selectedAgent.x + target.x)/2, (this.selectedAgent.y + target.y)/2);
 			}
@@ -516,7 +551,14 @@ public class BattleGUI extends GUI implements BattleObserver {
 		switch (keycode) {
 		case Keys.NUM_1:
 			if (this.mode == Mode.NONE) {
-				this.switchToTargetMode(new SimpleRangedAttack());
+				if (selectedAgent.getAgent().getCurrentWeapon() instanceof SpellWeapon) {
+					Spell readiedSpell = ((SpellWeapon)selectedAgent.getAgent().getCurrentWeapon()).getSpell();
+					if (readiedSpell != null) {
+						this.switchToTargetMode(readiedSpell);
+					}
+				} else {
+					this.switchToTargetMode(new SimpleRangedAttack());
+				}
 			}
 			break;
 		case Keys.ENTER:
@@ -525,14 +567,17 @@ public class BattleGUI extends GUI implements BattleObserver {
 			}
 			break;
 		case Keys.X:
-			action = new SwitchWeaponAction(selectedAgent.getAgent());
+			if (this.mode == Mode.NONE) {
+				action = new SwitchWeaponAction(selectedAgent.getAgent());
+			}
 			break;
 		case Keys.R:
 			// Reload
-			action = new ReloadAction(selectedAgent.getAgent());
-			break;
-		case Keys.C:
-			// Ready spell
+			if (selectedAgent.getAgent().getCurrentWeapon() instanceof SpellWeapon) {
+				action = new ReadySpellAction(selectedAgent.getAgent(), new FireballSpell());
+			} else {
+				action = new ReloadAction(selectedAgent.getAgent());
+			}
 			break;
 		case Keys.Y:
 			// Overwatch

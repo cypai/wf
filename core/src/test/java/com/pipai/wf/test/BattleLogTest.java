@@ -15,6 +15,7 @@ import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
+import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
@@ -214,6 +215,7 @@ public class BattleLogTest {
 		battle.registerObserver(observer);
 		Agent agent = map.getAgentAtPos(playerPos);
 		try {
+			battle.performAction(new SwitchWeaponAction(agent));
 			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
@@ -238,6 +240,7 @@ public class BattleLogTest {
 		Agent agent = map.getAgentAtPos(playerPos);
 		Agent target = map.getAgentAtPos(enemyPos);
 		try {
+			battle.performAction(new SwitchWeaponAction(agent));
 			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
 			battle.performAction(new CastTargetAction(agent, target));
 		} catch (IllegalActionException e) {
