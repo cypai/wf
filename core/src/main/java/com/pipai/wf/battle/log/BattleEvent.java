@@ -14,7 +14,7 @@ import com.pipai.wf.battle.spell.Spell;
 public class BattleEvent {
 	
 	public static enum Type {
-		MOVE, ATTACK, READY, CAST_TARGET, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, START_TURN;
+		MOVE, ATTACK, READY, CAST_TARGET, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, SWITCH_WEAPON, START_TURN;
 	}
 	
 	private Team team;
@@ -73,6 +73,11 @@ public class BattleEvent {
 	
 	public static BattleEvent reloadEvent(Agent performer) {
 		BattleEvent event = new BattleEvent(Type.RELOAD, performer, null);
+		return event;
+	}
+	
+	public static BattleEvent switchWeaponEvent(Agent performer) {
+		BattleEvent event = new BattleEvent(Type.SWITCH_WEAPON, performer, null);
 		return event;
 	}
 	

@@ -197,6 +197,14 @@ public class Agent implements BattleEventLoggable {
 		}
 	}
 	
+	public void switchWeapon() {
+		weaponIndex += 1;
+		if (weaponIndex == weapons.size()) {
+			weaponIndex = 0;
+		}
+		logEvent(BattleEvent.switchWeaponEvent(this));
+	}
+	
 	public void move(LinkedList<GridPosition> path) throws IllegalActionException {
 		boolean isValid = true;
 		BattleEvent event = BattleEvent.moveEvent(this, path);

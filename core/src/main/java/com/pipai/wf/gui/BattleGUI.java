@@ -22,6 +22,7 @@ import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.action.ReloadAction;
+import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.ai.AI;
@@ -522,6 +523,10 @@ public class BattleGUI extends GUI implements BattleObserver {
 			if (this.mode == Mode.TARGET_SELECT) {
 				this.attack(this.targetAgent);
 			}
+			break;
+		case Keys.X:
+			action = new SwitchWeaponAction(selectedAgent.getAgent());
+			break;
 		case Keys.R:
 			// Reload
 			action = new ReloadAction(selectedAgent.getAgent());
