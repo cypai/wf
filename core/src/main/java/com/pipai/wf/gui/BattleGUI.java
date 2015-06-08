@@ -279,6 +279,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			if (this.selectableAgentOrderedList.size() > 0) {
 				this.setSelected(this.selectableAgentOrderedList.getFirst());
 			}
+			this.mode = Mode.NONE;
 		}
 		for (AgentGUIObject a : this.agentList) {
 			if (a.getAgent().getTeam() == Team.PLAYER && (a.getAgent().getAP() > 0 && !a.getAgent().isKO())) {
@@ -424,6 +425,10 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.targetAgentList.add(this.agentMap.get(a));
 		}
 		this.mode = Mode.TARGET_SELECT;
+		if (this.targetAgentList.size() == 0) {
+			this.tooltip.setToGeneralDescription("Attack", "No enemies in range");
+			return;
+		}
 		this.switchTarget(this.targetAgentList.getFirst());
 	}
 	
