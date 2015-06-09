@@ -14,12 +14,12 @@ import com.pipai.wf.util.UtilFunctions;
 
 public class BulletGUIObject extends GUIObject implements Renderable {
 	
-	private BattleGUI gui;
-	private float x, y, dest_x, dest_y;
-	private int t, final_t;
-	private Vector2 dir;
-	private AgentGUIObject target;
-	private BattleEvent outcome;
+	protected BattleGUI gui;
+	protected float x, y, dest_x, dest_y;
+	protected int t, final_t;
+	protected Vector2 dir;
+	protected AgentGUIObject target;
+	protected BattleEvent outcome;
 	
 	private static final int SPEED = 16;
 	

@@ -18,6 +18,7 @@ import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.action.Action;
+import com.pipai.wf.battle.action.CastTargetAction;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.RangeAttackAction;
@@ -47,6 +48,7 @@ import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable;
 import com.pipai.wf.guiobject.battle.AgentGUIObject;
 import com.pipai.wf.guiobject.battle.BulletGUIObject;
+import com.pipai.wf.guiobject.battle.FireballGUIObject;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
@@ -324,13 +326,18 @@ public class BattleGUI extends GUI implements BattleObserver {
 	
 	public void attack(AgentGUIObject target) {
 		if (selectedAgent != null) {
-			if (selectedAgent.getAgent().getCurrentWeapon().currentAmmo() > 0) {
-				RangeAttackAction atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), new SimpleRangedAttack());
-				try {
-					this.battle.performAction(atk);
-				} catch (IllegalActionException e) {
-					System.out.println("Illegal move: " + e.getMessage());
+			Action atk = null;
+			if (this.targetModeAttack != null) {
+				if (selectedAgent.getAgent().getCurrentWeapon().currentAmmo() > 0) {
+					atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), this.targetModeAttack);
 				}
+			} else {
+				atk = new CastTargetAction(selectedAgent.getAgent(), target.getAgent());
+			}
+			try {
+				this.battle.performAction(atk);
+			} catch (IllegalActionException e) {
+				System.out.println("Illegal move: " + e.getMessage());
 			}
 		}
 		this.updatePaths();
@@ -403,6 +410,13 @@ public class BattleGUI extends GUI implements BattleObserver {
 			t = this.agentMap.get(event.getTarget());
 			BulletGUIObject b = new BulletGUIObject(this, a.x, a.y, t.x, t.y, t, event);
 			this.createInstance(b);
+			this.moveCameraToPos((a.x + t.x)/2, (a.y + t.y)/2);
+			break;
+		case CAST_TARGET:
+			a = this.agentMap.get(event.getPerformer());
+			t = this.agentMap.get(event.getTarget());
+			FireballGUIObject fireball = new FireballGUIObject(this, a.x, a.y, t.x, t.y, t, event);
+			this.createInstance(fireball);
 			this.moveCameraToPos((a.x + t.x)/2, (a.y + t.y)/2);
 			break;
 		case OVERWATCH:
