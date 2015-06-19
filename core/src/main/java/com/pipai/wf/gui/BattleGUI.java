@@ -6,9 +6,11 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -85,7 +87,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 	private static final int AI_MOVE_WAIT_TIME = 60;
 
-	private OrthographicCamera camera, overlayCamera, orthoCamera;
+	private Camera camera;
+	private OrthographicCamera overlayCamera, orthoCamera;
 	private BattleController battle;
 	private HashMap<Agent, AgentGUIObject> agentMap;
 	private ArrayList<AgentGUIObject> agentList;
@@ -118,10 +121,13 @@ public class BattleGUI extends GUI implements BattleObserver {
 	
 	public BattleGUI(WFGame game, BattleMap map) {
 		super(game);
-        camera = new OrthographicCamera();
+        camera = new PerspectiveCamera(67, this.getScreenWidth(), this.getScreenHeight());
+        camera.position.set(0, -200, 400);
+        camera.lookAt(0, 0, 0);
+        camera.near = 1f;
+        camera.far = 2000;
         overlayCamera = new OrthographicCamera();
         orthoCamera = new OrthographicCamera();
-        camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
         overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
         orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
 		this.battle = new BattleController(map);
@@ -521,28 +527,23 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (this.cameraMoveTime < 1.0) {
 			this.cameraMoveTime += 0.005;
 			this.camera.position.interpolate(this.cameraDest, this.cameraMoveTime, Interpolation.linear);
-			this.orthoCamera.position.interpolate(this.cameraDest, this.cameraMoveTime, Interpolation.linear);
 		}
 		if (this.mode.allowsInput()) {
 			if (this.checkKey(Keys.A)) {
 				this.cameraMoveTime = 1;
-				this.camera.translate(-3, 0);
-				this.orthoCamera.translate(-3, 0);
+				this.camera.translate(-3, 0, 0);
 			}
 			if (this.checkKey(Keys.D)) {
 				this.cameraMoveTime = 1;
-				this.camera.translate(3, 0);
-				this.orthoCamera.translate(3, 0);
+				this.camera.translate(3, 0, 0);
 			}
 			if (this.checkKey(Keys.W)) {
 				this.cameraMoveTime = 1;
-				this.camera.translate(0, 3);
-				this.orthoCamera.translate(0, 3);
+				this.camera.translate(0, 3, 0);
 			}
 			if (this.checkKey(Keys.S)) {
 				this.cameraMoveTime = 1;
-				this.camera.translate(0, -3);
-				this.orthoCamera.translate(0, -3);
+				this.camera.translate(0, -3, 0);
 			}
 		}
         this.camera.update();
@@ -636,7 +637,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		this.camera.setToOrtho(false, width, height);
+		//this.camera.setToOrtho(false, width, height);
 		this.orthoCamera.setToOrtho(false, width, height);
 		this.overlayCamera.setToOrtho(false, width, height);
 	}
