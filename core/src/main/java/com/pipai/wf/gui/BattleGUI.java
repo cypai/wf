@@ -9,6 +9,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
@@ -662,11 +663,20 @@ public class BattleGUI extends GUI implements BattleObserver {
 		for (Renderable r : this.overlayRenderables) {
 			r.render(batch);
 		}
+		drawFPS();
 		if (aiTurn) {
 			runAiTurn();
 		}
 		cleanDelBuffers();
 		cleanCreateBuffers();
+	}
+	
+	private void drawFPS() {
+		BitmapFont font = batch.getFont();
+		batch.getSpriteBatch().begin();
+		font.setColor(Color.WHITE);
+		font.draw(batch.getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), this.getScreenWidth() - 24, this.getScreenHeight() - font.getLineHeight()/2);
+		batch.getSpriteBatch().end();
 	}
 	
 	private void renderShape(ShapeRenderer batch) {
