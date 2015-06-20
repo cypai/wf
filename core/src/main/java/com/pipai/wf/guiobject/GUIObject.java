@@ -17,4 +17,6 @@ public abstract class GUIObject {
 	
 	public int getID() { return id; }
 	
+	public void update() {}
+	
 }

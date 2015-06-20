@@ -55,6 +55,13 @@ public abstract class GUI implements Screen, InputProcessor {
 	public void show() {
 		
 	}
+	
+	@Override
+	public void render(float delta) {
+		for (GUIObject o : this.instanceIndex.values()) {
+			o.update();
+		}
+	}
 
 	@Override
 	public void resize(int width, int height) {
