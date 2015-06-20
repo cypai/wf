@@ -30,7 +30,8 @@ public class TemporaryText extends GUIObject implements Renderable {
 	
 	public int renderPriority() { return -1; }
 	
-	private void update() {
+	@Override
+	public void update() {
 		destroyAlarm--;
 		if (destroyAlarm <= 0) {
 			gui.deleteInstance(this);
@@ -38,7 +39,6 @@ public class TemporaryText extends GUIObject implements Renderable {
 	}
 
 	public void render(BatchHelper batch) {
-		update();
 		ShapeRenderer r = batch.getShapeRenderer();
 		r.begin(ShapeType.Filled);
 		r.setColor(new Color(0, 0.2f, 0.5f, 1));
