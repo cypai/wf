@@ -3,10 +3,10 @@ package com.pipai.wf.guiobject.battle;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
@@ -36,6 +36,9 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 	private LinkedList<BattleEvent> chain;
 	private Alarm owAlarm;
 	
+	private Texture circleTex;
+	private Decal decal;
+	
 	public AgentGUIObject(BattleGUI gui, Agent agent, float x, float y, int radius) {
 		super(gui);
 		this.gui = gui;
@@ -48,6 +51,15 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		wait = false;
 		ko = false;
 		owAlarm = new Alarm();
+		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
+		Pixmap pixmap = new Pixmap(SQUARE_SIZE, SQUARE_SIZE, Pixmap.Format.RGBA8888);
+		pixmap.fill();
+		pixmap.setColor(Color.RED);
+		pixmap.fillCircle(SQUARE_SIZE/2, SQUARE_SIZE/2, SQUARE_SIZE/2-1);
+		circleTex = new Texture(pixmap);
+		pixmap.dispose();
+		decal = Decal.newDecal(new TextureRegion(circleTex), true);
+		decal.setDimensions(32, 32);
 	}
 
 	public int renderPriority() { return 0; }
@@ -106,6 +118,7 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 	}
 
 	public void update() {
+		decal.setPosition(x, y, 0);
 		if (!wait) {
 			if (animating) {
 				t += 1;
@@ -134,44 +147,44 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 
 	public void render(BatchHelper batch) {
 		update();
-		ShapeRenderer r = batch.getShapeRenderer();
 		if (!ko) {
-			r.begin(ShapeType.Filled);
-			if (agent.getTeam() == Team.PLAYER) {
-				r.setColor(0, 0.8f, 0, 1);
-			} else {
-				r.setColor(0.8f, 0, 0, 1);
-			}
-			r.circle(x, y, radius);
-			r.end();
-			if (this.selected) {
-				r.begin(ShapeType.Line);
-				r.setColor(0.8f, 0.8f, 0, 1);
-				r.circle(x, y, radius);
-				r.end();
-			}
-			SpriteBatch spr = batch.getSpriteBatch();
-			BitmapFont font = batch.getFont();
-			spr.begin();
-			font.setColor(Color.BLACK);
-			font.draw(spr, String.valueOf(agent.getAP()), x, y+15);
-			if (!agent.isOpen() && agent.isFlanked()) {
-				font.setColor(Color.ORANGE);
-			}
-			String cover = "-";
-			switch (agent.getCoverType()) {
-			case FULL:
-				cover = "F";
-				break;
-			case HALF:
-				cover = "H";
-				break;
-			default:
-				cover = "-";
-				break;
-			}
-			font.draw(spr, cover, x, y);
-			spr.end();
+			batch.getDecalBatch().add(decal);
+//			r.begin(ShapeType.Filled);
+//			if (agent.getTeam() == Team.PLAYER) {
+//				r.setColor(0, 0.8f, 0, 1);
+//			} else {
+//				r.setColor(0.8f, 0, 0, 1);
+//			}
+//			r.circle(x, y, radius);
+//			r.end();
+//			if (this.selected) {
+//				r.begin(ShapeType.Line);
+//				r.setColor(0.8f, 0.8f, 0, 1);
+//				r.circle(x, y, radius);
+//				r.end();
+//			}
+//			SpriteBatch spr = batch.getSpriteBatch();
+//			BitmapFont font = batch.getFont();
+//			spr.begin();
+//			font.setColor(Color.BLACK);
+//			font.draw(spr, String.valueOf(agent.getAP()), x, y+15);
+//			if (!agent.isOpen() && agent.isFlanked()) {
+//				font.setColor(Color.ORANGE);
+//			}
+//			String cover = "-";
+//			switch (agent.getCoverType()) {
+//			case FULL:
+//				cover = "F";
+//				break;
+//			case HALF:
+//				cover = "H";
+//				break;
+//			default:
+//				cover = "-";
+//				break;
+//			}
+//			font.draw(spr, cover, x, y);
+//			spr.end();
 		}
 	}
 

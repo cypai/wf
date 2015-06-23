@@ -152,8 +152,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 //			this.leftClickables.add(a);
 			this.rightClickables.add(a);
 		}
+		this.batch.set3DCamera(this.camera);
 		this.terrainRenderer = new BattleTerrainRenderer(this, map);
-		this.createInstance(this.terrainRenderer);
 		this.generateOverlays();
 		this.setSelected(this.selectableAgentOrderedList.getFirst());
 	}
@@ -639,14 +639,16 @@ public class BattleGUI extends GUI implements BattleObserver {
 	public void render(float delta) {
 		super.render(delta);
         Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		globalUpdate();
         batch.getSpriteBatch().setProjectionMatrix(camera.combined);
         batch.getShapeRenderer().setProjectionMatrix(camera.combined);
+        this.terrainRenderer.render(batch);
 //		renderShape(batch.getShapeRenderer());
 		for (Renderable r : this.renderables) {
 			r.render(batch);
 		}
+		batch.getDecalBatch().flush();
         batch.getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
         batch.getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
 		this.drawAllAgentInfo(batch.getShapeRenderer());
