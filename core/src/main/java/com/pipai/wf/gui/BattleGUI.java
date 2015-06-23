@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
@@ -37,7 +38,6 @@ import com.pipai.wf.battle.attack.Attack;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.EnvironmentObject;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.battle.spell.FireballSpell;
@@ -47,9 +47,11 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
+import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable;
 import com.pipai.wf.guiobject.battle.AgentGUIObject;
+import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
 import com.pipai.wf.guiobject.battle.BulletGUIObject;
 import com.pipai.wf.guiobject.battle.FireballGUIObject;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
@@ -80,11 +82,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 	}
     
-	public static final int SQUARE_SIZE = 40;
-	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
-	private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
-	private static final Color TARGET_COLOR = new Color(1f, 0.8f, 0, 0.5f);
-	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 	private static final int AI_MOVE_WAIT_TIME = 60;
 
 	private Camera camera;
@@ -96,7 +93,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private AgentGUIObject selectedAgent, targetAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
-	private ArrayList<LeftClickable> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer, overlayLeftClickables;
+	private ArrayList<LeftClickable3D> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer; 
+	private ArrayList<LeftClickable> overlayLeftClickables;
 	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
 	private Mode mode;
 	private boolean aiTurn;
@@ -104,23 +102,15 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private float cameraMoveTime = 1;
 	private Vector3 cameraDest = null;
 	private AI ai;
+	private BattleTerrainRenderer terrainRenderer;
 	private ActionToolTip tooltip;
 	private WeaponIndicator weaponIndicator;
 	private Attack targetModeAttack;
 	private Spell targetModeSpell;
-
-	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
-		int x_offset = gameX % SQUARE_SIZE;
-		int y_offset = gameY % SQUARE_SIZE;
-		return new GridPosition((gameX - x_offset)/SQUARE_SIZE, (gameY - y_offset)/SQUARE_SIZE);
-	}
-	
-	public static Vector2 centerOfGridPos(GridPosition pos) {
-		return new Vector2(pos.x*SQUARE_SIZE + SQUARE_SIZE/2, pos.y*SQUARE_SIZE + SQUARE_SIZE/2);
-	}
 	
 	public BattleGUI(WFGame game, BattleMap map) {
 		super(game);
+		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
         camera = new PerspectiveCamera(67, this.getScreenWidth(), this.getScreenHeight());
         camera.position.set(0, -200, 400);
         camera.lookAt(0, 0, 0);
@@ -137,15 +127,15 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.mode = Mode.NONE;
 		this.renderables = new ArrayList<Renderable>();
 		this.foregroundRenderables = new ArrayList<Renderable>();
-		this.leftClickables = new ArrayList<LeftClickable>();
+		this.leftClickables = new ArrayList<LeftClickable3D>();
 		this.rightClickables = new ArrayList<RightClickable>();
 		this.overlayRenderables = new ArrayList<Renderable>();
 		this.overlayLeftClickables = new ArrayList<LeftClickable>();
 		this.renderablesCreateBuffer = new ArrayList<Renderable>();
-		this.leftClickablesCreateBuffer = new ArrayList<LeftClickable>();
+		this.leftClickablesCreateBuffer = new ArrayList<LeftClickable3D>();
 		this.rightClickablesCreateBuffer = new ArrayList<RightClickable>();
 		this.renderablesDelBuffer = new ArrayList<Renderable>();
-		this.leftClickablesDelBuffer = new ArrayList<LeftClickable>();
+		this.leftClickablesDelBuffer = new ArrayList<LeftClickable3D>();
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
 		this.agentMap = new HashMap<Agent, AgentGUIObject>();
 		this.agentList = new ArrayList<AgentGUIObject>();
@@ -159,9 +149,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 				this.selectableAgentOrderedList.add(a);
 			}
 			this.renderables.add(a);
-			this.leftClickables.add(a);
+//			this.leftClickables.add(a);
 			this.rightClickables.add(a);
 		}
+		this.terrainRenderer = new BattleTerrainRenderer(this, map);
+		this.createInstance(this.terrainRenderer);
 		this.generateOverlays();
 		this.setSelected(this.selectableAgentOrderedList.getFirst());
 	}
@@ -204,8 +196,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (o instanceof Renderable) {
 			renderablesCreateBuffer.add((Renderable)o);
 		}
-		if (o instanceof LeftClickable) {
-			leftClickablesCreateBuffer.add((LeftClickable)o);
+		if (o instanceof LeftClickable3D) {
+			leftClickablesCreateBuffer.add((LeftClickable3D)o);
 		}
 		if (o instanceof RightClickable) {
 			rightClickablesCreateBuffer.add((RightClickable)o);
@@ -218,8 +210,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (o instanceof Renderable) {
 			renderablesDelBuffer.add((Renderable)o);
 		}
-		if (o instanceof LeftClickable) {
-			leftClickablesDelBuffer.add((LeftClickable)o);
+		if (o instanceof LeftClickable3D) {
+			leftClickablesDelBuffer.add((LeftClickable3D)o);
 		}
 		if (o instanceof RightClickable) {
 			rightClickablesDelBuffer.add((RightClickable)o);
@@ -234,7 +226,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 				renderables.add(o);
 			}
 		}
-		for (LeftClickable o : leftClickablesCreateBuffer) {
+		for (LeftClickable3D o : leftClickablesCreateBuffer) {
 			leftClickables.add(o);
 		}
 		for (RightClickable o : rightClickablesCreateBuffer) {
@@ -251,7 +243,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 				foregroundRenderables.remove(o);
 			}
 		}
-		for (LeftClickable o : leftClickablesDelBuffer) {
+		for (LeftClickable3D o : leftClickablesDelBuffer) {
 			leftClickables.remove(o);
 		}
 		for (RightClickable o : rightClickablesDelBuffer) {
@@ -272,7 +264,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
 		LinkedList<Vector2> vectorized = new LinkedList<Vector2>();
 		for (GridPosition p : path) {
-			vectorized.add(centerOfGridPos(p));
+//			vectorized.add(centerOfGridPos(p));
 		}
 		return vectorized;
 	}
@@ -355,6 +347,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (!this.mode.allowsInput()) {
 			return;
 		}
+		Ray ray = camera.getPickRay(screenX, screenY);
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
 		int gameX = (int)gamePos.x;
 		int gameY = (int)gamePos.y;
@@ -362,8 +355,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			for (LeftClickable o : overlayLeftClickables) {
 				o.onLeftClick(screenX, screenY, gameX, gameY);
 			}
-			for (LeftClickable o : leftClickables) {
-				o.onLeftClick(screenX, screenY, gameX, gameY);
+			for (LeftClickable3D o : leftClickables) {
+				o.onLeftClick(ray);
 			}
 			this.performPostInputChecks();
 		}
@@ -378,19 +371,19 @@ public class BattleGUI extends GUI implements BattleObserver {
 		int gameY = (int)gamePos.y;
 		boolean performedMove = false;
 		if (this.mode != Mode.ANIMATION) {
-			if (this.selectedAgent != null) {
-				GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
-				if (this.selectedMapGraph.canMoveTo(clickSquare)) {
-					LinkedList<GridPosition> path = selectedMapGraph.getPath(clickSquare);
-					MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
-					try {
-						this.battle.performAction(move);
-						performedMove = true;
-					} catch (IllegalActionException e) {
-						System.out.println("IllegalMoveException detected: " + e.getMessage());
-					}
-				}
-			}
+//			if (this.selectedAgent != null) {
+//				GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
+//				if (this.selectedMapGraph.canMoveTo(clickSquare)) {
+//					LinkedList<GridPosition> path = selectedMapGraph.getPath(clickSquare);
+//					MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
+//					try {
+//						this.battle.performAction(move);
+//						performedMove = true;
+//					} catch (IllegalActionException e) {
+//						System.out.println("IllegalMoveException detected: " + e.getMessage());
+//					}
+//				}
+//			}
 			for (RightClickable o : rightClickables) {
 				o.onRightClick(gameX, gameY);
 			}
@@ -650,7 +643,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		globalUpdate();
         batch.getSpriteBatch().setProjectionMatrix(camera.combined);
         batch.getShapeRenderer().setProjectionMatrix(camera.combined);
-		renderShape(batch.getShapeRenderer());
+//		renderShape(batch.getShapeRenderer());
 		for (Renderable r : this.renderables) {
 			r.render(batch);
 		}
@@ -679,79 +672,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 		font.setColor(Color.WHITE);
 		font.draw(batch.getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), this.getScreenWidth() - 24, this.getScreenHeight() - font.getLineHeight()/2);
 		batch.getSpriteBatch().end();
-	}
-	
-	private void renderShape(ShapeRenderer batch) {
-		BattleMap map = this.battle.getBattleMap();
-		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
-		this.drawWalls(batch);
-		if (this.mode != Mode.ANIMATION && !aiTurn) {
-			this.drawMovableTiles(batch);
-		}
-		if (this.mode == Mode.TARGET_SELECT) {
-			this.drawTargetTiles(batch);
-		}
-	}
-	
-	private void drawGrid(ShapeRenderer batch, float x, float y, float width, float height, int numCols, int numRows) {
-		batch.begin(ShapeType.Filled);
-		batch.setColor(1, 1, 1, 1);
-		batch.rect(x, y, width, height);
-		batch.end();
-		batch.begin(ShapeType.Line);
-		batch.setColor(0, 0.7f, 0.7f, 0.5f);
-		for (int i = 0; i<=numCols; i++) {
-			float horiz_pos = x + i*width/numCols;
-			batch.line(horiz_pos, y, horiz_pos, y + height);
-		}
-		for (int i = 0; i<=numRows; i++) {
-			float vert_pos = y + i*height/numRows;
-			batch.line(x, vert_pos, x + width, vert_pos);
-		}
-		batch.end();
-	}
-	
-	private void drawWalls(ShapeRenderer batch) {
-		BattleMap map = this.battle.getBattleMap();
-		// Needs optimization later
-		for (int x=0; x<map.getCols(); x++) {
-			for (int y=0; y<map.getRows(); y++) {
-				GridPosition pos = new GridPosition(x, y);
-				EnvironmentObject env = map.getCell(pos).getTileEnvironmentObject();
-				if (env != null) {
-					this.shadeSquare(batch, pos, SOLID_COLOR);
-				}
-			}
-		}
-	}
-	
-	private void shadeSquare(ShapeRenderer batch, GridPosition pos, Color color) {
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		batch.begin(ShapeType.Filled);
-		batch.setColor(color);
-		batch.rect(pos.x * SQUARE_SIZE, pos.y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
-		batch.end();
-		Gdx.gl.glDisable(GL20.GL_BLEND);
-	}
-	
-	private void drawMovableTiles(ShapeRenderer batch) {
-		if (this.selectedMapGraph != null) {
-			ArrayList<GridPosition> tileList = this.selectedMapGraph.getMovableCellPositions();
-			for (GridPosition pos : tileList) {
-				this.shadeSquare(batch, pos, MOVE_COLOR);
-			}
-		}
-	}
-	
-	private void drawTargetTiles(ShapeRenderer batch) {
-		for (AgentGUIObject target : this.targetAgentList) {
-			if (target == this.targetAgent) {
-				this.shadeSquare(batch, target.getAgent().getPosition(), TARGET_COLOR);
-			} else {
-				this.shadeSquare(batch, target.getAgent().getPosition(), ATTACK_COLOR);
-			}
-		}
 	}
 	
 	private void drawAllAgentInfo(ShapeRenderer batch) {
