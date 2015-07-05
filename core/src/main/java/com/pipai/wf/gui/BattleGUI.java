@@ -58,6 +58,7 @@ import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.guiobject.overlay.WeaponIndicator;
+import com.pipai.wf.util.RayMapper;
 
 /*
  * Simple 2D GUI for rendering a BattleMap
@@ -86,6 +87,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 
 	private Camera camera;
 	private OrthographicCamera overlayCamera, orthoCamera;
+	private RayMapper rayMapper;
 	private BattleController battle;
 	private HashMap<Agent, AgentGUIObject> agentMap;
 	private ArrayList<AgentGUIObject> agentList;
@@ -120,6 +122,7 @@ public class BattleGUI extends GUI implements BattleObserver {
         orthoCamera = new OrthographicCamera();
         overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
         orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
+        rayMapper = new RayMapper(camera);
 		this.battle = new BattleController(map);
 		this.battle.registerObserver(this);
 		this.ai = new RandomAI(battle);
@@ -396,6 +399,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	public void animateEvent(BattleEvent event) {
 		AgentGUIObject a = null, t;
 		TemporaryText ttext;
+		Vector2 ttextCoord;
 		switch (event.getType()) {
 		case MOVE:
 			a = this.agentMap.get(event.getPerformer());
@@ -421,19 +425,22 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case OVERWATCH:
 			a = this.agentMap.get(event.getPerformer());
-			ttext = new TemporaryText(this, a.x, a.y, 80, 24, "Overwatch");
+			ttextCoord = rayMapper.pointToScreen(a.x, a.y, 0);
+			ttext = new TemporaryText(this, ttextCoord.x, ttextCoord.y, 80, 24, "Overwatch");
 			this.createInstance(ttext);
 			this.moveCameraToPos(a.x, a.y);
 			break;
 		case RELOAD:
 			a = this.agentMap.get(event.getPerformer());
-			ttext = new TemporaryText(this, a.x, a.y, 60, 24, "Reload");
+			ttextCoord = rayMapper.pointToScreen(a.x, a.y, 0);
+			ttext = new TemporaryText(this, ttextCoord.x, ttextCoord.y, 60, 24, "Reload");
 			this.createInstance(ttext);
 			this.moveCameraToPos(a.x, a.y);
 			break;
 		case READY:
 			a = this.agentMap.get(event.getPerformer());
-			ttext = new TemporaryText(this, a.x, a.y, 120, 24, "Ready: " + event.getSpell().name());
+			ttextCoord = rayMapper.pointToScreen(a.x, a.y, 0);
+			ttext = new TemporaryText(this, ttextCoord.x, ttextCoord.y, 120, 24, "Ready: " + event.getSpell().name());
 			this.createInstance(ttext);
 			this.moveCameraToPos(a.x, a.y);
 			break;
