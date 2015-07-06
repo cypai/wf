@@ -1,6 +1,7 @@
 package com.pipai.wf.gui;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -14,7 +15,7 @@ public abstract class GUI implements Screen, InputProcessor {
 	protected WFGame game;
 	protected BatchHelper batch;
 	protected int width, height;
-	protected HashMap<Integer, GUIObject> instanceIndex;
+	protected ConcurrentHashMap<Integer, GUIObject> instanceIndex;
 	//Maybe add BST for rendering order??
 	
 	//Input Processing
@@ -24,7 +25,7 @@ public abstract class GUI implements Screen, InputProcessor {
 		this.game = game;
         Gdx.input.setInputProcessor(this);
         batch = new BatchHelper(game.sprBatch, game.shapeBatch, game.font);
-		instanceIndex = new HashMap<Integer, GUIObject>();
+		instanceIndex = new ConcurrentHashMap<Integer, GUIObject>();
         heldKeys = new HashMap<Integer, Boolean>();
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
