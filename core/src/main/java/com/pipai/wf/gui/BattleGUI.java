@@ -183,6 +183,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	public Mode getMode() { return this.mode; }
+	public Camera getCamera() { return this.camera; }
 	
 	public void setSelected(AgentGUIObject agent) {
 		if (agent.getAgent().getAP() > 0) {
@@ -425,22 +426,19 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case OVERWATCH:
 			a = this.agentMap.get(event.getPerformer());
-			ttextCoord = rayMapper.pointToScreen(a.x, a.y, 0);
-			ttext = new TemporaryText(this, ttextCoord.x, ttextCoord.y, 80, 24, "Overwatch");
+			ttext = new TemporaryText(this, new Vector3(a.x, a.y, 0), 80, 24, "Overwatch");
 			this.createInstance(ttext);
 			this.moveCameraToPos(a.x, a.y);
 			break;
 		case RELOAD:
 			a = this.agentMap.get(event.getPerformer());
-			ttextCoord = rayMapper.pointToScreen(a.x, a.y, 0);
-			ttext = new TemporaryText(this, ttextCoord.x, ttextCoord.y, 60, 24, "Reload");
+			ttext = new TemporaryText(this, new Vector3(a.x, a.y, 0), 60, 24, "Reload");
 			this.createInstance(ttext);
 			this.moveCameraToPos(a.x, a.y);
 			break;
 		case READY:
 			a = this.agentMap.get(event.getPerformer());
-			ttextCoord = rayMapper.pointToScreen(a.x, a.y, 0);
-			ttext = new TemporaryText(this, ttextCoord.x, ttextCoord.y, 120, 24, "Ready: " + event.getSpell().name());
+			ttext = new TemporaryText(this, new Vector3(a.x, a.y, 0), 120, 24, "Ready: " + event.getSpell().name());
 			this.createInstance(ttext);
 			this.moveCameraToPos(a.x, a.y);
 			break;

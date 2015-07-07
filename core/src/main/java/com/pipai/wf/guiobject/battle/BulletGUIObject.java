@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
@@ -51,10 +52,11 @@ public class BulletGUIObject extends GUIObject implements Renderable {
 			x = dest_x;
 			y = dest_y;
 			TemporaryText dmgTxt;
+			Vector3 txtAnchor = new Vector3(x + 12 , y + 16*UtilFunctions.rng.nextFloat() - 12, 0);
 			if (outcome.isHit()) {
-				dmgTxt = new TemporaryText(gui, x + 12 , y + 16*UtilFunctions.rng.nextFloat() - 12, 24, 24, String.valueOf(outcome.getDamageRoll()));
+				dmgTxt = new TemporaryText(gui, txtAnchor, 24, 24, String.valueOf(outcome.getDamageRoll()));
 			} else {
-				dmgTxt = new TemporaryText(gui, x + 12, y + 16*UtilFunctions.rng.nextFloat() - 12, 64, 24, "Missed");
+				dmgTxt = new TemporaryText(gui, txtAnchor, 64, 24, "Missed");
 			}
 			gui.createInstance(dmgTxt);
 			gui.deleteInstance(this);
