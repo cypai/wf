@@ -183,7 +183,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	public Mode getMode() { return this.mode; }
-	public Camera getCamera() { return this.camera; }
+	public RayMapper getRayMapper() { return this.rayMapper; }
 	
 	public void setSelected(AgentGUIObject agent) {
 		if (agent.getAgent().getAP() > 0) {
@@ -656,7 +656,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 		batch.getDecalBatch().flush();
         batch.getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
         batch.getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
-		this.drawAllAgentInfo(batch.getShapeRenderer());
 		for (Renderable r : this.foregroundRenderables) {
 			r.render(batch);
 		}
@@ -679,51 +678,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 		font.setColor(Color.WHITE);
 		font.draw(batch.getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), this.getScreenWidth() - 24, this.getScreenHeight() - font.getLineHeight()/2);
 		batch.getSpriteBatch().end();
-	}
-	
-	private void drawAllAgentInfo(ShapeRenderer batch) {
-		for (AgentGUIObject a : this.agentList) {
-			drawAgentInfo(batch, a);
-		}
-	}
-	
-	private void drawAgentInfo(ShapeRenderer batch, AgentGUIObject a) {
-		if (a.getAgent().isKO()) {
-			return;
-		}
-		batch.begin(ShapeType.Filled);
-		int bar_width = 40;
-		Vector2 agentPoint = new Vector2(a.x, a.y);
-		Vector2 barLeftTop = new Vector2(a.x + 24, a.y + 24);
-		Vector2 barRightFullTop = new Vector2(a.x + 24 + bar_width, a.y + 24);
-		Vector2 barRightTop = new Vector2(a.x + 24 + bar_width * ((float)a.getAgent().getArmor().getHP() / (float)a.getAgent().getArmor().maxHP()), a.y + 24);
-		Vector2 barLeftBot = new Vector2(a.x + 24, a.y + 18);
-		Vector2 barRightFullBot = new Vector2(a.x + 24 + bar_width, a.y + 18);
-		Vector2 barRightBot = new Vector2(a.x + 24 + bar_width * ((float)a.getAgent().getHP() / (float)a.getAgent().getMaxHP()), a.y + 18);
-		batch.setColor(Color.BLUE);
-		batch.rectLine(agentPoint, barLeftTop, 3);
-		// Health bar background
-		batch.setColor(Color.BLACK);
-		batch.rectLine(barLeftTop, barRightFullTop, 6);
-		batch.rectLine(barLeftBot, barRightFullBot, 6);
-		// Health bar
-		batch.setColor(Color.GRAY);
-		batch.rectLine(barLeftTop, barRightTop, 6);
-		batch.setColor(Color.GREEN);
-		batch.rectLine(barLeftBot, barRightBot, 6);
-		batch.end();
-		// Health bars outline
-		batch.begin(ShapeType.Line);
-		batch.setColor(Color.BLUE);
-		batch.rect(barLeftTop.x, barLeftTop.y + 3, barRightFullTop.x - barLeftTop.x, -12);
-		batch.end();
-		// Overwatch Icon
-		if (a.getAgent().isOverwatching()) {
-			batch.begin(ShapeType.Filled);
-			batch.setColor(Color.GRAY);
-			batch.circle(barRightFullTop.x + 8, (barRightFullTop.y + barRightFullBot.y)/2, 6);
-			batch.end();
-		}
 	}
 
 }

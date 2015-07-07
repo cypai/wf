@@ -17,6 +17,7 @@ import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable;
+import com.pipai.wf.guiobject.overlay.AnchoredAgentInfoDisplay;
 import com.pipai.wf.util.Alarm;
 import com.pipai.wf.util.UtilFunctions;
 
@@ -60,6 +61,7 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		pixmap.dispose();
 		decal = Decal.newDecal(new TextureRegion(circleTex), true);
 		decal.setDimensions(32, 32);
+		gui.createInstance(new AnchoredAgentInfoDisplay(gui, this));
 	}
 
 	public int renderPriority() { return 0; }

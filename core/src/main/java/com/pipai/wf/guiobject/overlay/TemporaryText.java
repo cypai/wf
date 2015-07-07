@@ -19,7 +19,7 @@ public class TemporaryText extends AnchoredGUIObject {
 	private String text;
 	
 	public TemporaryText(BattleGUI gui, Vector3 anchorPoint, float w, float h, String text) {
-		super(gui, gui.getCamera(), anchorPoint);
+		super(gui, gui.getRayMapper(), anchorPoint);
 		this.w = w;
 		this.h = h;
 		this.text = text;
