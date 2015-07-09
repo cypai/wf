@@ -103,6 +103,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private int aiMoveWait = 0;
 	private float cameraMoveTime = 1;
 	private Vector3 cameraDest = null;
+	private Vector3 cameraAnchor;
 	private AI ai;
 	private BattleTerrainRenderer terrainRenderer;
 	private ActionToolTip tooltip;
@@ -118,6 +119,7 @@ public class BattleGUI extends GUI implements BattleObserver {
         camera.lookAt(0, 0, 0);
         camera.near = 1f;
         camera.far = 2000;
+        cameraAnchor = new Vector3(0, 0, 0);
         overlayCamera = new OrthographicCamera();
         orthoCamera = new OrthographicCamera();
         overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
@@ -517,8 +519,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	private void moveCameraToPos(float x, float y) {
+		float xdiff = this.camera.position.x - this.cameraAnchor.x;
+		float ydiff = this.camera.position.y - this.cameraAnchor.y;
 		this.cameraMoveTime = 0;
-		this.cameraDest = new Vector3(x, y, this.camera.position.z);
+		this.cameraDest = new Vector3(x + xdiff, y + ydiff, this.camera.position.z);
+		this.cameraAnchor = new Vector3(x, y, this.cameraAnchor.z);
 	}
 	
 	private void updateCamera() {
