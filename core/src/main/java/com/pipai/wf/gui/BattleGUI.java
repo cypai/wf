@@ -154,7 +154,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 				this.selectableAgentOrderedList.add(a);
 			}
 			this.renderables.add(a);
-//			this.leftClickables.add(a);
+			this.leftClickables.add(a);
 			this.rightClickables.add(a);
 		}
 		this.batch.set3DCamera(this.camera);

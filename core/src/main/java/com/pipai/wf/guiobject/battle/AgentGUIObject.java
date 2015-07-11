@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
@@ -15,13 +17,14 @@ import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
+import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable;
 import com.pipai.wf.guiobject.overlay.AnchoredAgentInfoDisplay;
 import com.pipai.wf.util.Alarm;
 import com.pipai.wf.util.UtilFunctions;
 
-public class AgentGUIObject extends GUIObject implements Renderable, LeftClickable, RightClickable {
+public class AgentGUIObject extends GUIObject implements Renderable, LeftClickable3D, RightClickable {
 	
 	private BattleGUI gui;
 	private Agent agent;
@@ -198,6 +201,22 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 				this.gui.switchTarget(this);
 			}
 		}
+	}
+
+	@Override
+	public boolean onLeftClick(Ray ray) {
+		// ray.origin + t * ray.direction = 0
+		float t = -ray.origin.z/ray.direction.z;
+		Vector3 endpoint = new Vector3();
+		ray.getEndPoint(endpoint, t);
+		if (UtilFunctions.isInCircle(x, y, radius, endpoint.x, endpoint.y)) {
+			if (this.agent.getTeam() == Team.PLAYER) {
+				this.select();
+			} else {
+				this.gui.switchTarget(this);
+			}
+		}
+		return true;
 	}
 
 	public void onRightClick(int gameX, int gameY) {
