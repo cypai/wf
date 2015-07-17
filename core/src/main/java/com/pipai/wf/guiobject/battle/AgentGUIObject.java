@@ -16,7 +16,6 @@ import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
-import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable;
@@ -64,6 +63,7 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		pixmap.dispose();
 		decal = Decal.newDecal(new TextureRegion(circleTex), true);
 		decal.setDimensions(32, 32);
+		decal.setRotation(gui.getCamera().getCamera().direction, gui.getCamera().getCamera().up);
 		gui.createInstance(new AnchoredAgentInfoDisplay(gui, this));
 	}
 

@@ -178,6 +178,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	
 	public Mode getMode() { return this.mode; }
 	public RayMapper getRayMapper() { return this.rayMapper; }
+	public AnchoredCamera getCamera() { return this.camera; }
 	
 	public void setSelected(AgentGUIObject agent) {
 		if (agent.getAgent().getAP() > 0) {
