@@ -85,7 +85,7 @@ public class BattleGUI extends GUI implements BattleObserver {
     
 	private static final int AI_MOVE_WAIT_TIME = 60;
 
-	private Camera camera;
+	private AnchoredCamera camera;
 	private OrthographicCamera overlayCamera, orthoCamera;
 	private RayMapper rayMapper;
 	private BattleController battle;
@@ -101,9 +101,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private Mode mode;
 	private boolean aiTurn;
 	private int aiMoveWait = 0;
-	private float cameraMoveTime = 1;
-	private Vector3 cameraDest = null;
-	private Vector3 cameraAnchor;
 	private AI ai;
 	private BattleTerrainRenderer terrainRenderer;
 	private ActionToolTip tooltip;
@@ -114,17 +111,12 @@ public class BattleGUI extends GUI implements BattleObserver {
 	public BattleGUI(WFGame game, BattleMap map) {
 		super(game);
 		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
-        camera = new PerspectiveCamera(67, this.getScreenWidth(), this.getScreenHeight());
-        camera.position.set(0, -200, 400);
-        camera.lookAt(0, 0, 0);
-        camera.near = 1f;
-        camera.far = 2000;
-        cameraAnchor = new Vector3(0, 0, 0);
+		camera = new AnchoredCamera(this.getScreenWidth(), this.getScreenHeight());
         overlayCamera = new OrthographicCamera();
         orthoCamera = new OrthographicCamera();
         overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
         orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
-        rayMapper = new RayMapper(camera);
+        rayMapper = new RayMapper(camera.getCamera());
 		this.battle = new BattleController(map);
 		this.battle.registerObserver(this);
 		this.ai = new RandomAI(battle);
@@ -157,7 +149,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.leftClickables.add(a);
 			this.rightClickables.add(a);
 		}
-		this.batch.set3DCamera(this.camera);
+		this.batch.set3DCamera(this.camera.getCamera());
 		this.terrainRenderer = new BattleTerrainRenderer(this, map);
 		this.generateOverlays();
 		this.setSelected(this.selectableAgentOrderedList.getFirst());
@@ -276,8 +268,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 
 	private Vector2 screenPosToGraphicPos(int screenX, int screenY) {
-		float x = camera.position.x - this.getScreenWidth()/2 + screenX;
-		float y = camera.position.y - this.getScreenHeight()/2 + screenY;
+		float x = camera.position().x - this.getScreenWidth()/2 + screenX;
+		float y = camera.position().y - this.getScreenHeight()/2 + screenY;
 		return new Vector2(x, y);
 	}
 	
@@ -353,7 +345,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (!this.mode.allowsInput()) {
 			return;
 		}
-		Ray ray = camera.getPickRay(screenX, screenY);
+		Ray ray = camera.getCamera().getPickRay(screenX, screenY);
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
 		int gameX = (int)gamePos.x;
 		int gameY = (int)gamePos.y;
@@ -519,34 +511,22 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	private void moveCameraToPos(float x, float y) {
-		float xdiff = this.camera.position.x - this.cameraAnchor.x;
-		float ydiff = this.camera.position.y - this.cameraAnchor.y;
-		this.cameraMoveTime = 0;
-		this.cameraDest = new Vector3(x + xdiff, y + ydiff, this.camera.position.z);
-		this.cameraAnchor = new Vector3(x, y, this.cameraAnchor.z);
+		this.camera.moveTo(x, y);
 	}
 	
 	private void updateCamera() {
-		if (this.cameraMoveTime < 1.0) {
-			this.cameraMoveTime += 0.005;
-			this.camera.position.interpolate(this.cameraDest, this.cameraMoveTime, Interpolation.linear);
-		}
 		if (this.mode.allowsInput()) {
 			if (this.checkKey(Keys.A)) {
-				this.cameraMoveTime = 1;
-				this.camera.translate(-3, 0, 0);
+				this.camera.translate(-3, 0);
 			}
 			if (this.checkKey(Keys.D)) {
-				this.cameraMoveTime = 1;
-				this.camera.translate(3, 0, 0);
+				this.camera.translate(3, 0);
 			}
 			if (this.checkKey(Keys.W)) {
-				this.cameraMoveTime = 1;
-				this.camera.translate(0, 3, 0);
+				this.camera.translate(0, 3);
 			}
 			if (this.checkKey(Keys.S)) {
-				this.cameraMoveTime = 1;
-				this.camera.translate(0, -3, 0);
+				this.camera.translate(0, -3);
 			}
 		}
         this.camera.update();
@@ -651,8 +631,8 @@ public class BattleGUI extends GUI implements BattleObserver {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		globalUpdate();
-        batch.getSpriteBatch().setProjectionMatrix(camera.combined);
-        batch.getShapeRenderer().setProjectionMatrix(camera.combined);
+        batch.getSpriteBatch().setProjectionMatrix(camera.getProjectionMatrix());
+        batch.getShapeRenderer().setProjectionMatrix(camera.getProjectionMatrix());
         this.terrainRenderer.render(batch);
 //		renderShape(batch.getShapeRenderer());
 		for (Renderable r : this.renderables) {
