@@ -44,7 +44,6 @@ import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.Renderable;
-import com.pipai.wf.guiobject.RightClickable;
 import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.battle.AgentGUIObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
