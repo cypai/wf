@@ -118,9 +118,9 @@ public abstract class GUI implements Screen, InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button == Buttons.LEFT) {
-			onLeftClick(screenX, this.getScreenHeight() - screenY);
+			onLeftClick(screenX, screenY);
 		} else if (button == Buttons.RIGHT) {
-			onRightClick(screenX, this.getScreenHeight() - screenY);
+			onRightClick(screenX, screenY);
 		}
 		return true;
 	}

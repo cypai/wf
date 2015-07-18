@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.EnvironmentObject;
@@ -48,7 +49,12 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 
 	@Override
 	public boolean onRightClick(Ray ray) {
-		return false;
+		float t = -ray.origin.z/ray.direction.z;
+		Vector3 endpoint = new Vector3();
+		ray.getEndPoint(endpoint, t);
+		GridPosition dest = gamePosToGridPos((int)endpoint.x, (int)endpoint.y);
+		gui.performMoveWithSelectedAgent(dest);
+		return true;
 	}
 
 	@Override

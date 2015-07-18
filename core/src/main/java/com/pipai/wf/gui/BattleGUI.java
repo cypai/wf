@@ -45,6 +45,7 @@ import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable;
+import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.battle.AgentGUIObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
 import com.pipai.wf.guiobject.battle.BulletGUIObject;
@@ -92,7 +93,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable3D> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer; 
 	private ArrayList<LeftClickable> overlayLeftClickables;
-	private ArrayList<RightClickable> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
+	private ArrayList<RightClickable3D> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
 	private Mode mode;
 	private boolean aiTurn;
 	private int aiMoveWait = 0;
@@ -120,15 +121,15 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.renderables = new ArrayList<Renderable>();
 		this.foregroundRenderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable3D>();
-		this.rightClickables = new ArrayList<RightClickable>();
+		this.rightClickables = new ArrayList<RightClickable3D>();
 		this.overlayRenderables = new ArrayList<Renderable>();
 		this.overlayLeftClickables = new ArrayList<LeftClickable>();
 		this.renderablesCreateBuffer = new ArrayList<Renderable>();
 		this.leftClickablesCreateBuffer = new ArrayList<LeftClickable3D>();
-		this.rightClickablesCreateBuffer = new ArrayList<RightClickable>();
+		this.rightClickablesCreateBuffer = new ArrayList<RightClickable3D>();
 		this.renderablesDelBuffer = new ArrayList<Renderable>();
 		this.leftClickablesDelBuffer = new ArrayList<LeftClickable3D>();
-		this.rightClickablesDelBuffer = new ArrayList<RightClickable>();
+		this.rightClickablesDelBuffer = new ArrayList<RightClickable3D>();
 		this.agentMap = new HashMap<Agent, AgentGUIObject>();
 		this.agentList = new ArrayList<AgentGUIObject>();
 		this.selectableAgentOrderedList = new LinkedList<AgentGUIObject>();
@@ -140,12 +141,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 			if (agent.getTeam() == Team.PLAYER) {
 				this.selectableAgentOrderedList.add(a);
 			}
-			this.renderables.add(a);
-			this.leftClickables.add(a);
-			this.rightClickables.add(a);
+			this.createInstance(a);
 		}
 		this.batch.set3DCamera(this.camera.getCamera());
 		this.terrainRenderer = new BattleTerrainRenderer(this, map);
+		this.createInstance(this.terrainRenderer);
 		this.generateOverlays();
 		this.setSelected(this.selectableAgentOrderedList.getFirst());
 	}
@@ -165,7 +165,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (aiTurn) {
 			this.mode = Mode.AI;
 		} else {
-			this.mode = Mode.NONE;
+			this.switchToMoveMode();
 			this.populateSelectableAgentList();
 			this.performPostInputChecks();
 		}
@@ -194,8 +194,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (o instanceof LeftClickable3D) {
 			leftClickablesCreateBuffer.add((LeftClickable3D)o);
 		}
-		if (o instanceof RightClickable) {
-			rightClickablesCreateBuffer.add((RightClickable)o);
+		if (o instanceof RightClickable3D) {
+			rightClickablesCreateBuffer.add((RightClickable3D)o);
 		}
 	}
 	
@@ -208,8 +208,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (o instanceof LeftClickable3D) {
 			leftClickablesDelBuffer.add((LeftClickable3D)o);
 		}
-		if (o instanceof RightClickable) {
-			rightClickablesDelBuffer.add((RightClickable)o);
+		if (o instanceof RightClickable3D) {
+			rightClickablesDelBuffer.add((RightClickable3D)o);
 		}
 	}
 	
@@ -224,7 +224,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		for (LeftClickable3D o : leftClickablesCreateBuffer) {
 			leftClickables.add(o);
 		}
-		for (RightClickable o : rightClickablesCreateBuffer) {
+		for (RightClickable3D o : rightClickablesCreateBuffer) {
 			rightClickables.add(o);
 		}
 		renderablesCreateBuffer.clear();
@@ -241,7 +241,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		for (LeftClickable3D o : leftClickablesDelBuffer) {
 			leftClickables.remove(o);
 		}
-		for (RightClickable o : rightClickablesDelBuffer) {
+		for (RightClickable3D o : rightClickablesDelBuffer) {
 			rightClickables.remove(o);
 		}
 		renderablesDelBuffer.clear();
@@ -259,7 +259,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
 		LinkedList<Vector2> vectorized = new LinkedList<Vector2>();
 		for (GridPosition p : path) {
-//			vectorized.add(centerOfGridPos(p));
+			vectorized.add(BattleTerrainRenderer.centerOfGridPos(p));
 		}
 		return vectorized;
 	}
@@ -299,6 +299,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	private void startAiTurn() {
+		this.terrainRenderer.clearShadedTiles();
 		this.mode = Mode.AI;
 		this.aiTurn = true;
 		this.aiMoveWait = 0;
@@ -323,7 +324,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 	}
 	
-	public void attack(AgentGUIObject target) {
+	public void performAttackAction(AgentGUIObject target) {
 		if (selectedAgent != null) {
 			Action atk = null;
 			if (this.targetModeAttack != null) {
@@ -340,14 +341,29 @@ public class BattleGUI extends GUI implements BattleObserver {
 			}
 		}
 		this.updatePaths();
-		this.mode = Mode.NONE;
+		this.switchToMoveMode();
+	}
+	
+	public void performMoveWithSelectedAgent(GridPosition destination) {
+		if (this.selectedAgent != null) {
+			if (this.selectedMapGraph.canMoveTo(destination)) {
+				LinkedList<GridPosition> path = this.selectedMapGraph.getPath(destination);
+				MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
+				this.terrainRenderer.clearShadedTiles();
+				try {
+					this.battle.performAction(move);
+				} catch (IllegalActionException e) {
+					System.out.println("IllegalMoveException detected: " + e.getMessage());
+				}
+			}
+		}
 	}
 	
 	public void onLeftClick(int screenX, int screenY) {
 		if (!this.mode.allowsInput()) {
 			return;
 		}
-		Ray ray = camera.getCamera().getPickRay(screenX, screenY);
+		Ray ray = this.rayMapper.screenToRay(screenX, screenY);
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
 		int gameX = (int)gamePos.x;
 		int gameY = (int)gamePos.y;
@@ -366,26 +382,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (!this.mode.allowsInput()) {
 			return;
 		}
-		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
-		int gameX = (int)gamePos.x;
-		int gameY = (int)gamePos.y;
+		Ray ray = this.rayMapper.screenToRay(screenX, screenY);
 		boolean performedMove = false;
 		if (this.mode != Mode.ANIMATION) {
-//			if (this.selectedAgent != null) {
-//				GridPosition clickSquare = gamePosToGridPos(gameX, gameY);
-//				if (this.selectedMapGraph.canMoveTo(clickSquare)) {
-//					LinkedList<GridPosition> path = selectedMapGraph.getPath(clickSquare);
-//					MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
-//					try {
-//						this.battle.performAction(move);
-//						performedMove = true;
-//					} catch (IllegalActionException e) {
-//						System.out.println("IllegalMoveException detected: " + e.getMessage());
-//					}
-//				}
-//			}
-			for (RightClickable o : rightClickables) {
-				o.onRightClick(gameX, gameY);
+			for (RightClickable3D o : rightClickables) {
+				o.onRightClick(ray);
 			}
 			if (!performedMove) {
 				this.performPostInputChecks();
@@ -578,7 +579,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case Keys.ENTER:
 			if (this.mode == Mode.TARGET_SELECT) {
-				this.attack(this.targetAgent);
+				this.performAttackAction(this.targetAgent);
 			}
 			break;
 		case Keys.X:

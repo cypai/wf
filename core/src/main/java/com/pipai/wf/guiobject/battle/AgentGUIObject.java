@@ -18,12 +18,12 @@ import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.Renderable;
-import com.pipai.wf.guiobject.RightClickable;
+import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.overlay.AnchoredAgentInfoDisplay;
 import com.pipai.wf.util.Alarm;
 import com.pipai.wf.util.UtilFunctions;
 
-public class AgentGUIObject extends GUIObject implements Renderable, LeftClickable3D, RightClickable {
+public class AgentGUIObject extends GUIObject implements Renderable, LeftClickable3D, RightClickable3D {
 	
 	private BattleGUI gui;
 	private Agent agent;
@@ -63,7 +63,6 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		pixmap.dispose();
 		decal = Decal.newDecal(new TextureRegion(circleTex), true);
 		decal.setDimensions(32, 32);
-		decal.setRotation(gui.getCamera().getCamera().direction, gui.getCamera().getCamera().up);
 		gui.createInstance(new AnchoredAgentInfoDisplay(gui, this));
 	}
 
@@ -123,7 +122,6 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 	}
 
 	public void update() {
-		decal.setPosition(x, y, 0);
 		if (!wait) {
 			if (animating) {
 				t += 1;
@@ -148,10 +146,11 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 				wait = false;
 			}
 		}
+		decal.setPosition(x, y, 0);
+		decal.setRotation(gui.getCamera().getCamera().direction, gui.getCamera().getCamera().up);
 	}
 
 	public void render(BatchHelper batch) {
-		update();
 		if (!ko) {
 			batch.getDecalBatch().add(decal);
 //			r.begin(ShapeType.Filled);
@@ -219,12 +218,17 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		return true;
 	}
 
-	public void onRightClick(int gameX, int gameY) {
-		if (UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
+	@Override
+	public boolean onRightClick(Ray ray) {
+		float t = -ray.origin.z/ray.direction.z;
+		Vector3 endpoint = new Vector3();
+		ray.getEndPoint(endpoint, t);
+		if (UtilFunctions.isInCircle(x, y, radius, endpoint.x, endpoint.y)) {
 			if (this.gui.getMode() == BattleGUI.Mode.TARGET_SELECT && this == this.gui.getTarget()) {
-				this.gui.attack(this);
+				this.gui.performAttackAction(this);
 			}
 		}
+		return true;
 	}
 	
 }

@@ -61,6 +61,13 @@ public class AnchoredAgentInfoDisplay extends AnchoredGUIObject {
 			shapeBatch.circle(barRightFullTop.x + 8, (barRightFullTop.y + barRightFullBot.y)/2, 6);
 			shapeBatch.end();
 		}
-	}		
+	}
+	
+	@Override
+	public void update() {
+		super.update();
+		anchorPoint.x = a.x;
+		anchorPoint.y = a.y;
+	}
 
 }
