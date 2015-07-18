@@ -6,15 +6,10 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
@@ -186,6 +181,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.weaponIndicator.updateToAgent(agent);
 			this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 			this.updatePaths();
+			this.terrainRenderer.setMovableTiles(this.selectedMapGraph.getMovableCellPositions());
 		}
 	}
 	
@@ -298,6 +294,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 				return;
 			}
 		}
+		// All moves finished - start the AI
+		startAiTurn();
+	}
+	
+	private void startAiTurn() {
 		this.mode = Mode.AI;
 		this.aiTurn = true;
 		this.aiMoveWait = 0;
@@ -395,7 +396,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 	public void animateEvent(BattleEvent event) {
 		AgentGUIObject a = null, t;
 		TemporaryText ttext;
-		Vector2 ttextCoord;
 		switch (event.getType()) {
 		case MOVE:
 			a = this.agentMap.get(event.getPerformer());
@@ -450,7 +450,14 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 	}
 	
+	public void switchToMoveMode() {
+		this.mode = Mode.NONE;
+		this.terrainRenderer.clearShadedTiles();
+		this.terrainRenderer.setMovableTiles(this.selectedMapGraph.getMovableCellPositions());
+	}
+	
 	public void switchToTargetMode(Attack atk) {
+		this.terrainRenderer.clearShadedTiles();
 		this.targetModeSpell = null;
 		this.targetModeAttack = atk;
 		this.targetAgentList = new LinkedList<AgentGUIObject>();
@@ -466,6 +473,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 	
 	public void switchToTargetMode(Spell spell) {
+		this.terrainRenderer.clearShadedTiles();
 		this.targetModeAttack = null;
 		this.targetModeSpell = spell;
 		this.targetAgentList = new LinkedList<AgentGUIObject>();
@@ -483,6 +491,13 @@ public class BattleGUI extends GUI implements BattleObserver {
 	public void switchTarget(AgentGUIObject target) {
 		if (this.mode == Mode.TARGET_SELECT) {
 			if (this.targetAgentList.contains(target)) {
+				ArrayList<GridPosition> targetTiles = new ArrayList<GridPosition>(), targetableTiles = new ArrayList<GridPosition>();
+				targetTiles.add(target.getAgent().getPosition());
+				for (AgentGUIObject a : this.targetAgentList) {
+					targetableTiles.add(a.getAgent().getPosition());
+				}
+				this.terrainRenderer.setTargetableTiles(targetableTiles);
+				this.terrainRenderer.setTargetTiles(targetTiles);
 				this.targetAgent = target;
 				Weapon weapon = this.selectedAgent.getAgent().getCurrentWeapon();
 				if (weapon.needsAmmunition() && weapon.currentAmmo() < this.targetModeAttack.requiredAmmo()) {
@@ -540,7 +555,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			if (this.mode != Mode.TARGET_SELECT) {
 				Gdx.app.exit();
 			} else {
-				this.mode = Mode.NONE;
+				this.switchToMoveMode();
 				return;
 			}
 		}

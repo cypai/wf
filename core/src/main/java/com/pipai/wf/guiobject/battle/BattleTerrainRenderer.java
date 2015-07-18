@@ -1,5 +1,7 @@
 package com.pipai.wf.guiobject.battle;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,8 +22,8 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
-	private static final Color ATTACK_COLOR = new Color(0.5f, 0, 0, 0.5f);
-	private static final Color TARGET_COLOR = new Color(1f, 0.8f, 0, 0.5f);
+	private static final Color TARGET_COLOR = new Color(0.5f, 0, 0, 0.5f);
+	private static final Color TARGETABLE_COLOR = new Color(1f, 0.8f, 0, 0.5f);
 	private static final Color SOLID_COLOR = new Color(0, 0, 0, 1);
 	
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
@@ -36,6 +38,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 	
 	protected BattleGUI gui;
 	protected BattleMap map;
+	protected List<GridPosition> moveTiles, targetTiles, targetableTiles;
 
 	public BattleTerrainRenderer(BattleGUI gui, BattleMap map) {
 		super(gui);
@@ -57,7 +60,29 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 	public void render(BatchHelper batch) {
 		this.drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawWalls(batch.getShapeRenderer());
+		this.drawMovableTiles(batch.getShapeRenderer());
+		this.drawTargetTiles(batch.getShapeRenderer());
+		this.drawTargetableTiles(batch.getShapeRenderer());
 	}
+	
+	public void clearShadedTiles() {
+		this.moveTiles = null;
+		this.targetTiles = null;
+		this.targetableTiles = null;
+	}
+	
+	public void setMovableTiles(List<GridPosition> moveTiles) {
+		this.moveTiles = moveTiles;
+	}
+	
+	public void setTargetTiles(List<GridPosition> targetTiles) {
+		this.targetTiles = targetTiles;
+	}
+	
+	public void setTargetableTiles(List<GridPosition> targetableTiles) {
+		this.targetableTiles = targetableTiles;
+	}
+	
 
 //	private void renderShape(ShapeRenderer batch) {
 //		this.drawGrid(batch, 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
@@ -111,22 +136,28 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 	
-//	private void drawMovableTiles(ShapeRenderer batch) {
-//		if (this.selectedMapGraph != null) {
-//			ArrayList<GridPosition> tileList = this.selectedMapGraph.getMovableCellPositions();
-//			for (GridPosition pos : tileList) {
-//				this.shadeSquare(batch, pos, MOVE_COLOR);
-//			}
-//		}
-//	}
-//	
-//	private void drawTargetTiles(ShapeRenderer batch) {
-//		for (AgentGUIObject target : this.targetAgentList) {
-//			if (target == this.targetAgent) {
-//				this.shadeSquare(batch, target.getAgent().getPosition(), TARGET_COLOR);
-//			} else {
-//				this.shadeSquare(batch, target.getAgent().getPosition(), ATTACK_COLOR);
-//			}
-//		}
-//	}
+	private void drawMovableTiles(ShapeRenderer batch) {
+		if (this.moveTiles != null) {
+			for (GridPosition pos : this.moveTiles) {
+				this.shadeSquare(batch, pos, MOVE_COLOR);
+			}
+		}
+	}
+	
+	private void drawTargetTiles(ShapeRenderer batch) {
+		if (this.targetTiles != null) {
+			for (GridPosition pos : this.targetTiles) {
+				this.shadeSquare(batch, pos, TARGET_COLOR);
+			}
+		}
+	}
+	
+	private void drawTargetableTiles(ShapeRenderer batch) {
+		if (this.targetableTiles != null) {
+			for (GridPosition pos : this.targetableTiles) {
+				this.shadeSquare(batch, pos, TARGETABLE_COLOR);
+			}
+		}
+	}
+	
 }
