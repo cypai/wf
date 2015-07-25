@@ -8,11 +8,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pipai.wf.WFGame;
-import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.FullCoverIndestructibleObject;
-import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.map.BattleMapGenerator;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
@@ -67,12 +65,7 @@ public class PartyInfoGUI extends GUI {
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-        BattleMap map = new BattleMap(12, 10);
-        map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, new GridPosition(1, 1), party.get(0)));
-        map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, new GridPosition(4, 1), party.get(1)));
-        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, new GridPosition(5, 8), 3, 5, 2, 5, 65, 0));
-        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, new GridPosition(9, 10), 3, 5, 2, 5, 65, 0));
-        map.getCell(new GridPosition(5, 5)).setTileEnvironmentObject(new FullCoverIndestructibleObject());
+		BattleMap map = BattleMapGenerator.generateRandomTestMap(party);
 		this.game.setScreen(new BattleGUI(this.game, map));
 		this.dispose();
 	}

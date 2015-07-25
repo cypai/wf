@@ -6,6 +6,13 @@ public class UtilFunctions {
 
 	public static final Random rng = new Random();
 	
+	/*
+	 * Generates a random integer between min and max inclusive.
+	 */
+	public static int randInt(int min, int max) {
+		return rng.nextInt(max - min + 1) + min;
+	}
+	
 	public static boolean isInCircle(float centerX, float centerY, float radius, float x, float y) {
 		return Math.pow(x - centerX, 2.0) + Math.pow(y - centerY, 2.0) <= radius*radius;
 	}
