@@ -84,7 +84,11 @@ public class RandomAI extends AI {
 				return new ReloadAction(a);
 			} else {
 				Agent target = playerAgents.get(UtilFunctions.rng.nextInt(playerAgents.size()));
-				return new RangeAttackAction(a, target, new SimpleRangedAttack());
+				if (a.canSee(target)) {
+					return new RangeAttackAction(a, target, new SimpleRangedAttack());
+				} else {
+					return new OverwatchAction(a, new SimpleRangedAttack());
+				}
 			}
 		case 2:
 			MapGraph graph = new MapGraph(this.map, a.getPosition(), a.getMobility(), 1);

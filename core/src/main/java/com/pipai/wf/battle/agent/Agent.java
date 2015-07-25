@@ -21,10 +21,13 @@ import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.util.UtilFunctions;
 
 public class Agent implements BattleEventLoggable {
 	
 	public enum State {NEUTRAL, KO, OVERWATCH};
+	
+	public static final int RANGE = 17;
 	
 	protected Team team;
 	protected int maxHP, maxAP, maxMP, hp, ap, mp;
@@ -157,8 +160,10 @@ public class Agent implements BattleEventLoggable {
 	public boolean canSee(Agent other) {
 		for (GridPosition peekSquare : this.getPeekingSquares()) {
 			for (GridPosition otherPeekSquare : other.getPeekingSquares()) {
-				if (this.map.lineOfSight(peekSquare, otherPeekSquare)) {
-					return true;
+				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < RANGE) { 
+					if (this.map.lineOfSight(peekSquare, otherPeekSquare)) {
+						return true;
+					}
 				}
 			}
 		}

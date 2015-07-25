@@ -2,6 +2,8 @@ package com.pipai.wf.util;
 
 import java.util.Random;
 
+import com.pipai.wf.battle.map.GridPosition;
+
 public class UtilFunctions {
 
 	public static final Random rng = new Random();
@@ -32,6 +34,10 @@ public class UtilFunctions {
 			return min;
 		}
 		return value;
+	}
+	
+	public static float gridPositionDistance(GridPosition pos1, GridPosition pos2) {
+		return (float) Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
 	}
 	
 }
