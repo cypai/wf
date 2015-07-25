@@ -26,7 +26,7 @@ public class AnchoredCamera {
 	}
 	
 	public void translate(float x, float y) {
-		cameraMoveTime = 1;
+		cameraMoveTime = 2;
 		camera.translate(x, y, 0);
 		anchor.add(x, y, 0);
 	}
