@@ -24,7 +24,7 @@ public abstract class GUI implements Screen, InputProcessor {
 	public GUI(WFGame game) {
 		this.game = game;
         Gdx.input.setInputProcessor(this);
-        batch = new BatchHelper(game.sprBatch, game.shapeBatch, game.font);
+        batch = new BatchHelper(game.sprBatch, game.shapeBatch, game.modelBatch, game.font);
 		instanceIndex = new ConcurrentHashMap<Integer, GUIObject>();
         heldKeys = new HashMap<Integer, Boolean>();
         width = Gdx.graphics.getWidth();
@@ -39,6 +39,7 @@ public abstract class GUI implements Screen, InputProcessor {
 	}
 	public void deleteInstance(GUIObject o) {
 		instanceIndex.remove(o.getID());
+		o.dispose();
 	}
 	public void deleteInstance(int id) {
 		instanceIndex.remove(id);
@@ -87,7 +88,9 @@ public abstract class GUI implements Screen, InputProcessor {
 
 	@Override
 	public void dispose() {
-		
+		for (GUIObject o : this.instanceIndex.values()) {
+			o.dispose();
+		}
 	}
 
 	@Override

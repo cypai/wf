@@ -19,4 +19,6 @@ public abstract class GUIObject {
 	
 	public void update() {}
 	
+	public void dispose() {}
+	
 }

@@ -1,10 +1,19 @@
 package com.pipai.wf.guiobject.battle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -40,11 +49,30 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 	protected BattleGUI gui;
 	protected BattleMap map;
 	protected List<GridPosition> moveTiles, targetTiles, targetableTiles;
+	
+	private Environment environment;
+	private Model boxModel;
+	private ArrayList<ModelInstance> models;
+	private ModelBuilder modelBuilder;
 
 	public BattleTerrainRenderer(BattleGUI gui, BattleMap map) {
 		super(gui);
 		this.gui = gui;
 		this.map = map;
+		models = new ArrayList<ModelInstance>();
+		modelBuilder = new ModelBuilder();
+		boxModel = modelBuilder.createBox(SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, 
+				new Material(ColorAttribute.createDiffuse(Color.GRAY)),
+				Usage.Position | Usage.Normal);
+		models.add(new ModelInstance(boxModel));
+        environment = new Environment();
+        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
+        environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, 0.8f, -0.2f));
+	}
+	
+	@Override
+	public void dispose() {
+		this.boxModel.dispose();
 	}
 
 	@Override
@@ -69,6 +97,9 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		this.drawMovableTiles(batch.getShapeRenderer());
 		this.drawTargetTiles(batch.getShapeRenderer());
 		this.drawTargetableTiles(batch.getShapeRenderer());
+		batch.getModelBatch().begin(gui.getCamera().getCamera());
+		batch.getModelBatch().render(models, environment);
+		batch.getModelBatch().end();
 	}
 	
 	public void clearShadedTiles() {
