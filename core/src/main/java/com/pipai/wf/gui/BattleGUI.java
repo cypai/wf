@@ -329,6 +329,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			if (this.targetModeAttack != null) {
 				if (selectedAgent.getAgent().getCurrentWeapon().currentAmmo() > 0) {
 					atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), this.targetModeAttack);
+				} else {
+					return;
 				}
 			} else {
 				atk = new CastTargetAction(selectedAgent.getAgent(), target.getAgent());

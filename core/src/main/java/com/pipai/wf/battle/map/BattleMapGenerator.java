@@ -15,7 +15,7 @@ public class BattleMapGenerator {
         BattleMap map = new BattleMap(width, height);
         generateRandomEnvironment(map);
         generatePartyPod(map, party);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
         	generateEnemyPod(map);
         }
         return map;
@@ -52,7 +52,7 @@ public class BattleMapGenerator {
 	}
 	
 	private static void generateEnemyPod(BattleMap map) {
-		int amt = UtilFunctions.randInt(2, 4);
+		int amt = UtilFunctions.randInt(2, 3);
 		GridPosition center = randPos(new GridPosition(8, 8), new GridPosition(map.getCols() - 8, map.getRows() - 8));
 		List<GridPosition> enemyPos = new ArrayList<GridPosition>();
 		for (int i = 0; i < amt; i++) {
