@@ -23,7 +23,7 @@ public class LineOfSightTest {
 		 * A x x E
 		 */
 		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,0));
+		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,0)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(1, 0));
 		req.add(new GridPosition(2, 0));
@@ -43,7 +43,7 @@ public class LineOfSightTest {
 		 * A 0 0 0
 		 */
 		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(0,3));
+		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(0,3)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(0, 2));
@@ -63,7 +63,7 @@ public class LineOfSightTest {
 		 * A 0 0 0
 		 */
 		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,3));
+		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,3)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(1, 1));
 		req.add(new GridPosition(2, 2));
@@ -83,7 +83,7 @@ public class LineOfSightTest {
 		 * A x 0 0
 		 */
 		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,1));
+		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,1)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(1, 0));
 		req.add(new GridPosition(2, 1));
@@ -103,7 +103,7 @@ public class LineOfSightTest {
 		 * A 0 0 0
 		 */
 		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(2,3));
+		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(2,3)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(1, 1));

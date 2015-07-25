@@ -114,13 +114,45 @@ public class BattleMap implements BattleEventLoggable {
 	private Vector2 gridCenter(GridPosition pos) {
 		return new Vector2(pos.x+0.5f, pos.y+0.5f);
 	}
+	
+	public class Supercover {
+		
+		public class CornerPair {
+			public GridPosition a, b;
+			public CornerPair(GridPosition a, GridPosition b) {
+				this.a = a;
+				this.b = b;
+			}
+		}
+		
+		public ArrayList<GridPosition> supercover;
+		public ArrayList<CornerPair> corners;
+		
+		public Supercover() {
+			supercover = new ArrayList<GridPosition>();
+			corners = new ArrayList<CornerPair>();
+		}
+		
+		public void remove(GridPosition pos) {
+			supercover.remove(pos);
+		}
+		
+		public void add(GridPosition pos) {
+			supercover.add(pos);
+		}
+		
+		public void addCornerPair(GridPosition a, GridPosition b) {
+			corners.add(new CornerPair(a, b));
+		}
+		
+	}
 
-	public ArrayList<GridPosition> supercover(GridPosition a, GridPosition b) {
+	public Supercover supercover(GridPosition a, GridPosition b) {
 		return supercover(gridCenter(a), gridCenter(b));
 	}
 
-	private ArrayList<GridPosition> supercover(Vector2 a, Vector2 b) {
-		ArrayList<GridPosition> points = new ArrayList<GridPosition>();
+	private Supercover supercover(Vector2 a, Vector2 b) {
+		Supercover points = new Supercover();
 		int i;               // loop counter 
 		int ystep, xstep;    // the step on y and x axis 
 		int error;           // the error accumulated during the increment 
@@ -156,10 +188,9 @@ public class BattleMap implements BattleEventLoggable {
 						points.add(new GridPosition(x, y-ystep)); 
 					else if (error + errorprev > ddx)  // left square also 
 						points.add(new GridPosition(x-xstep, y)); 
-					/*else{  // corner: bottom and left squares also 
-						points.add(new GridPosition(x, y-ystep)); 
-						points.add(new GridPosition(x-xstep, y)); 
-					} */
+					else{  // corner: bottom and left squares also 
+						points.addCornerPair(new GridPosition(x, y-ystep), new GridPosition(x-xstep, y)); 
+					}
 				} 
 				points.add(new GridPosition(x, y)); 
 				errorprev = error; 
@@ -176,10 +207,9 @@ public class BattleMap implements BattleEventLoggable {
 						points.add(new GridPosition(x-xstep, y)); 
 					else if (error + errorprev > ddy) 
 						points.add(new GridPosition(x, y-ystep)); 
-					/*else{ 
-						points.add(new GridPosition(x-xstep, y)); 
-						points.add(new GridPosition(x, y-ystep)); 
-					} */
+					else{ 
+						points.addCornerPair(new GridPosition(x-xstep, y), new GridPosition(x, y-ystep)); 
+					}
 				} 
 				points.add(new GridPosition(x, y)); 
 				errorprev = error; 
@@ -197,11 +227,27 @@ public class BattleMap implements BattleEventLoggable {
 		}
 		return true;
 	}
+	
+	public boolean checkCornerPairsForSightBlockers(ArrayList<Supercover.CornerPair> list) {
+		for (Supercover.CornerPair pair : list) {
+			if (getCell(pair.a).hasTileSightBlocker() && getCell(pair.b).hasTileSightBlocker()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	/*
 	 * Using the centers/corners to determine line of sight between two GridPositions
 	 */
 	public boolean lineOfSight(GridPosition a, GridPosition b) {
-		return checkTileSightBlockersInList(supercover(gridCenter(a), gridCenter(b)));
+		Supercover sc = supercover(gridCenter(a), gridCenter(b));
+		if (checkTileSightBlockersInList(sc.supercover)) {
+			if (checkCornerPairsForSightBlockers(sc.corners)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
