@@ -615,6 +615,13 @@ public class BattleGUI extends GUI implements BattleObserver {
 				this.targetAgentList.addLast(this.targetAgent);
 				this.switchTarget(this.targetAgentList.peek());
 			}
+			break;
+		case Keys.Q:
+			this.camera.arcballRotationCW();
+			break;
+		case Keys.E:
+			this.camera.arcballRotationCCW();
+			break;
 		default:
 			break;
 		}

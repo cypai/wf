@@ -12,7 +12,9 @@ public class AnchoredCamera {
 	private Vector3 anchor;
 	
 	private float cameraMoveTime;
-	private Vector3 cameraDest, anchorDest;
+	private Vector3 cameraStart, cameraDest, anchorStart, anchorDest;
+	
+	private float STEP_SIZE = 0.05f;
 	
 	public AnchoredCamera(int screenWidth, int screenHeight) {
         camera = new PerspectiveCamera(67, screenWidth, screenHeight);
@@ -33,16 +35,18 @@ public class AnchoredCamera {
 		float xdiff = camera.position.x - anchor.x;
 		float ydiff = camera.position.y - anchor.y;
 		cameraMoveTime = 0;
+		cameraStart = camera.position.cpy();
 		cameraDest = new Vector3(x + xdiff, y + ydiff, camera.position.z);
-		anchorDest = new Vector3(x, y, camera.position.z);
+		anchorStart = anchor.cpy();
+		anchorDest = new Vector3(x, y, 0);
 	}
 	
 	public void arcballRotationCW() {
-		
+		camera.rotateAround(anchor, new Vector3(0, 0, 1), -45);
 	}
 	
 	public void arcballRotationCCW() {
-		
+		camera.rotateAround(anchor, new Vector3(0, 0, 1), 45);
 	}
 	
 	public Matrix4 getProjectionMatrix() {
@@ -50,10 +54,11 @@ public class AnchoredCamera {
 	}
 	
 	public void update() {
-		if (cameraMoveTime < 1.0) {
-			cameraMoveTime += 0.005;
-			camera.position.interpolate(cameraDest, cameraMoveTime, Interpolation.linear);
-			anchor.interpolate(anchorDest, cameraMoveTime, Interpolation.linear);
+		if (cameraMoveTime < 1.0 + 0.0001) {
+			Interpolation interp = Interpolation.sineOut;
+			camera.position.set(cameraStart.cpy().interpolate(cameraDest, cameraMoveTime, interp));
+			anchor.set(anchorStart.cpy().interpolate(anchorDest, cameraMoveTime, interp));
+			cameraMoveTime += STEP_SIZE;
 		}
 		camera.update();
 	}
