@@ -16,22 +16,13 @@ public class LineOfSightTest {
 	@Test
 	public void testHorizontalSupercover() {
 		/*
-		 * Map looks like:
+		 * Should look like:
 		 * 0 0 0 0
-		 * 0 1 1 0
 		 * 0 0 0 0
-		 * A 0 0 0
+		 * 0 0 0 0
+		 * A x x E
 		 */
-		String rawMapString = "4 4\n"
-				+ "s 1 2\n"
-				+ "s 2 2";
-
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
+		BattleMap map = new BattleMap(4, 4);
 		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,0));
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(1, 0));
@@ -45,22 +36,13 @@ public class LineOfSightTest {
 	@Test
 	public void testVerticalSupercover() {
 		/*
-		 * Map looks like:
-		 * 0 0 0 0
-		 * 0 1 1 0
-		 * 0 0 0 0
+		 * Should look like:
+		 * E 0 0 0
+		 * x 0 0 0
+		 * x 0 0 0
 		 * A 0 0 0
 		 */
-		String rawMapString = "4 4\n"
-				+ "s 1 2\n"
-				+ "s 2 2";
-
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
+		BattleMap map = new BattleMap(4, 4);
 		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(0,3));
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 1));
@@ -74,22 +56,13 @@ public class LineOfSightTest {
 	@Test
 	public void testDiagonalSupercover() {
 		/*
-		 * Map looks like:
-		 * 0 0 0 0
-		 * 0 1 1 0
-		 * 0 0 0 0
+		 * Should look like:
+		 * 0 0 0 E
+		 * 0 0 x 0
+		 * 0 x 0 0
 		 * A 0 0 0
 		 */
-		String rawMapString = "4 4\n"
-				+ "s 1 2\n"
-				+ "s 2 2";
-
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
+		BattleMap map = new BattleMap(4, 4);
 		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,3));
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(1, 1));
@@ -103,22 +76,13 @@ public class LineOfSightTest {
 	@Test
 	public void testFractionalSlopeSupercover() {
 		/*
-		 * Map looks like:
+		 * Should look like:
 		 * 0 0 0 0
-		 * 0 1 1 0
 		 * 0 0 0 0
-		 * A 0 0 0
+		 * 0 0 x E
+		 * A x 0 0
 		 */
-		String rawMapString = "4 4\n"
-				+ "s 1 2\n"
-				+ "s 2 2";
-
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
+		BattleMap map = new BattleMap(4, 4);
 		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,1));
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(1, 0));
@@ -132,22 +96,13 @@ public class LineOfSightTest {
 	@Test
 	public void testSteepSlopeSupercover() {
 		/*
-		 * Map looks like:
-		 * 0 0 0 0
-		 * 0 1 1 0
-		 * 0 0 0 0
+		 * Should look like:
+		 * 0 0 E 0
+		 * 0 x x 0
+		 * x x 0 0
 		 * A 0 0 0
 		 */
-		String rawMapString = "4 4\n"
-				+ "s 1 2\n"
-				+ "s 2 2";
-
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
+		BattleMap map = new BattleMap(4, 4);
 		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(2,3));
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 1));
