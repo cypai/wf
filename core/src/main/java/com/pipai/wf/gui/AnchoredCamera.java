@@ -49,6 +49,14 @@ public class AnchoredCamera {
 		camera.rotateAround(anchor, new Vector3(0, 0, 1), 45);
 	}
 	
+	public void increaseHeight() {
+		camera.position.z += 100;
+	}
+	
+	public void decreaseHeight() {
+		camera.position.z -= 100;
+	}
+	
 	public Matrix4 getProjectionMatrix() {
 		return camera.combined;
 	}

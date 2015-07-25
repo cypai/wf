@@ -55,5 +55,10 @@ public class BattleResultsGUI extends GUI {
 	public void onKeyUp(int keycode) {
 		
 	}
+
+	@Override
+	public void mouseScrolled(int amount) {
+		
+	}
 	
 }

@@ -115,6 +115,8 @@ public abstract class GUI implements Screen, InputProcessor {
 	public abstract void onKeyDown(int keycode);
 	public abstract void onKeyUp(int keycode);
 	
+	public abstract void mouseScrolled(int amount);
+	
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button == Buttons.LEFT) {
@@ -142,7 +144,8 @@ public abstract class GUI implements Screen, InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		return false;
+		mouseScrolled(amount);
+		return true;
 	}
 	
 }

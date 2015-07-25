@@ -86,6 +86,11 @@ public class PartyInfoGUI extends GUI {
 	public void onKeyUp(int keycode) {
 		
 	}
+
+	@Override
+	public void mouseScrolled(int amount) {
+		
+	}
 	
 	private void cleanCreateBuffers() {
 		for (Renderable o : renderablesCreateBuffer) {

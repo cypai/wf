@@ -395,6 +395,17 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 	}
 	
+	public void mouseScrolled(int amount) {
+		switch (amount) {
+		case 1:
+			this.camera.decreaseHeight();
+			break;
+		case -1:
+			this.camera.increaseHeight();
+			break;
+		}
+	}
+	
 	public void animateEvent(BattleEvent event) {
 		AgentGUIObject a = null, t;
 		TemporaryText ttext;
