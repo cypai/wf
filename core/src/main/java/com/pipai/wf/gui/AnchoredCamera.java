@@ -30,6 +30,11 @@ public class AnchoredCamera {
         angle = 90;
 	}
 	
+	public void setViewport(float width, float height) {
+		camera.viewportWidth = width;
+		camera.viewportHeight = height;
+	}
+	
 	public void moveUp() {
 		cameraMoveTime = 2;
 		Vector3 v = new Vector3(0, 3, 0);

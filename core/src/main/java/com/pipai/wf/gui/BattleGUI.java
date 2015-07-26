@@ -658,6 +658,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		//this.camera.setToOrtho(false, width, height);
+		this.camera.setViewport(width, height);
 		this.orthoCamera.setToOrtho(false, width, height);
 		this.overlayCamera.setToOrtho(false, width, height);
 	}
