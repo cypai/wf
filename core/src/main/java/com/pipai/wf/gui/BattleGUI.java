@@ -467,6 +467,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.mode = Mode.NONE;
 		this.terrainRenderer.clearShadedTiles();
 		this.terrainRenderer.setMovableTiles(this.selectedMapGraph.getMovableCellPositions());
+		this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 	}
 	
 	public void switchToTargetMode(Attack atk) {
