@@ -74,7 +74,7 @@ public class AnchoredCamera {
 		cameraStart = camera.position.cpy();
 		cameraDest = new Vector3(x + xdiff, y + ydiff, camera.position.z);
 		anchorStart = anchor.cpy();
-		anchorDest = new Vector3(x, y, 0);
+		anchorDest = new Vector3(x, y, anchor.z);
 	}
 	
 	public void arcballRotationCW() {
@@ -95,10 +95,12 @@ public class AnchoredCamera {
 	
 	public void increaseHeight() {
 		camera.position.z += 100;
+		anchor.z += 100;
 	}
 	
 	public void decreaseHeight() {
 		camera.position.z -= 100;
+		anchor.z -= 100;
 	}
 	
 	public Matrix4 getProjectionMatrix() {
