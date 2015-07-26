@@ -16,6 +16,10 @@ public class AnchoredCamera {
 	
 	private float STEP_SIZE = 0.05f;
 	
+	private int angle;
+	
+	private final Vector3 rot_axis = new Vector3(0, 0, 1);
+	
 	public AnchoredCamera(int screenWidth, int screenHeight) {
         camera = new PerspectiveCamera(67, screenWidth, screenHeight);
         camera.position.set(0, -200, 400);
@@ -23,12 +27,39 @@ public class AnchoredCamera {
         camera.near = 1f;
         camera.far = 2000;
         anchor = new Vector3(0, 0, 0);
+        angle = 90;
 	}
 	
-	public void translate(float x, float y) {
+	public void moveUp() {
 		cameraMoveTime = 2;
-		camera.translate(x, y, 0);
-		anchor.add(x, y, 0);
+		Vector3 v = new Vector3(0, 3, 0);
+		v.rotate(rot_axis, angle - 90);
+		camera.translate(v);
+		anchor.add(v);
+	}
+	
+	public void moveDown() {
+		cameraMoveTime = 2;
+		Vector3 v = new Vector3(0, -3, 0);
+		v.rotate(rot_axis, angle - 90);
+		camera.translate(v);
+		anchor.add(v);
+	}
+	
+	public void moveLeft() {
+		cameraMoveTime = 2;
+		Vector3 v = new Vector3(-3, 0, 0);
+		v.rotate(rot_axis, angle - 90);
+		camera.translate(v);
+		anchor.add(v);
+	}
+	
+	public void moveRight() {
+		cameraMoveTime = 2;
+		Vector3 v = new Vector3(3, 0, 0);
+		v.rotate(rot_axis, angle - 90);
+		camera.translate(v);
+		anchor.add(v);
 	}
 	
 	public void moveTo(float x, float y) {
@@ -42,11 +73,19 @@ public class AnchoredCamera {
 	}
 	
 	public void arcballRotationCW() {
-		camera.rotateAround(anchor, new Vector3(0, 0, 1), -45);
+		camera.rotateAround(anchor, rot_axis, -45);
+		angle -= 45;
+		if (angle < 0) {
+			angle += 360;
+		}
 	}
 	
 	public void arcballRotationCCW() {
-		camera.rotateAround(anchor, new Vector3(0, 0, 1), 45);
+		camera.rotateAround(anchor, rot_axis, 45);
+		angle += 45;
+		if (angle > 360) {
+			angle -= 360;
+		}
 	}
 	
 	public void increaseHeight() {

@@ -546,16 +546,16 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private void updateCamera() {
 		if (this.mode.allowsInput()) {
 			if (this.checkKey(Keys.A)) {
-				this.camera.translate(-3, 0);
+				this.camera.moveLeft();
 			}
 			if (this.checkKey(Keys.D)) {
-				this.camera.translate(3, 0);
+				this.camera.moveRight();
 			}
 			if (this.checkKey(Keys.W)) {
-				this.camera.translate(0, 3);
+				this.camera.moveUp();
 			}
 			if (this.checkKey(Keys.S)) {
-				this.camera.translate(0, -3);
+				this.camera.moveDown();
 			}
 		}
         this.camera.update();
