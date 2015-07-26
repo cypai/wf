@@ -33,7 +33,7 @@ public class BattleMapGenerator {
 	}
 	
 	private static void generateRandomEnvironment(BattleMap map) {
-		for (int i = 0; i < 70; i++) {
+		for (int i = 0; i < 30; i++) {
 			GridPosition pos = randPos(new GridPosition(5, 5), new GridPosition(map.getCols() - 5, map.getRows() - 5));
 	        map.getCell(pos).setTileEnvironmentObject(new FullCoverIndestructibleObject());
 		}
