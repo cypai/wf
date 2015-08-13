@@ -1,7 +1,10 @@
 package com.pipai.wf.test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.stub;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.pipai.wf.battle.Team;
@@ -10,9 +13,17 @@ import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapString;
+import com.pipai.wf.config.BattleProperties;
+import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class AgentLineOfSightTest {
+	
+	@BeforeClass
+	public static void battleConfigMocking() {
+		WFConfig.battle = mock(BattleProperties.class);
+		stub(WFConfig.battle.sightRange()).toReturn(17);
+	}
 
 	@Test
 	public void testPeekFlankLOS() {
@@ -188,9 +199,9 @@ public class AgentLineOfSightTest {
 
 	@Test
 	public void testOpenLOS() {
-		BattleMap map = new BattleMap(1, Agent.RANGE + 1);
+		BattleMap map = new BattleMap(1, WFConfig.battle.sightRange() + 1);
 		GridPosition playerPos = new GridPosition(0, 0);
-		GridPosition enemyPos = new GridPosition(Agent.RANGE - 1, 0);
+		GridPosition enemyPos = new GridPosition(WFConfig.battle.sightRange() - 1, 0);
 		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
@@ -201,9 +212,9 @@ public class AgentLineOfSightTest {
 
 	@Test
 	public void testTooFarLOS() {
-		BattleMap map = new BattleMap(1, Agent.RANGE + 1);
+		BattleMap map = new BattleMap(1, WFConfig.battle.sightRange() + 1);
 		GridPosition playerPos = new GridPosition(0, 0);
-		GridPosition enemyPos = new GridPosition(Agent.RANGE, 0);
+		GridPosition enemyPos = new GridPosition(WFConfig.battle.sightRange(), 0);
 		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
