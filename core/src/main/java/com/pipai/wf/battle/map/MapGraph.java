@@ -17,41 +17,54 @@ public class MapGraph {
 	private ArrayList<GridPosition> reachableList;
 	private boolean DEBUG;
 	
+	private class Edge {
+		private Node destination;
+		private float cost;
+		
+		public Edge(Node destination, float cost) {
+			this.destination = destination;
+			this.cost = cost;
+		}
+		
+		public Node getDestination() { return destination; }
+		public float cost() { return cost; }
+	}
+	
 	private class Node {
 		private GridPosition pos;
-		private ArrayList<Node> edges;
+		private ArrayList<Edge> edges;
 		private boolean added, visited;
-		private int cost, totalCost;
+		private float totalCost;
 		private Node path;
 		
 		public Node(GridPosition pos) {
 			this.pos = pos;
-			this.cost = 1;
-			this.edges = new ArrayList<Node>();
+			this.edges = new ArrayList<Edge>();
 		}
 		
 		public void addEdge(Node node) {
-			this.edges.add(node);
+			this.edges.add(new Edge(node, 1));
 		}
 		
 		public boolean isVisited() { return this.visited; }
 		public void visit() { this.visited = true; }
 		public boolean isAdded() { return this.added; }
 		public void setAdded() { this.added = true; }
-		public int getTotalCost() { return this.totalCost; }
-		public void setTotalCost(int totalCost) { this.totalCost = totalCost; }
-		public int getCost() { return this.cost; }
+		public float getTotalCost() { return this.totalCost; }
+		public void setTotalCost(float totalCost) { this.totalCost = totalCost; }
+		//public int getCost() { return this.cost; }
 		public void setPath(Node from) { this.path = from; }
 		public Node getPath() { return this.path; }
 		public GridPosition getPosition() { return this.pos; }
 		
-		public ArrayList<Node> getNeighbors() {
+		public ArrayList<Edge> getEdges() {
 			return this.edges;
 		}
 
 		public String toString() {
 			String s = "Node: " + this.pos + " Edges [ ";
-			for (Node node : this.edges) {
+			for (Edge edge : this.edges) {
+				Node node = edge.getDestination();
 				s += "{" + node.getPosition() + " " + String.valueOf(node.isVisited()) + " " + String.valueOf(node.isAdded()) + "} ";
 			}
 			s += "]";
@@ -123,10 +136,11 @@ public class MapGraph {
 			}
 			current.visit();
 			if (DEBUG) { System.out.println("Current " + current); }
-			for (Node node : current.getNeighbors()) {
+			for (Edge edge : current.getEdges()) {
+				Node node = edge.getDestination();
 				if (DEBUG) { System.out.println("Checking " + node.getPosition()); }
 				if (!node.isVisited() && !node.isAdded()) {
-					int totalCost = node.getCost() + current.getTotalCost();
+					float totalCost = edge.cost() + current.getTotalCost();
 					if (totalCost <= mobility) {
 						if (DEBUG) { System.out.println("Added " + node.getPosition()); }
 						node.setAdded();
