@@ -43,7 +43,7 @@ public class MapGraph {
 		}
 		
 		public void addEdge(Node node) {
-			this.edges.add(new Edge(node, 1));
+			this.edges.add(new Edge(node, (float)pos.distance(node.pos)));
 		}
 		
 		public boolean isVisited() { return this.visited; }
@@ -114,6 +114,16 @@ public class MapGraph {
 						south.addEdge(cell);
 						cell.addEdge(south);
 					}
+					Node sw = this.getNode(new GridPosition(x-1, y-1));
+					if (sw != null) {
+						sw.addEdge(cell);	//Will add height-weights later
+						cell.addEdge(sw);
+					}
+					Node nw = this.getNode(new GridPosition(x-1, y+1));
+					if (nw != null) {
+						nw.addEdge(cell);
+						cell.addEdge(nw);
+					}
 					if (rootPos != null && x == rootPos.x && y == rootPos.y) {
 						this.root = cell;
 					}
@@ -142,7 +152,7 @@ public class MapGraph {
 				if (!node.isVisited() && !node.isAdded()) {
 					float totalCost = edge.cost() + current.getTotalCost();
 					if (totalCost <= mobility) {
-						if (DEBUG) { System.out.println("Added " + node.getPosition()); }
+						if (DEBUG) { System.out.println("Added " + node.getPosition() + " Dist " + String.valueOf(totalCost)); }
 						node.setAdded();
 						node.setTotalCost(totalCost);
 						node.setPath(current);

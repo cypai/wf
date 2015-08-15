@@ -79,6 +79,7 @@ public class PathfindingTest {
 		req.add(new GridPosition(0, 2));
 		req.add(new GridPosition(0, 3));
 		req.add(new GridPosition(1, 0));
+		req.add(new GridPosition(1, 3));
 		req.add(new GridPosition(2, 0));
 		req.add(new GridPosition(2, 1));
 		req.add(new GridPosition(3, 1));
@@ -90,15 +91,27 @@ public class PathfindingTest {
 	}
 	
 	@Test
-	public void testFourMobilityMovableList() {
-		BattleMap map = new BattleMap(8, 3);
-		MapGraph graph = new MapGraph(map, new GridPosition(0, 1), 4, 1);
+	public void testThreeMobilityMovableList() {
+		BattleMap map = new BattleMap(8, 8);
+		MapGraph graph = new MapGraph(map, new GridPosition(3, 3), 3, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
-		req.add(new GridPosition(0, 0));
-		req.add(new GridPosition(0, 2));
 		req.add(new GridPosition(0, 3));
-		req.add(new GridPosition(0, 4));
+		req.add(new GridPosition(1, 3));
+		req.add(new GridPosition(2, 3));
+		req.add(new GridPosition(4, 3));
+		req.add(new GridPosition(5, 3));
+		req.add(new GridPosition(6, 3));
+		req.add(new GridPosition(3, 0));
+		req.add(new GridPosition(3, 1));
+		req.add(new GridPosition(3, 2));
+		req.add(new GridPosition(3, 4));
+		req.add(new GridPosition(3, 5));
+		req.add(new GridPosition(3, 6));
+		req.add(new GridPosition(1, 1));
+		req.add(new GridPosition(1, 5));
+		req.add(new GridPosition(5, 1));
+		req.add(new GridPosition(5, 5));
 		for (GridPosition r : req) {
 			assertTrue("Does not contain " + r, movableList.contains(r));
 		}
@@ -132,7 +145,7 @@ public class PathfindingTest {
 		MapGraph graph = new MapGraph(map, start, 10, 1);
 		LinkedList<GridPosition> path = graph.getPath(end);
 		assertTrue("Invalid path", checkPathingList(path, start, end));
-		assertTrue("Path too long: Expected 6 but got " + String.valueOf(path.size()), path.size() == 6);
+		assertTrue("Path too long: Expected 4 but got " + String.valueOf(path.size()), path.size() == 4);
 	}
 	
 	@Test

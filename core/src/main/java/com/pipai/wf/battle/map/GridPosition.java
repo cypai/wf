@@ -29,5 +29,9 @@ public class GridPosition {
     public int hashCode() {
     	return new HashCodeBuilder(17, 31).append(x).append(y).toHashCode();
 	}
+	
+	public double distance(GridPosition other) {
+		return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
+	}
 
 }
