@@ -94,21 +94,21 @@ public abstract class GUI implements Screen, InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
+	public final boolean keyDown(int keycode) {
 		this.heldKeys.put(keycode, true);
 		this.onKeyDown(keycode);
         return true;
 	}
 
 	@Override
-	public boolean keyUp(int keycode) {
+	public final boolean keyUp(int keycode) {
 		this.heldKeys.put(keycode, false);
 		this.onKeyUp(keycode);
 		return true;
 	}
 
 	@Override
-	public boolean keyTyped(char character) {
+	public final boolean keyTyped(char character) {
 		return false;
 	}
 
@@ -121,7 +121,7 @@ public abstract class GUI implements Screen, InputProcessor {
 	public abstract void mouseScrolled(int amount);
 	
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+	public final boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button == Buttons.LEFT) {
 			onLeftClick(screenX, screenY);
 		} else if (button == Buttons.RIGHT) {
@@ -131,22 +131,22 @@ public abstract class GUI implements Screen, InputProcessor {
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+	public final boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		return false;
 	}
 
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
+	public final boolean touchDragged(int screenX, int screenY, int pointer) {
 		return false;
 	}
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
+	public final boolean mouseMoved(int screenX, int screenY) {
 		return false;
 	}
 
 	@Override
-	public boolean scrolled(int amount) {
+	public final boolean scrolled(int amount) {
 		mouseScrolled(amount);
 		return true;
 	}
