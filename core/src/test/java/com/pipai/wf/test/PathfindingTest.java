@@ -20,8 +20,8 @@ public class PathfindingTest {
 	@Test
 	public void testOneMobilityMovableList() {
 		BattleMap map = new BattleMap(3, 4);
-		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 1, 1);
-		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
+		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 1, 1, 1);
+		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(1, 0));
@@ -36,8 +36,8 @@ public class PathfindingTest {
 	@Test
 	public void testTwoMobilityMovableList() {
 		BattleMap map = new BattleMap(4, 4);
-		MapGraph graph = new MapGraph(map, new GridPosition(0, 1), 2, 1);
-		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
+		MapGraph graph = new MapGraph(map, new GridPosition(0, 1), 2, 1, 1);
+		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 0));
 		req.add(new GridPosition(0, 2));
@@ -71,8 +71,8 @@ public class PathfindingTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 3, 1);
-		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
+		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 3, 1, 1);
+		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 0));
 		req.add(new GridPosition(0, 1));
@@ -93,8 +93,8 @@ public class PathfindingTest {
 	@Test
 	public void testThreeMobilityMovableList() {
 		BattleMap map = new BattleMap(8, 8);
-		MapGraph graph = new MapGraph(map, new GridPosition(3, 3), 3, 1);
-		ArrayList<GridPosition> movableList = graph.getMovableCellPositions();
+		MapGraph graph = new MapGraph(map, new GridPosition(3, 3), 3, 1, 1);
+		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 3));
 		req.add(new GridPosition(1, 3));
@@ -142,7 +142,7 @@ public class PathfindingTest {
 		BattleMap map = new BattleMap(4, 4);
 		GridPosition start = new GridPosition(0, 0);
 		GridPosition end = new GridPosition(3, 2);
-		MapGraph graph = new MapGraph(map, start, 10, 1);
+		MapGraph graph = new MapGraph(map, start, 10, 1, 1);
 		LinkedList<GridPosition> path = graph.getPath(end);
 		assertTrue("Invalid path", checkPathingList(path, start, end));
 		assertTrue("Path too long: Expected 4 but got " + String.valueOf(path.size()), path.size() == 4);
@@ -153,7 +153,7 @@ public class PathfindingTest {
 		BattleMap map = new BattleMap(4, 4);
 		GridPosition start = new GridPosition(0, 0);
 		GridPosition end = new GridPosition(3, 2);
-		MapGraph graph = new MapGraph(map, start, 3, 1);
+		MapGraph graph = new MapGraph(map, start, 3, 1, 1);
 		LinkedList<GridPosition> path = graph.getPath(end);
 		assertTrue(path == null);
 	}
@@ -170,7 +170,7 @@ public class PathfindingTest {
 		}
         map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, new GridPosition(1, 1), 3, 5, 2, 5, 65, 0));
         map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, new GridPosition(2, 1), 3, 5, 2, 5, 65, 0));
-		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1);
+		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1, 1);
 		assertFalse("Failed to return false on moving to solid tile", graph.canMoveTo(new GridPosition(3, 0)));
 		assertFalse("Failed to return false on moving to tile with other agent", graph.canMoveTo(new GridPosition(2, 1)));
 	}
@@ -178,7 +178,7 @@ public class PathfindingTest {
 	@Test
 	public void testIllegalSquares() {
 		BattleMap map = new BattleMap(4, 4);
-		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1);
+		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1, 1);
 		GridPosition illegal = new GridPosition(4, 1);
 		assertFalse("Failed to return false on moving to tile outside map", graph.canMoveTo(illegal));
 		assertTrue("Failed to return null on path to tile outside map", graph.getPath(illegal) == null);

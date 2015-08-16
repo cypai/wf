@@ -14,7 +14,8 @@ public class MapGraph {
 	
 	private Node root;
 	private HashMap<String, Node> nodeMap;
-	private ArrayList<GridPosition> reachableList;
+	private float[] moveBounds;
+	private ArrayList<ArrayList<GridPosition>> reachableLists;
 	private boolean DEBUG;
 	
 	private class Edge {
@@ -84,14 +85,19 @@ public class MapGraph {
 	    }
 	}
 	
-	public MapGraph(BattleMap map, GridPosition start, int mobility, int jumpHeight) {
-		this(map, start, mobility, jumpHeight, false);
+	public MapGraph(BattleMap map, GridPosition start, int mobility, int ap, int apMax) {
+		this(map, start, mobility, ap, apMax, false);
 	}
 	
-	public MapGraph(BattleMap map, GridPosition start, int mobility, int jumpHeight, boolean debug) {
+	public MapGraph(BattleMap map, GridPosition start, int mobility, int ap, int apMax, boolean debug) {
 		DEBUG = debug;
+		this.reachableLists = new ArrayList<ArrayList<GridPosition>>();
+		for (int i = 0; i < ap; i++) {
+			this.reachableLists.add(new ArrayList<GridPosition>());
+		}
+		calcApMoveBounds(mobility, ap, apMax);
 		initialize(map, start);
-		runDijkstra(mobility, jumpHeight);
+		runDijkstra(mobility, ap, apMax);
 	}
 	
 	private void initialize(BattleMap map, GridPosition rootPos) {
@@ -132,17 +138,36 @@ public class MapGraph {
 		}
 	}
 	
+	private void calcApMoveBounds(int mobility, int ap, int apMax) {
+		this.moveBounds = new float[ap];
+		float mobilitySegment = ((float) mobility) / ((float) apMax);
+		for (int i = 1; i <= ap; i++) {
+			this.moveBounds[i - 1] = mobilitySegment * i;
+		}
+	}
+	
 	private Node getNode(GridPosition pos) {
 		return this.nodeMap.get(pos.toString());
 	}
 	
-	private void runDijkstra(int mobility, int jumpHeight) {
-		this.reachableList = new ArrayList<GridPosition>();
+	private int apRequiredToMoveTo(Node destination) {
+		float DELTA = 0.000001f;
+		for (int i = 1; i <= this.moveBounds.length; i++) {
+			if (destination.getTotalCost() - DELTA <= this.moveBounds[i - 1]) {
+				return i;
+			}
+		}
+		return Integer.MAX_VALUE;
+	}
+	
+	private void runDijkstra(int mobility, int ap, int apMax) {
 		PriorityQueue<Node> pqueue = new PriorityQueue<Node>(mobility*mobility, new NodeComparator());
 		Node current = this.root;
 		while (current != null) {
 			if (!current.getPosition().equals(this.root.getPosition())) {
-				this.reachableList.add(current.getPosition());
+				int index = apRequiredToMoveTo(current) - 1;
+				ArrayList<GridPosition> reachableList = this.reachableLists.get(index);
+				reachableList.add(current.getPosition());
 			}
 			current.visit();
 			if (DEBUG) { System.out.println("Current " + current); }
@@ -164,9 +189,9 @@ public class MapGraph {
 		}
 	}
 	
-	public ArrayList<GridPosition> getMovableCellPositions() {
+	public ArrayList<GridPosition> getMovableCellPositions(int ap) {
 		@SuppressWarnings("unchecked")
-		ArrayList<GridPosition> list = (ArrayList<GridPosition>) this.reachableList.clone();
+		ArrayList<GridPosition> list = (ArrayList<GridPosition>) this.reachableLists.get(ap - 1).clone();
 		return list;
 	}
 	
