@@ -121,8 +121,8 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		this.drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawMovableTiles(batch.getShapeRenderer());
 		this.drawDashTiles(batch.getShapeRenderer());
-		this.drawTargetTiles(batch.getShapeRenderer());
 		this.drawTargetableTiles(batch.getShapeRenderer());
+		this.drawTargetTiles(batch.getShapeRenderer());
 		batch.getModelBatch().begin(gui.getCamera().getCamera());
 		batch.getModelBatch().render(wallModels, environment);
 		batch.getModelBatch().end();
