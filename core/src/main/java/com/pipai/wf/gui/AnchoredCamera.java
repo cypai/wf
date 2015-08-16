@@ -22,7 +22,7 @@ public class AnchoredCamera {
 	
 	public AnchoredCamera(int screenWidth, int screenHeight) {
         camera = new PerspectiveCamera(67, screenWidth, screenHeight);
-        camera.position.set(0, -200, 300);
+        camera.position.set(0, -300, 400);
         camera.lookAt(0, 0, 0);
         camera.near = 1f;
         camera.far = 2000;
