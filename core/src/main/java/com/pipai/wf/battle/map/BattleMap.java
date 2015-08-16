@@ -95,7 +95,8 @@ public class BattleMap implements BattleEventLoggable {
 
 	public void addAgent(AgentState state) {
 		Agent agent = new Agent(this, state);
-		this.getCell(agent.getPosition()).setAgent(agent);
+		BattleMapCell cell = this.getCell(agent.getPosition());
+		cell.setAgent(agent);
 		agent.register(log);
 		this.agents.add(agent);
 	}
