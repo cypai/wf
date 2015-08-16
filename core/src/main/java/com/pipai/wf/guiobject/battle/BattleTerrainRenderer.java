@@ -33,6 +33,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
+	private static final Color DASH_COLOR = new Color(1f, 0.8f, 0, 0.5f);
 	private static final Color TARGET_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color TARGETABLE_COLOR = new Color(1f, 0.8f, 0, 0.5f);
 	
@@ -48,7 +49,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 	
 	protected BattleGUI gui;
 	protected BattleMap map;
-	protected List<GridPosition> moveTiles, targetTiles, targetableTiles;
+	protected List<GridPosition> moveTiles, dashTiles, targetTiles, targetableTiles;
 	
 	private Environment environment;
 	private Model boxModel, terrainModel;
@@ -119,6 +120,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		batch.getModelBatch().end();
 		this.drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawMovableTiles(batch.getShapeRenderer());
+		this.drawDashTiles(batch.getShapeRenderer());
 		this.drawTargetTiles(batch.getShapeRenderer());
 		this.drawTargetableTiles(batch.getShapeRenderer());
 		batch.getModelBatch().begin(gui.getCamera().getCamera());
@@ -128,12 +130,17 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 	
 	public void clearShadedTiles() {
 		this.moveTiles = null;
+		this.dashTiles = null;
 		this.targetTiles = null;
 		this.targetableTiles = null;
 	}
 	
 	public void setMovableTiles(List<GridPosition> moveTiles) {
 		this.moveTiles = moveTiles;
+	}
+	
+	public void setDashTiles(List<GridPosition> dashTiles) {
+		this.dashTiles = dashTiles;
 	}
 	
 	public void setTargetTiles(List<GridPosition> targetTiles) {
@@ -175,6 +182,14 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		if (this.moveTiles != null) {
 			for (GridPosition pos : this.moveTiles) {
 				this.shadeSquare(batch, pos, MOVE_COLOR);
+			}
+		}
+	}
+	
+	private void drawDashTiles(ShapeRenderer batch) {
+		if (this.dashTiles != null) {
+			for (GridPosition pos : this.dashTiles) {
+				this.shadeSquare(batch, pos, DASH_COLOR);
 			}
 		}
 	}

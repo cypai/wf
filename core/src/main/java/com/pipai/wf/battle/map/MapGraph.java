@@ -37,10 +37,12 @@ public class MapGraph {
 		private boolean added, visited;
 		private float totalCost;
 		private Node path;
+		private int apNeeded;
 		
 		public Node(GridPosition pos) {
 			this.pos = pos;
 			this.edges = new ArrayList<Edge>();
+			this.apNeeded = Integer.MAX_VALUE;
 		}
 		
 		public void addEdge(Node node) {
@@ -57,6 +59,8 @@ public class MapGraph {
 		public void setPath(Node from) { this.path = from; }
 		public Node getPath() { return this.path; }
 		public GridPosition getPosition() { return this.pos; }
+		public void setAPNeeded(int ap) { this.apNeeded = ap; }
+		public int getAPNeeded() { return this.apNeeded; }
 		
 		public ArrayList<Edge> getEdges() {
 			return this.edges;
@@ -92,12 +96,13 @@ public class MapGraph {
 	public MapGraph(BattleMap map, GridPosition start, int mobility, int ap, int apMax, boolean debug) {
 		DEBUG = debug;
 		this.reachableLists = new ArrayList<ArrayList<GridPosition>>();
+		if (ap == 0) { return; }
 		for (int i = 0; i < ap; i++) {
 			this.reachableLists.add(new ArrayList<GridPosition>());
 		}
 		calcApMoveBounds(mobility, ap, apMax);
 		initialize(map, start);
-		runDijkstra(mobility, ap, apMax);
+		runDijkstra(this.moveBounds[this.moveBounds.length - 1], ap, apMax);
 	}
 	
 	private void initialize(BattleMap map, GridPosition rootPos) {
@@ -147,6 +152,7 @@ public class MapGraph {
 	}
 	
 	private Node getNode(GridPosition pos) {
+		if (this.nodeMap == null) { return null; }
 		return this.nodeMap.get(pos.toString());
 	}
 	
@@ -160,14 +166,17 @@ public class MapGraph {
 		return Integer.MAX_VALUE;
 	}
 	
-	private void runDijkstra(int mobility, int ap, int apMax) {
-		PriorityQueue<Node> pqueue = new PriorityQueue<Node>(mobility*mobility, new NodeComparator());
+	private void runDijkstra(float maxMove, int ap, int apMax) {
+		PriorityQueue<Node> pqueue = new PriorityQueue<Node>((int)(maxMove*maxMove), new NodeComparator());
 		Node current = this.root;
 		while (current != null) {
 			if (!current.getPosition().equals(this.root.getPosition())) {
-				int index = apRequiredToMoveTo(current) - 1;
-				ArrayList<GridPosition> reachableList = this.reachableLists.get(index);
+				int apNeeded = apRequiredToMoveTo(current);
+				int index = apNeeded - 1;
+				ArrayList<GridPosition> reachableList = null;
+				reachableList = this.reachableLists.get(index);
 				reachableList.add(current.getPosition());
+				current.setAPNeeded(apNeeded);
 			}
 			current.visit();
 			if (DEBUG) { System.out.println("Current " + current); }
@@ -176,7 +185,7 @@ public class MapGraph {
 				if (DEBUG) { System.out.println("Checking " + node.getPosition()); }
 				if (!node.isVisited() && !node.isAdded()) {
 					float totalCost = edge.cost() + current.getTotalCost();
-					if (totalCost <= mobility) {
+					if (totalCost <= maxMove) {
 						if (DEBUG) { System.out.println("Added " + node.getPosition() + " Dist " + String.valueOf(totalCost)); }
 						node.setAdded();
 						node.setTotalCost(totalCost);
@@ -189,10 +198,15 @@ public class MapGraph {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public ArrayList<GridPosition> getMovableCellPositions(int ap) {
-		@SuppressWarnings("unchecked")
-		ArrayList<GridPosition> list = (ArrayList<GridPosition>) this.reachableLists.get(ap - 1).clone();
-		return list;
+		ArrayList<GridPosition> list;
+		try {
+			list = this.reachableLists.get(ap - 1);
+		} catch (IndexOutOfBoundsException e) {
+			list  = new ArrayList<GridPosition>();
+		}
+		return (ArrayList<GridPosition>) list.clone();
 	}
 	
 	public LinkedList<GridPosition> getPath(GridPosition destinationPos) {
@@ -212,6 +226,10 @@ public class MapGraph {
 	
 	public GridPosition startingPosition() {
 		return root.getPosition();
+	}
+	
+	public int apRequiredToMoveTo(GridPosition destination) {
+		return this.getNode(destination).getAPNeeded();
 	}
 	
 }

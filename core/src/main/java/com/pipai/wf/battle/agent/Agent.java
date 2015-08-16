@@ -207,7 +207,10 @@ public class Agent implements BattleEventLoggable {
 		logEvent(BattleEvent.switchWeaponEvent(this));
 	}
 	
-	public void move(LinkedList<GridPosition> path) throws IllegalActionException {
+	public void move(LinkedList<GridPosition> path, int useAP) throws IllegalActionException {
+		if (useAP > this.ap) {
+			throw new IllegalActionException("AP required for movement greater than current AP");
+		}
 		boolean isValid = true;
 		BattleEvent event = BattleEvent.moveEvent(this, path);
 		for (GridPosition pos : path) {
@@ -236,7 +239,7 @@ public class Agent implements BattleEventLoggable {
 		}
 		GridPosition dest = path.peekLast();
 		this.setPosition(dest);
-		this.setAP(this.ap - 1);
+		this.setAP(this.ap - useAP);
 	}
 	
 	public void rangeAttack(Agent other, Attack attack) {

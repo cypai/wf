@@ -183,4 +183,44 @@ public class PathfindingTest {
 		assertFalse("Failed to return false on moving to tile outside map", graph.canMoveTo(illegal));
 		assertTrue("Failed to return null on path to tile outside map", graph.getPath(illegal) == null);
 	}
+	
+	@Test
+	public void testNoAP() {
+		BattleMap map = new BattleMap(3, 3);
+		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 0, 1);
+		GridPosition any = new GridPosition(0, 0);
+		assertFalse("Failed to return false on moving to a tile", graph.canMoveTo(any));
+		assertTrue("Failed to return null on path to a tile", graph.getPath(any) == null);
+	}
+	
+	@Test
+	public void testTwoAP() {
+		BattleMap map = new BattleMap(5, 5);
+		MapGraph graph = new MapGraph(map, new GridPosition(2, 2), 2, 2, 2);
+		ArrayList<GridPosition> movableList1 = graph.getMovableCellPositions(1);
+		ArrayList<GridPosition> req1 = new ArrayList<GridPosition>();
+		req1.add(new GridPosition(1, 2));
+		req1.add(new GridPosition(2, 3));
+		req1.add(new GridPosition(2, 1));
+		req1.add(new GridPosition(3, 2));
+		for (GridPosition r : req1) {
+			assertTrue("Does not contain " + r, movableList1.contains(r));
+		}
+		assertTrue(movableList1.size() == req1.size());
+		ArrayList<GridPosition> movableList2 = graph.getMovableCellPositions(2);
+		ArrayList<GridPosition> req2 = new ArrayList<GridPosition>();
+		req2.add(new GridPosition(0, 2));
+		req2.add(new GridPosition(1, 3));
+		req2.add(new GridPosition(1, 1));
+		req2.add(new GridPosition(2, 4));
+		req2.add(new GridPosition(2, 0));
+		req2.add(new GridPosition(3, 3));
+		req2.add(new GridPosition(3, 1));
+		req2.add(new GridPosition(4, 2));
+		for (GridPosition r : req2) {
+			assertTrue("Does not contain " + r, movableList2.contains(r));
+		}
+		assertTrue(movableList2.size() == req2.size());
+	}
+	
 }

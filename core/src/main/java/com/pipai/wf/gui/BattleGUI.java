@@ -181,6 +181,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 			this.updatePaths();
 			this.terrainRenderer.setMovableTiles(this.selectedMapGraph.getMovableCellPositions(1));
+			this.terrainRenderer.setDashTiles(this.selectedMapGraph.getMovableCellPositions(2));
 		}
 	}
 	
@@ -250,7 +251,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 	
 	public void updatePaths() {
 		if (selectedAgent != null) {
-			MapGraph graph = new MapGraph(this.battle.getBattleMap(), selectedAgent.getAgent().getPosition(), selectedAgent.getAgent().getMobility(), 1, 1);
+			Agent a = selectedAgent.getAgent();
+			MapGraph graph = new MapGraph(this.battle.getBattleMap(), a.getPosition(), a.getMobility(), a.getAP(), a.getMaxAP());
 			this.selectedMapGraph = graph;
 		}
 	}
@@ -349,7 +351,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		if (this.selectedAgent != null) {
 			if (this.selectedMapGraph.canMoveTo(destination)) {
 				LinkedList<GridPosition> path = this.selectedMapGraph.getPath(destination);
-				MoveAction move = new MoveAction(selectedAgent.getAgent(), path);
+				int useAP = this.selectedMapGraph.apRequiredToMoveTo(destination);
+				MoveAction move = new MoveAction(selectedAgent.getAgent(), path, useAP);
 				this.terrainRenderer.clearShadedTiles();
 				try {
 					this.battle.performAction(move);
@@ -467,6 +470,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.mode = Mode.NONE;
 		this.terrainRenderer.clearShadedTiles();
 		this.terrainRenderer.setMovableTiles(this.selectedMapGraph.getMovableCellPositions(1));
+		this.terrainRenderer.setDashTiles(this.selectedMapGraph.getMovableCellPositions(2));
 		this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 	}
 	

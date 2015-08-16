@@ -29,8 +29,8 @@ public class PartyInfoGUI extends GUI {
 		renderablesCreateBuffer = new ArrayList<Renderable>();
 		renderablesDelBuffer = new ArrayList<Renderable>();
 		party = new ArrayList<AgentState>();
-		party.add(AgentState.statsOnlyState(3, 5, 2, 5, 65, 0));
-		party.add(AgentState.statsOnlyState(3, 5, 2, 5, 65, 0));
+		party.add(AgentState.statsOnlyState(3, 5, 2, 13, 65, 0));
+		party.add(AgentState.statsOnlyState(3, 5, 2, 13, 65, 0));
 		this.createInstance(new PartyInfoList(this, party, 4, this.getScreenHeight() - 4, this.getScreenWidth()/2, this.getScreenHeight()/2, Color.CYAN));
 	}
 	

@@ -95,7 +95,7 @@ public class RandomAI extends AI {
 			ArrayList<GridPosition> potentialTiles = graph.getMovableCellPositions(1);
 			GridPosition destination = potentialTiles.get(UtilFunctions.rng.nextInt(potentialTiles.size()));
 			LinkedList<GridPosition> path = graph.getPath(destination);
-			return new MoveAction(a, path);
+			return new MoveAction(a, path, 1);
 		default:
 			return new OverwatchAction(a, new SimpleRangedAttack());
 		}

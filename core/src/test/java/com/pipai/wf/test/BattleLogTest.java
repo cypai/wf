@@ -64,7 +64,7 @@ public class BattleLogTest {
 		GridPosition dest = new GridPosition(2, 0);
 		path.add(agent.getPosition());
 		path.add(dest);
-		MoveAction move = new MoveAction(agent, path);
+		MoveAction move = new MoveAction(agent, path, 1);
 		try {
 			battle.performAction(move);
 		} catch (IllegalActionException e) {
@@ -98,7 +98,7 @@ public class BattleLogTest {
 		GridPosition dest = new GridPosition(1, 1);
 		path.add(agent.getPosition());
 		path.add(dest);
-		MoveAction move = new MoveAction(agent, path);
+		MoveAction move = new MoveAction(agent, path, 1);
 		try {
 			battle.performAction(move);
 		} catch (IllegalActionException e) {
@@ -112,7 +112,7 @@ public class BattleLogTest {
 		LinkedList<GridPosition> illegalPath = new LinkedList<GridPosition>();
 		illegalPath.add(agent.getPosition());
 		illegalPath.add(new GridPosition(2, 1));
-		MoveAction badmove = new MoveAction(agent, illegalPath);
+		MoveAction badmove = new MoveAction(agent, illegalPath, 1);
 		try {
 			battle.performAction(badmove);
 			fail("Expected IllegalMoveException was not thrown");
@@ -177,7 +177,7 @@ public class BattleLogTest {
 		GridPosition dest = new GridPosition(2, 1);
 		path.add(player.getPosition());
 		path.add(dest);
-		MoveAction move = new MoveAction(player, path);
+		MoveAction move = new MoveAction(player, path, 1);
 		try {
 			battle.performAction(move);
 		} catch (IllegalActionException e) {

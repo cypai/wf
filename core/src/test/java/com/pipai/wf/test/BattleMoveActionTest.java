@@ -43,7 +43,7 @@ public class BattleMoveActionTest {
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
 		path.add(agent.getPosition());
 		path.add(new GridPosition(2, 0));
-		MoveAction move = new MoveAction(agent, path);
+		MoveAction move = new MoveAction(agent, path, 1);
 		try {
 			move.perform();
 		} catch (IllegalActionException e) {
@@ -57,7 +57,7 @@ public class BattleMoveActionTest {
 		path2.add(new GridPosition(1, 0));
 		path2.add(new GridPosition(0, 0));
 		path2.add(new GridPosition(0, 1));
-		MoveAction move2 = new MoveAction(agent, path2);
+		MoveAction move2 = new MoveAction(agent, path2, 1);
 		try {
 			move2.perform();
 		} catch (IllegalActionException e) {
@@ -93,7 +93,7 @@ public class BattleMoveActionTest {
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
 		path.add(agent.getPosition());
 		path.add(new GridPosition(1, 1));
-		MoveAction move = new MoveAction(agent, path);
+		MoveAction move = new MoveAction(agent, path, 1);
 		try {
 			move.perform();
 			fail("Expected IllegalMoveException was not thrown");
@@ -129,7 +129,7 @@ public class BattleMoveActionTest {
 		path.add(agent.getPosition());
 		path.add(new GridPosition(1, 1));
 		path.add(new GridPosition(0, 1));
-		MoveAction move = new MoveAction(agent, path);
+		MoveAction move = new MoveAction(agent, path, 1);
 		try {
 			move.perform();
 			fail("Expected IllegalMoveException was not thrown");
