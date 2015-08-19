@@ -23,6 +23,7 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.CoverType;
 import com.pipai.wf.battle.map.EnvironmentObject;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
@@ -33,6 +34,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
+	private static final Color MID_DASH_COLOR = new Color(0.8f, 0.8f, 0, 0.5f);
 	private static final Color DASH_COLOR = new Color(1f, 0.8f, 0, 0.5f);
 	private static final Color TARGET_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color TARGETABLE_COLOR = new Color(1f, 0.8f, 0, 0.5f);
@@ -49,7 +51,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 	
 	protected BattleGUI gui;
 	protected BattleMap map;
-	protected List<GridPosition> moveTiles, dashTiles, targetTiles, targetableTiles;
+	protected List<GridPosition> moveTiles, midDashTiles, dashTiles, targetTiles, targetableTiles;
 	
 	private Environment environment;
 	private Model boxModel, terrainModel;
@@ -120,6 +122,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		batch.getModelBatch().end();
 		this.drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawMovableTiles(batch.getShapeRenderer());
+		this.drawMidDashTiles(batch.getShapeRenderer());
 		this.drawDashTiles(batch.getShapeRenderer());
 		this.drawTargetableTiles(batch.getShapeRenderer());
 		this.drawTargetTiles(batch.getShapeRenderer());
@@ -130,13 +133,41 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 	
 	public void clearShadedTiles() {
 		this.moveTiles = null;
+		this.midDashTiles = null;
 		this.dashTiles = null;
 		this.targetTiles = null;
 		this.targetableTiles = null;
 	}
 	
+	public void setMovingTiles(MapGraph mapgraph) {
+		clearShadedTiles();
+		int ap = mapgraph.getAP();
+		int apmax = mapgraph.getAPMax();
+		if (ap == 1) {
+			setDashTiles(mapgraph.getMovableCellPositions(1));
+			return;
+		}
+		if (apmax == 2) {
+			setMovableTiles(mapgraph.getMovableCellPositions(1));
+			setDashTiles(mapgraph.getMovableCellPositions(2));
+		} else if (apmax == 3) {
+			if (ap == 2) {
+				setMidDashTiles(mapgraph.getMovableCellPositions(1));
+				setDashTiles(mapgraph.getMovableCellPositions(2));
+			} else {
+				setMovableTiles(mapgraph.getMovableCellPositions(1));
+				setMidDashTiles(mapgraph.getMovableCellPositions(2));
+				setDashTiles(mapgraph.getMovableCellPositions(3));
+			}
+		}
+	}
+	
 	public void setMovableTiles(List<GridPosition> moveTiles) {
 		this.moveTiles = moveTiles;
+	}
+	
+	public void setMidDashTiles(List<GridPosition> midDashTiles) {
+		this.midDashTiles = midDashTiles;
 	}
 	
 	public void setDashTiles(List<GridPosition> dashTiles) {
@@ -182,6 +213,14 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		if (this.moveTiles != null) {
 			for (GridPosition pos : this.moveTiles) {
 				this.shadeSquare(batch, pos, MOVE_COLOR);
+			}
+		}
+	}
+	
+	private void drawMidDashTiles(ShapeRenderer batch) {
+		if (this.midDashTiles != null) {
+			for (GridPosition pos : this.midDashTiles) {
+				this.shadeSquare(batch, pos, MID_DASH_COLOR);
 			}
 		}
 	}

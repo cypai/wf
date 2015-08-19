@@ -17,6 +17,7 @@ public class MapGraph {
 	private float[] moveBounds;
 	private ArrayList<ArrayList<GridPosition>> reachableLists;
 	private boolean DEBUG;
+	private int ap, apmax;
 	
 	private class Edge {
 		private Node destination;
@@ -95,6 +96,8 @@ public class MapGraph {
 	
 	public MapGraph(BattleMap map, GridPosition start, int mobility, int ap, int apMax, boolean debug) {
 		DEBUG = debug;
+		this.ap = ap;
+		this.apmax = apMax;
 		this.reachableLists = new ArrayList<ArrayList<GridPosition>>();
 		if (ap == 0) { return; }
 		for (int i = 0; i < ap; i++) {
@@ -230,6 +233,14 @@ public class MapGraph {
 	
 	public int apRequiredToMoveTo(GridPosition destination) {
 		return this.getNode(destination).getAPNeeded();
+	}
+	
+	public int getAP() {
+		return ap;
+	}
+	
+	public int getAPMax() {
+		return apmax;
 	}
 	
 }

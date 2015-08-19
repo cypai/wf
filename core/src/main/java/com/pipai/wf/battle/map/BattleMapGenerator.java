@@ -9,6 +9,17 @@ import com.pipai.wf.util.UtilFunctions;
 
 public class BattleMapGenerator {
 	
+	private static ArrayList<GridPosition> partyRelativeStartingPositions = new ArrayList<GridPosition>();
+	
+	static {
+		partyRelativeStartingPositions.add(new GridPosition(-1, 1));
+		partyRelativeStartingPositions.add(new GridPosition(1, 1));
+		partyRelativeStartingPositions.add(new GridPosition(-1, 0));
+		partyRelativeStartingPositions.add(new GridPosition(1, 0));
+		partyRelativeStartingPositions.add(new GridPosition(-1, -1));
+		partyRelativeStartingPositions.add(new GridPosition(1, -1));
+	}
+	
 	public static BattleMap generateRandomTestMap(List<AgentState> party) {
 		int width = UtilFunctions.randInt(30, 40);
 		int height = UtilFunctions.randInt(30, 40);
@@ -41,8 +52,10 @@ public class BattleMapGenerator {
 	
 	private static void generatePartyPod(BattleMap map, List<AgentState> party) {
 		GridPosition center = randPos(new GridPosition(1, 1), new GridPosition(map.getCols() - 1, 4));
-        map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, new GridPosition(center.x - 1, center.y), party.get(0)));
-        map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, new GridPosition(center.x + 1, center.y), party.get(1)));
+		for (int i = 0; i < partyRelativeStartingPositions.size() && i < party.size(); i++) {
+			GridPosition relativePos = partyRelativeStartingPositions.get(i);
+			map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, new GridPosition(center.x + relativePos.x, center.y + relativePos.y), party.get(i)));
+		}
 	}
 	
 	private static void generateEnemyIfEmpty(BattleMap map, GridPosition pos) {

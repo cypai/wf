@@ -180,8 +180,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.weaponIndicator.updateToAgent(agent);
 			this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 			this.updatePaths();
-			this.terrainRenderer.setMovableTiles(this.selectedMapGraph.getMovableCellPositions(1));
-			this.terrainRenderer.setDashTiles(this.selectedMapGraph.getMovableCellPositions(2));
+			this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
 		}
 	}
 	
@@ -468,9 +467,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	
 	public void switchToMoveMode() {
 		this.mode = Mode.NONE;
-		this.terrainRenderer.clearShadedTiles();
-		this.terrainRenderer.setMovableTiles(this.selectedMapGraph.getMovableCellPositions(1));
-		this.terrainRenderer.setDashTiles(this.selectedMapGraph.getMovableCellPositions(2));
+		this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
 		this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 	}
 	
