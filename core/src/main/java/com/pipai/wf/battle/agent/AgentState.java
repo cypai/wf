@@ -75,4 +75,9 @@ public class AgentState {
 		s += "State: " + state + "\n";
 		return s;
 	}
+	
+	public AgentState statsOnlyCopy() {
+		return statsOnlyState(maxHP, maxMP, maxAP, mobility, aim, defense);
+	}
+	
 }

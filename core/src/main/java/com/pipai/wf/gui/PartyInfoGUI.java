@@ -14,6 +14,7 @@ import com.pipai.wf.battle.map.BattleMapGenerator;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
+import com.pipai.wf.unit.race.Race;
 
 public class PartyInfoGUI extends GUI {
 
@@ -29,8 +30,12 @@ public class PartyInfoGUI extends GUI {
 		renderablesCreateBuffer = new ArrayList<Renderable>();
 		renderablesDelBuffer = new ArrayList<Renderable>();
 		party = new ArrayList<AgentState>();
-		party.add(AgentState.statsOnlyState(3, 5, 2, 13, 65, 0));
-		party.add(AgentState.statsOnlyState(3, 5, 2, 13, 65, 0));
+		party.add(Race.FAIRY.getBaseStats());	// Tidus
+		party.add(Race.HUMAN.getBaseStats());	// Sienna
+		party.add(Race.FAIRY.getBaseStats());	// Sapphire
+		party.add(Race.CAT.getBaseStats());	// Mira
+		party.add(Race.HUMAN.getBaseStats());	// Roland
+		party.add(Race.FOX.getBaseStats());	// Nolan
 		this.createInstance(new PartyInfoList(this, party, 4, this.getScreenHeight() - 4, this.getScreenWidth()/2, this.getScreenHeight()/2, Color.CYAN));
 	}
 	
