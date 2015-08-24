@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 
 public class BattleProperties {
 	
@@ -16,7 +17,8 @@ public class BattleProperties {
 	
 	public BattleProperties() {
     	try {
-			battleConfig.load(Gdx.files.local("battle.properties").reader());
+    		FileHandle configFile = Gdx.files.local("config/battle.properties");
+			battleConfig.load(configFile.reader());
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}

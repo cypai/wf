@@ -18,11 +18,18 @@ public class GdxMockedTest {
 	@BeforeClass
 	public static void mockGdxFiles() {
 		Gdx.files = mock(Files.class);
-		when(Gdx.files.local(anyString())).thenAnswer(new Answer<FileHandle>() {
+		when(Gdx.files.internal(anyString())).thenAnswer(new Answer<FileHandle>() {
 			@Override
 			public FileHandle answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();
 				return new FileHandle("assets/" + (String)args[0]);
+			}
+		});
+		when(Gdx.files.local(anyString())).thenAnswer(new Answer<FileHandle>() {
+			@Override
+			public FileHandle answer(InvocationOnMock invocation) throws Throwable {
+				Object[] args = invocation.getArguments();
+				return new FileHandle((String)args[0]);
 			}
 		});
 	}
