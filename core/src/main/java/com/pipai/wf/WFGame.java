@@ -5,12 +5,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.pipai.wf.config.BattleProperties;
-import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.gui.PartyInfoGUI;
 
 public class WFGame extends Game {
-
+	
 	public SpriteBatch sprBatch;
     public ShapeRenderer shapeBatch;
     public ModelBatch modelBatch;
@@ -18,7 +16,6 @@ public class WFGame extends Game {
     
     @Override
     public void create() {
-    	WFConfig.battle = new BattleProperties();
     	this.sprBatch = new SpriteBatch();
     	this.shapeBatch = new ShapeRenderer();
     	this.modelBatch = new ModelBatch();

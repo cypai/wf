@@ -159,7 +159,7 @@ public class Agent implements BattleEventLoggable {
 	public boolean canSee(Agent other) {
 		for (GridPosition peekSquare : this.getPeekingSquares()) {
 			for (GridPosition otherPeekSquare : other.getPeekingSquares()) {
-				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < WFConfig.battle.sightRange()) { 
+				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < WFConfig.battleProps().sightRange()) { 
 					if (this.map.lineOfSight(peekSquare, otherPeekSquare)) {
 						return true;
 					}

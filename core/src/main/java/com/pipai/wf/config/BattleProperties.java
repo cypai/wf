@@ -11,7 +11,7 @@ public class BattleProperties {
 	
 	public BattleProperties() {
     	try {
-			battleConfig.load(Gdx.files.internal("battle.properties").reader());
+			battleConfig.load(Gdx.files.local("battle.properties").reader());
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}

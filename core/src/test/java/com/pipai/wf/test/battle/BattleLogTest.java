@@ -1,12 +1,9 @@
-package com.pipai.wf.test;
+package com.pipai.wf.test.battle;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.stub;
 
 import java.util.LinkedList;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.pipai.wf.battle.BattleController;
@@ -27,18 +24,11 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.spell.FireballSpell;
-import com.pipai.wf.config.BattleProperties;
-import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.exception.BadStateStringException;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.test.WfConfiguredTest;
 
-public class BattleLogTest {
-	
-	@BeforeClass
-	public static void battleConfigMocking() {
-		WFConfig.battle = mock(BattleProperties.class);
-		stub(WFConfig.battle.sightRange()).toReturn(17);
-	}
+public class BattleLogTest extends WfConfiguredTest {
 	
 	private class MockGUIObserver implements BattleObserver {
 		
