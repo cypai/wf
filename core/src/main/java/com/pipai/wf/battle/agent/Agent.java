@@ -22,6 +22,7 @@ import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.util.UtilFunctions;
 
 public class Agent implements BattleEventLoggable {
@@ -39,6 +40,7 @@ public class Agent implements BattleEventLoggable {
 	protected GridPosition position;
 	protected BattleLog log;
 	protected Attack overwatchAttack;
+	protected ArrayList<Ability> abilities;
 	
 	public Agent(BattleMap map, AgentState state) {
 		this.map = map;
@@ -193,6 +195,12 @@ public class Agent implements BattleEventLoggable {
 			return list;
 		} else {
 			return this.enemiesInRange();
+		}
+	}
+	
+	public void procEndTurnAbilities() {
+		for (Ability a : abilities) {
+			a.onEndTurn(this);
 		}
 	}
 	

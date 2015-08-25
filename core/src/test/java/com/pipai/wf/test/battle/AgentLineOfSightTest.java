@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapString;
@@ -37,8 +37,8 @@ public class AgentLineOfSightTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(0, 3);
 		GridPosition enemyPos = new GridPosition(1, 0);
-		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.canSee(enemy));
@@ -65,8 +65,8 @@ public class AgentLineOfSightTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(3, 3);
-		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.canSee(enemy));
@@ -93,8 +93,8 @@ public class AgentLineOfSightTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(3, 3);
-		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.canSee(enemy));
@@ -122,8 +122,8 @@ public class AgentLineOfSightTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(3, 3);
-		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player.canSee(enemy));
@@ -151,8 +151,8 @@ public class AgentLineOfSightTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(1, 0);
 		GridPosition enemyPos = new GridPosition(2, 3);
-		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player.canSee(enemy));
@@ -180,8 +180,8 @@ public class AgentLineOfSightTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(0, 1);
 		GridPosition enemyPos = new GridPosition(3, 2);
-		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player.canSee(enemy));
@@ -193,8 +193,8 @@ public class AgentLineOfSightTest extends WfConfiguredTest {
 		BattleMap map = new BattleMap(1, WFConfig.battleProps().sightRange() + 1);
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(WFConfig.battleProps().sightRange() - 1, 0);
-		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.canSee(enemy));
@@ -206,8 +206,8 @@ public class AgentLineOfSightTest extends WfConfiguredTest {
 		BattleMap map = new BattleMap(1, WFConfig.battleProps().sightRange() + 1);
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(WFConfig.battleProps().sightRange(), 0);
-		map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, playerPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentState.battleAgentFromStats(Team.ENEMY, enemyPos, AgentState.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player.canSee(enemy));

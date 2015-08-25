@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapString;
@@ -27,7 +27,7 @@ public class PeekingSquaresTest {
 		 */
 		BattleMap map = new BattleMap(3, 3);
 		GridPosition playerPos = new GridPosition(1, 1);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -52,7 +52,7 @@ public class PeekingSquaresTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 1);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -81,7 +81,7 @@ public class PeekingSquaresTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 1);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -107,7 +107,7 @@ public class PeekingSquaresTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 1);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -134,7 +134,7 @@ public class PeekingSquaresTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 1);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -162,7 +162,7 @@ public class PeekingSquaresTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 1);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -189,7 +189,7 @@ public class PeekingSquaresTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(2, 1);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -215,9 +215,9 @@ public class PeekingSquaresTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 1);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		GridPosition enemyPos = new GridPosition(0, 2);
-        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));

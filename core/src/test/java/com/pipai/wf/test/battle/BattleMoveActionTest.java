@@ -9,7 +9,7 @@ import org.junit.Test;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
@@ -37,7 +37,7 @@ public class BattleMoveActionTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent agent = map.getAgentAtPos(playerPos);
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
@@ -87,7 +87,7 @@ public class BattleMoveActionTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent agent = map.getAgentAtPos(playerPos);
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
@@ -122,7 +122,7 @@ public class BattleMoveActionTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent agent = map.getAgentAtPos(playerPos);
 		assertFalse(agent == null);
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();

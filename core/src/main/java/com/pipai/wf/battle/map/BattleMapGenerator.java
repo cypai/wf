@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.util.UtilFunctions;
 
 public class BattleMapGenerator {
@@ -54,13 +55,13 @@ public class BattleMapGenerator {
 		GridPosition center = randPos(new GridPosition(1, 1), new GridPosition(map.getCols() - 1, 4));
 		for (int i = 0; i < partyRelativeStartingPositions.size() && i < party.size(); i++) {
 			GridPosition relativePos = partyRelativeStartingPositions.get(i);
-			map.addAgent(AgentState.battleAgentFromStats(Team.PLAYER, new GridPosition(center.x + relativePos.x, center.y + relativePos.y), party.get(i)));
+			map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, new GridPosition(center.x + relativePos.x, center.y + relativePos.y), party.get(i)));
 		}
 	}
 	
 	private static void generateEnemyIfEmpty(BattleMap map, GridPosition pos) {
 		if (map.getCell(pos).isEmpty()) {
-			map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, pos, 3, 5, 2, 5, 65, 0));
+			map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, pos, 3, 5, 2, 5, 65, 0));
 		}
 	}
 	

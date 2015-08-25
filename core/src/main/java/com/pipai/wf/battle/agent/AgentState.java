@@ -1,8 +1,13 @@
 package com.pipai.wf.battle.agent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.unit.ability.Ability;
+import com.pipai.wf.unit.ability.AbilityFactory;
 
 public class AgentState {
 	
@@ -13,39 +18,16 @@ public class AgentState {
 	public int mobility, aim, defense;
 	public GridPosition position;
 	public State state;
+	public ArrayList<Ability> abilities;
 	
-	public static AgentState statsOnlyState(int hp, int mp, int ap, int mobility, int aim, int defense) {
-		AgentState a = new AgentState();
-		a.maxHP = hp;
-		a.hp = hp;
-		a.maxMP = mp;
-		a.mp = mp;
-		a.maxAP = ap;
-		a.ap = ap;
-		a.mobility = mobility;
-		a.aim = aim;
-		a.defense = defense;
-		return a;
+	public AgentState() {
+		abilities = new ArrayList<Ability>();
 	}
 	
-	public static AgentState newBattleAgentState(Team team, GridPosition position, int hp, int mp, int ap, int mobility, int aim, int defense) {
-		AgentState a = AgentState.statsOnlyState(hp, mp, ap, mobility, aim, defense);
-		a.team = team;
-		a.state = State.NEUTRAL;
-		a.position = position;
-		return a;
-	}
-	
-	public static AgentState battleAgentFromStats(Team team, GridPosition position, AgentState stats) {
-		AgentState a = AgentState.statsOnlyState(stats.maxHP, stats.maxMP, stats.maxAP, stats.mobility, stats.aim, stats.defense);
-		a.team = team;
-		a.state = State.NEUTRAL;
-		a.position = position;
-		return a;
-	}
-	
-	private AgentState() {
-		
+	public void addAbilities(List<Ability> abilityList) {
+		for (Ability a : abilityList) {
+			abilities.add(AbilityFactory.clone(a));
+		}
 	}
 	
 	/*
@@ -77,7 +59,7 @@ public class AgentState {
 	}
 	
 	public AgentState statsOnlyCopy() {
-		return statsOnlyState(maxHP, maxMP, maxAP, mobility, aim, defense);
+		return AgentStateFactory.statsOnlyState(maxHP, maxMP, maxAP, mobility, aim, defense);
 	}
 	
 }

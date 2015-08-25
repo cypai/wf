@@ -17,7 +17,7 @@ import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
@@ -44,7 +44,7 @@ public class BattleLogTest extends WfConfiguredTest {
 	public void testMoveLog() {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -78,7 +78,7 @@ public class BattleLogTest extends WfConfiguredTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -117,8 +117,8 @@ public class BattleLogTest extends WfConfiguredTest {
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
-        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -143,8 +143,8 @@ public class BattleLogTest extends WfConfiguredTest {
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
-        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -190,7 +190,7 @@ public class BattleLogTest extends WfConfiguredTest {
 	public void testReloadLog() {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -210,7 +210,7 @@ public class BattleLogTest extends WfConfiguredTest {
 	public void testReadyFireballLog() {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -233,8 +233,8 @@ public class BattleLogTest extends WfConfiguredTest {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(AgentState.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
-        map.addAgent(AgentState.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+        map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
