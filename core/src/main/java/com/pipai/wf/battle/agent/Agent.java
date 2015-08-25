@@ -80,6 +80,10 @@ public class Agent implements BattleEventLoggable {
 		int pierceDmg = this.armor.takeDamage(amt);
 		this.setHP(this.getHP() - pierceDmg);
 	}
+	public void heal(int amt) {
+		int added = this.hp + amt;
+		this.setHP((added > this.maxHP) ? this.maxHP : added);
+	}
 	public int getMaxHP() { return this.maxHP; }
 	public int getMP() { return this.mp; }
 	public void setMP(int mp) { this.mp = mp; }
