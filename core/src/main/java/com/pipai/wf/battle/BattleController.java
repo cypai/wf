@@ -69,6 +69,11 @@ public class BattleController {
 			}
 			notifyObservers(BattleEvent.startTurnEvent(Team.ENEMY));
 		} else {
+			// Round ended
+			for (Agent a : this.map.getAgents()) {
+				a.procRoundEndAbilities();
+			}
+			// Start Player turn
 			this.currentTeam = Team.PLAYER;
 			for (Agent a : this.playerList) {
 				a.postTurnReset();

@@ -10,6 +10,7 @@ public abstract class Ability {
 	
 	public Ability(AbilityType t, int level) {
 		type = t;
+		this.level = level;
 	}
 	
 	public abstract String name();
@@ -19,6 +20,8 @@ public abstract class Ability {
 	public void onCast(Agent caster, Spell spell) {}
 	
 	public void onEndTurn(Agent a) {}
+	
+	public void onRoundEnd(Agent a) {}
 	
 	public Spell grantSpell() {
 		return null;

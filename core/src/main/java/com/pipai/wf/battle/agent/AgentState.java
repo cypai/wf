@@ -30,6 +30,14 @@ public class AgentState {
 		}
 	}
 	
+	public ArrayList<Ability> getAbilityListCopy() {
+		ArrayList<Ability> copy = new ArrayList<Ability>();
+		for (Ability a : abilities) {
+			copy.add(AbilityFactory.clone(a));
+		}
+		return copy;
+	}
+	
 	/*
 	 * MapString version
 	 */

@@ -60,6 +60,7 @@ public class Agent implements BattleEventLoggable {
 		weapons.add(new SpellWeapon());
 		weaponIndex = 0;
 		armor = new LeatherArmor();
+		abilities = state.getAbilityListCopy();
 	}
 	
 	public Team getTeam() { return this.team; }
@@ -83,8 +84,10 @@ public class Agent implements BattleEventLoggable {
 		this.setHP(this.getHP() - pierceDmg);
 	}
 	public void heal(int amt) {
-		int added = this.hp + amt;
-		this.setHP((added > this.maxHP) ? this.maxHP : added);
+		this.hp += amt;
+		if (this.hp > this.maxHP) {
+			this.hp = this.maxHP;
+		}
 	}
 	public int getMaxHP() { return this.maxHP; }
 	public int getMP() { return this.mp; }
@@ -198,9 +201,9 @@ public class Agent implements BattleEventLoggable {
 		}
 	}
 	
-	public void procEndTurnAbilities() {
+	public void procRoundEndAbilities() {
 		for (Ability a : abilities) {
-			a.onEndTurn(this);
+			a.onRoundEnd(this);
 		}
 	}
 	

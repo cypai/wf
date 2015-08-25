@@ -19,7 +19,7 @@ public class RegenerationAbility extends Ability {
 	}
 	
 	@Override
-	public void onEndTurn(Agent a) {
+	public void onRoundEnd(Agent a) {
 		a.heal(super.getLevel());
 	}
 	
