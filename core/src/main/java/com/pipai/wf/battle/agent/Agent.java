@@ -203,7 +203,7 @@ public class Agent implements BattleEventLoggable {
 	
 	public void procRoundEndAbilities() {
 		for (Ability a : abilities) {
-			a.onRoundEnd(this);
+			a.notifyRoundEnd(this);
 		}
 	}
 	

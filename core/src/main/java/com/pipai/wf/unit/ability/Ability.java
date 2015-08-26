@@ -5,6 +5,7 @@ import com.pipai.wf.battle.spell.Spell;
 
 public abstract class Ability {
 	
+	private int cooldown;
 	private int level;
 	private AbilityType type;
 	
@@ -17,11 +18,20 @@ public abstract class Ability {
 	
 	public abstract String description();
 	
-	public void onCast(Agent caster, Spell spell) {}
+	public void startCooldown() {}
 	
-	public void onEndTurn(Agent a) {}
+	public int getCooldownTimer() {
+		return 0;
+	}
 	
-	public void onRoundEnd(Agent a) {}
+	public final void notifyRoundEnd(Agent a) {
+		if (cooldown > 0) {
+			cooldown -= 1;
+		}
+		onRoundEnd(a);
+	}
+	
+	protected void onRoundEnd(Agent a) {}
 	
 	public Spell grantSpell() {
 		return null;
