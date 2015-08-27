@@ -16,6 +16,11 @@ public class AbilityList implements Iterable<Ability> {
 		spellMap = new HashMap<Class<? extends Spell>, Integer>();
 	}
 	
+	public boolean hasSpell(Spell spell) {
+		Class<? extends Spell> spellClass = spell.getClass();
+		return hasSpell(spellClass);
+	}
+	
 	public boolean hasSpell(Class<? extends Spell> spellClass) {
 		if (spellMap.containsKey(spellClass) && spellMap.get(spellClass) > 0) {
 			return true;

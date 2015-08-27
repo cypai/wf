@@ -303,6 +303,9 @@ public class Agent implements BattleEventLoggable {
 	}
 	
 	public void readySpell(Spell spell) throws IllegalActionException {
+		if (!this.abilities.hasSpell(spell)) {
+			throw new IllegalActionException("Does not have the ability to cast " + spell.name());
+		}
 		if (this.mp < spell.requiredMP()) {
 			throw new IllegalActionException("Not enough mp to cast " + spell.name());
 		}

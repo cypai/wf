@@ -17,6 +17,7 @@ import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
@@ -27,6 +28,7 @@ import com.pipai.wf.battle.spell.FireballSpell;
 import com.pipai.wf.exception.BadStateStringException;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.test.WfConfiguredTest;
+import com.pipai.wf.unit.ability.FireballAbility;
 
 public class BattleLogTest extends WfConfiguredTest {
 	
@@ -210,7 +212,9 @@ public class BattleLogTest extends WfConfiguredTest {
 	public void testReadyFireballLog() {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.abilities.add(new FireballAbility());
+        map.addAgent(playerState);
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -233,7 +237,9 @@ public class BattleLogTest extends WfConfiguredTest {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.abilities.add(new FireballAbility());
+        map.addAgent(playerState);
         map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
