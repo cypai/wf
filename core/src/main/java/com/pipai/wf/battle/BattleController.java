@@ -84,6 +84,7 @@ public class BattleController {
 	
 	public void performAction(Action a) throws IllegalActionException {
 		log.clear();
+		a.register(log);
 		a.perform();
 		this.notifyObservers(log.getLastEvent());
 	}

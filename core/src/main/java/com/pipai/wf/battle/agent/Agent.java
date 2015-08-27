@@ -265,19 +265,6 @@ public class Agent implements BattleEventLoggable {
 		this.setAP(this.ap - useAP);
 	}
 	
-	public void rangeAttack(Agent other, Attack attack) {
-		this.getCurrentWeapon().expendAmmo(attack.requiredAmmo());
-		float distance = 0;
-		boolean hit = attack.rollToHit(this, other, distance);
-		int dmg = 0;
-		if (hit) {
-			dmg = attack.damageRoll(this, other, distance);
-			other.takeDamage(dmg);
-		}
-		this.setAP(0);
-		logEvent(BattleEvent.attackEvent(this, other, attack, hit, dmg));
-	}
-	
 	public void overwatch(Attack attack) {
 		this.overwatchAttack = attack;
 		this.state = State.OVERWATCH;
