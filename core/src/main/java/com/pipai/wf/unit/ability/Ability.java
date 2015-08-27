@@ -20,6 +20,10 @@ public abstract class Ability {
 	
 	public void startCooldown() {}
 	
+	public boolean isOnCooldown() {
+		return cooldown > 0;
+	}
+	
 	public int getCooldownTimer() {
 		return 0;
 	}
