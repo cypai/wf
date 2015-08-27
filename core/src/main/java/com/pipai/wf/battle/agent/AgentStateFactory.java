@@ -3,6 +3,9 @@ package com.pipai.wf.battle.agent;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.weapon.Pistol;
+import com.pipai.wf.battle.weapon.SpellWeapon;
+import com.pipai.wf.unit.schema.UnitSchema;
 
 public class AgentStateFactory {
 	
@@ -20,11 +23,21 @@ public class AgentStateFactory {
 		return a;
 	}
 	
+	public static AgentState createFromSchema(UnitSchema schema) {
+		AgentState as = AgentStateFactory.statsOnlyState(schema.hp(), schema.mp(), schema.ap(), schema.mobility(), schema.aim(), schema.defense());
+		as.abilities = schema.abilities();
+		as.armor = schema.armor();
+		as.weapons = schema.weapons();
+		return as;
+	}
+	
 	public static AgentState newBattleAgentState(Team team, GridPosition position, int hp, int mp, int ap, int mobility, int aim, int defense) {
 		AgentState a = AgentStateFactory.statsOnlyState(hp, mp, ap, mobility, aim, defense);
 		a.team = team;
 		a.state = State.NEUTRAL;
 		a.position = position;
+		a.weapons.add(new Pistol());
+		a.weapons.add(new SpellWeapon());
 		return a;
 	}
 	
@@ -33,6 +46,8 @@ public class AgentStateFactory {
 		a.team = team;
 		a.state = State.NEUTRAL;
 		a.position = position;
+		a.weapons.add(new Pistol());
+		a.weapons.add(new SpellWeapon());
 		return a;
 	}
 }

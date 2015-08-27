@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.armor.Armor;
-import com.pipai.wf.battle.armor.LeatherArmor;
 import com.pipai.wf.battle.attack.Attack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
@@ -17,7 +16,6 @@ import com.pipai.wf.battle.map.Direction;
 import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.spell.Spell;
-import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.config.WFConfig;
@@ -55,11 +53,9 @@ public class Agent implements BattleEventLoggable {
 		mobility = state.mobility;
 		aim = 60;
 		defense = 0;
-		weapons = new ArrayList<Weapon>();
-		weapons.add(new Pistol());
-		weapons.add(new SpellWeapon());
+		weapons = state.weapons;
 		weaponIndex = 0;
-		armor = new LeatherArmor();
+		armor = state.armor;
 		abilities = state.getAbilityListCopy();
 	}
 	

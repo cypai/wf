@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pipai.wf.battle.agent.Agent.State;
+import com.pipai.wf.battle.armor.Armor;
+import com.pipai.wf.battle.armor.NoArmor;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityFactory;
 
@@ -19,9 +22,13 @@ public class AgentState {
 	public GridPosition position;
 	public State state;
 	public ArrayList<Ability> abilities;
+	public ArrayList<Weapon> weapons;
+	public Armor armor;
 	
 	public AgentState() {
 		abilities = new ArrayList<Ability>();
+		weapons = new ArrayList<Weapon>();
+		armor = new NoArmor();
 	}
 	
 	public void addAbilities(List<Ability> abilityList) {
