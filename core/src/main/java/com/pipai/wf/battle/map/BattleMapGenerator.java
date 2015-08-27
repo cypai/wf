@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.unit.schema.UnitSchema;
 import com.pipai.wf.util.UtilFunctions;
 
 public class BattleMapGenerator {
@@ -21,7 +21,7 @@ public class BattleMapGenerator {
 		partyRelativeStartingPositions.add(new GridPosition(1, -1));
 	}
 	
-	public static BattleMap generateRandomTestMap(List<AgentState> party) {
+	public static BattleMap generateRandomTestMap(List<UnitSchema> party) {
 		int width = UtilFunctions.randInt(30, 40);
 		int height = UtilFunctions.randInt(30, 40);
         BattleMap map = new BattleMap(width, height);
@@ -51,11 +51,11 @@ public class BattleMapGenerator {
 		}
 	}
 	
-	private static void generatePartyPod(BattleMap map, List<AgentState> party) {
+	private static void generatePartyPod(BattleMap map, List<UnitSchema> party) {
 		GridPosition center = randPos(new GridPosition(1, 1), new GridPosition(map.getCols() - 1, 4));
 		for (int i = 0; i < partyRelativeStartingPositions.size() && i < party.size(); i++) {
 			GridPosition relativePos = partyRelativeStartingPositions.get(i);
-			map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, new GridPosition(center.x + relativePos.x, center.y + relativePos.y), party.get(i)));
+			map.addAgent(AgentStateFactory.battleAgentFromSchema(Team.PLAYER, new GridPosition(center.x + relativePos.x, center.y + relativePos.y), party.get(i)));
 		}
 	}
 	

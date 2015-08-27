@@ -9,17 +9,22 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapGenerator;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
 import com.pipai.wf.unit.race.Race;
+import com.pipai.wf.unit.schema.RaceTemplateSchema;
+import com.pipai.wf.unit.schema.TidusSchema;
+import com.pipai.wf.unit.schema.UnitSchema;
 
 public class PartyInfoGUI extends GUI {
 
 	private OrthographicCamera camera;
 	private ArrayList<Renderable> renderables, renderablesCreateBuffer, renderablesDelBuffer; 
+	private ArrayList<UnitSchema> partySchema = new ArrayList<UnitSchema>();
 	private ArrayList<AgentState> party = new ArrayList<AgentState>();
 
 	public PartyInfoGUI(WFGame game) {
@@ -29,13 +34,17 @@ public class PartyInfoGUI extends GUI {
 		renderables = new ArrayList<Renderable>();
 		renderablesCreateBuffer = new ArrayList<Renderable>();
 		renderablesDelBuffer = new ArrayList<Renderable>();
+		partySchema = new ArrayList<UnitSchema>();
+		partySchema.add(new TidusSchema());	// Tidus
+		partySchema.add(new RaceTemplateSchema(Race.HUMAN));	// Sienna
+		partySchema.add(new RaceTemplateSchema(Race.FAIRY));	// Sapphire
+		partySchema.add(new RaceTemplateSchema(Race.CAT));	// Mira
+		partySchema.add(new RaceTemplateSchema(Race.HUMAN));	// Roland
+		partySchema.add(new RaceTemplateSchema(Race.FOX));	// Nolan
 		party = new ArrayList<AgentState>();
-		party.add(Race.FAIRY.getBaseStats());	// Tidus
-		party.add(Race.HUMAN.getBaseStats());	// Sienna
-		party.add(Race.FAIRY.getBaseStats());	// Sapphire
-		party.add(Race.CAT.getBaseStats());	// Mira
-		party.add(Race.HUMAN.getBaseStats());	// Roland
-		party.add(Race.FOX.getBaseStats());	// Nolan
+		for (UnitSchema us : partySchema) {
+			party.add(AgentStateFactory.createFromSchema(us));
+		}
 		this.createInstance(new PartyInfoList(this, party, 4, this.getScreenHeight() - 4, this.getScreenWidth()/2, this.getScreenHeight()/2, Color.CYAN));
 	}
 	
@@ -70,7 +79,7 @@ public class PartyInfoGUI extends GUI {
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-		BattleMap map = BattleMapGenerator.generateRandomTestMap(party);
+		BattleMap map = BattleMapGenerator.generateRandomTestMap(partySchema);
 		this.game.setScreen(new BattleGUI(this.game, map));
 		this.dispose();
 	}

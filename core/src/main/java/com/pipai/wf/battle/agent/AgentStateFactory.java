@@ -31,6 +31,14 @@ public class AgentStateFactory {
 		return as;
 	}
 	
+	public static AgentState battleAgentFromSchema(Team team, GridPosition position, UnitSchema schema) {
+		AgentState a = AgentStateFactory.createFromSchema(schema);
+		a.team = team;
+		a.state = State.NEUTRAL;
+		a.position = position;
+		return a;
+	}
+	
 	public static AgentState newBattleAgentState(Team team, GridPosition position, int hp, int mp, int ap, int mobility, int aim, int defense) {
 		AgentState a = AgentStateFactory.statsOnlyState(hp, mp, ap, mobility, aim, defense);
 		a.team = team;
