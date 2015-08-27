@@ -19,7 +19,7 @@ public class MoveAction extends Action {
 	
 	public void perform() throws IllegalActionException {
 		super.perform();
-		this.performerAgent.move(this.path, this.useAP);
+		getPerformer().move(this.path, this.useAP);
 	}
 
 	public int getAPRequired() { return 1; }

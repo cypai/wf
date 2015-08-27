@@ -11,7 +11,7 @@ public class ReloadAction extends Action {
 	
 	public void perform() throws IllegalActionException {
 		super.perform();
-		this.performerAgent.reload();
+		getPerformer().reload();
 	}
 
 	public int getAPRequired() { return 1; }

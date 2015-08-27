@@ -15,7 +15,7 @@ public class OverwatchAction extends Action {
 	
 	public void perform() throws IllegalActionException {
 		super.perform();
-		this.performerAgent.overwatch(atk);
+		getPerformer().overwatch(atk);
 	}
 
 	public int getAPRequired() { return 1; }

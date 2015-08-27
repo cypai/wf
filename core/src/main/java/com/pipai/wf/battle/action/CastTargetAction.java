@@ -14,7 +14,7 @@ public class CastTargetAction extends Action {
 	
 	public void perform() throws IllegalActionException {
 		super.perform();
-		this.performerAgent.castReadiedSpell(this.target);
+		getPerformer().castReadiedSpell(this.target);
 	}
 
 	public int getAPRequired() { return 1; }

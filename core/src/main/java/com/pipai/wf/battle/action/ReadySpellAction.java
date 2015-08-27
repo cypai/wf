@@ -15,7 +15,7 @@ public class ReadySpellAction extends Action {
 	
 	public void perform() throws IllegalActionException {
 		super.perform();
-		this.performerAgent.readySpell(spell);
+		getPerformer().readySpell(spell);
 	}
 
 	public int getAPRequired() { return 1; }

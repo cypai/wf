@@ -11,7 +11,7 @@ public class SwitchWeaponAction extends Action {
 	
 	public void perform() throws IllegalActionException {
 		super.perform();
-		this.performerAgent.switchWeapon();
+		getPerformer().switchWeapon();
 	}
 
 	public int getAPRequired() { return 0; }

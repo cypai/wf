@@ -17,7 +17,7 @@ public class RangeAttackAction extends Action {
 	
 	public void perform() throws IllegalActionException {
 		super.perform();
-		this.performerAgent.rangeAttack(this.target, this.attack);
+		getPerformer().rangeAttack(this.target, this.attack);
 	}
 
 	public int getAPRequired() { return 1; }

@@ -60,6 +60,7 @@ public class Agent implements BattleEventLoggable {
 		abilities = state.abilities.clone();
 	}
 	
+	public BattleMap getBattleMap() { return this.map; }
 	public Team getTeam() { return this.team; }
 	public void setTeam(Team team) { this.team = team; }
 	public int getAP() { return this.ap; }
