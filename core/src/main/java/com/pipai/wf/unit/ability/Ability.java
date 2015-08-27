@@ -37,11 +37,11 @@ public abstract class Ability {
 		return null;
 	}
 	
-	public AbilityType type() {
+	public final AbilityType type() {
 		return type;
 	}
 	
-	public int getLevel() {
+	public final int getLevel() {
 		return level;
 	}
 	
