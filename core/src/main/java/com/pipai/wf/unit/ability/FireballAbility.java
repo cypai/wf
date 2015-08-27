@@ -5,8 +5,8 @@ import com.pipai.wf.battle.spell.Spell;
 
 public class FireballAbility extends SpellAbility {
 
-	public FireballAbility(int level) {
-		super(AbilityType.FIREBALL, level);
+	public FireballAbility() {
+		super(AbilityType.FIREBALL, 0);
 	}
 
 	@Override
