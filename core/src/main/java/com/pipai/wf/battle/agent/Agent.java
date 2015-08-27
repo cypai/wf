@@ -103,9 +103,8 @@ public class Agent implements BattleEventLoggable {
 	public ArrayList<Spell> getSpellList() {
 		ArrayList<Spell> l = new ArrayList<Spell>();
 		for (Ability a : abilities) {
-			Spell spell = a.grantsSpell();
-			if (spell != null) {
-				l.add(spell);
+			if (a.grantsSpell()) {
+				l.add(a.getGrantedSpell());
 			}
 		}
 		return l;
