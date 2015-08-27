@@ -10,6 +10,8 @@ public class AbilityFactory {
 		switch (t) {
 		case REGENERATION:
 			return new RegenerationAbility(1);
+		case FIREBALL:
+			return new FireballAbility();
 		default:
 			return null;
 		}

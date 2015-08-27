@@ -14,12 +14,13 @@ import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.spell.FireballSpell;
+import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityFactory;
 import com.pipai.wf.unit.ability.AbilityType;
 
-public class RegenerationTest {
-
+public class AbilityTest {
 	
 	@Test
 	public void testHealOnTurnEnd() {
@@ -41,4 +42,25 @@ public class RegenerationTest {
 		// Regeneration should proc at end of enemy turn
 		assertTrue(agent.getHP() == agent.getMaxHP());
 	}
+	
+	@Test
+	public void testSpellGranted() {
+		BattleMap map = new BattleMap(1, 1);
+		GridPosition playerPos = new GridPosition(0, 0);
+		AgentState as = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		ArrayList<Ability> abilities = new ArrayList<Ability>();
+		abilities.add(AbilityFactory.createAbility(AbilityType.FIREBALL));
+		as.addAbilities(abilities);
+        map.addAgent(as);
+		Agent agent = map.getAgentAtPos(playerPos);
+		boolean hasFireball = false;
+		for (Spell s : agent.getSpellList()) {
+			if (s instanceof FireballSpell) {
+				hasFireball = true;
+				break;
+			}
+		}
+		assertTrue(hasFireball);
+	}
+	
 }
