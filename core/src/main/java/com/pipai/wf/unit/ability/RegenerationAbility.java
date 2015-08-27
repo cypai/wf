@@ -2,7 +2,7 @@ package com.pipai.wf.unit.ability;
 
 import com.pipai.wf.battle.agent.Agent;
 
-public class RegenerationAbility extends Ability {
+public class RegenerationAbility extends PassiveAbility {
 	
 	public RegenerationAbility(int level) {
 		super(AbilityType.REGENERATION, level);
