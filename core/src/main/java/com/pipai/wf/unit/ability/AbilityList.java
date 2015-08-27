@@ -37,6 +37,14 @@ public class AbilityList implements Iterable<Ability> {
 		spellMap = new HashMap<Class<? extends Spell>, Integer>();
 	}
 	
+	public AbilityList clone() {
+		AbilityList alist = new AbilityList();
+		for (Ability a : list) {
+			alist.add(AbilityFactory.clone(a));
+		}
+		return alist;
+	}
+	
 	public boolean contains(Ability arg0) {
 		return list.contains(arg0);
 	}

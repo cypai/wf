@@ -21,6 +21,7 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.unit.ability.Ability;
+import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.util.UtilFunctions;
 
 public class Agent implements BattleEventLoggable {
@@ -38,7 +39,7 @@ public class Agent implements BattleEventLoggable {
 	protected GridPosition position;
 	protected BattleLog log;
 	protected Attack overwatchAttack;
-	protected ArrayList<Ability> abilities;
+	protected AbilityList abilities;
 	
 	public Agent(BattleMap map, AgentState state) {
 		this.map = map;
@@ -56,7 +57,7 @@ public class Agent implements BattleEventLoggable {
 		weapons = state.weapons;
 		weaponIndex = 0;
 		armor = state.armor;
-		abilities = state.getAbilityListCopy();
+		abilities = state.abilities.clone();
 	}
 	
 	public Team getTeam() { return this.team; }

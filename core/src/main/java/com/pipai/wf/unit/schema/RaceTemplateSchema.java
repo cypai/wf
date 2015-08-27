@@ -7,7 +7,7 @@ import com.pipai.wf.battle.armor.LeatherArmor;
 import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
-import com.pipai.wf.unit.ability.Ability;
+import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.race.Race;
 
 public class RaceTemplateSchema implements UnitSchema {
@@ -49,8 +49,8 @@ public class RaceTemplateSchema implements UnitSchema {
 	}
 	
 	@Override
-	public ArrayList<Ability> abilities() {
-		ArrayList<Ability> l = new ArrayList<Ability>();
+	public AbilityList abilities() {
+		AbilityList l = new AbilityList();
 		return l;
 	}
 	

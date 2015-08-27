@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.weapon.Weapon;
-import com.pipai.wf.unit.ability.Ability;
+import com.pipai.wf.unit.ability.AbilityList;
 
 public interface UnitSchema {
 	
@@ -15,7 +15,7 @@ public interface UnitSchema {
 	public int mobility();
 	public int defense();
 	
-	public ArrayList<Ability> abilities();
+	public AbilityList abilities();
 	
 	public Armor armor();
 	public ArrayList<Weapon> weapons();

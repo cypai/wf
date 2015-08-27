@@ -11,6 +11,7 @@ import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityFactory;
+import com.pipai.wf.unit.ability.AbilityList;
 
 public class AgentState {
 	
@@ -21,12 +22,12 @@ public class AgentState {
 	public int mobility, aim, defense;
 	public GridPosition position;
 	public State state;
-	public ArrayList<Ability> abilities;
+	public AbilityList abilities;
 	public ArrayList<Weapon> weapons;
 	public Armor armor;
 	
 	public AgentState() {
-		abilities = new ArrayList<Ability>();
+		abilities = new AbilityList();
 		weapons = new ArrayList<Weapon>();
 		armor = new NoArmor();
 	}
@@ -35,14 +36,6 @@ public class AgentState {
 		for (Ability a : abilityList) {
 			abilities.add(AbilityFactory.clone(a));
 		}
-	}
-	
-	public ArrayList<Ability> getAbilityListCopy() {
-		ArrayList<Ability> copy = new ArrayList<Ability>();
-		for (Ability a : abilities) {
-			copy.add(AbilityFactory.clone(a));
-		}
-		return copy;
 	}
 	
 	/*
