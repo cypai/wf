@@ -10,7 +10,7 @@ public class FireballAbility extends SpellAbility {
 	}
 
 	@Override
-	public Spell grantSpell() {
+	public Spell grantsSpell() {
 		return new FireballSpell();
 	}
 	

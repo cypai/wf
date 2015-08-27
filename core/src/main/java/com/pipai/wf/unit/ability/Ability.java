@@ -33,7 +33,7 @@ public abstract class Ability {
 	
 	protected void onRoundEnd(Agent a) {}
 	
-	public Spell grantSpell() {
+	public Spell grantsSpell() {
 		return null;
 	}
 	

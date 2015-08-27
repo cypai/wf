@@ -104,6 +104,17 @@ public class Agent implements BattleEventLoggable {
 	@SuppressWarnings("unchecked")
 	public ArrayList<Weapon> getWeapons() { return (ArrayList<Weapon>) this.weapons.clone(); }
 	
+	public ArrayList<Spell> getSpellList() {
+		ArrayList<Spell> l = new ArrayList<Spell>();
+		for (Ability a : abilities) {
+			Spell spell = a.grantsSpell();
+			if (spell != null) {
+				l.add(spell);
+			}
+		}
+		return l;
+	}
+	
 	public GridPosition getPosition() { return this.position; }
 	
 	private void setPosition(GridPosition pos) {

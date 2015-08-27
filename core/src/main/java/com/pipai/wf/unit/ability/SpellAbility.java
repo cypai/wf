@@ -10,15 +10,15 @@ public abstract class SpellAbility extends Ability {
 	
 	@Override
 	public final String name() {
-		return grantSpell().name();
+		return grantsSpell().name();
 	}
 
 	@Override
 	public final String description() {
-		return grantSpell().description();
+		return grantsSpell().description();
 	}
 	
 	@Override
-	public abstract Spell grantSpell();
+	public abstract Spell grantsSpell();
 	
 }
