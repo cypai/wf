@@ -8,12 +8,13 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
-import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.action.ReloadAction;
+import com.pipai.wf.battle.action.TargetedActionable;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.UtilFunctions;
 
@@ -80,16 +81,18 @@ public class RandomAI extends AI {
 		case 0:
 			return new OverwatchAction(a, new SimpleRangedAttack());
 		case 1:
-			if (a.getCurrentWeapon().currentAmmo() == 0) {
+			Weapon weapon = a.getCurrentWeapon();
+			if (weapon.currentAmmo() == 0) {
 				return new ReloadAction(a);
 			} else {
 				Agent target = playerAgents.get(UtilFunctions.rng.nextInt(playerAgents.size()));
 				if (a.canSee(target)) {
-					return new RangeAttackAction(a, target, new SimpleRangedAttack());
-				} else {
-					return new OverwatchAction(a, new SimpleRangedAttack());
+					if (weapon instanceof TargetedActionable) {
+						return ((TargetedActionable) weapon).getAction(a, target);
+					}
 				}
 			}
+			return new OverwatchAction(a, new SimpleRangedAttack());
 		case 2:
 			MapGraph graph = new MapGraph(this.map, a.getPosition(), a.getMobility(), 1, 2);
 			ArrayList<GridPosition> potentialTiles = graph.getMovableCellPositions(1);

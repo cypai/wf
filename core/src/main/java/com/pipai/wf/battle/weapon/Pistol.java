@@ -1,6 +1,11 @@
 package com.pipai.wf.battle.weapon;
 
-public class Pistol extends Weapon {
+import com.pipai.wf.battle.action.RangedWeaponAttackAction;
+import com.pipai.wf.battle.action.TargetedAction;
+import com.pipai.wf.battle.action.TargetedActionable;
+import com.pipai.wf.battle.agent.Agent;
+
+public class Pistol extends Weapon implements TargetedActionable {
 
 	@Override
 	public int flatAimModifier() {
@@ -13,12 +18,12 @@ public class Pistol extends Weapon {
 	}
 
 	@Override
-	public float flatCritProbabilityModifier() {
+	public int flatCritProbabilityModifier() {
 		return -10;
 	}
 
 	@Override
-	public float situationalCritProbabilityModifier(float distance, boolean flanked) {
+	public int situationalCritProbabilityModifier(float distance, boolean flanked) {
 		return 0;
 	}
 
@@ -45,6 +50,11 @@ public class Pistol extends Weapon {
 	@Override
 	public String name() {
 		return "Pistol";
+	}
+
+	@Override
+	public TargetedAction getAction(Agent performer, Agent target) {
+		return new RangedWeaponAttackAction(performer, target);
 	}
 
 }

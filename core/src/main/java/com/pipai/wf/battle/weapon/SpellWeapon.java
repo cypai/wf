@@ -41,12 +41,12 @@ public class SpellWeapon extends Weapon {
 	}
 
 	@Override
-	public float flatCritProbabilityModifier() {
+	public int flatCritProbabilityModifier() {
 		return 0;
 	}
 
 	@Override
-	public float situationalCritProbabilityModifier(float distance, boolean flanked) {
+	public int situationalCritProbabilityModifier(float distance, boolean flanked) {
 		return 0;
 	}
 

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.attack.Attack;
+import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.spell.Spell;
 
@@ -23,8 +24,7 @@ public class BattleEvent {
 	private LinkedList<GridPosition> path;
 	private Attack atk;
 	private Spell spell;
-	private boolean hit;
-	private int damageRoll;
+	private DamageResult dmgResult;
 	private LinkedList<BattleEvent> chainedEvents;
 	private GridPosition targetTile;
 	
@@ -34,11 +34,10 @@ public class BattleEvent {
 		return event;
 	}
 	
-	public static BattleEvent attackEvent(Agent performer, Agent target, Attack atk, boolean hit, int damage) {
+	public static BattleEvent attackEvent(Agent performer, Agent target, Attack atk, DamageResult dmgResult) {
 		BattleEvent event = new BattleEvent(Type.ATTACK, performer, target);
 		event.atk = atk;
-		event.hit = hit;
-		event.damageRoll = damage;
+		event.dmgResult = dmgResult;
 		return event;
 	}
 	
@@ -48,11 +47,10 @@ public class BattleEvent {
 		return event;
 	}
 	
-	public static BattleEvent castTargetEvent(Agent performer, Agent target, Spell spell, boolean hit, int damage) {
+	public static BattleEvent castTargetEvent(Agent performer, Agent target, Spell spell, DamageResult dmgResult) {
 		BattleEvent event = new BattleEvent(Type.CAST_TARGET, performer, target);
 		event.spell = spell;
-		event.hit = hit;
-		event.damageRoll = damage;
+		event.dmgResult = dmgResult;
 		return event;
 	}
 	
@@ -62,11 +60,10 @@ public class BattleEvent {
 		return event;
 	}
 	
-	public static BattleEvent overwatchActivationEvent(Agent performer, Agent target, Attack atk, GridPosition targetTile, boolean hit, int damage) {
+	public static BattleEvent overwatchActivationEvent(Agent performer, Agent target, Attack atk, GridPosition targetTile, DamageResult dmgResult) {
 		BattleEvent event = new BattleEvent(Type.OVERWATCH_ACTIVATION, performer, target);
 		event.atk = atk;
-		event.hit = hit;
-		event.damageRoll = damage;
+		event.dmgResult = dmgResult;
 		event.targetTile = targetTile;
 		return event;
 	}
@@ -101,8 +98,11 @@ public class BattleEvent {
 	public LinkedList<GridPosition> getPath() { return this.path; }
 	public Attack getAttack() { return this.atk; }
 	public Spell getSpell() { return this.spell; }
-	public boolean isHit() { return this.hit; }
-	public int getDamageRoll() { return this.damageRoll; }
+	public DamageResult getDamageResult() { return this.dmgResult; }
+	public boolean isHit() { return this.dmgResult.hit; }
+	public boolean isCrit() { return this.dmgResult.crit; }
+	public int getDamage() { return this.dmgResult.damage; }
+	public int getDamageReduction() { return this.dmgResult.damageReduction; }
 	public GridPosition getTargetTile() { return this.targetTile; }
 	
 	public int getNumChainEvents() { return this.chainedEvents.size(); }
@@ -122,8 +122,10 @@ public class BattleEvent {
 		switch (type) {
 		case ATTACK:
 			returnStr += atk.getClass() + " ";
-			returnStr += String.valueOf(hit) + " ";
-			returnStr += damageRoll;
+			returnStr += String.valueOf(dmgResult.hit) + " ";
+			returnStr += String.valueOf(dmgResult.crit) + " ";
+			returnStr += String.valueOf(dmgResult.damage)+ " ";
+			returnStr += String.valueOf(dmgResult.damageReduction);
 			break;
 		default:
 			break;

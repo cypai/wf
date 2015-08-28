@@ -17,13 +17,12 @@ import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.action.Action;
-import com.pipai.wf.battle.action.CastTargetAction;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
-import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
+import com.pipai.wf.battle.action.TargetedActionable;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.ai.AI;
@@ -329,12 +328,14 @@ public class BattleGUI extends GUI implements BattleObserver {
 			Action atk = null;
 			if (this.targetModeAttack != null) {
 				if (selectedAgent.getAgent().getCurrentWeapon().currentAmmo() > 0) {
-					atk = new RangeAttackAction(selectedAgent.getAgent(), target.getAgent(), this.targetModeAttack);
+					Weapon weapon = selectedAgent.getAgent().getCurrentWeapon();
+					atk = ((TargetedActionable) weapon).getAction(selectedAgent.getAgent(), target.getAgent());
 				} else {
 					return;
 				}
 			} else {
-				atk = new CastTargetAction(selectedAgent.getAgent(), target.getAgent());
+				SpellWeapon weapon = (SpellWeapon) selectedAgent.getAgent().getCurrentWeapon();
+				atk = weapon.getSpell().getAction(selectedAgent.getAgent(), target.getAgent());
 			}
 			try {
 				this.battle.performAction(atk);

@@ -9,10 +9,8 @@ import org.junit.Test;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.action.CastTargetAction;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
-import com.pipai.wf.battle.action.RangeAttackAction;
 import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
@@ -114,7 +112,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		}
 	}
 	
-	@Test
+	/*@Test
 	public void testAttackLog() {
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
@@ -138,7 +136,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getPerformer() == player);
 		assertTrue(ev.getTarget() == enemy);
 		assertTrue(ev.getChainEvents().size() == 0);
-	}
+	}*/
 	
 	@Test
 	public void testOverwatchLog() {
@@ -231,7 +229,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getSpell() instanceof FireballSpell);
 		assertTrue(ev.getChainEvents().size() == 0);
 	}
-	
+	/*
 	@Test
 	public void testCastFireballLog() {
 		BattleMap map = new BattleMap(3, 4);
@@ -259,6 +257,6 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getTarget() == target);
 		assertTrue(ev.getSpell() instanceof FireballSpell);
 		assertTrue(ev.getChainEvents().size() == 0);
-	}
+	}*/
 
 }

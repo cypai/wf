@@ -1,5 +1,7 @@
 package com.pipai.wf.battle.spell;
 
+import com.pipai.wf.battle.action.GeneralTargetedSpellAction;
+import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.util.UtilFunctions;
 
@@ -56,6 +58,11 @@ public class FireballSpell extends Spell {
 	@Override
 	public boolean canOverwatch() {
 		return true;
+	}
+
+	@Override
+	public TargetedAction getAction(Agent performer, Agent target) {
+		return new GeneralTargetedSpellAction(performer, target, this);
 	}
 
 }

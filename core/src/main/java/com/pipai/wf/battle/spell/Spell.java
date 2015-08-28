@@ -1,9 +1,10 @@
 package com.pipai.wf.battle.spell;
 
+import com.pipai.wf.battle.action.TargetedActionable;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.util.UtilFunctions;
 
-public abstract class Spell {
+public abstract class Spell implements TargetedActionable {
 	
 	public abstract int requiredMP();
 	

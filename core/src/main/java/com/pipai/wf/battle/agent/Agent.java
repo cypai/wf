@@ -1,9 +1,11 @@
 package com.pipai.wf.battle.agent;
 
 import java.util.ArrayList;
+
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.attack.Attack;
+import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
 import com.pipai.wf.battle.log.BattleLog;
@@ -117,6 +119,10 @@ public class Agent implements BattleEventLoggable {
 		this.map.getCell(this.position).removeAgent();
 		this.map.getCell(pos).setAgent(this);
 		this.position = pos;
+	}
+	
+	public float getDistanceFrom(Agent other) {
+		return (float) getPosition().distance(other.getPosition());
 	}
 	
 	public ArrayList<GridPosition> getPeekingSquares() {
@@ -245,7 +251,7 @@ public class Agent implements BattleEventLoggable {
 			dmg = overwatchAttack.damageRoll(this, other, distance);
 			other.takeDamage(dmg);
 		}
-		activationLogEvent.addChainEvent(BattleEvent.overwatchActivationEvent(this, other, overwatchAttack, activatedTile, hit, dmg));
+		activationLogEvent.addChainEvent(BattleEvent.overwatchActivationEvent(this, other, overwatchAttack, activatedTile, new DamageResult(hit, false, dmg, 0)));
 	}
 	
 	public void reload() {
@@ -268,28 +274,6 @@ public class Agent implements BattleEventLoggable {
 		this.setAP(this.ap - 1);
 		((SpellWeapon)this.getCurrentWeapon()).ready(spell);
 		logEvent(BattleEvent.readySpellEvent(this, spell));
-	}
-	
-	public void castReadiedSpell(Agent other) throws IllegalActionException {
-		if (!(this.getCurrentWeapon() instanceof SpellWeapon)) {
-			throw new IllegalActionException("Currently selected weapon is not a spell weapon");
-		}
-		Spell readiedSpell = ((SpellWeapon)this.getCurrentWeapon()).getSpell();
-		if (readiedSpell == null) {
-			throw new IllegalActionException("No readied spell available");
-		}
-		if (!readiedSpell.canTargetAgent()) {
-			throw new IllegalActionException("Cannot target with " + readiedSpell.name());
-		}
-		float distance = 0;
-		boolean hit = readiedSpell.rollToHit(this, other, distance);
-		int dmg = 0;
-		if (hit) {
-			dmg = readiedSpell.damageRoll();
-			other.takeDamage(dmg);
-		}
-		this.setAP(0);
-		logEvent(BattleEvent.castTargetEvent(this, other, readiedSpell, hit, dmg));
 	}
 	
 	@Override
