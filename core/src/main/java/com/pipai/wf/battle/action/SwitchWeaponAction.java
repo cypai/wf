@@ -3,17 +3,17 @@ package com.pipai.wf.battle.action;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class SwitchWeaponAction extends Action {
+public class SwitchWeaponAction extends AlterStateAction {
 	
 	public SwitchWeaponAction(Agent performerAgent) {
 		super(performerAgent);
 	}
 	
-	public void perform() throws IllegalActionException {
-		super.perform();
+	public int getAPRequired() { return 0; }
+
+	@Override
+	protected void performImpl() throws IllegalActionException {
 		getPerformer().switchWeapon();
 	}
-
-	public int getAPRequired() { return 0; }
 	
 }

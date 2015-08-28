@@ -3,17 +3,17 @@ package com.pipai.wf.battle.action;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class ReloadAction extends Action {
+public class ReloadAction extends AlterStateAction {
 	
 	public ReloadAction(Agent performerAgent) {
 		super(performerAgent);
 	}
 	
-	public void perform() throws IllegalActionException {
-		super.perform();
+	public int getAPRequired() { return 1; }
+
+	@Override
+	protected void performImpl() throws IllegalActionException {
 		getPerformer().reload();
 	}
-
-	public int getAPRequired() { return 1; }
 	
 }

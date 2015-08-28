@@ -46,7 +46,9 @@ public abstract class Action implements BattleEventLoggable {
     }
     
     protected final void log(BattleEvent ev) {
-        log.logEvent(ev);
+    	if (log != null) {
+    		log.logEvent(ev);
+    	}
     }
 	
 }

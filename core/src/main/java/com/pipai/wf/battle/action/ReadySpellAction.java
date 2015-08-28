@@ -4,7 +4,7 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class ReadySpellAction extends Action {
+public class ReadySpellAction extends AlterStateAction {
 	
 	private Spell spell;
 	
@@ -13,11 +13,11 @@ public class ReadySpellAction extends Action {
 		this.spell = spell;
 	}
 	
-	public void perform() throws IllegalActionException {
-		super.perform();
+	public int getAPRequired() { return 1; }
+
+	@Override
+	protected void performImpl() throws IllegalActionException {
 		getPerformer().readySpell(spell);
 	}
-
-	public int getAPRequired() { return 1; }
 	
 }

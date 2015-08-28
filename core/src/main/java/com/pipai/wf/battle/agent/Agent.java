@@ -65,6 +65,7 @@ public class Agent implements BattleEventLoggable {
 	public void setTeam(Team team) { this.team = team; }
 	public int getAP() { return this.ap; }
 	public void setAP(int ap) { this.ap = ap; }
+	public void useAP(int ap) { this.ap -= ap; if (this.ap < 0) this.ap = 0; }
 	public int getMaxAP() { return this.maxAP; }
 	public int getHP() { return this.hp; }
 	public void setHP(int hp) {
@@ -114,7 +115,7 @@ public class Agent implements BattleEventLoggable {
 	
 	public GridPosition getPosition() { return this.position; }
 	
-	private void setPosition(GridPosition pos) {
+	public void setPosition(GridPosition pos) {
 		this.map.getCell(this.position).removeAgent();
 		this.map.getCell(pos).setAgent(this);
 		this.position = pos;

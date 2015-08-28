@@ -4,7 +4,7 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.attack.Attack;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class OverwatchAction extends Action {
+public class OverwatchAction extends AlterStateAction {
 	
 	private Attack atk;
 	
@@ -13,11 +13,11 @@ public class OverwatchAction extends Action {
 		atk = attack;
 	}
 	
-	public void perform() throws IllegalActionException {
-		super.perform();
+	public int getAPRequired() { return 1; }
+
+	@Override
+	protected void performImpl() throws IllegalActionException {
 		getPerformer().overwatch(atk);
 	}
-
-	public int getAPRequired() { return 1; }
 	
 }
