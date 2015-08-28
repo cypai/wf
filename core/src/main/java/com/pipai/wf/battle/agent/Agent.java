@@ -1,8 +1,6 @@
 package com.pipai.wf.battle.agent;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.attack.Attack;
@@ -229,41 +227,6 @@ public class Agent implements BattleEventLoggable {
 			weaponIndex = 0;
 		}
 		logEvent(BattleEvent.switchWeaponEvent(this));
-	}
-	
-	public void move(LinkedList<GridPosition> path, int useAP) throws IllegalActionException {
-		if (useAP > this.ap) {
-			throw new IllegalActionException("AP required for movement greater than current AP");
-		}
-		boolean isValid = true;
-		BattleEvent event = BattleEvent.moveEvent(this, path);
-		for (GridPosition pos : path) {
-			if (pos.equals(this.getPosition())) { continue; }
-			BattleMapCell cell = this.map.getCell(pos);
-			if (cell == null || !cell.isEmpty()) {
-				isValid = false;
-				break;
-			}
-		}
-		if (isValid) {
-			logEvent(event);
-		} else {
-			throw new IllegalActionException("Move path sequence is not valid");
-		}
-		for (GridPosition pos : path) {
-			this.setPosition(pos);
-			for (Agent a : this.enemiesInRange()) {
-				if (a.isOverwatching()) {
-					a.activateOverwatch(this, event, pos);
-					if (this.isKO()) {
-						return;
-					}
-				}
-			}
-		}
-		GridPosition dest = path.peekLast();
-		this.setPosition(dest);
-		this.setAP(this.ap - useAP);
 	}
 	
 	public void overwatch(Attack attack) {
