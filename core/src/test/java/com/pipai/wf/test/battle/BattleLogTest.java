@@ -167,7 +167,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
-		OverwatchAction ow = new OverwatchAction(player, WeaponActionFactory.defaultWeaponActionClass(player));
+		OverwatchAction ow = new OverwatchAction(player);
 		try {
 			battle.performAction(ow);
 		} catch (IllegalActionException e) {

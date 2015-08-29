@@ -17,7 +17,7 @@ public class ActionListGenerator {
 			for (Agent target : a.targetableEnemies()) {
 				list.add(WeaponActionFactory.defaultWeaponAction(a, target));
 			}
-			list.add(new OverwatchAction(a, WeaponActionFactory.defaultWeaponActionClass(a)));
+			list.add(new OverwatchAction(a));
 		}
 		return list;
 	}

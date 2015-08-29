@@ -6,14 +6,15 @@ import com.pipai.wf.battle.misc.OverwatchHelper;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class OverwatchAction extends AlterStateAction {
-	
+
 	private Class<? extends TargetedWithAccuracyAction> owAction;
-	
-	public OverwatchAction(Agent performerAgent, Class<? extends TargetedWithAccuracyAction> owAction) {
+
+	public OverwatchAction(Agent performerAgent) {
 		super(performerAgent);
-		this.owAction = owAction;
+		this.owAction = WeaponActionFactory.defaultWeaponActionClass(performerAgent);
 	}
-	
+
+	@Override
 	public int getAPRequired() { return 1; }
 
 	@Override
@@ -31,5 +32,5 @@ public class OverwatchAction extends AlterStateAction {
 	public String description() {
 		return "Attack the first enemy that moves in range";
 	}
-	
+
 }

@@ -574,7 +574,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case Keys.Y:
 			// Overwatch
-			action = new OverwatchAction(selectedAgent.getAgent(), WeaponActionFactory.defaultWeaponActionClass(selectedAgent.getAgent()));
+			action = new OverwatchAction(selectedAgent.getAgent());
 			break;
 		case Keys.K:
 			// Hunker

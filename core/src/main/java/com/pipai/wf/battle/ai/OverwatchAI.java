@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.OverwatchAction;
-import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.exception.IllegalActionException;
 
@@ -41,7 +40,7 @@ public class OverwatchAI extends AI {
 		}
 		Agent a = this.toAct.poll();
 		if (a.getAP() > 0) {
-			OverwatchAction ow = new OverwatchAction(a, WeaponActionFactory.defaultWeaponActionClass(a));
+			OverwatchAction ow = new OverwatchAction(a);
 			try {
 				this.battleController.performAction(ow);
 			} catch (IllegalActionException e) {
