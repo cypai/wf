@@ -45,7 +45,7 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyAction {
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
 			throw new IllegalActionException("Not enough ammo to fire " + w.name());
 		}
-		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w));
+		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
 		a.setAP(0);
 		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, result));
 	}
@@ -53,6 +53,34 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyAction {
 	@Override
 	public int getAPRequired() {
 		return 1;
+	}
+
+	@Override
+	public void performOnOverwatch(BattleEvent parent) throws IllegalActionException {
+		Agent a = getPerformer();
+		Agent target = getTarget();
+		Weapon w = a.getCurrentWeapon();
+		if (w.needsAmmunition() && w.currentAmmo() == 0) {
+			throw new IllegalActionException("Not enough ammo to fire " + w.name());
+		}
+		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 1);
+		a.setAP(0);
+		parent.addChainEvent(BattleEvent.overwatchActivationEvent(a, target, this, target.getPosition(), result));
+	}
+
+	@Override
+	public String name() {
+		return "Attack";
+	}
+
+	@Override
+	public String description() {
+		Weapon weapon = getPerformer().getCurrentWeapon();
+		if (weapon.needsAmmunition() && weapon.currentAmmo() <= 0) {
+			return "Not enough ammunition";
+		} else {
+			return "Attack with the selected ranged weapon";
+		}
 	}
 
 }

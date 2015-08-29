@@ -3,9 +3,8 @@ package com.pipai.wf.battle.agent;
 import java.util.ArrayList;
 
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.armor.Armor;
-import com.pipai.wf.battle.attack.Attack;
-import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
 import com.pipai.wf.battle.log.BattleLog;
@@ -15,6 +14,7 @@ import com.pipai.wf.battle.map.CoverType;
 import com.pipai.wf.battle.map.Direction;
 import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.misc.OverwatchContainer;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
@@ -25,9 +25,9 @@ import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.util.UtilFunctions;
 
 public class Agent implements BattleEventLoggable {
-	
+
 	public enum State {NEUTRAL, KO, OVERWATCH};
-	
+
 	protected Team team;
 	protected int maxHP, maxAP, maxMP, hp, ap, mp;
 	protected int mobility, aim, defense;
@@ -38,9 +38,9 @@ public class Agent implements BattleEventLoggable {
 	protected BattleMap map;
 	protected GridPosition position;
 	protected BattleLog log;
-	protected Attack overwatchAttack;
+	protected OverwatchContainer owContainer;
 	protected AbilityList abilities;
-	
+
 	public Agent(BattleMap map, AgentState state) {
 		this.map = map;
 		team = state.team;
@@ -58,14 +58,17 @@ public class Agent implements BattleEventLoggable {
 		weaponIndex = 0;
 		armor = state.armor;
 		abilities = state.abilities.clone();
+		owContainer = new OverwatchContainer();
 	}
-	
+
 	public BattleMap getBattleMap() { return this.map; }
 	public Team getTeam() { return this.team; }
 	public void setTeam(Team team) { this.team = team; }
 	public int getAP() { return this.ap; }
 	public void setAP(int ap) { this.ap = ap; }
-	public void useAP(int ap) { this.ap -= ap; if (this.ap < 0) this.ap = 0; }
+	public void useAP(int ap) { this.ap -= ap; if (this.ap < 0) {
+		this.ap = 0;
+	} }
 	public int getMaxAP() { return this.maxAP; }
 	public int getHP() { return this.hp; }
 	public void setHP(int hp) {
@@ -102,7 +105,7 @@ public class Agent implements BattleEventLoggable {
 
 	@SuppressWarnings("unchecked")
 	public ArrayList<Weapon> getWeapons() { return (ArrayList<Weapon>) this.weapons.clone(); }
-	
+
 	public ArrayList<Spell> getSpellList() {
 		ArrayList<Spell> l = new ArrayList<Spell>();
 		for (Ability a : abilities) {
@@ -112,19 +115,19 @@ public class Agent implements BattleEventLoggable {
 		}
 		return l;
 	}
-	
+
 	public GridPosition getPosition() { return this.position; }
-	
+
 	public void setPosition(GridPosition pos) {
 		this.map.getCell(this.position).removeAgent();
 		this.map.getCell(pos).setAgent(this);
 		this.position = pos;
 	}
-	
+
 	public float getDistanceFrom(Agent other) {
 		return (float) getPosition().distance(other.getPosition());
 	}
-	
+
 	public ArrayList<GridPosition> getPeekingSquares() {
 		ArrayList<GridPosition> l = new ArrayList<GridPosition>();
 		l.add(this.getPosition());
@@ -136,7 +139,7 @@ public class Agent implements BattleEventLoggable {
 				if (peekSquare != null) {
 					GridPosition pos = peekSquare.getPosition();
 					BattleMapCell peekCoverSquare = this.map.getCellInDirection(pos, coverDir);
-					
+
 					if (peekSquare.isEmpty() && !peekCoverSquare.hasTileSightBlocker() && !l.contains(pos)) {
 						l.add(peekSquare.getPosition());
 					}
@@ -145,15 +148,15 @@ public class Agent implements BattleEventLoggable {
 		}
 		return l;
 	}
-	
+
 	public CoverType getCoverType() {
 		return DirectionalCoverSystem.getCover(this.map, this.getPosition());
 	}
-	
+
 	public boolean isOpen() {
 		return DirectionalCoverSystem.isOpen(map, this.getPosition());
 	}
-	
+
 	public boolean isFlanked() {
 		for (Agent a : this.enemiesInRange()) {
 			if (this.isFlankedBy(a)) {
@@ -162,7 +165,7 @@ public class Agent implements BattleEventLoggable {
 		}
 		return false;
 	}
-	
+
 	public boolean isFlankedBy(Agent other) {
 		ArrayList<GridPosition> otherPosList = other.getPeekingSquares();
 		for (GridPosition otherPos : otherPosList) {
@@ -172,16 +175,16 @@ public class Agent implements BattleEventLoggable {
 		}
 		return false;
 	}
-	
+
 	public int getDefense(GridPosition attackerPos) {
 		int situationalDef = this.defense + DirectionalCoverSystem.getBestCoverAgainstAttack(map, this.getPosition(), attackerPos).getDefense();
 		return situationalDef;
 	}
-	
+
 	public boolean canSee(Agent other) {
 		for (GridPosition peekSquare : this.getPeekingSquares()) {
 			for (GridPosition otherPeekSquare : other.getPeekingSquares()) {
-				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < WFConfig.battleProps().sightRange()) { 
+				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < WFConfig.battleProps().sightRange()) {
 					if (this.map.lineOfSight(peekSquare, otherPeekSquare)) {
 						return true;
 					}
@@ -190,11 +193,11 @@ public class Agent implements BattleEventLoggable {
 		}
 		return false;
 	}
-	
+
 	public boolean inRange(Agent other) {
 		return other.canSee(this);
 	}
-	
+
 	public ArrayList<Agent> enemiesInRange() {
 		ArrayList<Agent> l = new ArrayList<Agent>();
 		for (Agent a : this.map.getAgents()) {
@@ -204,7 +207,7 @@ public class Agent implements BattleEventLoggable {
 		}
 		return l;
 	}
-	
+
 	public ArrayList<Agent> targetableEnemies() {
 		ArrayList<Agent> list = new ArrayList<Agent>();
 		if (this.getCurrentWeapon().currentAmmo() == 0) {
@@ -213,20 +216,20 @@ public class Agent implements BattleEventLoggable {
 			return this.enemiesInRange();
 		}
 	}
-	
+
 	public void procRoundEndAbilities() {
 		for (Ability a : abilities) {
 			a.notifyRoundEnd(this);
 		}
 	}
-	
+
 	public void postTurnReset() {
 		ap = maxAP;
 		if (!isKO()) {
 			state = State.NEUTRAL;
 		}
 	}
-	
+
 	public void switchWeapon() {
 		weaponIndex += 1;
 		if (weaponIndex == weapons.size()) {
@@ -234,32 +237,31 @@ public class Agent implements BattleEventLoggable {
 		}
 		logEvent(BattleEvent.switchWeaponEvent(this));
 	}
-	
-	public void overwatch(Attack attack) {
-		this.overwatchAttack = attack;
+
+	public void overwatch(Class<? extends TargetedWithAccuracyAction> attack) {
+		this.owContainer.prepareAction(attack);
 		this.state = State.OVERWATCH;
 		this.setAP(0);
-		logEvent(BattleEvent.overwatchEvent(this, attack));
 	}
-	
+
 	public void activateOverwatch(Agent other, BattleEvent activationLogEvent, GridPosition activatedTile) {
-		float distance = 0;
-		boolean hit = overwatchAttack.rollToHit(this, other, distance);
-		this.state = State.NEUTRAL;
-		int dmg = 0;
-		if (hit) {
-			dmg = overwatchAttack.damageRoll(this, other, distance);
-			other.takeDamage(dmg);
+		TargetedWithAccuracyAction action = this.owContainer.generateAction(this, other);
+		try {
+			other.setPosition(activatedTile);
+			action.performOnOverwatch(activationLogEvent);
+			this.owContainer.clear();
+			this.state = State.NEUTRAL;
+		} catch (IllegalActionException e) {
+			System.out.println(e.getMessage());
 		}
-		activationLogEvent.addChainEvent(BattleEvent.overwatchActivationEvent(this, other, overwatchAttack, activatedTile, new DamageResult(hit, false, dmg, 0)));
 	}
-	
+
 	public void reload() {
 		this.getCurrentWeapon().reload();
 		this.setAP(0);
 		logEvent(BattleEvent.reloadEvent(this));
 	}
-	
+
 	public void readySpell(Spell spell) throws IllegalActionException {
 		if (!this.abilities.hasSpell(spell)) {
 			throw new IllegalActionException("Does not have the ability to cast " + spell.name());
@@ -275,16 +277,16 @@ public class Agent implements BattleEventLoggable {
 		((SpellWeapon)this.getCurrentWeapon()).ready(spell);
 		logEvent(BattleEvent.readySpellEvent(this, spell));
 	}
-	
+
 	@Override
 	public void register(BattleLog log) {
 		this.log = log;
 	}
-	
+
 	private void logEvent(BattleEvent ev) {
 		if (log != null) {
 			log.logEvent(ev);
 		}
 	}
-	
+
 }

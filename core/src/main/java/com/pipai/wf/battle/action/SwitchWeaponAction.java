@@ -15,5 +15,15 @@ public class SwitchWeaponAction extends AlterStateAction {
 	protected void performImpl() throws IllegalActionException {
 		getPerformer().switchWeapon();
 	}
+
+	@Override
+	public String name() {
+		return "Switch Weapon";
+	}
+
+	@Override
+	public String description() {
+		return "Switch to a different weapon";
+	}
 	
 }

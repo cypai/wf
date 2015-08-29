@@ -23,19 +23,17 @@ import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.action.TargetedActionable;
+import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.ai.AI;
 import com.pipai.wf.battle.ai.AIMoveRunnable;
 import com.pipai.wf.battle.ai.RandomAI;
-import com.pipai.wf.battle.attack.Attack;
-import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.battle.spell.FireballSpell;
-import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
@@ -59,24 +57,24 @@ import com.pipai.wf.util.RayMapper;
  */
 
 public class BattleGUI extends GUI implements BattleObserver {
-	
+
 	public static enum Mode {
 		NONE(true),
 		TARGET_SELECT(true),
 		ANIMATION(false),
 		AI(false);
-		
+
 		private boolean allowInput;
-		
+
 		private Mode(boolean allowInput) {
 			this.allowInput = allowInput;
 		}
-		
+
 		public boolean allowsInput() {
 			return allowInput;
 		}
 	}
-    
+
 	private static final int AI_MOVE_WAIT_TIME = 60;
 
 	private AnchoredCamera camera;
@@ -89,7 +87,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private AgentGUIObject selectedAgent, targetAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
-	private ArrayList<LeftClickable3D> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer; 
+	private ArrayList<LeftClickable3D> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer;
 	private ArrayList<LeftClickable> overlayLeftClickables;
 	private ArrayList<RightClickable3D> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
 	private Mode mode;
@@ -99,18 +97,16 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private BattleTerrainRenderer terrainRenderer;
 	private ActionToolTip tooltip;
 	private WeaponIndicator weaponIndicator;
-	private Attack targetModeAttack;
-	private Spell targetModeSpell;
-	
+
 	public BattleGUI(WFGame game, BattleMap map) {
 		super(game);
 		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
 		camera = new AnchoredCamera(this.getScreenWidth(), this.getScreenHeight());
-        overlayCamera = new OrthographicCamera();
-        orthoCamera = new OrthographicCamera();
-        overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
-        orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
-        rayMapper = new RayMapper(camera.getCamera());
+		overlayCamera = new OrthographicCamera();
+		orthoCamera = new OrthographicCamera();
+		overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
+		orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
+		rayMapper = new RayMapper(camera.getCamera());
 		this.battle = new BattleController(map);
 		this.battle.registerObserver(this);
 		this.ai = new RandomAI(battle);
@@ -147,7 +143,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.generateOverlays();
 		this.setSelected(this.selectableAgentOrderedList.getFirst());
 	}
-	
+
 	private void generateOverlays() {
 		AttackButtonOverlay atkBtn = new AttackButtonOverlay(this);
 		this.overlayRenderables.add(atkBtn);
@@ -157,7 +153,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.overlayRenderables.add(this.tooltip);
 		this.overlayRenderables.add(this.weaponIndicator);
 	}
-	
+
 	private void beginAnimation() { this.mode = Mode.ANIMATION; }
 	public void endAnimation() {
 		if (aiTurn) {
@@ -168,11 +164,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.performPostInputChecks();
 		}
 	}
-	
+
 	public Mode getMode() { return this.mode; }
 	public RayMapper getRayMapper() { return this.rayMapper; }
 	public AnchoredCamera getCamera() { return this.camera; }
-	
+
 	public void setSelected(AgentGUIObject agent) {
 		if (agent.getAgent().getAP() > 0) {
 			this.selectedAgent = agent;
@@ -182,7 +178,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
 		}
 	}
-	
+
 	@Override
 	public void createInstance(GUIObject o) {
 		super.createInstance(o);
@@ -196,7 +192,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			rightClickablesCreateBuffer.add((RightClickable3D)o);
 		}
 	}
-	
+
 	@Override
 	public void deleteInstance(GUIObject o) {
 		super.deleteInstance(o);
@@ -210,7 +206,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			rightClickablesDelBuffer.add((RightClickable3D)o);
 		}
 	}
-	
+
 	private void cleanCreateBuffers() {
 		for (Renderable o : renderablesCreateBuffer) {
 			if (o.renderPriority() == -1) {
@@ -229,7 +225,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		leftClickablesCreateBuffer.clear();
 		rightClickablesCreateBuffer.clear();
 	}
-	
+
 	private void cleanDelBuffers() {
 		for (Renderable o : renderablesDelBuffer) {
 			if (!renderables.remove(o)) {
@@ -246,7 +242,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		leftClickablesDelBuffer.clear();
 		rightClickablesDelBuffer.clear();
 	}
-	
+
 	public void updatePaths() {
 		if (selectedAgent != null) {
 			Agent a = selectedAgent.getAgent();
@@ -254,7 +250,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.selectedMapGraph = graph;
 		}
 	}
-	
+
 	private LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
 		LinkedList<Vector2> vectorized = new LinkedList<Vector2>();
 		for (GridPosition p : path) {
@@ -268,13 +264,13 @@ public class BattleGUI extends GUI implements BattleObserver {
 		float y = camera.position().y - this.getScreenHeight()/2 + screenY;
 		return new Vector2(x, y);
 	}
-	
+
 	@Override
 	public void notifyBattleEvent(BattleEvent ev) {
 		this.animateEvent(ev);
 		this.aiMoveWait = 0;
 	}
-	
+
 	private void performPostInputChecks() {
 		if (this.battle.battleResult() != BattleController.Result.NONE) {
 			this.game.setScreen(new BattleResultsGUI(this.game));
@@ -296,7 +292,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		// All moves finished - start the AI
 		startAiTurn();
 	}
-	
+
 	private void startAiTurn() {
 		this.terrainRenderer.clearShadedTiles();
 		this.mode = Mode.AI;
@@ -305,7 +301,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.battle.endTurn();
 		this.ai.startTurn();
 	}
-	
+
 	private void runAiTurn() {
 		this.aiMoveWait += 1;
 		if (this.aiMoveWait == BattleGUI.AI_MOVE_WAIT_TIME) {
@@ -313,7 +309,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			t.run();
 		}
 	}
-	
+
 	private void populateSelectableAgentList() {
 		this.selectableAgentOrderedList.clear();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
@@ -322,20 +318,20 @@ public class BattleGUI extends GUI implements BattleObserver {
 			}
 		}
 	}
-	
+
 	public void performAttackAction(AgentGUIObject target) {
 		if (selectedAgent != null) {
 			Action atk = null;
-			if (this.targetModeAttack != null) {
-				if (selectedAgent.getAgent().getCurrentWeapon().currentAmmo() > 0) {
-					Weapon weapon = selectedAgent.getAgent().getCurrentWeapon();
+			Weapon weapon = selectedAgent.getAgent().getCurrentWeapon();
+			if (weapon instanceof SpellWeapon) {
+				SpellWeapon sw = (SpellWeapon) weapon;
+				atk = sw.getSpell().getAction(selectedAgent.getAgent(), target.getAgent());
+			} else {
+				if (weapon.currentAmmo() > 0) {
 					atk = ((TargetedActionable) weapon).getAction(selectedAgent.getAgent(), target.getAgent());
 				} else {
 					return;
 				}
-			} else {
-				SpellWeapon weapon = (SpellWeapon) selectedAgent.getAgent().getCurrentWeapon();
-				atk = weapon.getSpell().getAction(selectedAgent.getAgent(), target.getAgent());
 			}
 			try {
 				this.battle.performAction(atk);
@@ -346,7 +342,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.updatePaths();
 		this.switchToMoveMode();
 	}
-	
+
 	public void performMoveWithSelectedAgent(GridPosition destination) {
 		if (this.selectedAgent != null) {
 			if (this.selectedMapGraph.canMoveTo(destination)) {
@@ -362,7 +358,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			}
 		}
 	}
-	
+
+	@Override
 	public void onLeftClick(int screenX, int screenY) {
 		if (!this.mode.allowsInput()) {
 			return;
@@ -381,7 +378,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.performPostInputChecks();
 		}
 	}
-	
+
+	@Override
 	public void onRightClick(int screenX, int screenY) {
 		if (!this.mode.allowsInput()) {
 			return;
@@ -397,7 +395,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			}
 		}
 	}
-	
+
+	@Override
 	public void mouseScrolled(int amount) {
 		switch (amount) {
 		case 1:
@@ -408,7 +407,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		}
 	}
-	
+
 	public void animateEvent(BattleEvent event) {
 		AgentGUIObject a = null, t;
 		TemporaryText ttext;
@@ -466,45 +465,27 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		}
 	}
-	
+
 	public void switchToMoveMode() {
 		this.mode = Mode.NONE;
 		this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
 		this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 	}
-	
-	public void switchToTargetMode(Attack atk) {
+
+	public void switchToTargetMode() {
 		this.terrainRenderer.clearShadedTiles();
-		this.targetModeSpell = null;
-		this.targetModeAttack = atk;
 		this.targetAgentList = new LinkedList<AgentGUIObject>();
 		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
 			this.targetAgentList.add(this.agentMap.get(a));
 		}
 		this.mode = Mode.TARGET_SELECT;
 		if (this.targetAgentList.size() == 0) {
-			this.tooltip.setToGeneralDescription(atk.name(), "No enemies in range");
+			this.tooltip.setToGeneralDescription(WeaponActionFactory.defaultWeaponActionName(this.selectedAgent.getAgent()), "No enemies in range");
 			return;
 		}
 		this.switchTarget(this.targetAgentList.getFirst());
 	}
-	
-	public void switchToTargetMode(Spell spell) {
-		this.terrainRenderer.clearShadedTiles();
-		this.targetModeAttack = null;
-		this.targetModeSpell = spell;
-		this.targetAgentList = new LinkedList<AgentGUIObject>();
-		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
-			this.targetAgentList.add(this.agentMap.get(a));
-		}
-		this.mode = Mode.TARGET_SELECT;
-		if (this.targetAgentList.size() == 0) {
-			this.tooltip.setToGeneralDescription(spell.name(), "No enemies in range");
-			return;
-		}
-		this.switchTarget(this.targetAgentList.getFirst());
-	}
-	
+
 	public void switchTarget(AgentGUIObject target) {
 		if (this.mode == Mode.TARGET_SELECT) {
 			if (this.targetAgentList.contains(target)) {
@@ -516,37 +497,24 @@ public class BattleGUI extends GUI implements BattleObserver {
 				this.terrainRenderer.setTargetableTiles(targetableTiles);
 				this.terrainRenderer.setTargetTiles(targetTiles);
 				this.targetAgent = target;
-				Weapon weapon = this.selectedAgent.getAgent().getCurrentWeapon();
-				if (weapon.needsAmmunition() && weapon.currentAmmo() < this.targetModeAttack.requiredAmmo()) {
-					this.tooltip.setToGeneralDescription("Attack", "Not enough ammunition");
-				} else {
-					if (this.targetModeAttack != null) {
-						int acc = this.targetModeAttack.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-						int crit = this.targetModeAttack.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-						this.tooltip.setToAttackDescription(this.targetModeAttack, acc, crit);
-					} else if (this.targetModeSpell != null) {
-						int acc = this.targetModeSpell.getAccuracy(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-						int crit = this.targetModeSpell.getCritPercentage(this.selectedAgent.getAgent(), this.targetAgent.getAgent(), 0);
-						this.tooltip.setToTargetableSpellDescription(this.targetModeSpell, acc, crit);
-					}
-				}
+				this.tooltip.setToTargetedAccuracyActionDescription(WeaponActionFactory.defaultWeaponAction(this.selectedAgent.getAgent(), target.getAgent()));
 				this.moveCameraToPos((this.selectedAgent.x + target.x)/2, (this.selectedAgent.y + target.y)/2);
 			}
 		}
 	}
-	
+
 	public AgentGUIObject getTarget() {
 		return this.targetAgent;
 	}
-	
+
 	private void globalUpdate() {
 		updateCamera();
 	}
-	
+
 	private void moveCameraToPos(float x, float y) {
 		this.camera.moveTo(x, y);
 	}
-	
+
 	private void updateCamera() {
 		if (this.mode.allowsInput()) {
 			if (this.checkKey(Keys.A)) {
@@ -562,10 +530,10 @@ public class BattleGUI extends GUI implements BattleObserver {
 				this.camera.moveDown();
 			}
 		}
-        this.camera.update();
-        this.orthoCamera.update();
+		this.camera.update();
+		this.orthoCamera.update();
 	}
-	
+
 	@Override
 	public void onKeyDown(int keycode) {
 		if (keycode == Keys.ESCAPE) {
@@ -583,14 +551,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		switch (keycode) {
 		case Keys.NUM_1:
 			if (this.mode == Mode.NONE) {
-				if (selectedAgent.getAgent().getCurrentWeapon() instanceof SpellWeapon) {
-					Spell readiedSpell = ((SpellWeapon)selectedAgent.getAgent().getCurrentWeapon()).getSpell();
-					if (readiedSpell != null) {
-						this.switchToTargetMode(readiedSpell);
-					}
-				} else {
-					this.switchToTargetMode(new SimpleRangedAttack());
-				}
+				switchToTargetMode();
 			}
 			break;
 		case Keys.ENTER:
@@ -613,7 +574,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case Keys.Y:
 			// Overwatch
-			action = new OverwatchAction(selectedAgent.getAgent(), new SimpleRangedAttack());
+			action = new OverwatchAction(selectedAgent.getAgent(), WeaponActionFactory.defaultWeaponActionClass(selectedAgent.getAgent()));
 			break;
 		case Keys.K:
 			// Hunker
@@ -651,12 +612,12 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 		this.performPostInputChecks();
 	}
-	
+
 	@Override
 	public void onKeyUp(int keycode) {
-		
+
 	}
-	
+
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
@@ -665,28 +626,28 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.orthoCamera.setToOrtho(false, width, height);
 		this.overlayCamera.setToOrtho(false, width, height);
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		super.render(delta);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		globalUpdate();
-        batch.getSpriteBatch().setProjectionMatrix(camera.getProjectionMatrix());
-        batch.getShapeRenderer().setProjectionMatrix(camera.getProjectionMatrix());
-        this.terrainRenderer.render(batch);
-//		renderShape(batch.getShapeRenderer());
+		batch.getSpriteBatch().setProjectionMatrix(camera.getProjectionMatrix());
+		batch.getShapeRenderer().setProjectionMatrix(camera.getProjectionMatrix());
+		this.terrainRenderer.render(batch);
+		//		renderShape(batch.getShapeRenderer());
 		for (Renderable r : this.renderables) {
 			r.render(batch);
 		}
 		batch.getDecalBatch().flush();
-        batch.getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
-        batch.getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
+		batch.getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
+		batch.getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
 		for (Renderable r : this.foregroundRenderables) {
 			r.render(batch);
 		}
-        batch.getSpriteBatch().setProjectionMatrix(overlayCamera.combined);
-        batch.getShapeRenderer().setProjectionMatrix(overlayCamera.combined);
+		batch.getSpriteBatch().setProjectionMatrix(overlayCamera.combined);
+		batch.getShapeRenderer().setProjectionMatrix(overlayCamera.combined);
 		for (Renderable r : this.overlayRenderables) {
 			r.render(batch);
 		}
@@ -697,7 +658,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		cleanDelBuffers();
 		cleanCreateBuffers();
 	}
-	
+
 	private void drawFPS() {
 		BitmapFont font = batch.getFont();
 		batch.getSpriteBatch().begin();

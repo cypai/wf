@@ -15,5 +15,15 @@ public class ReloadAction extends AlterStateAction {
 	protected void performImpl() throws IllegalActionException {
 		getPerformer().reload();
 	}
+
+	@Override
+	public String name() {
+		return "Reload";
+	}
+
+	@Override
+	public String description() {
+		return "Reload your current weapon";
+	}
 	
 }

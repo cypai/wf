@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.OverwatchAction;
+import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class OverwatchAI extends AI {
 	protected LinkedList<Agent> enemyAgents, toAct;
-	
+
 	public OverwatchAI(BattleController battleController) {
 		super(battleController);
 		this.enemyAgents = new LinkedList<Agent>();
@@ -21,7 +21,7 @@ public class OverwatchAI extends AI {
 			}
 		}
 	}
-	
+
 	@Override
 	public void startTurn() {
 		super.startTurn();
@@ -32,7 +32,7 @@ public class OverwatchAI extends AI {
 			}
 		}
 	}
-	
+
 	@Override
 	public void performMove() {
 		if (this.toAct.isEmpty()) {
@@ -41,7 +41,7 @@ public class OverwatchAI extends AI {
 		}
 		Agent a = this.toAct.poll();
 		if (a.getAP() > 0) {
-			OverwatchAction ow = new OverwatchAction(a, new SimpleRangedAttack());
+			OverwatchAction ow = new OverwatchAction(a, WeaponActionFactory.defaultWeaponActionClass(a));
 			try {
 				this.battleController.performAction(ow);
 			} catch (IllegalActionException e) {
@@ -49,5 +49,5 @@ public class OverwatchAI extends AI {
 			}
 		}
 	}
-	
+
 }

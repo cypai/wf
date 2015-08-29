@@ -1,0 +1,36 @@
+package com.pipai.wf.battle.action;
+
+import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.weapon.SpellWeapon;
+import com.pipai.wf.battle.weapon.Weapon;
+
+public class WeaponActionFactory {
+
+	public static TargetedWithAccuracyAction defaultWeaponAction(Agent performer, Agent target) {
+		Weapon weapon = performer.getCurrentWeapon();
+		if (weapon instanceof SpellWeapon) {
+			return new TargetedSpellWeaponAction(performer, target, ((SpellWeapon)weapon).getSpell());
+		} else {
+			return new RangedWeaponAttackAction(performer, target);
+		}
+	}
+
+	public static Class<? extends TargetedWithAccuracyAction> defaultWeaponActionClass(Agent performer) {
+		Weapon weapon = performer.getCurrentWeapon();
+		if (weapon instanceof SpellWeapon) {
+			return TargetedSpellWeaponAction.class;
+		} else {
+			return RangedWeaponAttackAction.class;
+		}
+	}
+
+	public static String defaultWeaponActionName(Agent performer) {
+		Weapon weapon = performer.getCurrentWeapon();
+		if (weapon instanceof SpellWeapon) {
+			return new TargetedSpellWeaponAction(performer, null, ((SpellWeapon)weapon).getSpell()).name();
+		} else {
+			return new RangedWeaponAttackAction(performer, null).name();
+		}
+	}
+
+}

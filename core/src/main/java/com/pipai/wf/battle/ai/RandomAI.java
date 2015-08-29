@@ -10,8 +10,8 @@ import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.TargetedActionable;
+import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.battle.weapon.Weapon;
@@ -19,9 +19,9 @@ import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.UtilFunctions;
 
 public class RandomAI extends AI {
-	
+
 	protected LinkedList<Agent> enemyAgents, playerAgents, toAct;
-	
+
 	public RandomAI(BattleController battleController) {
 		super(battleController);
 		this.enemyAgents = new LinkedList<Agent>();
@@ -34,7 +34,7 @@ public class RandomAI extends AI {
 			}
 		}
 	}
-	
+
 	@Override
 	public void startTurn() {
 		super.startTurn();
@@ -45,7 +45,7 @@ public class RandomAI extends AI {
 			}
 		}
 	}
-	
+
 	@Override
 	public void performMove() {
 		Agent a = getFirstMovableAgent();
@@ -62,7 +62,7 @@ public class RandomAI extends AI {
 			}
 		}
 	}
-	
+
 	/*
 	 * Returns null if there are no more Agents with AP
 	 */
@@ -74,12 +74,12 @@ public class RandomAI extends AI {
 		}
 		return null;
 	}
-	
+
 	protected Action generateRandomAction(Agent a) {
 		int r = UtilFunctions.rng.nextInt(3);
 		switch (r) {
 		case 0:
-			return new OverwatchAction(a, new SimpleRangedAttack());
+			return new OverwatchAction(a, WeaponActionFactory.defaultWeaponActionClass(a));
 		case 1:
 			Weapon weapon = a.getCurrentWeapon();
 			if (weapon.currentAmmo() == 0) {
@@ -92,7 +92,7 @@ public class RandomAI extends AI {
 					}
 				}
 			}
-			return new OverwatchAction(a, new SimpleRangedAttack());
+			return new OverwatchAction(a, WeaponActionFactory.defaultWeaponActionClass(a));
 		case 2:
 			MapGraph graph = new MapGraph(this.map, a.getPosition(), a.getMobility(), 1, 2);
 			ArrayList<GridPosition> potentialTiles = graph.getMovableCellPositions(1);
@@ -100,8 +100,8 @@ public class RandomAI extends AI {
 			LinkedList<GridPosition> path = graph.getPath(destination);
 			return new MoveAction(a, path, 1);
 		default:
-			return new OverwatchAction(a, new SimpleRangedAttack());
+			return new OverwatchAction(a, WeaponActionFactory.defaultWeaponActionClass(a));
 		}
 	}
-	
+
 }

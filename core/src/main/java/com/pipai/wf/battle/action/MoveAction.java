@@ -56,5 +56,15 @@ public class MoveAction extends AlterStateAction {
 		getPerformer().setPosition(dest);
 		getPerformer().useAP(useAP);
 	}
+
+	@Override
+	public String name() {
+		return "Move";
+	}
+
+	@Override
+	public String description() {
+		return "Move to a different location";
+	}
 	
 }

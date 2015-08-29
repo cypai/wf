@@ -19,5 +19,15 @@ public class ReadySpellAction extends AlterStateAction {
 	protected void performImpl() throws IllegalActionException {
 		getPerformer().readySpell(spell);
 	}
+
+	@Override
+	public String name() {
+		return "Ready: " + spell.name();
+	}
+
+	@Override
+	public String description() {
+		return spell.description();
+	}
 	
 }

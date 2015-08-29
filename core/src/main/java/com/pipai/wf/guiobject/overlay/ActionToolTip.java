@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
-import com.pipai.wf.battle.attack.Attack;
-import com.pipai.wf.battle.spell.Spell;
+import com.pipai.wf.battle.action.Action;
+import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
@@ -18,7 +18,7 @@ import com.pipai.wf.guiobject.Renderable;
 public class ActionToolTip extends GUIObject implements Renderable {
 	
 	public enum Mode {
-		ATTACK, GENERAL;
+		GENERAL, ACCURACY_ACTION;
 	}
 	
 	protected BattleGUI gui;
@@ -46,20 +46,20 @@ public class ActionToolTip extends GUIObject implements Renderable {
 		this.description = description;
 	}
 	
-	public void setToAttackDescription(Attack atk, int accuracy, int critProb) {
-		mode = Mode.ATTACK;
-		title = atk.name();
-		description = atk.description();
-		this.accuracy = accuracy;
-		this.critProb = critProb;
+	public void setToActionDescription(Action a) {
+		if (a instanceof TargetedWithAccuracyAction) {
+			setToTargetedAccuracyActionDescription((TargetedWithAccuracyAction)a);
+		} else {
+			setToGeneralDescription(a.name(), a.description());
+		}
 	}
 	
-	public void setToTargetableSpellDescription(Spell spell, int accuracy, int critProb) {
-		mode = Mode.ATTACK;
-		title = spell.name();
-		description = spell.description();
-		this.accuracy = accuracy;
-		this.critProb = critProb;
+	public void setToTargetedAccuracyActionDescription(TargetedWithAccuracyAction a) {
+		mode = Mode.ACCURACY_ACTION;
+		title = a.name();
+		description = a.description();
+		this.accuracy = a.toHit();
+		this.critProb = a.toCrit();
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class ActionToolTip extends GUIObject implements Renderable {
 		f.setColor(Color.WHITE);
 		f.draw(spr, title, (x + width)/2, y - f.getLineHeight(), 0, Align.center, true);
 		f.draw(spr, description, (x + width)/2, y - 2.5f * f.getLineHeight(), 0, Align.center, true);
-		if (this.mode == Mode.ATTACK) {
+		if (this.mode == Mode.ACCURACY_ACTION) {
 			f.draw(spr, "Acc: " + String.valueOf(accuracy) + "%", x + PADDING, y - height + f.getLineHeight());
 			f.draw(spr, "Crit: " + String.valueOf(critProb) + "%", x + width - PADDING, y - height + f.getLineHeight(), 0, Align.right, true);
 		}

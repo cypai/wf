@@ -40,6 +40,10 @@ public abstract class Action implements BattleEventLoggable {
 	 */
 	public abstract int getAPRequired();
 	
+	public abstract String name();
+	
+	public abstract String description();
+	
 	@Override
     public final void register(BattleLog log) {
         this.log = log;

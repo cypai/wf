@@ -12,13 +12,14 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
+import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
+import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.AgentStateFactory;
-import com.pipai.wf.battle.attack.SimpleRangedAttack;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
@@ -32,22 +33,23 @@ import com.pipai.wf.test.WfConfiguredTest;
 import com.pipai.wf.unit.ability.FireballAbility;
 
 public class BattleLogTest extends WfConfiguredTest {
-	
+
 	private class MockGUIObserver implements BattleObserver {
-		
+
 		public BattleEvent ev;
 
+		@Override
 		public void notifyBattleEvent(BattleEvent ev) {
 			this.ev = ev;
 		}
-		
+
 	}
-	
+
 	@Test
 	public void testMoveLog() {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -69,7 +71,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getPath().peekLast().equals(dest));
 		assertTrue(ev.getChainEvents().size() == 0);
 	}
-	
+
 	@Test
 	public void testIllegalMoveLog() {
 		String rawMapString = "3 4\n"
@@ -81,7 +83,7 @@ public class BattleLogTest extends WfConfiguredTest {
 			fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -114,7 +116,7 @@ public class BattleLogTest extends WfConfiguredTest {
 			assertTrue(ev2 == ev);	// Check that notifyBattleEvent was not called
 		}
 	}
-	
+
 	@Test
 	public void testAttackLog() {
 		BattleMap map = new BattleMap(5, 5);
@@ -122,8 +124,8 @@ public class BattleLogTest extends WfConfiguredTest {
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
 		playerState.weapons.add(new Pistol());
-        map.addAgent(playerState);
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		map.addAgent(playerState);
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -142,21 +144,23 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getTarget() == enemy);
 		assertTrue(ev.getChainEvents().size() == 0);
 	}
-	
+
 	@Test
 	public void testOverwatchLog() {
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.weapons.add(new Pistol());
+		map.addAgent(playerState);
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
-		OverwatchAction ow = new OverwatchAction(enemy, new SimpleRangedAttack());
+		OverwatchAction ow = new OverwatchAction(player, WeaponActionFactory.defaultWeaponActionClass(player));
 		try {
 			battle.performAction(ow);
 		} catch (IllegalActionException e) {
@@ -164,15 +168,15 @@ public class BattleLogTest extends WfConfiguredTest {
 		}
 		BattleEvent ev = observer.ev;
 		assertTrue(ev.getType() == BattleEvent.Type.OVERWATCH);
-		assertTrue(ev.getPerformer() == enemy);
-		assertTrue(ev.getAttack() instanceof SimpleRangedAttack);
+		assertTrue(ev.getPerformer() == player);
+		assertTrue(ev.getPreparedOWName() == "Attack");
 		assertTrue(ev.getChainEvents().size() == 0);
 		//Test Overwatch Activation
 		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
 		GridPosition dest = new GridPosition(2, 1);
-		path.add(player.getPosition());
+		path.add(enemy.getPosition());
 		path.add(dest);
-		MoveAction move = new MoveAction(player, path, 1);
+		MoveAction move = new MoveAction(enemy, path, 1);
 		try {
 			battle.performAction(move);
 		} catch (IllegalActionException e) {
@@ -180,22 +184,22 @@ public class BattleLogTest extends WfConfiguredTest {
 		}
 		BattleEvent moveEv = observer.ev;
 		assertTrue(moveEv.getType() == BattleEvent.Type.MOVE);
-		assertTrue(moveEv.getPerformer() == player);
+		assertTrue(moveEv.getPerformer() == enemy);
 		LinkedList<BattleEvent> chain = moveEv.getChainEvents();
 		assertTrue(chain.size() == 1);
 		BattleEvent owEv = chain.peekFirst();
 		assertTrue(owEv.getType() == BattleEvent.Type.OVERWATCH_ACTIVATION);
-		assertTrue(owEv.getPerformer() == enemy);
-		assertTrue(owEv.getTarget() == player);
-		assertTrue(owEv.getAttack() instanceof SimpleRangedAttack);
+		assertTrue(owEv.getPerformer() == player);
+		assertTrue(owEv.getTarget() == enemy);
+		assertTrue(owEv.getActivatedOWAction() instanceof RangedWeaponAttackAction);
 		assertTrue(owEv.getChainEvents().size() == 0);
 	}
-	
+
 	@Test
 	public void testReloadLog() {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -210,14 +214,14 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getPerformer() == agent);
 		assertTrue(ev.getChainEvents().size() == 0);
 	}
-	
+
 	@Test
 	public void testReadyFireballLog() {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
 		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
 		playerState.abilities.add(new FireballAbility());
-        map.addAgent(playerState);
+		map.addAgent(playerState);
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -234,7 +238,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getSpell() instanceof FireballSpell);
 		assertTrue(ev.getChainEvents().size() == 0);
 	}
-	
+
 	@Test
 	public void testCastFireballLog() {
 		BattleMap map = new BattleMap(3, 4);
@@ -244,8 +248,8 @@ public class BattleLogTest extends WfConfiguredTest {
 		playerState.weapons.add(new Pistol());
 		playerState.weapons.add(new SpellWeapon());
 		playerState.abilities.add(new FireballAbility());
-        map.addAgent(playerState);
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		map.addAgent(playerState);
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
@@ -254,7 +258,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		try {
 			battle.performAction(new SwitchWeaponAction(agent));
 			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
-			battle.performAction(new FireballSpell().getAction(agent, target));
+			battle.performAction(WeaponActionFactory.defaultWeaponAction(agent, target));
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
