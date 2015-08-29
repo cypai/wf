@@ -242,6 +242,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
 		Agent agent = map.getAgentAtPos(playerPos);
+		assertTrue(agent.getCurrentWeapon() instanceof Pistol);
 		try {
 			battle.performAction(new SwitchWeaponAction(agent));
 		} catch (IllegalActionException e) {

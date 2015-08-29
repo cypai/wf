@@ -7,14 +7,9 @@ import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
-import com.pipai.wf.battle.action.OverwatchAction;
-import com.pipai.wf.battle.action.ReloadAction;
-import com.pipai.wf.battle.action.TargetedActionable;
-import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
-import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.UtilFunctions;
 
@@ -76,31 +71,16 @@ public class RandomAI extends AI {
 	}
 
 	protected Action generateRandomAction(Agent a) {
-		int r = UtilFunctions.rng.nextInt(3);
-		switch (r) {
-		case 0:
-			return new OverwatchAction(a, WeaponActionFactory.defaultWeaponActionClass(a));
-		case 1:
-			Weapon weapon = a.getCurrentWeapon();
-			if (weapon.currentAmmo() == 0) {
-				return new ReloadAction(a);
-			} else {
-				Agent target = playerAgents.get(UtilFunctions.rng.nextInt(playerAgents.size()));
-				if (a.canSee(target)) {
-					if (weapon instanceof TargetedActionable) {
-						return ((TargetedActionable) weapon).getAction(a, target);
-					}
-				}
-			}
-			return new OverwatchAction(a, WeaponActionFactory.defaultWeaponActionClass(a));
-		case 2:
+		ArrayList<Action> list = ActionListGenerator.generateWeaponActionList(a);
+		int r = UtilFunctions.rng.nextInt(list.size() * 2 + 1);
+		if (r < list.size()) {
+			return list.get(r);
+		} else {
 			MapGraph graph = new MapGraph(this.map, a.getPosition(), a.getMobility(), 1, 2);
 			ArrayList<GridPosition> potentialTiles = graph.getMovableCellPositions(1);
 			GridPosition destination = potentialTiles.get(UtilFunctions.rng.nextInt(potentialTiles.size()));
 			LinkedList<GridPosition> path = graph.getPath(destination);
 			return new MoveAction(a, path, 1);
-		default:
-			return new OverwatchAction(a, WeaponActionFactory.defaultWeaponActionClass(a));
 		}
 	}
 

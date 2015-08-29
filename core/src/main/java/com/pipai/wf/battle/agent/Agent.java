@@ -98,7 +98,12 @@ public class Agent implements BattleEventLoggable {
 	public int getMaxMP() { return this.maxMP; }
 	public int getMobility() { return this.mobility; }
 	public int getBaseAim() { return this.aim; }
-	public Weapon getCurrentWeapon() { return this.weapons.get(this.weaponIndex); }
+	public Weapon getCurrentWeapon() {
+		if (this.weapons.size() == 0) {
+			return null;
+		}
+		return this.weapons.get(this.weaponIndex);
+	}
 	public Armor getArmor() { return this.armor; }
 	public boolean isKO() { return this.state == State.KO; }
 	public boolean isOverwatching() { return this.state == State.OVERWATCH; }
