@@ -47,6 +47,7 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyAction {
 		}
 		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
 		a.setAP(0);
+		target.takeDamage(result.damage);
 		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, result));
 	}
 
@@ -65,6 +66,7 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyAction {
 		}
 		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 1);
 		a.setAP(0);
+		target.takeDamage(result.damage);
 		parent.addChainEvent(BattleEvent.overwatchActivationEvent(a, target, this, target.getPosition(), result));
 	}
 

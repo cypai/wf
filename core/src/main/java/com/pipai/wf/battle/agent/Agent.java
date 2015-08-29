@@ -52,8 +52,8 @@ public class Agent implements BattleEventLoggable {
 		maxMP = state.maxMP;
 		ap = state.ap;
 		mobility = state.mobility;
-		aim = 60;
-		defense = 0;
+		aim = state.aim;
+		defense = state.defense;
 		weapons = state.weapons;
 		weaponIndex = 0;
 		armor = state.armor;
