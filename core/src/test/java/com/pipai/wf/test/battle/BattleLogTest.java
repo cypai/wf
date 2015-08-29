@@ -200,6 +200,10 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(owEv.getTarget() == enemy);
 		assertTrue(owEv.getActivatedOWAction() instanceof RangedWeaponAttackAction);
 		assertTrue(owEv.getChainEvents().size() == 0);
+		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
+		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv.getDamage());
+		assertTrue(enemy.getHP() == expectedHP);
+		assertTrue(player.getHP() == player.getMaxHP());
 	}
 
 	@Test
@@ -280,7 +284,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
 		GridPosition enemyPos = new GridPosition(2, 2);
-		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
 		playerState.weapons.add(new Pistol());
 		playerState.weapons.add(new SpellWeapon());
 		playerState.abilities.add(new FireballAbility());
@@ -304,6 +308,11 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getTarget() == target);
 		assertTrue(ev.getSpell() instanceof FireballSpell);
 		assertTrue(ev.getChainEvents().size() == 0);
+		// Player has 1000 aim, cannot miss
+		assertTrue(ev.getDamageResult().hit);
+		int expectedHP = UtilFunctions.clamp(0, target.getMaxHP(), target.getMaxHP() - ev.getDamage());
+		assertTrue(target.getHP() == expectedHP);
+		assertTrue(agent.getHP() == agent.getMaxHP());
 	}
 
 }

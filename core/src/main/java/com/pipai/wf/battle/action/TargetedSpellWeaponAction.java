@@ -60,6 +60,7 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyAction {
 		}
 		DamageResult result = DamageCalculator.rollDamageGeneral(this, new SpellDamageFunction(spell), 1);
 		a.setAP(0);
+		target.takeDamage(result.damage);
 		parent.addChainEvent(BattleEvent.overwatchActivationEvent(a, target, this, target.getPosition(), result));
 	}
 
@@ -80,6 +81,7 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyAction {
 		}
 		DamageResult result = DamageCalculator.rollDamageGeneral(this, new SpellDamageFunction(spell), 0);
 		a.setAP(0);
+		target.takeDamage(result.damage);
 		log(BattleEvent.castTargetEvent(a, target, spell, result));
 	}
 
