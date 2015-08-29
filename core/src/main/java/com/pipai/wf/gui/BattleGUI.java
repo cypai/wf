@@ -421,6 +421,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.moveCameraToPos(a.x, a.y);
 			break;
 		case ATTACK:
+		case RANGED_WEAPON_ATTACK:
 		case OVERWATCH_ACTIVATION:
 			a = this.agentMap.get(event.getPerformer());
 			t = this.agentMap.get(event.getTarget());
