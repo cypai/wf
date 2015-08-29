@@ -1,6 +1,10 @@
 package com.pipai.wf.battle.action;
 
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.damage.DamageCalculator;
+import com.pipai.wf.battle.damage.DamageResult;
+import com.pipai.wf.battle.damage.WeaponDamageFunction;
+import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.UtilFunctions;
@@ -35,7 +39,15 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyAction {
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
-		
+		Agent a = getPerformer();
+		Agent target = getTarget();
+		Weapon w = a.getCurrentWeapon();
+		if (w.needsAmmunition() && w.currentAmmo() == 0) {
+			throw new IllegalActionException("Not enough ammo to fire " + w.name());
+		}
+		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w));
+		a.setAP(0);
+		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, result));
 	}
 
 	@Override

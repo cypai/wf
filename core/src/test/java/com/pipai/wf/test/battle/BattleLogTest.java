@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.ReadySpellAction;
@@ -23,6 +24,8 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.spell.FireballSpell;
+import com.pipai.wf.battle.weapon.Pistol;
+import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.exception.BadStateStringException;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.test.WfConfiguredTest;
@@ -112,12 +115,14 @@ public class BattleLogTest extends WfConfiguredTest {
 		}
 	}
 	
-	/*@Test
+	@Test
 	public void testAttackLog() {
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.weapons.add(new Pistol());
+        map.addAgent(playerState);
         map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
 		MockGUIObserver observer = new MockGUIObserver();
@@ -125,18 +130,18 @@ public class BattleLogTest extends WfConfiguredTest {
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
-		RangeAttackAction atk = new RangeAttackAction(player, enemy, new SimpleRangedAttack());
+		Action atk = ((Pistol)player.getCurrentWeapon()).getAction(player, enemy);
 		try {
 			battle.performAction(atk);
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
 		BattleEvent ev = observer.ev;
-		assertTrue(ev.getType() == BattleEvent.Type.ATTACK);
+		assertTrue(ev.getType() == BattleEvent.Type.RANGED_WEAPON_ATTACK);
 		assertTrue(ev.getPerformer() == player);
 		assertTrue(ev.getTarget() == enemy);
 		assertTrue(ev.getChainEvents().size() == 0);
-	}*/
+	}
 	
 	@Test
 	public void testOverwatchLog() {
@@ -229,13 +234,15 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getSpell() instanceof FireballSpell);
 		assertTrue(ev.getChainEvents().size() == 0);
 	}
-	/*
+	
 	@Test
 	public void testCastFireballLog() {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.weapons.add(new Pistol());
+		playerState.weapons.add(new SpellWeapon());
 		playerState.abilities.add(new FireballAbility());
         map.addAgent(playerState);
         map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
@@ -247,7 +254,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		try {
 			battle.performAction(new SwitchWeaponAction(agent));
 			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
-			battle.performAction(new CastTargetAction(agent, target));
+			battle.performAction(new FireballSpell().getAction(agent, target));
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
@@ -257,6 +264,6 @@ public class BattleLogTest extends WfConfiguredTest {
 		assertTrue(ev.getTarget() == target);
 		assertTrue(ev.getSpell() instanceof FireballSpell);
 		assertTrue(ev.getChainEvents().size() == 0);
-	}*/
+	}
 
 }
