@@ -11,54 +11,54 @@ import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.race.Race;
 
 public class RaceTemplateSchema implements UnitSchema {
-	
+
 	private Race race;
 
 	public RaceTemplateSchema(Race race) {
 		this.race = race;
 	}
-	
+
 	@Override
 	public int hp() {
 		return race.hp;
 	}
-	
+
 	@Override
 	public int mp() {
 		return race.mp;
 	}
-	
+
 	@Override
 	public int ap() {
 		return race.ap;
 	}
-	
+
 	@Override
 	public int aim() {
 		return race.aim;
 	}
-	
+
 	@Override
 	public int mobility() {
 		return race.mobility;
 	}
-	
+
 	@Override
 	public int defense() {
 		return race.defense;
 	}
-	
+
 	@Override
 	public AbilityList abilities() {
 		AbilityList l = new AbilityList();
 		return l;
 	}
-	
+
 	@Override
 	public Armor armor() {
 		return new LeatherArmor();
 	}
-	
+
 	@Override
 	public ArrayList<Weapon> weapons() {
 		ArrayList<Weapon> l = new ArrayList<Weapon>();
@@ -66,5 +66,10 @@ public class RaceTemplateSchema implements UnitSchema {
 		l.add(new SpellWeapon());
 		return l;
 	}
-	
+
+	@Override
+	public String name() {
+		return race.name;
+	}
+
 }

@@ -16,19 +16,19 @@ public class TidusSchema extends RaceTemplateSchema {
 	public TidusSchema() {
 		super(Race.HUMAN);
 	}
-	
+
 	@Override
 	public AbilityList abilities() {
 		AbilityList l = new AbilityList();
 		l.add(new FireballAbility());
 		return l;
 	}
-	
+
 	@Override
 	public Armor armor() {
 		return new LeatherArmor();
 	}
-	
+
 	@Override
 	public ArrayList<Weapon> weapons() {
 		ArrayList<Weapon> l = new ArrayList<Weapon>();
@@ -36,5 +36,10 @@ public class TidusSchema extends RaceTemplateSchema {
 		l.add(new SpellWeapon());
 		return l;
 	}
-	
+
+	@Override
+	public String name() {
+		return "Tidus";
+	}
+
 }

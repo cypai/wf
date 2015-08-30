@@ -10,17 +10,17 @@ import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.GUI;
 
 public class UnitInfoListItem extends UIListItem {
-	
-//	public static final int PADDING = 4;
-//	public static final int STAT_SPACING = 64;
-//	public static final int WIDTH = 2 * PADDING + STAT_SPACING * 6;
-//	public static final int HEIGHT = 2 * PADDING + 32;
-	
+
+	//	public static final int PADDING = 4;
+	//	public static final int STAT_SPACING = 64;
+	//	public static final int WIDTH = 2 * PADDING + STAT_SPACING * 6;
+	//	public static final int HEIGHT = 2 * PADDING + 32;
+
 	protected String name;
 	protected int hp, mp, ap, mobility, aim, defense;
 	protected float width, padding, stat_spacing, height;
 	protected LinkedList<String> statLine;
-	
+
 	public UnitInfoListItem(GUI gui, AgentState state, float x, float y, float width, float padding) {
 		super(gui, x, y, width, 2 * padding + 32, Color.ORANGE);
 		this.width = width;
@@ -33,7 +33,7 @@ public class UnitInfoListItem extends UIListItem {
 		mobility = state.mobility;
 		aim = state.aim;
 		defense = state.defense;
-		name = "Tidus";
+		name = state.name;
 		statLine = new LinkedList<String>();
 		statLine.add("HP: " + String.valueOf(hp));
 		statLine.add("MP: " + String.valueOf(mp));
@@ -42,7 +42,7 @@ public class UnitInfoListItem extends UIListItem {
 		statLine.add("Aim: " + String.valueOf(aim));
 		statLine.add("Def: " + String.valueOf(defense));
 	}
-	
+
 	@Override
 	public void render(BatchHelper batch) {
 		super.render(batch);
@@ -61,5 +61,5 @@ public class UnitInfoListItem extends UIListItem {
 		}
 		spr.end();
 	}
-	
+
 }

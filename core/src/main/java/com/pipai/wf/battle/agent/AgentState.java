@@ -14,7 +14,7 @@ import com.pipai.wf.unit.ability.AbilityFactory;
 import com.pipai.wf.unit.ability.AbilityList;
 
 public class AgentState {
-	
+
 	public Team team;
 	public int hp, maxHP;
 	public int mp, maxMP;
@@ -25,19 +25,20 @@ public class AgentState {
 	public AbilityList abilities;
 	public ArrayList<Weapon> weapons;
 	public Armor armor;
-	
+	public String name;
+
 	public AgentState() {
 		abilities = new AbilityList();
 		weapons = new ArrayList<Weapon>();
 		armor = new NoArmor();
 	}
-	
+
 	public void addAbilities(List<Ability> abilityList) {
 		for (Ability a : abilityList) {
 			abilities.add(AbilityFactory.clone(a));
 		}
 	}
-	
+
 	/*
 	 * MapString version
 	 */
@@ -51,10 +52,11 @@ public class AgentState {
 		s += state;
 		return s;
 	}
-	
+
 	/*
 	 * Readable version
 	 */
+	@Override
 	public String toString() {
 		String s = "";
 		s += "Position: " + position + "\n";
@@ -65,9 +67,9 @@ public class AgentState {
 		s += "State: " + state + "\n";
 		return s;
 	}
-	
+
 	public AgentState statsOnlyCopy() {
 		return AgentStateFactory.statsOnlyState(maxHP, maxMP, maxAP, mobility, aim, defense);
 	}
-	
+
 }

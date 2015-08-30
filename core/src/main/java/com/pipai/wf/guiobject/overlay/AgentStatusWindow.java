@@ -86,7 +86,7 @@ public class AgentStatusWindow extends GUIObject implements Renderable {
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
-		f.draw(spr, "Agent Name Here", padding + width/2, padding + height - f.getLineHeight(), 0, Align.center, true);
+		f.draw(spr, agent.getName(), padding + width/2, padding + height - f.getLineHeight(), 0, Align.center, true);
 		// Draw Abilities
 		float abilityX = padding * 2;
 		float abilityY = height - f.getLineHeight() * 2;
@@ -105,7 +105,7 @@ public class AgentStatusWindow extends GUIObject implements Renderable {
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
-		f.draw(spr, "Agent Name Here", padding + width/2, padding + height - f.getLineHeight(), 0, Align.center, true);
+		f.draw(spr, targetAccAction.getTarget().getName(), padding + width/2, padding + height - f.getLineHeight(), 0, Align.center, true);
 		// Draw Abilities
 		float abilityX = padding * 2;
 		float abilityY = height - f.getLineHeight() * 8;

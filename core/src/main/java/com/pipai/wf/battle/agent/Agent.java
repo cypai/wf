@@ -31,6 +31,7 @@ public class Agent implements BattleEventLoggable {
 	protected Team team;
 	protected int maxHP, maxAP, maxMP, hp, ap, mp;
 	protected int mobility, aim, defense;
+	protected String name;
 	protected State state;
 	protected ArrayList<Weapon> weapons;
 	protected int weaponIndex;
@@ -58,6 +59,7 @@ public class Agent implements BattleEventLoggable {
 		weaponIndex = 0;
 		armor = state.armor;
 		abilities = state.abilities.clone();
+		name = state.name;
 		owContainer = new OverwatchContainer();
 	}
 
@@ -108,6 +110,7 @@ public class Agent implements BattleEventLoggable {
 	public boolean isKO() { return this.state == State.KO; }
 	public boolean isOverwatching() { return this.state == State.OVERWATCH; }
 	public AbilityList getAbilities() { return this.abilities; }
+	public String getName() { return name; }
 
 	@SuppressWarnings("unchecked")
 	public ArrayList<Weapon> getWeapons() { return (ArrayList<Weapon>) this.weapons.clone(); }

@@ -20,6 +20,7 @@ public class AgentStateFactory {
 		a.mobility = mobility;
 		a.aim = aim;
 		a.defense = defense;
+		a.name = "No name";
 		return a;
 	}
 
@@ -28,6 +29,7 @@ public class AgentStateFactory {
 		as.abilities = schema.abilities();
 		as.armor = schema.armor();
 		as.weapons = schema.weapons();
+		as.name = schema.name();
 		return as;
 	}
 
