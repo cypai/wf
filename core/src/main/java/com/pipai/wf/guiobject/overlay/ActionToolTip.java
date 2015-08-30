@@ -16,18 +16,18 @@ import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.Renderable;
 
 public class ActionToolTip extends GUIObject implements Renderable {
-	
+
 	public enum Mode {
 		GENERAL, ACCURACY_ACTION;
 	}
-	
+
 	protected BattleGUI gui;
 	private Mode mode;
 	private final int PADDING = 6;
 	private float x, y, width, height;
 	private String title, description;
 	private int accuracy, critProb;
-	
+
 	public ActionToolTip(BattleGUI gui, float x, float y, float width, float height) {
 		super(gui);
 		this.gui = gui;
@@ -39,13 +39,13 @@ public class ActionToolTip extends GUIObject implements Renderable {
 
 	@Override
 	public int renderPriority() { return 0;	}
-	
+
 	public void setToGeneralDescription(String title, String description) {
 		mode = Mode.GENERAL;
 		this.title = title;
 		this.description = description;
 	}
-	
+
 	public void setToActionDescription(Action a) {
 		if (a instanceof TargetedWithAccuracyAction) {
 			setToTargetedAccuracyActionDescription((TargetedWithAccuracyAction)a);
@@ -53,7 +53,7 @@ public class ActionToolTip extends GUIObject implements Renderable {
 			setToGeneralDescription(a.name(), a.description());
 		}
 	}
-	
+
 	public void setToTargetedAccuracyActionDescription(TargetedWithAccuracyAction a) {
 		mode = Mode.ACCURACY_ACTION;
 		title = a.name();
@@ -87,5 +87,5 @@ public class ActionToolTip extends GUIObject implements Renderable {
 		}
 		spr.end();
 	}
-	
+
 }

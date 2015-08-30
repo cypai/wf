@@ -22,7 +22,9 @@ import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
+import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.action.TargetedActionable;
+import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
@@ -47,6 +49,7 @@ import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
 import com.pipai.wf.guiobject.battle.BulletGUIObject;
 import com.pipai.wf.guiobject.battle.FireballGUIObject;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
+import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.guiobject.overlay.WeaponIndicator;
@@ -97,6 +100,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private BattleTerrainRenderer terrainRenderer;
 	private ActionToolTip tooltip;
 	private WeaponIndicator weaponIndicator;
+	private AgentStatusWindow agentStatusWindow;
+	private TargetedAction targetedAction;
 
 	public BattleGUI(WFGame game, BattleMap map) {
 		super(game);
@@ -150,8 +155,10 @@ public class BattleGUI extends GUI implements BattleObserver {
 		this.overlayLeftClickables.add(atkBtn);
 		this.tooltip = new ActionToolTip(this, 0, 120, 320, 120);
 		this.weaponIndicator = new WeaponIndicator(this, this.getScreenWidth() - 120, 80, 120, 80);
+		this.agentStatusWindow = new AgentStatusWindow(this);
 		this.overlayRenderables.add(this.tooltip);
 		this.overlayRenderables.add(this.weaponIndicator);
+		this.overlayRenderables.add(this.agentStatusWindow);
 	}
 
 	private void beginAnimation() { this.mode = Mode.ANIMATION; }
@@ -497,7 +504,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 				this.terrainRenderer.setTargetableTiles(targetableTiles);
 				this.terrainRenderer.setTargetTiles(targetTiles);
 				this.targetAgent = target;
-				this.tooltip.setToTargetedAccuracyActionDescription(WeaponActionFactory.defaultWeaponAction(this.selectedAgent.getAgent(), target.getAgent()));
+				this.targetedAction = WeaponActionFactory.defaultWeaponAction(this.selectedAgent.getAgent(), target.getAgent());
+				this.tooltip.setToActionDescription(this.targetedAction);
 				this.moveCameraToPos((this.selectedAgent.x + target.x)/2, (this.selectedAgent.y + target.y)/2);
 			}
 		}
@@ -537,6 +545,10 @@ public class BattleGUI extends GUI implements BattleObserver {
 	@Override
 	public void onKeyDown(int keycode) {
 		if (keycode == Keys.ESCAPE) {
+			if (this.agentStatusWindow.getVisible()) {
+				this.agentStatusWindow.setVisible(false);
+				return;
+			}
 			if (this.mode != Mode.TARGET_SELECT) {
 				Gdx.app.exit();
 			} else {
@@ -599,6 +611,18 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case Keys.E:
 			this.camera.arcballRotationCCW();
+			break;
+		case Keys.F1:
+			if (this.mode == Mode.NONE) {
+				this.agentStatusWindow.setAgentStatus(this.selectedAgent.getAgent());
+			} else if (this.mode == Mode.TARGET_SELECT) {
+				if (this.targetedAction instanceof TargetedWithAccuracyAction) {
+					this.agentStatusWindow.setTargetedWithAccuracyAction((TargetedWithAccuracyAction)this.targetedAction);
+				}  else {
+					this.agentStatusWindow.setAgentStatus(this.targetedAction.getTarget());
+				}
+			}
+			this.agentStatusWindow.setVisible(true);
 			break;
 		default:
 			break;

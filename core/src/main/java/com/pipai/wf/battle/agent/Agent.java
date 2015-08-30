@@ -107,6 +107,7 @@ public class Agent implements BattleEventLoggable {
 	public Armor getArmor() { return this.armor; }
 	public boolean isKO() { return this.state == State.KO; }
 	public boolean isOverwatching() { return this.state == State.OVERWATCH; }
+	public AbilityList getAbilities() { return this.abilities; }
 
 	@SuppressWarnings("unchecked")
 	public ArrayList<Weapon> getWeapons() { return (ArrayList<Weapon>) this.weapons.clone(); }
