@@ -14,16 +14,16 @@ import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.util.UtilFunctions;
 
 public class BulletGUIObject extends GUIObject implements Renderable {
-	
+
 	protected BattleGUI gui;
 	protected float x, y, dest_x, dest_y;
 	protected int t, final_t;
 	protected Vector2 dir;
 	protected AgentGUIObject target;
 	protected BattleEvent outcome;
-	
+
 	private static final int SPEED = 16;
-	
+
 	public BulletGUIObject(BattleGUI gui, float x, float y, float dest_x, float dest_y, AgentGUIObject target, BattleEvent outcome) {
 		super(gui);
 		this.gui = gui;
@@ -41,8 +41,10 @@ public class BulletGUIObject extends GUIObject implements Renderable {
 		this.outcome = outcome;
 	}
 
+	@Override
 	public int renderPriority() { return 0; }
-	
+
+	@Override
 	public void update() {
 		t += 1;
 		if (t < final_t) {
@@ -54,7 +56,7 @@ public class BulletGUIObject extends GUIObject implements Renderable {
 			TemporaryText dmgTxt;
 			Vector3 txtAnchor = new Vector3(x + 12 , y + 16*UtilFunctions.rng.nextFloat() - 12, 0);
 			if (outcome.isHit()) {
-				dmgTxt = new TemporaryText(gui, txtAnchor, 24, 24, String.valueOf(outcome.getDamage()));
+				dmgTxt = new TemporaryText(gui, txtAnchor, 48, 24, (outcome.isCrit() ? "/!\\ " : "Hit: ") + String.valueOf(outcome.getDamage()));
 			} else {
 				dmgTxt = new TemporaryText(gui, txtAnchor, 64, 24, "Missed");
 			}
@@ -63,7 +65,8 @@ public class BulletGUIObject extends GUIObject implements Renderable {
 			target.hit();
 		}
 	}
-	
+
+	@Override
 	public void render(BatchHelper batch) {
 		update();
 		ShapeRenderer r = batch.getShapeRenderer();

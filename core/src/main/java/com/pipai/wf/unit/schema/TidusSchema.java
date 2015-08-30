@@ -19,6 +19,12 @@ public class TidusSchema extends RaceTemplateSchema {
 	}
 
 	@Override
+	public int aim() {
+		// For testing purposes
+		return 100;
+	}
+
+	@Override
 	public AbilityList abilities() {
 		AbilityList l = new AbilityList();
 		l.add(new FireballAbility());

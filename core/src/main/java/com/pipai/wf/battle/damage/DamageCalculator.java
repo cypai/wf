@@ -3,7 +3,7 @@ package com.pipai.wf.battle.damage;
 import com.pipai.wf.util.UtilFunctions;
 
 public class DamageCalculator {
-	
+
 	protected static boolean rollToHit(AccuracyPercentages a, int owPenalty) {
 		int diceroll = 1 + UtilFunctions.rng.nextInt(100);
 		return diceroll <= (int)(a.toHit() * Math.pow(0.7, owPenalty));
@@ -13,7 +13,7 @@ public class DamageCalculator {
 		int diceroll = 1 + UtilFunctions.rng.nextInt(100);
 		return diceroll <= a.toCrit();
 	}
-	
+
 	public static DamageResult rollDamageGeneral(AccuracyPercentages a, DamageFunction f, int owPenalty) {
 		if (rollToHit(a, owPenalty)) {
 			int dmg = 0;
@@ -27,7 +27,7 @@ public class DamageCalculator {
 			return DamageResult.missedResult();
 		}
 	}
-	
+
 	public static DamageResult rollDamageNormal(AccuracyPercentages a, DamageFunction f) {
 		if (rollToHit(a, 0)) {
 			int dmg = 0;
@@ -41,5 +41,5 @@ public class DamageCalculator {
 			return DamageResult.missedResult();
 		}
 	}
-	
+
 }
