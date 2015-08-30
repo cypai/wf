@@ -24,7 +24,7 @@ import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.action.TargetedActionable;
-import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
+import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
@@ -53,6 +53,9 @@ import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.guiobject.overlay.WeaponIndicator;
+import com.pipai.wf.unit.ability.Ability;
+import com.pipai.wf.unit.ability.ActiveSkillTargetedAccAbility;
+import com.pipai.wf.unit.ability.PrecisionShotAbility;
 import com.pipai.wf.util.RayMapper;
 
 /*
@@ -480,6 +483,10 @@ public class BattleGUI extends GUI implements BattleObserver {
 	}
 
 	public void switchToTargetMode() {
+		switchToTargetMode(null);
+	}
+
+	public void switchToTargetMode(ActiveSkillTargetedAccAbility ability) {
 		this.terrainRenderer.clearShadedTiles();
 		this.targetAgentList = new LinkedList<AgentGUIObject>();
 		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
@@ -487,13 +494,21 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 		this.mode = Mode.TARGET_SELECT;
 		if (this.targetAgentList.size() == 0) {
-			this.tooltip.setToGeneralDescription(WeaponActionFactory.defaultWeaponActionName(this.selectedAgent.getAgent()), "No enemies in range");
+			if (ability == null) {
+				this.tooltip.setToGeneralDescription(WeaponActionFactory.defaultWeaponActionName(this.selectedAgent.getAgent()), "No enemies in range");
+			} else {
+				this.tooltip.setToGeneralDescription(ability.name(), "No enemies in range");
+			}
 			return;
 		}
-		this.switchTarget(this.targetAgentList.getFirst());
+		this.switchTarget(this.targetAgentList.getFirst(), ability);
 	}
 
 	public void switchTarget(AgentGUIObject target) {
+		switchTarget(target, null);
+	}
+
+	public void switchTarget(AgentGUIObject target, ActiveSkillTargetedAccAbility ability) {
 		if (this.mode == Mode.TARGET_SELECT) {
 			if (this.targetAgentList.contains(target)) {
 				ArrayList<GridPosition> targetTiles = new ArrayList<GridPosition>(), targetableTiles = new ArrayList<GridPosition>();
@@ -504,7 +519,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 				this.terrainRenderer.setTargetableTiles(targetableTiles);
 				this.terrainRenderer.setTargetTiles(targetTiles);
 				this.targetAgent = target;
-				this.targetedAction = WeaponActionFactory.defaultWeaponAction(this.selectedAgent.getAgent(), target.getAgent());
+				if (ability == null) {
+					this.targetedAction = WeaponActionFactory.defaultWeaponAction(this.selectedAgent.getAgent(), target.getAgent());
+				} else {
+					this.targetedAction = ability.getAction(this.selectedAgent.getAgent(), target.getAgent());
+				}
 				this.tooltip.setToActionDescription(this.targetedAction);
 				this.moveCameraToPos((this.selectedAgent.x + target.x)/2, (this.selectedAgent.y + target.y)/2);
 			}
@@ -588,8 +607,19 @@ public class BattleGUI extends GUI implements BattleObserver {
 			// Overwatch
 			action = new OverwatchAction(selectedAgent.getAgent());
 			break;
-		case Keys.K:
+		case Keys.H:
 			// Hunker
+			break;
+		case Keys.K:
+			// Skill
+			if (this.mode == Mode.NONE) {
+				for (Ability a : selectedAgent.getAgent().getAbilities()) {
+					if (a instanceof PrecisionShotAbility) {
+						this.switchToTargetMode((PrecisionShotAbility)a);
+						break;
+					}
+				}
+			}
 			break;
 		case Keys.M:
 			// Recharge mana
@@ -616,8 +646,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			if (this.mode == Mode.NONE) {
 				this.agentStatusWindow.setAgentStatus(this.selectedAgent.getAgent());
 			} else if (this.mode == Mode.TARGET_SELECT) {
-				if (this.targetedAction instanceof TargetedWithAccuracyAction) {
-					this.agentStatusWindow.setTargetedWithAccuracyAction((TargetedWithAccuracyAction)this.targetedAction);
+				if (this.targetedAction instanceof TargetedWithAccuracyActionOWCapable) {
+					this.agentStatusWindow.setTargetedWithAccuracyAction((TargetedWithAccuracyActionOWCapable)this.targetedAction);
 				}  else {
 					this.agentStatusWindow.setAgentStatus(this.targetedAction.getTarget());
 				}

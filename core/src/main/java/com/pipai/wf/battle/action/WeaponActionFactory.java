@@ -6,7 +6,7 @@ import com.pipai.wf.battle.weapon.Weapon;
 
 public class WeaponActionFactory {
 
-	public static TargetedWithAccuracyAction defaultWeaponAction(Agent performer, Agent target) {
+	public static TargetedWithAccuracyActionOWCapable defaultWeaponAction(Agent performer, Agent target) {
 		Weapon weapon = performer.getCurrentWeapon();
 		if (weapon instanceof SpellWeapon) {
 			return new TargetedSpellWeaponAction(performer, target);
@@ -15,7 +15,7 @@ public class WeaponActionFactory {
 		}
 	}
 
-	public static Class<? extends TargetedWithAccuracyAction> defaultWeaponActionClass(Agent performer) {
+	public static Class<? extends TargetedWithAccuracyActionOWCapable> defaultWeaponActionClass(Agent performer) {
 		Weapon weapon = performer.getCurrentWeapon();
 		if (weapon instanceof SpellWeapon) {
 			return TargetedSpellWeaponAction.class;

@@ -7,7 +7,7 @@ import com.pipai.wf.exception.IllegalActionException;
 
 public class OverwatchAction extends AlterStateAction {
 
-	private Class<? extends TargetedWithAccuracyAction> owAction;
+	private Class<? extends TargetedWithAccuracyActionOWCapable> owAction;
 
 	public OverwatchAction(Agent performerAgent) {
 		super(performerAgent);
@@ -33,7 +33,7 @@ public class OverwatchAction extends AlterStateAction {
 		return "Attack the first enemy that moves in range";
 	}
 
-	public Class<? extends TargetedWithAccuracyAction> getOWClass() {
+	public Class<? extends TargetedWithAccuracyActionOWCapable> getOWClass() {
 		return owAction;
 	}
 

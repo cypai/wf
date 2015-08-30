@@ -3,7 +3,7 @@ package com.pipai.wf.battle.agent;
 import java.util.ArrayList;
 
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
+import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
@@ -247,14 +247,14 @@ public class Agent implements BattleEventLoggable {
 		logEvent(BattleEvent.switchWeaponEvent(this));
 	}
 
-	public void overwatch(Class<? extends TargetedWithAccuracyAction> attack) {
+	public void overwatch(Class<? extends TargetedWithAccuracyActionOWCapable> attack) {
 		this.owContainer.prepareAction(attack);
 		this.state = State.OVERWATCH;
 		this.setAP(0);
 	}
 
 	public void activateOverwatch(Agent other, BattleEvent activationLogEvent, GridPosition activatedTile) {
-		TargetedWithAccuracyAction action = this.owContainer.generateAction(this, other);
+		TargetedWithAccuracyActionOWCapable action = this.owContainer.generateAction(this, other);
 		try {
 			other.setPosition(activatedTile);
 			action.performOnOverwatch(activationLogEvent);

@@ -15,7 +15,7 @@ import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.action.TargetedSpellWeaponAction;
-import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
+import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
@@ -123,7 +123,7 @@ public class BattleLogTest extends WfConfiguredTest {
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
-		TargetedWithAccuracyAction atk = (TargetedWithAccuracyAction)((Pistol)player.getCurrentWeapon()).getAction(player, enemy);
+		TargetedWithAccuracyActionOWCapable atk = (TargetedWithAccuracyActionOWCapable)((Pistol)player.getCurrentWeapon()).getAction(player, enemy);
 		assertTrue(atk.toHit() == 100);
 		try {
 			battle.performAction(atk);

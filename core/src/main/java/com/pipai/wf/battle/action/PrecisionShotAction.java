@@ -9,9 +9,9 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.UtilFunctions;
 
-public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapable {
+public class PrecisionShotAction extends TargetedWithAccuracyAction {
 
-	public RangedWeaponAttackAction(Agent performerAgent, Agent targetAgent) {
+	public PrecisionShotAction(Agent performerAgent, Agent targetAgent) {
 		super(performerAgent, targetAgent);
 	}
 
@@ -34,6 +34,7 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapabl
 		Weapon weapon = a.getCurrentWeapon();
 		int crit_prob = weapon.flatCritProbabilityModifier();
 		crit_prob += weapon.situationalCritProbabilityModifier(a.getDistanceFrom(target), target.isFlankedBy(a));
+		crit_prob += 30;
 		return UtilFunctions.clamp(1, 100, crit_prob);
 	}
 
@@ -46,9 +47,10 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapabl
 			throw new IllegalActionException("Not enough ammo to fire " + w.name());
 		}
 		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
-		a.setAP(0);
+		DamageResult adjustedResult = new DamageResult(result.hit, result.crit, result.damage + (result.hit ? 1 : 0), result.damageReduction);
 		target.takeDamage(result.damage);
-		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, result));
+		a.setAP(0);
+		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, adjustedResult));
 	}
 
 	@Override
@@ -57,32 +59,13 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapabl
 	}
 
 	@Override
-	public void performOnOverwatch(BattleEvent parent) throws IllegalActionException {
-		Agent a = getPerformer();
-		Agent target = getTarget();
-		Weapon w = a.getCurrentWeapon();
-		if (w.needsAmmunition() && w.currentAmmo() == 0) {
-			throw new IllegalActionException("Not enough ammo to fire " + w.name());
-		}
-		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 1);
-		a.setAP(0);
-		target.takeDamage(result.damage);
-		parent.addChainEvent(BattleEvent.overwatchActivationEvent(a, target, this, target.getPosition(), result));
-	}
-
-	@Override
 	public String name() {
-		return "Attack";
+		return "Precision Shot";
 	}
 
 	@Override
 	public String description() {
-		Weapon weapon = getPerformer().getCurrentWeapon();
-		if (weapon.needsAmmunition() && weapon.currentAmmo() <= 0) {
-			return "Not enough ammunition";
-		} else {
-			return "Attack with the selected ranged weapon";
-		}
+		return "Fires a shot that has +1 extra damage and +30% critical chance.";
 	}
 
 }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
-import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
+import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.GUI;
@@ -25,7 +25,7 @@ public class AgentStatusWindow extends GUIObject implements Renderable {
 	private Mode mode;
 	private boolean visible;
 	private Agent agent;
-	private TargetedWithAccuracyAction targetAccAction;
+	private TargetedWithAccuracyActionOWCapable targetAccAction;
 	private float x, y, width, height;
 
 	private final int padding = 32;
@@ -45,7 +45,7 @@ public class AgentStatusWindow extends GUIObject implements Renderable {
 		agent = a;
 	}
 
-	public void setTargetedWithAccuracyAction(TargetedWithAccuracyAction a) {
+	public void setTargetedWithAccuracyAction(TargetedWithAccuracyActionOWCapable a) {
 		mode = Mode.TARGETED_ACC_STATUS;
 		targetAccAction = a;
 	}
@@ -95,7 +95,7 @@ public class AgentStatusWindow extends GUIObject implements Renderable {
 		for (Ability a : agent.getAbilities()) {
 			f.draw(spr, a.name(), abilityX, currY, width/3, Align.left, true);
 			f.draw(spr, a.description(), abilityX, currY - f.getLineHeight(), width/3, Align.left, true);
-			currY -= f.getLineHeight() * 2;
+			currY -= f.getLineHeight() * 3;
 		}
 		spr.end();
 	}
@@ -114,7 +114,7 @@ public class AgentStatusWindow extends GUIObject implements Renderable {
 		for (Ability a : targetAccAction.getTarget().getAbilities()) {
 			f.draw(spr, a.name(), abilityX, currY, width/3, Align.left, true);
 			f.draw(spr, a.description(), abilityX, currY - f.getLineHeight(), width/3, Align.left, true);
-			currY -= f.getLineHeight() * 2;
+			currY -= f.getLineHeight() * 3;
 		}
 		spr.end();
 	}

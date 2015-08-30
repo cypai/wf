@@ -3,7 +3,7 @@ package com.pipai.wf.battle.log;
 import java.util.LinkedList;
 
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
+import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.map.GridPosition;
@@ -29,7 +29,7 @@ public class BattleEvent {
 	private LinkedList<BattleEvent> chainedEvents;
 	private GridPosition targetTile;
 	private String actionName;
-	private TargetedWithAccuracyAction owActivatedAction;
+	private TargetedWithAccuracyActionOWCapable owActivatedAction;
 
 	public static BattleEvent moveEvent(Agent performer, LinkedList<GridPosition> path) {
 		BattleEvent event = new BattleEvent(Type.MOVE, performer, null);
@@ -63,7 +63,7 @@ public class BattleEvent {
 		return event;
 	}
 
-	public static BattleEvent overwatchActivationEvent(Agent performer, Agent target, TargetedWithAccuracyAction action, GridPosition targetTile, DamageResult dmgResult) {
+	public static BattleEvent overwatchActivationEvent(Agent performer, Agent target, TargetedWithAccuracyActionOWCapable action, GridPosition targetTile, DamageResult dmgResult) {
 		BattleEvent event = new BattleEvent(Type.OVERWATCH_ACTIVATION, performer, target);
 		event.owActivatedAction = action;
 		event.dmgResult = dmgResult;
@@ -102,7 +102,7 @@ public class BattleEvent {
 	public Weapon getWeapon() { return this.wpn; }
 	public String getActionName() { return this.actionName; }
 	public String getPreparedOWName() { return this.actionName; }
-	public TargetedWithAccuracyAction getActivatedOWAction() { return this.owActivatedAction; }
+	public TargetedWithAccuracyActionOWCapable getActivatedOWAction() { return this.owActivatedAction; }
 	public Spell getSpell() { return this.spell; }
 	public DamageResult getDamageResult() { return this.dmgResult; }
 	public boolean isHit() { return this.dmgResult.hit; }

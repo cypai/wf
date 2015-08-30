@@ -9,6 +9,7 @@ import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.FireballAbility;
+import com.pipai.wf.unit.ability.PrecisionShotAbility;
 import com.pipai.wf.unit.race.Race;
 
 public class TidusSchema extends RaceTemplateSchema {
@@ -21,6 +22,7 @@ public class TidusSchema extends RaceTemplateSchema {
 	public AbilityList abilities() {
 		AbilityList l = new AbilityList();
 		l.add(new FireballAbility());
+		l.add(new PrecisionShotAbility());
 		return l;
 	}
 

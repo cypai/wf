@@ -1,17 +1,17 @@
 package com.pipai.wf.battle.misc;
 
-import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
+import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.agent.Agent;
 
 public class OverwatchContainer {
 	
-	private Class<? extends TargetedWithAccuracyAction> actionClass;
+	private Class<? extends TargetedWithAccuracyActionOWCapable> actionClass;
 	
-	public void prepareAction(Class<? extends TargetedWithAccuracyAction> a) {
+	public void prepareAction(Class<? extends TargetedWithAccuracyActionOWCapable> a) {
 		actionClass = a;
 	}
 	
-	public TargetedWithAccuracyAction generateAction(Agent performer, Agent target) {
+	public TargetedWithAccuracyActionOWCapable generateAction(Agent performer, Agent target) {
 		return OverwatchHelper.generateAction(actionClass, performer, target);
 	}
 	

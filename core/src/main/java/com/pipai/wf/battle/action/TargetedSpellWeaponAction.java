@@ -10,7 +10,7 @@ import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class TargetedSpellWeaponAction extends TargetedWithAccuracyAction {
+public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapable {
 
 	public final Spell spell;
 
