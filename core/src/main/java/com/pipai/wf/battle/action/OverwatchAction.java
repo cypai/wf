@@ -20,7 +20,7 @@ public class OverwatchAction extends AlterStateAction {
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		getPerformer().overwatch(owAction);
-		log(BattleEvent.overwatchEvent(getPerformer(), OverwatchHelper.getName(owAction)));
+		log(BattleEvent.overwatchEvent(getPerformer(), OverwatchHelper.getName(this)));
 	}
 
 	@Override
@@ -31,6 +31,10 @@ public class OverwatchAction extends AlterStateAction {
 	@Override
 	public String description() {
 		return "Attack the first enemy that moves in range";
+	}
+
+	public Class<? extends TargetedWithAccuracyAction> getOWClass() {
+		return owAction;
 	}
 
 }

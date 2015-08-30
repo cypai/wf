@@ -1,15 +1,16 @@
 package com.pipai.wf.battle.misc;
 
+import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 
 public class OverwatchHelper {
 
-	public static String getName(Class<? extends TargetedWithAccuracyAction> actionClass) {
-		Agent dummy1 = new Agent(null, new AgentState());
-		Agent dummy2 = new Agent(null, new AgentState());
-		TargetedWithAccuracyAction dummyAction = generateAction(actionClass, dummy1, dummy2);
+	public static String getName(OverwatchAction owAction) {
+		Agent owAgent = owAction.getPerformer();
+		Agent dummy = new Agent(null, new AgentState());
+		TargetedWithAccuracyAction dummyAction = generateAction(owAction.getOWClass(), owAgent, dummy);
 		return dummyAction.name();
 	}
 

@@ -62,7 +62,7 @@ public class FireballSpell extends Spell {
 
 	@Override
 	public TargetedAction getAction(Agent performer, Agent target) {
-		return new TargetedSpellWeaponAction(performer, target, this);
+		return new TargetedSpellWeaponAction(performer, target);
 	}
 
 }

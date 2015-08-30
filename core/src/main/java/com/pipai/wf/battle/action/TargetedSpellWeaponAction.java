@@ -14,17 +14,20 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyAction {
 
 	public final Spell spell;
 
+	public TargetedSpellWeaponAction(Agent performerAgent, Agent targetAgent) {
+		super(performerAgent, targetAgent);
+		this.spell = getWeapon().getSpell();
+	}
+
 	private SpellWeapon getWeapon() {
 		Weapon w = getPerformer().getCurrentWeapon();
+		if (w == null) {
+			throw new IllegalArgumentException("No weapon is equipped");
+		}
 		if (!(w instanceof SpellWeapon)) {
 			throw new IllegalArgumentException("Currently selected weapon is not a spell weapon");
 		}
 		return (SpellWeapon) w;
-	}
-
-	public TargetedSpellWeaponAction(Agent performerAgent, Agent targetAgent, Spell spell) {
-		super(performerAgent, targetAgent);
-		this.spell = spell;
 	}
 
 	@Override

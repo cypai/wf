@@ -9,7 +9,7 @@ public class WeaponActionFactory {
 	public static TargetedWithAccuracyAction defaultWeaponAction(Agent performer, Agent target) {
 		Weapon weapon = performer.getCurrentWeapon();
 		if (weapon instanceof SpellWeapon) {
-			return new TargetedSpellWeaponAction(performer, target, ((SpellWeapon)weapon).getSpell());
+			return new TargetedSpellWeaponAction(performer, target);
 		} else {
 			return new RangedWeaponAttackAction(performer, target);
 		}
@@ -27,7 +27,7 @@ public class WeaponActionFactory {
 	public static String defaultWeaponActionName(Agent performer) {
 		Weapon weapon = performer.getCurrentWeapon();
 		if (weapon instanceof SpellWeapon) {
-			return new TargetedSpellWeaponAction(performer, null, ((SpellWeapon)weapon).getSpell()).name();
+			return new TargetedSpellWeaponAction(performer, null).name();
 		} else {
 			return new RangedWeaponAttackAction(performer, null).name();
 		}
