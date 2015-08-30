@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import org.junit.Test;
 
 import com.pipai.wf.battle.BattleController;
-import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
@@ -15,6 +14,7 @@ import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
+import com.pipai.wf.battle.action.TargetedSpellWeaponAction;
 import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
@@ -29,22 +29,12 @@ import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.exception.BadStateStringException;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.test.MockGUIObserver;
 import com.pipai.wf.test.WfConfiguredTest;
 import com.pipai.wf.unit.ability.FireballAbility;
 import com.pipai.wf.util.UtilFunctions;
 
 public class BattleLogTest extends WfConfiguredTest {
-
-	private class MockGUIObserver implements BattleObserver {
-
-		public BattleEvent ev;
-
-		@Override
-		public void notifyBattleEvent(BattleEvent ev) {
-			this.ev = ev;
-		}
-
-	}
 
 	@Test
 	public void testMoveLog() {
@@ -286,7 +276,6 @@ public class BattleLogTest extends WfConfiguredTest {
 		GridPosition playerPos = new GridPosition(1, 0);
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
-		playerState.weapons.add(new Pistol());
 		playerState.weapons.add(new SpellWeapon());
 		playerState.abilities.add(new FireballAbility());
 		map.addAgent(playerState);
@@ -297,7 +286,6 @@ public class BattleLogTest extends WfConfiguredTest {
 		Agent agent = map.getAgentAtPos(playerPos);
 		Agent target = map.getAgentAtPos(enemyPos);
 		try {
-			battle.performAction(new SwitchWeaponAction(agent));
 			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
 			battle.performAction(WeaponActionFactory.defaultWeaponAction(agent, target));
 		} catch (IllegalActionException e) {
@@ -314,6 +302,61 @@ public class BattleLogTest extends WfConfiguredTest {
 		int expectedHP = UtilFunctions.clamp(0, target.getMaxHP(), target.getMaxHP() - ev.getDamage());
 		assertTrue(target.getHP() == expectedHP);
 		assertTrue(agent.getHP() == agent.getMaxHP());
+	}
+
+	@Test
+	public void testFireballOverwatchLog() {
+		BattleMap map = new BattleMap(5, 5);
+		GridPosition playerPos = new GridPosition(1, 1);
+		GridPosition enemyPos = new GridPosition(2, 2);
+		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.weapons.add(new SpellWeapon());
+		playerState.abilities.add(new FireballAbility());
+		map.addAgent(playerState);
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map);
+		MockGUIObserver observer = new MockGUIObserver();
+		battle.registerObserver(observer);
+		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
+		assertFalse(player == null || enemy == null);
+		try {
+			battle.performAction(new ReadySpellAction(player, new FireballSpell()));
+			battle.performAction(new OverwatchAction(player));
+		} catch (IllegalActionException e) {
+			fail(e.getMessage());
+		}
+		BattleEvent ev = observer.ev;
+		assertTrue(ev.getType() == BattleEvent.Type.OVERWATCH);
+		assertTrue(ev.getPerformer() == player);
+		assertTrue(ev.getPreparedOWName() == "Fireball");
+		assertTrue(ev.getChainEvents().size() == 0);
+		//Test Overwatch Activation
+		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		GridPosition dest = new GridPosition(2, 1);
+		path.add(enemy.getPosition());
+		path.add(dest);
+		MoveAction move = new MoveAction(enemy, path, 1);
+		try {
+			battle.performAction(move);
+		} catch (IllegalActionException e) {
+			fail(e.getMessage());
+		}
+		BattleEvent moveEv = observer.ev;
+		assertTrue(moveEv.getType() == BattleEvent.Type.MOVE);
+		assertTrue(moveEv.getPerformer() == enemy);
+		LinkedList<BattleEvent> chain = moveEv.getChainEvents();
+		assertTrue(chain.size() == 1);
+		BattleEvent owEv = chain.peekFirst();
+		assertTrue(owEv.getType() == BattleEvent.Type.OVERWATCH_ACTIVATION);
+		assertTrue(owEv.getPerformer() == player);
+		assertTrue(owEv.getTarget() == enemy);
+		assertTrue(owEv.getActivatedOWAction() instanceof TargetedSpellWeaponAction);
+		assertTrue(owEv.getChainEvents().size() == 0);
+		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
+		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv.getDamage());
+		assertTrue(enemy.getHP() == expectedHP);
+		assertTrue(player.getHP() == player.getMaxHP());
 	}
 
 }
