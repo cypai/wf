@@ -3,12 +3,15 @@ package com.pipai.wf.battle.action;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageResult;
+import com.pipai.wf.battle.damage.PercentageModifier;
+import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.SpellDamageFunction;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.util.UtilFunctions;
 
 public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapable {
 
@@ -32,18 +35,41 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapab
 
 	@Override
 	public int toHit() {
-		Agent a = getPerformer();
-		Agent target = getTarget();
-		int base = spell.getAccuracy(a, target, a.getDistanceFrom(target));
-		return base;
+		int total_aim = getHitCalculation().total();
+		return UtilFunctions.clamp(1, 100, total_aim);
 	}
 
 	@Override
 	public int toCrit() {
+		int crit_prob = getCritCalculation().total();
+		return UtilFunctions.clamp(1, 100, crit_prob);
+	}
+
+	@Override
+	public PercentageModifierList getHitCalculation() {
 		Agent a = getPerformer();
 		Agent target = getTarget();
-		int base = spell.getCritPercentage(a, target, a.getDistanceFrom(target));
-		return base;
+		Weapon weapon = a.getCurrentWeapon();
+		PercentageModifierList p = new PercentageModifierList();
+		p.add(new PercentageModifier("Aim", a.getBaseAim()));
+		p.add(new PercentageModifier("Weapon Aim", weapon.flatAimModifier()));
+		p.add(new PercentageModifier("Range", weapon.rangeAimModifier(a.getDistanceFrom(target))));
+		p.add(new PercentageModifier("Defense", target.getDefense(a.getPosition())));
+		return p;
+	}
+
+	@Override
+	public PercentageModifierList getCritCalculation() {
+		Agent a = getPerformer();
+		Agent target = getTarget();
+		Weapon weapon = a.getCurrentWeapon();
+		PercentageModifierList p = new PercentageModifierList();
+		p.add(new PercentageModifier("Weapon Base", weapon.flatCritProbabilityModifier()));
+		p.add(new PercentageModifier("Range", weapon.rangeCritModifier(a.getDistanceFrom(target))));
+		if (target.isFlankedBy(a)) {
+			p.add(new PercentageModifier("No Cover", 30));
+		}
+		return p;
 	}
 
 	@Override

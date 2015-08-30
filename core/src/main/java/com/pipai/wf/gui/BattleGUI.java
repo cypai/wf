@@ -24,7 +24,7 @@ import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.action.TargetedActionable;
-import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
+import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
@@ -650,8 +650,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 			if (this.mode == Mode.NONE) {
 				this.agentStatusWindow.setAgentStatus(this.selectedAgent.getAgent());
 			} else if (this.mode == Mode.TARGET_SELECT) {
-				if (this.targetedAction instanceof TargetedWithAccuracyActionOWCapable) {
-					this.agentStatusWindow.setTargetedWithAccuracyAction((TargetedWithAccuracyActionOWCapable)this.targetedAction);
+				if (this.targetedAction instanceof TargetedWithAccuracyAction) {
+					this.agentStatusWindow.setTargetedWithAccuracyAction((TargetedWithAccuracyAction)this.targetedAction);
 				}  else {
 					this.agentStatusWindow.setAgentStatus(this.targetedAction.getTarget());
 				}

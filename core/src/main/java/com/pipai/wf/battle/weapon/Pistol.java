@@ -13,7 +13,10 @@ public class Pistol extends Weapon implements TargetedActionable {
 	}
 
 	@Override
-	public int situationalAimModifier(float distance, boolean flanked) {
+	public int rangeAimModifier(float distance) {
+		if (distance <= 5) {
+			return 10;
+		}
 		return 0;
 	}
 
@@ -23,7 +26,7 @@ public class Pistol extends Weapon implements TargetedActionable {
 	}
 
 	@Override
-	public int situationalCritProbabilityModifier(float distance, boolean flanked) {
+	public int rangeCritModifier(float distance) {
 		return 0;
 	}
 
@@ -46,7 +49,7 @@ public class Pistol extends Weapon implements TargetedActionable {
 	public int baseAmmoCapacity() {
 		return 2;
 	}
-	
+
 	@Override
 	public String name() {
 		return "Pistol";

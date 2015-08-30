@@ -38,7 +38,7 @@ public class SpellWeapon extends Weapon {
 	}
 
 	@Override
-	public int situationalAimModifier(float distance, boolean flanked) {
+	public int rangeAimModifier(float distance) {
 		return 0;
 	}
 
@@ -48,7 +48,7 @@ public class SpellWeapon extends Weapon {
 	}
 
 	@Override
-	public int situationalCritProbabilityModifier(float distance, boolean flanked) {
+	public int rangeCritModifier(float distance) {
 		return 0;
 	}
 
