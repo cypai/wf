@@ -13,5 +13,10 @@ public class FireballAbility extends SpellAbility {
 	public Spell getGrantedSpell() {
 		return new FireballSpell();
 	}
-	
+
+	@Override
+	public Ability clone() {
+		return new FireballAbility();
+	}
+
 }

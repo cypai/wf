@@ -21,6 +21,11 @@ public class PrecisionShotAbility extends ActiveSkillTargetedAccAbility {
 	}
 
 	@Override
+	public Ability clone() {
+		return new PrecisionShotAbility();
+	}
+
+	@Override
 	public TargetedWithAccuracyAction getAction(Agent performer, Agent target) {
 		return new PrecisionShotAction(performer, target);
 	}

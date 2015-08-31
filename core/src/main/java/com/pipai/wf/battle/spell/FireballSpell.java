@@ -46,4 +46,9 @@ public class FireballSpell extends Spell {
 		return new TargetedSpellWeaponAction(performer, target);
 	}
 
+	@Override
+	public SpellElement element() {
+		return SpellElement.FIRE;
+	}
+
 }

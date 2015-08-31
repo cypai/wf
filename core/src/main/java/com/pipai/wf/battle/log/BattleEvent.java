@@ -30,6 +30,7 @@ public class BattleEvent {
 	private GridPosition targetTile;
 	private String actionName;
 	private TargetedWithAccuracyActionOWCapable owActivatedAction;
+	private boolean quickenFlag;
 
 	public static BattleEvent moveEvent(Agent performer, LinkedList<GridPosition> path) {
 		BattleEvent event = new BattleEvent(Type.MOVE, performer, null);
@@ -44,9 +45,10 @@ public class BattleEvent {
 		return event;
 	}
 
-	public static BattleEvent readySpellEvent(Agent performer, Spell spell) {
+	public static BattleEvent readySpellEvent(Agent performer, Spell spell, boolean quickened) {
 		BattleEvent event = new BattleEvent(Type.READY, performer, null);
 		event.spell = spell;
+		event.quickenFlag = quickened;
 		return event;
 	}
 
@@ -110,6 +112,8 @@ public class BattleEvent {
 	public int getDamage() { return this.dmgResult.damage; }
 	public int getDamageReduction() { return this.dmgResult.damageReduction; }
 	public GridPosition getTargetTile() { return this.targetTile; }
+
+	public boolean getQuickened() { return this.quickenFlag; }
 
 	public int getNumChainEvents() { return this.chainedEvents.size(); }
 

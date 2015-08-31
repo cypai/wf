@@ -16,7 +16,6 @@ import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.misc.OverwatchContainer;
 import com.pipai.wf.battle.spell.Spell;
-import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.exception.IllegalActionException;
@@ -269,22 +268,6 @@ public class Agent implements BattleEventLoggable {
 		this.getCurrentWeapon().reload();
 		this.setAP(0);
 		logEvent(BattleEvent.reloadEvent(this));
-	}
-
-	public void readySpell(Spell spell) throws IllegalActionException {
-		if (!this.abilities.hasSpell(spell)) {
-			throw new IllegalActionException("Does not have the ability to cast " + spell.name());
-		}
-		if (this.mp < spell.requiredMP()) {
-			throw new IllegalActionException("Not enough mp to cast " + spell.name());
-		}
-		if (!(this.getCurrentWeapon() instanceof SpellWeapon)) {
-			throw new IllegalActionException("Currently selected weapon is not a spell weapon");
-		}
-		this.useMP(spell.requiredMP());
-		this.setAP(this.ap - 1);
-		((SpellWeapon)this.getCurrentWeapon()).ready(spell);
-		logEvent(BattleEvent.readySpellEvent(this, spell));
 	}
 
 	@Override

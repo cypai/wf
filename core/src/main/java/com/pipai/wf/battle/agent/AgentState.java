@@ -1,8 +1,6 @@
 package com.pipai.wf.battle.agent;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.NoArmor;
@@ -10,7 +8,6 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.Ability;
-import com.pipai.wf.unit.ability.AbilityFactory;
 import com.pipai.wf.unit.ability.AbilityList;
 
 public class AgentState {
@@ -33,9 +30,9 @@ public class AgentState {
 		armor = new NoArmor();
 	}
 
-	public void addAbilities(List<Ability> abilityList) {
+	public void addAbilities(AbilityList abilityList) {
 		for (Ability a : abilityList) {
-			abilities.add(AbilityFactory.clone(a));
+			abilities.add(a.clone());
 		}
 	}
 

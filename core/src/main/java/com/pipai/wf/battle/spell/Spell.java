@@ -25,4 +25,6 @@ public abstract class Spell implements TargetedActionable {
 
 	public abstract boolean canOverwatch();
 
+	public abstract SpellElement element();
+
 }
