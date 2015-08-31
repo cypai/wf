@@ -291,6 +291,9 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.selectableAgentOrderedList.remove(this.selectedAgent);
 			if (this.selectableAgentOrderedList.size() > 0) {
 				this.setSelected(this.selectableAgentOrderedList.getFirst());
+			} else {
+				this.updatePaths();
+				this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
 			}
 			this.mode = Mode.NONE;
 		}
@@ -498,6 +501,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 		}
 		this.mode = Mode.TARGET_SELECT;
 		if (this.targetAgentList.size() == 0) {
+			this.targetedAction = null;
 			if (ability == null) {
 				this.tooltip.setToGeneralDescription(WeaponActionFactory.defaultWeaponActionName(this.selectedAgent.getAgent()), "No enemies in range");
 			} else {
@@ -647,7 +651,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.camera.arcballRotationCCW();
 			break;
 		case Keys.F1:
-			if (this.mode == Mode.NONE) {
+			if (this.mode == Mode.NONE || this.targetedAction == null) {
 				this.agentStatusWindow.setAgentStatus(this.selectedAgent.getAgent());
 			} else if (this.mode == Mode.TARGET_SELECT) {
 				if (this.targetedAction instanceof TargetedWithAccuracyAction) {

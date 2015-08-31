@@ -90,7 +90,7 @@ public class AgentStatusWindow extends GUIObject implements Renderable {
 		f.setColor(Color.WHITE);
 		f.draw(spr, agent.getName(), padding + width/2, padding + height - f.getLineHeight(), 0, Align.center, true);
 		spr.end();
-		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 2);
+		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 2, agent);
 	}
 
 	private void renderTAccActionMode(BatchHelper batch) {
@@ -102,7 +102,7 @@ public class AgentStatusWindow extends GUIObject implements Renderable {
 		spr.end();
 		renderCalc(batch, padding * 2, height - f.getLineHeight() * 2, targetAccAction.getHitCalculation(), "Hit Calculation");
 		renderCalc(batch, width - padding - 120, height - f.getLineHeight() * 2, targetAccAction.getCritCalculation(), "Crit Calculation");
-		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 12);
+		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 12, targetAccAction.getTarget());
 	}
 
 	private void renderCalc(BatchHelper batch, float calcX, float calcY, PercentageModifierList pmList, String title) {
@@ -129,14 +129,14 @@ public class AgentStatusWindow extends GUIObject implements Renderable {
 		r.end();
 	}
 
-	private void renderAbilities(BatchHelper batch, float abilityX, float abilityY) {
+	private void renderAbilities(BatchHelper batch, float abilityX, float abilityY, Agent the_agent) {
 		SpriteBatch spr = batch.getSpriteBatch();
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
 		f.draw(spr, "Abilities", abilityX, abilityY, 0, Align.left, true);
 		float currY = abilityY - f.getLineHeight() * 2;
-		for (Ability a : targetAccAction.getTarget().getAbilities()) {
+		for (Ability a : the_agent.getAbilities()) {
 			f.draw(spr, a.name(), abilityX, currY, width/3, Align.left, true);
 			f.draw(spr, a.description(), abilityX, currY - f.getLineHeight(), width/3, Align.left, true);
 			currY -= f.getLineHeight() * 3;
