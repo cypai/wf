@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.LeatherArmor;
+import com.pipai.wf.battle.weapon.Bow;
 import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
@@ -62,7 +63,11 @@ public class RaceTemplateSchema implements UnitSchema {
 	@Override
 	public ArrayList<Weapon> weapons() {
 		ArrayList<Weapon> l = new ArrayList<Weapon>();
-		l.add(new Pistol());
+		if (race == Race.FAIRY) {
+			l.add(new Bow());
+		} else {
+			l.add(new Pistol());
+		}
 		l.add(new SpellWeapon());
 		return l;
 	}

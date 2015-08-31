@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.LeatherArmor;
-import com.pipai.wf.battle.weapon.Pistol;
+import com.pipai.wf.battle.weapon.Bow;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.AbilityList;
@@ -42,7 +42,7 @@ public class TidusSchema extends RaceTemplateSchema {
 	@Override
 	public ArrayList<Weapon> weapons() {
 		ArrayList<Weapon> l = new ArrayList<Weapon>();
-		l.add(new Pistol());
+		l.add(new Bow());
 		l.add(new SpellWeapon());
 		return l;
 	}
