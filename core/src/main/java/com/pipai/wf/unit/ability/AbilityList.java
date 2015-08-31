@@ -30,6 +30,22 @@ public class AbilityList implements Iterable<Ability> {
 		}
 	}
 
+	/**
+	 * This one also checks for ability level. If just looking for a class, use the other function
+	 */
+	public boolean hasAbility(Ability ability) {
+		return list.contains(ability);
+	}
+
+	public boolean hasAbility(Class<? extends Ability> abilityClass) {
+		for (Ability a : list) {
+			if (abilityClass.isInstance(a)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public int getActualizationLevel(SpellElement e) {
 		for (Ability a : list) {
 			switch (e) {

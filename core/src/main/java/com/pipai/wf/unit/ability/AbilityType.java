@@ -7,6 +7,7 @@ public enum AbilityType {
 	FIREBALL,
 	WATER_BLAST,
 	REGENERATION,
+	QUICK_RELOAD,
 	PRECISION_SHOT
 	;
 
