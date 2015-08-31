@@ -16,6 +16,7 @@ import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
 import com.pipai.wf.unit.race.Race;
+import com.pipai.wf.unit.schema.FlameFairySchema;
 import com.pipai.wf.unit.schema.RaceTemplateSchema;
 import com.pipai.wf.unit.schema.TidusSchema;
 import com.pipai.wf.unit.schema.UnitSchema;
@@ -23,14 +24,14 @@ import com.pipai.wf.unit.schema.UnitSchema;
 public class PartyInfoGUI extends GUI {
 
 	private OrthographicCamera camera;
-	private ArrayList<Renderable> renderables, renderablesCreateBuffer, renderablesDelBuffer; 
+	private ArrayList<Renderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;
 	private ArrayList<UnitSchema> partySchema = new ArrayList<UnitSchema>();
 	private ArrayList<AgentState> party = new ArrayList<AgentState>();
 
 	public PartyInfoGUI(WFGame game) {
 		super(game);
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
 		renderables = new ArrayList<Renderable>();
 		renderablesCreateBuffer = new ArrayList<Renderable>();
 		renderablesDelBuffer = new ArrayList<Renderable>();
@@ -39,7 +40,7 @@ public class PartyInfoGUI extends GUI {
 		partySchema.add(new RaceTemplateSchema(Race.HUMAN));	// Sienna
 		partySchema.add(new RaceTemplateSchema(Race.FAIRY));	// Sapphire
 		partySchema.add(new RaceTemplateSchema(Race.CAT));	// Mira
-		partySchema.add(new RaceTemplateSchema(Race.HUMAN));	// Roland
+		partySchema.add(new FlameFairySchema());	// Sunny
 		partySchema.add(new RaceTemplateSchema(Race.FOX));	// Nolan
 		party = new ArrayList<AgentState>();
 		for (UnitSchema us : partySchema) {
@@ -47,7 +48,7 @@ public class PartyInfoGUI extends GUI {
 		}
 		this.createInstance(new PartyInfoList(this, party, 4, this.getScreenHeight() - 4, this.getScreenWidth()/2, this.getScreenHeight()/2, Color.CYAN));
 	}
-	
+
 	@Override
 	public void createInstance(GUIObject o) {
 		super.createInstance(o);
@@ -55,7 +56,7 @@ public class PartyInfoGUI extends GUI {
 			renderablesCreateBuffer.add((Renderable)o);
 		}
 	}
-	
+
 	@Override
 	public void deleteInstance(GUIObject o) {
 		super.deleteInstance(o);
@@ -63,16 +64,16 @@ public class PartyInfoGUI extends GUI {
 			renderablesDelBuffer.add((Renderable)o);
 		}
 	}
-	
+
 	@Override
 	public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.getSpriteBatch().setProjectionMatrix(camera.combined);
-        batch.getShapeRenderer().setProjectionMatrix(camera.combined);
-    	for (Renderable r : this.renderables) {
-    		r.render(batch);
-    	}
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.getSpriteBatch().setProjectionMatrix(camera.combined);
+		batch.getShapeRenderer().setProjectionMatrix(camera.combined);
+		for (Renderable r : this.renderables) {
+			r.render(batch);
+		}
 		cleanDelBuffers();
 		cleanCreateBuffers();
 	}
@@ -86,33 +87,33 @@ public class PartyInfoGUI extends GUI {
 
 	@Override
 	public void onRightClick(int screenX, int screenY) {
-		
+
 	}
 
 	@Override
 	public void onKeyDown(int keycode) {
-		if (keycode == Keys.ESCAPE) { 
+		if (keycode == Keys.ESCAPE) {
 			Gdx.app.exit();
 		}
 	}
 
 	@Override
 	public void onKeyUp(int keycode) {
-		
+
 	}
 
 	@Override
 	public void mouseScrolled(int amount) {
-		
+
 	}
-	
+
 	private void cleanCreateBuffers() {
 		for (Renderable o : renderablesCreateBuffer) {
 			renderables.add(o);
 		}
 		renderablesCreateBuffer.clear();
 	}
-	
+
 	private void cleanDelBuffers() {
 		for (Renderable o : renderablesDelBuffer) {
 			renderables.remove(o);

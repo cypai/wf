@@ -10,27 +10,19 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.FireActualizationAbility;
 import com.pipai.wf.unit.ability.FireballAbility;
-import com.pipai.wf.unit.ability.PrecisionShotAbility;
 import com.pipai.wf.unit.race.Race;
 
-public class TidusSchema extends RaceTemplateSchema {
+public class FlameFairySchema extends RaceTemplateSchema {
 
-	public TidusSchema() {
-		super(Race.HUMAN);
-	}
-
-	@Override
-	public int aim() {
-		// For testing purposes
-		return 100;
+	public FlameFairySchema() {
+		super(Race.FAIRY);
 	}
 
 	@Override
 	public AbilityList abilities() {
 		AbilityList l = new AbilityList();
-		l.add(new FireActualizationAbility(1));
+		l.add(new FireActualizationAbility(2));
 		l.add(new FireballAbility());
-		l.add(new PrecisionShotAbility());
 		return l;
 	}
 
@@ -49,7 +41,7 @@ public class TidusSchema extends RaceTemplateSchema {
 
 	@Override
 	public String name() {
-		return "Tidus";
+		return "Flame Fairy";
 	}
 
 }

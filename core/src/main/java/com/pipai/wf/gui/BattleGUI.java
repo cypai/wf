@@ -291,14 +291,15 @@ public class BattleGUI extends GUI implements BattleObserver {
 			this.selectableAgentOrderedList.remove(this.selectedAgent);
 			if (this.selectableAgentOrderedList.size() > 0) {
 				this.setSelected(this.selectableAgentOrderedList.getFirst());
-			} else {
-				this.updatePaths();
-				this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
 			}
 			this.mode = Mode.NONE;
 		}
 		for (AgentGUIObject a : this.agentList) {
 			if (a.getAgent().getTeam() == Team.PLAYER && (a.getAgent().getAP() > 0 && !a.getAgent().isKO())) {
+				if (this.mode == Mode.NONE) {
+					this.updatePaths();
+					this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
+				}
 				return;
 			}
 		}
@@ -466,7 +467,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 			break;
 		case READY:
 			a = this.agentMap.get(event.getPerformer());
-			ttext = new TemporaryText(this, new Vector3(a.x, a.y, 0), 120, 24, "Ready: " + event.getSpell().name());
+			ttext = new TemporaryText(this, new Vector3(a.x, a.y, 0), 120, 24, (event.getQuickened() ? "Quickened " : "Ready ") + event.getSpell().name());
 			this.createInstance(ttext);
 			this.moveCameraToPos(a.x, a.y);
 			break;
