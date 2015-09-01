@@ -1,5 +1,6 @@
 package com.pipai.wf.battle.weapon;
 
+import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.util.UtilFunctions;
 
 public abstract class Weapon {
@@ -45,5 +46,9 @@ public abstract class Weapon {
 	}
 
 	public abstract String name();
+
+	public AbilityList getGrantedAbilities() {
+		return new AbilityList();
+	}
 
 }

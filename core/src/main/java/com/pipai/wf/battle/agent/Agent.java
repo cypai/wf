@@ -108,7 +108,13 @@ public class Agent implements BattleEventLoggable {
 	public Armor getArmor() { return this.armor; }
 	public boolean isKO() { return this.state == State.KO; }
 	public boolean isOverwatching() { return this.state == State.OVERWATCH; }
-	public AbilityList getAbilities() { return this.abilities; }
+	public AbilityList getAbilities() {
+		AbilityList allAbilities = this.abilities.clone();
+		if (this.getCurrentWeapon() != null) {
+			allAbilities.add(getCurrentWeapon().getGrantedAbilities());
+		}
+		return allAbilities;
+	}
 	public String getName() { return name; }
 
 	@SuppressWarnings("unchecked")

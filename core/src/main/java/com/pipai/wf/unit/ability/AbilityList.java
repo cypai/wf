@@ -69,6 +69,12 @@ public class AbilityList implements Iterable<Ability> {
 		return true;
 	}
 
+	public void add(AbilityList alist) {
+		for (Ability a : alist) {
+			add(a.clone());
+		}
+	}
+
 	public void clear() {
 		list = new LinkedList<Ability>();
 		spellMap = new HashMap<Class<? extends Spell>, Integer>();

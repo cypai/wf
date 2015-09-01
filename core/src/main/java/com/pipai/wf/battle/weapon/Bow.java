@@ -6,6 +6,8 @@ import com.pipai.wf.battle.action.TargetedActionable;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.math.LinearFunction;
+import com.pipai.wf.unit.ability.AbilityList;
+import com.pipai.wf.unit.ability.QuickReloadAbility;
 
 public class Bow extends Weapon implements TargetedActionable {
 
@@ -71,6 +73,13 @@ public class Bow extends Weapon implements TargetedActionable {
 	@Override
 	public TargetedAction getAction(Agent performer, Agent target) {
 		return new RangedWeaponAttackAction(performer, target);
+	}
+
+	@Override
+	public AbilityList getGrantedAbilities() {
+		AbilityList alist = new AbilityList();
+		alist.add(new QuickReloadAbility());
+		return alist;
 	}
 
 }
