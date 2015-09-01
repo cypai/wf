@@ -25,9 +25,9 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	private Vector2 start, dest;
 	private int t;	//Animation time t counter
 
-	public MoveAnimationHandler(BattleGUI gui, AgentGUIObject a, BattleEvent moveEvent, boolean noCameraFollow) {
+	public MoveAnimationHandler(BattleGUI gui, BattleEvent moveEvent, boolean noCameraFollow) {
 		super(gui);
-		this.agent = a;
+		agent = getGUI().getAgentGUIObject(moveEvent.getPerformer());
 		path = moveEvent.getPath();
 		moveSeq = vectorizePath(path);
 		chainEvents = moveEvent.getChainEvents();

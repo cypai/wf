@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
@@ -42,8 +41,11 @@ import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.gui.animation.AnimationHandler;
 import com.pipai.wf.gui.animation.AnimationObserver;
 import com.pipai.wf.gui.animation.BulletAttackAnimationHandler;
+import com.pipai.wf.gui.animation.CastTargetAnimationHandler;
 import com.pipai.wf.gui.animation.MoveAnimationHandler;
 import com.pipai.wf.gui.animation.OverwatchAnimationHandler;
+import com.pipai.wf.gui.animation.ReadySpellAnimationHandler;
+import com.pipai.wf.gui.animation.ReloadAnimationHandler;
 import com.pipai.wf.gui.camera.AnchoredCamera;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
@@ -52,11 +54,9 @@ import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.battle.AgentGUIObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
-import com.pipai.wf.guiobject.battle.FireballGUIObject;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
 import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
-import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.guiobject.overlay.WeaponIndicator;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.ActiveSkillTargetedAccAbility;
@@ -419,40 +419,25 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	}
 
 	public void animateEvent(BattleEvent event) {
-		AgentGUIObject a = null, t;
-		TemporaryText ttext;
 		switch (event.getType()) {
 		case MOVE:
-			a = this.agentMap.get(event.getPerformer());
-			animationHandler = new MoveAnimationHandler(this, a, event, event.getPerformer().getTeam() == Team.PLAYER);
+			animationHandler = new MoveAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
 			break;
 		case ATTACK:
 		case RANGED_WEAPON_ATTACK:
-			a = this.agentMap.get(event.getPerformer());
-			t = this.agentMap.get(event.getTarget());
 			animationHandler = new BulletAttackAnimationHandler(this, event);
 			break;
 		case CAST_TARGET:
-			a = this.agentMap.get(event.getPerformer());
-			t = this.agentMap.get(event.getTarget());
-			FireballGUIObject fireball = new FireballGUIObject(this, a.x, a.y, t.x, t.y, t, event);
-			this.createInstance(fireball);
-			this.moveCameraToPos((a.x + t.x)/2, (a.y + t.y)/2);
+			animationHandler = new CastTargetAnimationHandler(this, event);
 			break;
 		case OVERWATCH:
 			animationHandler = new OverwatchAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
 			break;
 		case RELOAD:
-			a = this.agentMap.get(event.getPerformer());
-			ttext = new TemporaryText(this, new Vector3(a.x, a.y, 0), 60, 24, "Reload");
-			this.createInstance(ttext);
-			this.moveCameraToPos(a.x, a.y);
+			animationHandler = new ReloadAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
 			break;
 		case READY:
-			a = this.agentMap.get(event.getPerformer());
-			ttext = new TemporaryText(this, new Vector3(a.x, a.y, 0), 120, 24, (event.getQuickened() ? "Quickened " : "Ready ") + event.getSpell().name());
-			this.createInstance(ttext);
-			this.moveCameraToPos(a.x, a.y);
+			animationHandler = new ReadySpellAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
 			break;
 		case START_TURN:
 			if (event.getTeam() == Team.PLAYER) {
@@ -468,6 +453,9 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		if (animationHandler != null) {
 			beginAnimation();
 			animationHandler.begin(this);
+		} else {
+			// No animation yet, just end now
+			endAnimation();
 		}
 	}
 
