@@ -62,7 +62,7 @@ public class BulletGUIObject extends GUIObject implements Renderable {
 			}
 			gui.createInstance(dmgTxt);
 			destroy();
-			target.hit();
+			target.hit(outcome);
 		}
 	}
 

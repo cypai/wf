@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
@@ -27,6 +28,8 @@ public class AgentGUIObject extends GUIObject implements XYPositioned, Renderabl
 	public float x, y;
 	public int radius;
 
+	public int displayHP, displayArmorHP;
+
 	private Texture circleTex;
 	private Decal decal;
 
@@ -34,6 +37,8 @@ public class AgentGUIObject extends GUIObject implements XYPositioned, Renderabl
 		super(gui);
 		this.gui = gui;
 		this.agent = agent;
+		displayHP = agent.getHP();
+		displayArmorHP = agent.getArmor().getHP();
 		this.selected = false;
 		this.x = x;
 		this.y = y;
@@ -74,9 +79,22 @@ public class AgentGUIObject extends GUIObject implements XYPositioned, Renderabl
 	}
 	public void deselect() { selected = false; }
 	public boolean isSelected() { return selected; }
+	/**
+	 * @return If displaying as KOed, not necessarily the Agent
+	 */
+	public boolean isShowingKO() { return ko; }
+	public int getDisplayHP() { return displayHP; }
+	public int getDisplayArmorHP() { return displayArmorHP; }
 
-	public void hit() {
-		if (this.agent.isKO()) {
+	public void hit(BattleEvent outcome) {
+		int dmg = outcome.getDamage();
+		displayArmorHP -= dmg;
+		if (displayArmorHP < 0) {
+			displayHP += displayArmorHP;	// Add the negative damage
+			displayArmorHP = 0;
+		}
+		if (displayHP <= 0) {
+			displayHP = 0;
 			ko = true;
 		}
 	}

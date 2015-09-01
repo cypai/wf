@@ -11,7 +11,7 @@ import com.pipai.wf.guiobject.AnchoredGUIObject;
 import com.pipai.wf.guiobject.battle.AgentGUIObject;
 
 public class AnchoredAgentInfoDisplay extends AnchoredGUIObject {
-	
+
 	protected AgentGUIObject a;
 
 	public AnchoredAgentInfoDisplay(BattleGUI gui, AgentGUIObject agent) {
@@ -24,7 +24,7 @@ public class AnchoredAgentInfoDisplay extends AnchoredGUIObject {
 
 	@Override
 	public void render(BatchHelper batch) {
-		if (a.getAgent().isKO()) {
+		if (a.isShowingKO()) {
 			return;
 		}
 		ShapeRenderer shapeBatch = batch.getShapeRenderer();
@@ -33,10 +33,10 @@ public class AnchoredAgentInfoDisplay extends AnchoredGUIObject {
 		Vector2 agentPoint = screenPosition;
 		Vector2 barLeftTop = new Vector2(screenPosition.x + 24, screenPosition.y + 24);
 		Vector2 barRightFullTop = new Vector2(screenPosition.x + 24 + bar_width, screenPosition.y + 24);
-		Vector2 barRightTop = new Vector2(screenPosition.x + 24 + bar_width * ((float)a.getAgent().getArmor().getHP() / (float)a.getAgent().getArmor().maxHP()), screenPosition.y + 24);
+		Vector2 barRightTop = new Vector2(screenPosition.x + 24 + bar_width * ((float)a.getDisplayArmorHP() / (float)a.getAgent().getArmor().maxHP()), screenPosition.y + 24);
 		Vector2 barLeftBot = new Vector2(screenPosition.x + 24, screenPosition.y + 18);
 		Vector2 barRightFullBot = new Vector2(screenPosition.x + 24 + bar_width, screenPosition.y + 18);
-		Vector2 barRightBot = new Vector2(screenPosition.x + 24 + bar_width * ((float)a.getAgent().getHP() / (float)a.getAgent().getMaxHP()), screenPosition.y + 18);
+		Vector2 barRightBot = new Vector2(screenPosition.x + 24 + bar_width * ((float)a.getDisplayHP() / (float)a.getAgent().getMaxHP()), screenPosition.y + 18);
 		shapeBatch.setColor(Color.BLUE);
 		shapeBatch.rectLine(agentPoint, barLeftTop, 3);
 		// Health bar background
@@ -62,7 +62,7 @@ public class AnchoredAgentInfoDisplay extends AnchoredGUIObject {
 			shapeBatch.end();
 		}
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();

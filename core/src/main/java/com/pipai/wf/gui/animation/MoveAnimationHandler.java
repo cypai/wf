@@ -123,7 +123,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	@Override
 	public void notifyAnimationEnd(AnimationHandler finishedHandler) {
 		if (finishedHandler == owAniHandler) {
-			if (agent.getAgent().isKO()) {
+			if (agent.isShowingKO()) {
 				finish();
 			} else {
 				go = true;
