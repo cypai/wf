@@ -24,6 +24,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	private LinkedList<Vector2> moveSeq;
 	private Vector2 start, dest;
 	private int t;	//Animation time t counter
+	private LinkedList<BattleEvent> currentOWChain;
 
 	public MoveAnimationHandler(BattleGUI gui, BattleEvent moveEvent, boolean noCameraFollow) {
 		super(gui);
@@ -57,24 +58,22 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 
 	@Override
 	public void notifyCameraMoveInterrupt() {
-		System.out.println("Interrupt");
 		notifyCameraMoveEnd();
 	}
 
 	/**
-	 * @return null if no activation, the chained BattleEvent if there is
+	 * @return all chain events given current position
 	 */
-	private BattleEvent getOWActivationEvent() {
-		BattleEvent retEv = null;
+	private LinkedList<BattleEvent> getOWActivationEvents() {
+		LinkedList<BattleEvent> retEv = new LinkedList<BattleEvent>();
 		if (chainEvents.size() > 0) {
 			for (BattleEvent ev : chainEvents) {
 				Vector2 owtile = BattleTerrainRenderer.centerOfGridPos(ev.getTargetTile());
 				if (owtile.epsilonEquals(start, 0.0001f)) {
-					retEv = ev;
-					break;
+					retEv.add(ev);
 				}
 			}
-			chainEvents.remove(retEv);
+			chainEvents.removeAll(retEv);
 		}
 		return retEv;
 	}
@@ -93,23 +92,28 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	public void update() {
 		if (go && !isFinished()) {
 			t += 1;
-			int time = 6;
+			int time = 30;
 			if (t <= time) {
 				float alpha = (float)t/(float)time;
 				agent.x = start.x*(1-alpha) + dest.x*(alpha);
 				agent.y = start.y*(1-alpha) + dest.y*(alpha);
 			}
 			if (t > time) {
-				BattleEvent ow = getOWActivationEvent();
-				if (ow != null) {
-					owAniHandler = new BulletAttackAnimationHandler(getGUI(), ow);
-					owAniHandler.begin(this);
-					go = false;
+				currentOWChain = getOWActivationEvents();
+				if (currentOWChain.peekFirst() != null) {
+					handleOWActivation();
 				} else {
 					animateNextMoveInSeq();
 				}
 			}
 		}
+	}
+
+	private void handleOWActivation() {
+		BattleEvent ow = currentOWChain.pollFirst();
+		owAniHandler = new BulletAttackAnimationHandler(getGUI(), ow);
+		owAniHandler.begin(this);
+		go = false;
 	}
 
 	private LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
@@ -122,12 +126,14 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 
 	@Override
 	public void notifyAnimationEnd(AnimationHandler finishedHandler) {
-		if (finishedHandler == owAniHandler) {
+		if (currentOWChain.isEmpty()) {
 			if (agent.isShowingKO()) {
 				finish();
 			} else {
 				go = true;
 			}
+		} else {
+			handleOWActivation();
 		}
 	}
 

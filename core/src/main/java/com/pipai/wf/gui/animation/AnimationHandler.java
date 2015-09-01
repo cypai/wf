@@ -12,6 +12,7 @@ public abstract class AnimationHandler {
 
 	public AnimationHandler(BattleGUI gui) {
 		this.gui = gui;
+		gui.registerAnimationHandler(this);
 		camera = gui.getCamera();
 		finished = false;
 	}

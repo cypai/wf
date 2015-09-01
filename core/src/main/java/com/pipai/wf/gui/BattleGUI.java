@@ -111,6 +111,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	private WeaponIndicator weaponIndicator;
 	private AgentStatusWindow agentStatusWindow;
 	private TargetedAction targetedAction;
+	private ArrayList<AnimationHandler> animationHandlerList, animationHandlerBuffer;
 	private AnimationHandler animationHandler;
 
 	public BattleGUI(WFGame game, BattleMap map) {
@@ -156,6 +157,8 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		this.terrainRenderer = new BattleTerrainRenderer(this, map);
 		this.createInstance(this.terrainRenderer);
 		this.generateOverlays();
+		animationHandlerList = new ArrayList<AnimationHandler>();
+		animationHandlerBuffer = new ArrayList<AnimationHandler>();
 		this.setSelected(this.selectableAgentOrderedList.getFirst());
 	}
 
@@ -177,6 +180,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		performVictoryCheck();
 		if (aiTurn) {
 			this.mode = Mode.AI;
+			this.aiMoveWait = 0;
 		} else {
 			this.populateSelectableAgentList();
 			this.mode = Mode.MOVE;
@@ -203,6 +207,9 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	public Mode getMode() { return this.mode; }
 	public RayMapper getRayMapper() { return this.rayMapper; }
 	public AnchoredCamera getCamera() { return this.camera; }
+	public void registerAnimationHandler(AnimationHandler a) {
+		this.animationHandlerBuffer.add(a);
+	}
 
 	public void setSelected(AgentGUIObject agent) {
 		if (agent.getAgent().getAP() > 0) {
@@ -278,6 +285,19 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		rightClickablesDelBuffer.clear();
 	}
 
+	private void cleanAnimationHandlerBuffers() {
+		for (AnimationHandler a : animationHandlerBuffer) {
+			animationHandlerList.add(a);
+		}
+		ArrayList<AnimationHandler> delBuffer = new ArrayList<AnimationHandler>();
+		for (AnimationHandler a : animationHandlerList) {
+			if (a.isFinished()) {
+				delBuffer.add(a);
+			}
+		}
+		animationHandlerList.removeAll(delBuffer);
+	}
+
 	public void updatePaths() {
 		if (selectedAgent != null) {
 			Agent a = selectedAgent.getAgent();
@@ -295,7 +315,6 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	@Override
 	public void notifyBattleEvent(BattleEvent ev) {
 		this.animateEvent(ev);
-		this.aiMoveWait = 0;
 	}
 
 	private void performVictoryCheck() {
@@ -677,8 +696,8 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	@Override
 	public void render(float delta) {
 		super.render(delta);
-		if (animationHandler != null) {
-			animationHandler.update();
+		for (AnimationHandler a : animationHandlerList) {
+			a.update();
 		}
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -707,6 +726,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		}
 		cleanDelBuffers();
 		cleanCreateBuffers();
+		cleanAnimationHandlerBuffers();
 	}
 
 	private void drawFPS() {
