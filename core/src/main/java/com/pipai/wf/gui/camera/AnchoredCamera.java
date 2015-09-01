@@ -37,7 +37,15 @@ public class AnchoredCamera {
 		camera.viewportHeight = height;
 	}
 
+	private void setNewObserver(CameraMovementObserver o) {
+		if (observer != null) {
+			observer.notifyCameraMoveInterrupt();
+		}
+		observer = o;
+	}
+
 	public void moveUp() {
+		setNewObserver(null);
 		cameraMoveTime = 2;
 		Vector3 v = new Vector3(0, 3, 0);
 		v.rotate(rot_axis, angle - 90);
@@ -46,6 +54,7 @@ public class AnchoredCamera {
 	}
 
 	public void moveDown() {
+		setNewObserver(null);
 		cameraMoveTime = 2;
 		Vector3 v = new Vector3(0, -3, 0);
 		v.rotate(rot_axis, angle - 90);
@@ -54,6 +63,7 @@ public class AnchoredCamera {
 	}
 
 	public void moveLeft() {
+		setNewObserver(null);
 		cameraMoveTime = 2;
 		Vector3 v = new Vector3(-3, 0, 0);
 		v.rotate(rot_axis, angle - 90);
@@ -62,6 +72,7 @@ public class AnchoredCamera {
 	}
 
 	public void moveRight() {
+		setNewObserver(null);
 		cameraMoveTime = 2;
 		Vector3 v = new Vector3(3, 0, 0);
 		v.rotate(rot_axis, angle - 90);
@@ -74,7 +85,7 @@ public class AnchoredCamera {
 	}
 
 	public void moveTo(float x, float y, CameraMovementObserver o) {
-		observer = o;
+		setNewObserver(o);
 		float xdiff = camera.position.x - anchor.x;
 		float ydiff = camera.position.y - anchor.y;
 		cameraMoveTime = 0;

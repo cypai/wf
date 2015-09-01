@@ -25,16 +25,21 @@ public abstract class AnimationHandler {
 	}
 
 	public void begin(AnimationObserver observer) {
+		if (finished) {
+			throw new IllegalStateException("Cannot call begin on finished AnimationHandler");
+		}
 		this.observer = observer;
 		beginAnimation();
 	}
 
 	protected abstract void beginAnimation();
 
+	public void update() {}
+
 	protected void finish() {
 		finished = true;
 		if (observer != null) {
-			observer.notifyAnimationEnd();
+			observer.notifyAnimationEnd(this);
 		}
 	}
 

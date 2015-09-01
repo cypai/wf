@@ -4,4 +4,6 @@ public interface CameraMovementObserver {
 
 	public void notifyCameraMoveEnd();
 
+	public void notifyCameraMoveInterrupt();
+
 }

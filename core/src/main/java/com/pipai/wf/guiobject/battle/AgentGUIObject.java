@@ -1,18 +1,14 @@
 package com.pipai.wf.guiobject.battle;
 
-import java.util.LinkedList;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGUI;
 import com.pipai.wf.guiobject.GUIObject;
@@ -21,7 +17,6 @@ import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.XYPositioned;
 import com.pipai.wf.guiobject.overlay.AnchoredAgentInfoDisplay;
-import com.pipai.wf.util.Alarm;
 import com.pipai.wf.util.UtilFunctions;
 
 public class AgentGUIObject extends GUIObject implements XYPositioned, Renderable, LeftClickable3D, RightClickable3D {
@@ -31,14 +26,6 @@ public class AgentGUIObject extends GUIObject implements XYPositioned, Renderabl
 	private boolean selected, ko;
 	public float x, y;
 	public int radius;
-
-	//Animation variables
-	private boolean animating, wait;
-	private LinkedList<Vector2> moveSeq;
-	private Vector2 start, dest;
-	private int t;	//Animation time t counter
-	private LinkedList<BattleEvent> chain;
-	private Alarm owAlarm;
 
 	private Texture circleTex;
 	private Decal decal;
@@ -51,10 +38,7 @@ public class AgentGUIObject extends GUIObject implements XYPositioned, Renderabl
 		this.x = x;
 		this.y = y;
 		this.radius = radius;
-		animating = false;
-		wait = false;
 		ko = false;
-		owAlarm = new Alarm();
 		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
 		Pixmap pixmap = new Pixmap(SQUARE_SIZE, SQUARE_SIZE, Pixmap.Format.RGBA8888);
 		pixmap.fill();
@@ -94,73 +78,11 @@ public class AgentGUIObject extends GUIObject implements XYPositioned, Renderabl
 	public void hit() {
 		if (this.agent.isKO()) {
 			ko = true;
-			if (animating) {
-				gui.endAnimation();
-			}
-		}
-	}
-
-	public void animateMoveSequence(LinkedList<Vector2> seq, LinkedList<BattleEvent> chain) {
-		animating = true;
-		moveSeq = seq;
-		this.chain = chain;
-		animateNextMoveInSeq();
-	}
-
-	private boolean checkOverwatchActivation() {
-		LinkedList<BattleEvent> removeBuffer = new LinkedList<BattleEvent>();
-		boolean owActive = false;
-		if (chain.size() > 0) {
-			for (BattleEvent ev : chain) {
-				Vector2 owtile = BattleTerrainRenderer.centerOfGridPos(ev.getTargetTile());
-				if (owtile.epsilonEquals(start, 0.0001f)) {
-					gui.animateEvent(ev);
-					removeBuffer.add(ev);
-					owActive = true;
-				}
-			}
-			chain.removeAll(removeBuffer);
-		}
-		return owActive;
-	}
-
-	private void animateNextMoveInSeq() {
-		start = moveSeq.pollFirst();
-		dest = moveSeq.peekFirst();
-		t = 0;
-		if (dest == null) {
-			animating = false;
-			start = null;
-			gui.endAnimation();
 		}
 	}
 
 	@Override
 	public void update() {
-		if (!wait) {
-			if (animating) {
-				t += 1;
-				int time = 6;
-				if (t <= time) {
-					float alpha = (float)t/(float)time;
-					x = start.x*(1-alpha) + dest.x*(alpha);
-					y = start.y*(1-alpha) + dest.y*(alpha);
-				}
-				if (t > time) {
-					if (checkOverwatchActivation()) {
-						wait = true;
-						owAlarm.set(60);
-						return;
-					}
-					animateNextMoveInSeq();
-				}
-			}
-		} else {
-			owAlarm.update();
-			if (owAlarm.check()) {
-				wait = false;
-			}
-		}
 		decal.setPosition(x, y, 0);
 		decal.setRotation(gui.getCamera().getCamera().direction, gui.getCamera().getCamera().up);
 	}

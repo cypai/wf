@@ -41,6 +41,7 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.gui.animation.AnimationHandler;
 import com.pipai.wf.gui.animation.AnimationObserver;
+import com.pipai.wf.gui.animation.BulletAttackAnimationHandler;
 import com.pipai.wf.gui.animation.MoveAnimationHandler;
 import com.pipai.wf.gui.camera.AnchoredCamera;
 import com.pipai.wf.guiobject.GUIObject;
@@ -50,7 +51,6 @@ import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.battle.AgentGUIObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
-import com.pipai.wf.guiobject.battle.BulletGUIObject;
 import com.pipai.wf.guiobject.battle.FireballGUIObject;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
@@ -69,8 +69,9 @@ import com.pipai.wf.util.RayMapper;
 public class BattleGUI extends GUI implements BattleObserver, AnimationObserver {
 
 	public static enum Mode {
-		NONE(true),
+		MOVE(true),
 		TARGET_SELECT(true),
+		PRE_ANIMATION(false),
 		ANIMATION(false),
 		AI(false);
 
@@ -124,7 +125,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		this.battle.registerObserver(this);
 		this.ai = new RandomAI(battle);
 		this.aiTurn = false;
-		this.mode = Mode.NONE;
+		this.mode = Mode.MOVE;
 		this.renderables = new ArrayList<Renderable>();
 		this.foregroundRenderables = new ArrayList<Renderable>();
 		this.leftClickables = new ArrayList<LeftClickable3D>();
@@ -171,12 +172,29 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 
 	private void beginAnimation() { this.mode = Mode.ANIMATION; }
 	public void endAnimation() {
+		performVictoryCheck();
 		if (aiTurn) {
 			this.mode = Mode.AI;
 		} else {
-			this.switchToMoveMode();
 			this.populateSelectableAgentList();
-			this.performPostInputChecks();
+			this.mode = Mode.MOVE;
+			// Check if we need to change selected Agent
+			if (this.selectedAgent.getAgent().getAP() == 0 || this.selectedAgent.getAgent().isKO()) {
+				this.selectableAgentOrderedList.remove(this.selectedAgent);
+				if (this.selectableAgentOrderedList.size() > 0) {
+					this.setSelected(this.selectableAgentOrderedList.getFirst());
+				}
+			}
+			for (AgentGUIObject a : this.agentList) {
+				if (a.getAgent().getTeam() == Team.PLAYER && (a.getAgent().getAP() > 0 && !a.getAgent().isKO())) {
+					// Found a movable Agent, so we return and do not start AI turn
+					this.updatePaths();
+					this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
+					return;
+				}
+			}
+			// All moves finished - start the AI
+			startAiTurn();
 		}
 	}
 
@@ -278,30 +296,12 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		this.aiMoveWait = 0;
 	}
 
-	private void performPostInputChecks() {
+	private void performVictoryCheck() {
 		if (this.battle.battleResult() != BattleController.Result.NONE) {
 			this.game.setScreen(new BattleResultsGUI(this.game));
 			this.dispose();
 			return;
 		}
-		if (this.selectedAgent.getAgent().getAP() == 0 || this.selectedAgent.getAgent().isKO()) {
-			this.selectableAgentOrderedList.remove(this.selectedAgent);
-			if (this.selectableAgentOrderedList.size() > 0) {
-				this.setSelected(this.selectableAgentOrderedList.getFirst());
-			}
-			this.mode = Mode.NONE;
-		}
-		for (AgentGUIObject a : this.agentList) {
-			if (a.getAgent().getTeam() == Team.PLAYER && (a.getAgent().getAP() > 0 && !a.getAgent().isKO())) {
-				if (this.mode == Mode.NONE) {
-					this.updatePaths();
-					this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
-				}
-				return;
-			}
-		}
-		// All moves finished - start the AI
-		startAiTurn();
 	}
 
 	private void startAiTurn() {
@@ -354,8 +354,6 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 				System.out.println("Illegal move: " + e.getMessage());
 			}
 		}
-		this.updatePaths();
-		this.switchToMoveMode();
 	}
 
 	public void performMoveWithSelectedAgent(GridPosition destination) {
@@ -390,7 +388,6 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			for (LeftClickable3D o : leftClickables) {
 				o.onLeftClick(ray);
 			}
-			this.performPostInputChecks();
 		}
 	}
 
@@ -400,13 +397,9 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			return;
 		}
 		Ray ray = this.rayMapper.screenToRay(screenX, screenY);
-		boolean performedMove = false;
 		if (this.mode != Mode.ANIMATION) {
 			for (RightClickable3D o : rightClickables) {
 				o.onRightClick(ray);
-			}
-			if (!performedMove) {
-				this.performPostInputChecks();
 			}
 		}
 	}
@@ -435,12 +428,11 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			break;
 		case ATTACK:
 		case RANGED_WEAPON_ATTACK:
-		case OVERWATCH_ACTIVATION:
 			a = this.agentMap.get(event.getPerformer());
 			t = this.agentMap.get(event.getTarget());
-			BulletGUIObject b = new BulletGUIObject(this, a.x, a.y, t.x, t.y, t, event);
-			this.createInstance(b);
-			this.moveCameraToPos((a.x + t.x)/2, (a.y + t.y)/2);
+			beginAnimation();
+			animationHandler = new BulletAttackAnimationHandler(this, a, t, event);
+			animationHandler.begin(this);
 			break;
 		case CAST_TARGET:
 			a = this.agentMap.get(event.getPerformer());
@@ -469,7 +461,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			break;
 		case START_TURN:
 			if (event.getTeam() == Team.PLAYER) {
-				this.mode = Mode.NONE;
+				this.mode = Mode.MOVE;
 				this.aiTurn = false;
 				this.populateSelectableAgentList();
 				this.setSelected(this.selectableAgentOrderedList.getFirst());
@@ -481,12 +473,12 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	}
 
 	@Override
-	public void notifyAnimationEnd() {
+	public void notifyAnimationEnd(AnimationHandler finishedHandler) {
 		endAnimation();
 	}
 
 	public void switchToMoveMode() {
-		this.mode = Mode.NONE;
+		this.mode = Mode.MOVE;
 		this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
 		this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
 	}
@@ -544,6 +536,10 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		return this.targetAgent;
 	}
 
+	public AgentGUIObject getAgentGUIObject(Agent a) {
+		return this.agentMap.get(a);
+	}
+
 	private void globalUpdate() {
 		updateCamera();
 	}
@@ -591,7 +587,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		Action action = null;
 		switch (keycode) {
 		case Keys.NUM_1:
-			if (this.mode == Mode.NONE) {
+			if (this.mode == Mode.MOVE) {
 				switchToTargetMode();
 			}
 			break;
@@ -601,7 +597,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			}
 			break;
 		case Keys.X:
-			if (this.mode == Mode.NONE) {
+			if (this.mode == Mode.MOVE) {
 				action = new SwitchWeaponAction(selectedAgent.getAgent());
 			}
 			break;
@@ -622,7 +618,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			break;
 		case Keys.K:
 			// Skill
-			if (this.mode == Mode.NONE) {
+			if (this.mode == Mode.MOVE) {
 				for (Ability a : selectedAgent.getAgent().getAbilities()) {
 					if (a instanceof PrecisionShotAbility) {
 						this.switchToTargetMode((PrecisionShotAbility)a);
@@ -636,7 +632,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			break;
 		case Keys.SHIFT_LEFT:
 			// Select next unit
-			if (this.mode == Mode.NONE) {
+			if (this.mode == Mode.MOVE) {
 				this.selectableAgentOrderedList.remove(this.selectedAgent);
 				this.selectableAgentOrderedList.addLast(this.selectedAgent);
 				this.setSelected(this.selectableAgentOrderedList.peek());
@@ -653,7 +649,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			this.camera.arcballRotationCCW();
 			break;
 		case Keys.F1:
-			if (this.mode == Mode.NONE || this.targetedAction == null) {
+			if (this.mode == Mode.MOVE || this.targetedAction == null) {
 				this.agentStatusWindow.setAgentStatus(this.selectedAgent.getAgent());
 			} else if (this.mode == Mode.TARGET_SELECT) {
 				if (this.targetedAction instanceof TargetedWithAccuracyAction) {
@@ -670,11 +666,11 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		if (action != null) {
 			try {
 				this.battle.performAction(action);
+				this.mode = Mode.PRE_ANIMATION;
 			} catch (IllegalActionException e) {
 				System.out.println("Illegal move: " + e.getMessage());
 			}
 		}
-		this.performPostInputChecks();
 	}
 
 	@Override
@@ -694,6 +690,9 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	@Override
 	public void render(float delta) {
 		super.render(delta);
+		if (animationHandler != null) {
+			animationHandler.update();
+		}
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		globalUpdate();

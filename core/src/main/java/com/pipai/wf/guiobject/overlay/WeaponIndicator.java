@@ -47,7 +47,7 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 
 	@Override
 	public void render(BatchHelper batch) {
-		if (gui.getMode() != BattleGUI.Mode.NONE && gui.getMode() != BattleGUI.Mode.TARGET_SELECT) {
+		if (gui.getMode() != BattleGUI.Mode.MOVE && gui.getMode() != BattleGUI.Mode.TARGET_SELECT) {
 			return;
 		}
 		ShapeRenderer r = batch.getShapeRenderer();

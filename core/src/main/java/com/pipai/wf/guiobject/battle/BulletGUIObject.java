@@ -61,7 +61,7 @@ public class BulletGUIObject extends GUIObject implements Renderable {
 				dmgTxt = new TemporaryText(gui, txtAnchor, 64, 24, "Missed");
 			}
 			gui.createInstance(dmgTxt);
-			gui.deleteInstance(this);
+			destroy();
 			target.hit();
 		}
 	}
