@@ -43,6 +43,7 @@ import com.pipai.wf.gui.animation.AnimationHandler;
 import com.pipai.wf.gui.animation.AnimationObserver;
 import com.pipai.wf.gui.animation.BulletAttackAnimationHandler;
 import com.pipai.wf.gui.animation.MoveAnimationHandler;
+import com.pipai.wf.gui.animation.OverwatchAnimationHandler;
 import com.pipai.wf.gui.camera.AnchoredCamera;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
@@ -172,6 +173,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 
 	private void beginAnimation() { this.mode = Mode.ANIMATION; }
 	public void endAnimation() {
+		this.animationHandler = null;
 		performVictoryCheck();
 		if (aiTurn) {
 			this.mode = Mode.AI;
@@ -422,17 +424,13 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		switch (event.getType()) {
 		case MOVE:
 			a = this.agentMap.get(event.getPerformer());
-			beginAnimation();
 			animationHandler = new MoveAnimationHandler(this, a, event, event.getPerformer().getTeam() == Team.PLAYER);
-			animationHandler.begin(this);
 			break;
 		case ATTACK:
 		case RANGED_WEAPON_ATTACK:
 			a = this.agentMap.get(event.getPerformer());
 			t = this.agentMap.get(event.getTarget());
-			beginAnimation();
 			animationHandler = new BulletAttackAnimationHandler(this, a, t, event);
-			animationHandler.begin(this);
 			break;
 		case CAST_TARGET:
 			a = this.agentMap.get(event.getPerformer());
@@ -442,10 +440,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			this.moveCameraToPos((a.x + t.x)/2, (a.y + t.y)/2);
 			break;
 		case OVERWATCH:
-			a = this.agentMap.get(event.getPerformer());
-			ttext = new TemporaryText(this, new Vector3(a.x, a.y, 0), 80, 24, "Overwatch");
-			this.createInstance(ttext);
-			this.moveCameraToPos(a.x, a.y);
+			animationHandler = new OverwatchAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
 			break;
 		case RELOAD:
 			a = this.agentMap.get(event.getPerformer());
@@ -469,6 +464,10 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			break;
 		default:
 			break;
+		}
+		if (animationHandler != null) {
+			beginAnimation();
+			animationHandler.begin(this);
 		}
 	}
 
@@ -665,8 +664,8 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		}
 		if (action != null) {
 			try {
-				this.battle.performAction(action);
 				this.mode = Mode.PRE_ANIMATION;
+				this.battle.performAction(action);
 			} catch (IllegalActionException e) {
 				System.out.println("Illegal move: " + e.getMessage());
 			}
