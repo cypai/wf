@@ -9,8 +9,6 @@ import org.junit.Test;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.MoveAction;
-import com.pipai.wf.battle.action.OverwatchAction;
-import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
@@ -133,60 +131,6 @@ public class BattleLogTest extends WfConfiguredTest {
 		// Player has 1000 aim, cannot miss
 		assertTrue(ev.getDamageResult().hit);
 		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.getDamage());
-		assertTrue(enemy.getHP() == expectedHP);
-		assertTrue(player.getHP() == player.getMaxHP());
-	}
-
-	@Test
-	public void testOverwatchLog() {
-		BattleMap map = new BattleMap(5, 5);
-		GridPosition playerPos = new GridPosition(1, 1);
-		GridPosition enemyPos = new GridPosition(2, 2);
-		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		playerState.weapons.add(new Pistol());
-		map.addAgent(playerState);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
-		BattleController battle = new BattleController(map);
-		MockGUIObserver observer = new MockGUIObserver();
-		battle.registerObserver(observer);
-		Agent player = map.getAgentAtPos(playerPos);
-		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertFalse(player == null || enemy == null);
-		OverwatchAction ow = new OverwatchAction(player);
-		try {
-			battle.performAction(ow);
-		} catch (IllegalActionException e) {
-			fail(e.getMessage());
-		}
-		BattleEvent ev = observer.ev;
-		assertTrue(ev.getType() == BattleEvent.Type.OVERWATCH);
-		assertTrue(ev.getPerformer() == player);
-		assertTrue(ev.getPreparedOWName() == "Attack");
-		assertTrue(ev.getChainEvents().size() == 0);
-		//Test Overwatch Activation
-		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
-		GridPosition dest = new GridPosition(2, 1);
-		path.add(enemy.getPosition());
-		path.add(dest);
-		MoveAction move = new MoveAction(enemy, path, 1);
-		try {
-			battle.performAction(move);
-		} catch (IllegalActionException e) {
-			fail(e.getMessage());
-		}
-		BattleEvent moveEv = observer.ev;
-		assertTrue(moveEv.getType() == BattleEvent.Type.MOVE);
-		assertTrue(moveEv.getPerformer() == enemy);
-		LinkedList<BattleEvent> chain = moveEv.getChainEvents();
-		assertTrue(chain.size() == 1);
-		BattleEvent owEv = chain.peekFirst();
-		assertTrue(owEv.getType() == BattleEvent.Type.OVERWATCH_ACTIVATION);
-		assertTrue(owEv.getPerformer() == player);
-		assertTrue(owEv.getTarget() == enemy);
-		assertTrue(owEv.getActivatedOWAction() instanceof RangedWeaponAttackAction);
-		assertTrue(owEv.getChainEvents().size() == 0);
-		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv.getDamage());
 		assertTrue(enemy.getHP() == expectedHP);
 		assertTrue(player.getHP() == player.getMaxHP());
 	}
