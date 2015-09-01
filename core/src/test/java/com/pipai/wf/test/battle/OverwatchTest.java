@@ -121,4 +121,62 @@ public class OverwatchTest extends WfConfiguredTest {
 		assertTrue(player.getHP() == player.getMaxHP());
 	}
 
+	@Test
+	public void testDualOverwatchLog() {
+		BattleMap map = new BattleMap(5, 5);
+		GridPosition player1Pos = new GridPosition(1, 1);
+		GridPosition player2Pos = new GridPosition(0, 1);
+		GridPosition enemyPos = new GridPosition(2, 2);
+		AgentState player1State = AgentStateFactory.newBattleAgentState(Team.PLAYER, player1Pos, 3, 5, 2, 5, 65, 0);
+		player1State.weapons.add(new Pistol());
+		map.addAgent(player1State);
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		AgentState player2State = AgentStateFactory.newBattleAgentState(Team.PLAYER, player2Pos, 3, 5, 2, 5, 65, 0);
+		player2State.weapons.add(new Pistol());
+		map.addAgent(player2State);
+		// Enemy needs more HP to more accurately test damage
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 10, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map);
+		MockGUIObserver observer = new MockGUIObserver();
+		battle.registerObserver(observer);
+		Agent player1 = map.getAgentAtPos(player1Pos);
+		Agent player2 = map.getAgentAtPos(player2Pos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
+		try {
+			battle.performAction(new OverwatchAction(player1));
+			battle.performAction(new OverwatchAction(player2));
+		} catch (IllegalActionException e) {
+			fail(e.getMessage());
+		}
+		//Test Overwatch Activation
+		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		GridPosition dest = new GridPosition(2, 1);
+		path.add(enemy.getPosition());
+		path.add(dest);
+		MoveAction move = new MoveAction(enemy, path, 1);
+		try {
+			battle.performAction(move);
+		} catch (IllegalActionException e) {
+			fail(e.getMessage());
+		}
+		BattleEvent moveEv = observer.ev;
+		assertTrue(moveEv.getType() == BattleEvent.Type.MOVE);
+		assertTrue(moveEv.getPerformer() == enemy);
+		LinkedList<BattleEvent> chain = moveEv.getChainEvents();
+		assertTrue(chain.size() == 2);
+		BattleEvent owEv1 = chain.pollFirst();
+		assertTrue(owEv1.getType() == BattleEvent.Type.OVERWATCH_ACTIVATION);
+		assertTrue(owEv1.getTarget() == enemy);
+		assertTrue(owEv1.getActivatedOWAction() instanceof RangedWeaponAttackAction);
+		assertTrue(owEv1.getChainEvents().size() == 0);
+		BattleEvent owEv2 = chain.pollFirst();
+		assertTrue(owEv2.getType() == BattleEvent.Type.OVERWATCH_ACTIVATION);
+		assertTrue(owEv2.getTarget() == enemy);
+		assertTrue(owEv2.getActivatedOWAction() instanceof RangedWeaponAttackAction);
+		assertTrue(owEv2.getChainEvents().size() == 0);
+		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
+		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv1.getDamage() - owEv2.getDamage());
+		assertTrue(enemy.getHP() == expectedHP);
+	}
+
 }
