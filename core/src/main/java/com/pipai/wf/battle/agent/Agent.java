@@ -265,6 +265,9 @@ public class Agent implements BattleEventLoggable {
 			action.performOnOverwatch(activationLogEvent);
 			this.owContainer.clear();
 			this.state = State.NEUTRAL;
+			if (this.getCurrentWeapon().needsAmmunition()) {
+				this.getCurrentWeapon().expendAmmo(1);
+			}
 		} catch (IllegalActionException e) {
 			System.out.println(e.getMessage());
 		}

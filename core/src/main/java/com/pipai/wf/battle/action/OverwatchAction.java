@@ -19,7 +19,13 @@ public class OverwatchAction extends AlterStateAction {
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
-		getPerformer().overwatch(owAction);
+		Agent performer = getPerformer();
+		if (performer.getCurrentWeapon().needsAmmunition()) {
+			if (performer.getCurrentWeapon().currentAmmo() == 0) {
+				throw new IllegalActionException("Not enough ammo to overwatch");
+			}
+		}
+		performer.overwatch(owAction);
 		log(BattleEvent.overwatchEvent(getPerformer(), OverwatchHelper.getName(this)));
 	}
 
