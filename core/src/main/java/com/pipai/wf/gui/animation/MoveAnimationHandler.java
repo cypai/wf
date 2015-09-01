@@ -57,6 +57,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 
 	@Override
 	public void notifyCameraMoveInterrupt() {
+		System.out.println("Interrupt");
 		notifyCameraMoveEnd();
 	}
 
@@ -101,7 +102,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 			if (t > time) {
 				BattleEvent ow = getOWActivationEvent();
 				if (ow != null) {
-					owAniHandler = new BulletAttackAnimationHandler(getGUI(), agent, getGUI().getAgentGUIObject(ow.getTarget()), ow);
+					owAniHandler = new BulletAttackAnimationHandler(getGUI(), ow);
 					owAniHandler.begin(this);
 					go = false;
 				} else {

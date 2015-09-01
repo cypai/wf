@@ -15,10 +15,10 @@ public class BulletAttackAnimationHandler extends AnimationHandler implements Ca
 	private BattleEvent outcome;
 	private Alarm alarm;
 
-	public BulletAttackAnimationHandler(BattleGUI gui, AgentGUIObject performer, AgentGUIObject target, BattleEvent outcome) {
+	public BulletAttackAnimationHandler(BattleGUI gui, BattleEvent outcome) {
 		super(gui);
-		this.performer = performer;
-		this.target = target;
+		this.performer = getGUI().getAgentGUIObject(outcome.getPerformer());
+		this.target = getGUI().getAgentGUIObject(outcome.getTarget());
 		this.outcome = outcome;
 		alarm = new Alarm();
 	}

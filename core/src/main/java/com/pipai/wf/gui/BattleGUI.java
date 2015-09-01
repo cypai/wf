@@ -430,7 +430,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		case RANGED_WEAPON_ATTACK:
 			a = this.agentMap.get(event.getPerformer());
 			t = this.agentMap.get(event.getTarget());
-			animationHandler = new BulletAttackAnimationHandler(this, a, t, event);
+			animationHandler = new BulletAttackAnimationHandler(this, event);
 			break;
 		case CAST_TARGET:
 			a = this.agentMap.get(event.getPerformer());
