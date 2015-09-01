@@ -19,18 +19,19 @@ import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable3D;
+import com.pipai.wf.guiobject.XYPositioned;
 import com.pipai.wf.guiobject.overlay.AnchoredAgentInfoDisplay;
 import com.pipai.wf.util.Alarm;
 import com.pipai.wf.util.UtilFunctions;
 
-public class AgentGUIObject extends GUIObject implements Renderable, LeftClickable3D, RightClickable3D {
-	
+public class AgentGUIObject extends GUIObject implements XYPositioned, Renderable, LeftClickable3D, RightClickable3D {
+
 	private BattleGUI gui;
 	private Agent agent;
 	private boolean selected, ko;
 	public float x, y;
 	public int radius;
-	
+
 	//Animation variables
 	private boolean animating, wait;
 	private LinkedList<Vector2> moveSeq;
@@ -38,10 +39,10 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 	private int t;	//Animation time t counter
 	private LinkedList<BattleEvent> chain;
 	private Alarm owAlarm;
-	
+
 	private Texture circleTex;
 	private Decal decal;
-	
+
 	public AgentGUIObject(BattleGUI gui, Agent agent, float x, float y, int radius) {
 		super(gui);
 		this.gui = gui;
@@ -66,17 +67,30 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		gui.createInstance(new AnchoredAgentInfoDisplay(gui, this));
 	}
 
+	@Override
+	public float getX() { return x; }
+
+	@Override
+	public float getY() { return y; }
+
+	@Override
+	public void setX(float x) { this.x = x; }
+
+	@Override
+	public void setY(float y) { this.y = y; }
+
+	@Override
 	public int renderPriority() { return 0; }
-	
+
 	public Agent getAgent() { return this.agent; }
-	
+
 	public void select() {
-		selected = true; 
+		selected = true;
 		gui.setSelected(this);
 	}
 	public void deselect() { selected = false; }
 	public boolean isSelected() { return selected; }
-	
+
 	public void hit() {
 		if (this.agent.isKO()) {
 			ko = true;
@@ -85,14 +99,14 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 			}
 		}
 	}
-	
+
 	public void animateMoveSequence(LinkedList<Vector2> seq, LinkedList<BattleEvent> chain) {
 		animating = true;
 		moveSeq = seq;
 		this.chain = chain;
 		animateNextMoveInSeq();
 	}
-	
+
 	private boolean checkOverwatchActivation() {
 		LinkedList<BattleEvent> removeBuffer = new LinkedList<BattleEvent>();
 		boolean owActive = false;
@@ -109,7 +123,7 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		}
 		return owActive;
 	}
-	
+
 	private void animateNextMoveInSeq() {
 		start = moveSeq.pollFirst();
 		dest = moveSeq.peekFirst();
@@ -121,6 +135,7 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		}
 	}
 
+	@Override
 	public void update() {
 		if (!wait) {
 			if (animating) {
@@ -150,45 +165,46 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		decal.setRotation(gui.getCamera().getCamera().direction, gui.getCamera().getCamera().up);
 	}
 
+	@Override
 	public void render(BatchHelper batch) {
 		if (!ko) {
 			batch.getDecalBatch().add(decal);
-//			r.begin(ShapeType.Filled);
-//			if (agent.getTeam() == Team.PLAYER) {
-//				r.setColor(0, 0.8f, 0, 1);
-//			} else {
-//				r.setColor(0.8f, 0, 0, 1);
-//			}
-//			r.circle(x, y, radius);
-//			r.end();
-//			if (this.selected) {
-//				r.begin(ShapeType.Line);
-//				r.setColor(0.8f, 0.8f, 0, 1);
-//				r.circle(x, y, radius);
-//				r.end();
-//			}
-//			SpriteBatch spr = batch.getSpriteBatch();
-//			BitmapFont font = batch.getFont();
-//			spr.begin();
-//			font.setColor(Color.BLACK);
-//			font.draw(spr, String.valueOf(agent.getAP()), x, y+15);
-//			if (!agent.isOpen() && agent.isFlanked()) {
-//				font.setColor(Color.ORANGE);
-//			}
-//			String cover = "-";
-//			switch (agent.getCoverType()) {
-//			case FULL:
-//				cover = "F";
-//				break;
-//			case HALF:
-//				cover = "H";
-//				break;
-//			default:
-//				cover = "-";
-//				break;
-//			}
-//			font.draw(spr, cover, x, y);
-//			spr.end();
+			//			r.begin(ShapeType.Filled);
+			//			if (agent.getTeam() == Team.PLAYER) {
+			//				r.setColor(0, 0.8f, 0, 1);
+			//			} else {
+			//				r.setColor(0.8f, 0, 0, 1);
+			//			}
+			//			r.circle(x, y, radius);
+			//			r.end();
+			//			if (this.selected) {
+			//				r.begin(ShapeType.Line);
+			//				r.setColor(0.8f, 0.8f, 0, 1);
+			//				r.circle(x, y, radius);
+			//				r.end();
+			//			}
+			//			SpriteBatch spr = batch.getSpriteBatch();
+			//			BitmapFont font = batch.getFont();
+			//			spr.begin();
+			//			font.setColor(Color.BLACK);
+			//			font.draw(spr, String.valueOf(agent.getAP()), x, y+15);
+			//			if (!agent.isOpen() && agent.isFlanked()) {
+			//				font.setColor(Color.ORANGE);
+			//			}
+			//			String cover = "-";
+			//			switch (agent.getCoverType()) {
+			//			case FULL:
+			//				cover = "F";
+			//				break;
+			//			case HALF:
+			//				cover = "H";
+			//				break;
+			//			default:
+			//				cover = "-";
+			//				break;
+			//			}
+			//			font.draw(spr, cover, x, y);
+			//			spr.end();
 		}
 	}
 
@@ -230,5 +246,5 @@ public class AgentGUIObject extends GUIObject implements Renderable, LeftClickab
 		}
 		return true;
 	}
-	
+
 }

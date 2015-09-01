@@ -39,6 +39,10 @@ import com.pipai.wf.battle.spell.FireballSpell;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.gui.animation.AnimationHandler;
+import com.pipai.wf.gui.animation.AnimationObserver;
+import com.pipai.wf.gui.animation.MoveAnimationHandler;
+import com.pipai.wf.gui.camera.AnchoredCamera;
 import com.pipai.wf.guiobject.GUIObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.LeftClickable3D;
@@ -62,7 +66,7 @@ import com.pipai.wf.util.RayMapper;
  * Simple 2D GUI for rendering a BattleMap
  */
 
-public class BattleGUI extends GUI implements BattleObserver {
+public class BattleGUI extends GUI implements BattleObserver, AnimationObserver {
 
 	public static enum Mode {
 		NONE(true),
@@ -105,6 +109,7 @@ public class BattleGUI extends GUI implements BattleObserver {
 	private WeaponIndicator weaponIndicator;
 	private AgentStatusWindow agentStatusWindow;
 	private TargetedAction targetedAction;
+	private AnimationHandler animationHandler;
 
 	public BattleGUI(WFGame game, BattleMap map) {
 		super(game);
@@ -259,14 +264,6 @@ public class BattleGUI extends GUI implements BattleObserver {
 			MapGraph graph = new MapGraph(this.battle.getBattleMap(), a.getPosition(), a.getMobility(), a.getAP(), a.getMaxAP());
 			this.selectedMapGraph = graph;
 		}
-	}
-
-	private LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
-		LinkedList<Vector2> vectorized = new LinkedList<Vector2>();
-		for (GridPosition p : path) {
-			vectorized.add(BattleTerrainRenderer.centerOfGridPos(p));
-		}
-		return vectorized;
 	}
 
 	private Vector2 screenPosToGraphicPos(int screenX, int screenY) {
@@ -433,9 +430,8 @@ public class BattleGUI extends GUI implements BattleObserver {
 		case MOVE:
 			a = this.agentMap.get(event.getPerformer());
 			beginAnimation();
-			a.animateMoveSequence(vectorizePath(event.getPath()), event.getChainEvents());
-			this.updatePaths();
-			this.moveCameraToPos(a.x, a.y);
+			animationHandler = new MoveAnimationHandler(this, a, event, event.getPerformer().getTeam() == Team.PLAYER);
+			animationHandler.begin(this);
 			break;
 		case ATTACK:
 		case RANGED_WEAPON_ATTACK:
@@ -482,6 +478,11 @@ public class BattleGUI extends GUI implements BattleObserver {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void notifyAnimationEnd() {
+		endAnimation();
 	}
 
 	public void switchToMoveMode() {
