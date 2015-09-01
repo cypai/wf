@@ -4,7 +4,6 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.weapon.Pistol;
-import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public class AgentStateFactory {
@@ -55,7 +54,6 @@ public class AgentStateFactory {
 		a.state = State.NEUTRAL;
 		a.position = position;
 		a.weapons.add(new Pistol());
-		a.weapons.add(new SpellWeapon());
 		return a;
 	}
 }

@@ -2,22 +2,12 @@ package com.pipai.wf.battle.weapon;
 
 import com.pipai.wf.battle.spell.Spell;
 
-public class SpellWeapon extends Weapon {
+public abstract class SpellWeapon extends Weapon {
 
-	protected Spell spell;
+	private Spell spell;
 
 	public SpellWeapon() {
 		currentAmmo = 0;
-	}
-
-	@Override
-	public boolean needsAmmunition() {
-		return false;
-	}
-
-	@Override
-	public int baseAmmoCapacity() {
-		return 0;
 	}
 
 	public void ready(Spell spell) {
@@ -60,11 +50,6 @@ public class SpellWeapon extends Weapon {
 	@Override
 	public int maxBaseDamage() {
 		return 0;
-	}
-
-	@Override
-	public String name() {
-		return "Spell";
 	}
 
 }

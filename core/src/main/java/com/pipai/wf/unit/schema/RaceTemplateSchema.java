@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.LeatherArmor;
 import com.pipai.wf.battle.weapon.Bow;
+import com.pipai.wf.battle.weapon.InnateCasting;
 import com.pipai.wf.battle.weapon.Pistol;
-import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.race.Race;
@@ -68,7 +68,7 @@ public class RaceTemplateSchema implements UnitSchema {
 		} else {
 			l.add(new Pistol());
 		}
-		l.add(new SpellWeapon());
+		l.add(new InnateCasting());
 		return l;
 	}
 
