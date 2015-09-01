@@ -16,6 +16,7 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
@@ -28,6 +29,22 @@ import com.pipai.wf.test.WfConfiguredTest;
 import com.pipai.wf.util.UtilFunctions;
 
 public class BattleLogTest extends WfConfiguredTest {
+
+	@Test
+	public void chainPopTest() {
+		BattleLog log = new BattleLog();
+		BattleEvent primary = BattleEvent.startTurnEvent(Team.PLAYER);
+		BattleEvent chain = BattleEvent.startTurnEvent(Team.PLAYER);
+		primary.addChainEvent(chain);
+		log.logEvent(primary);
+		BattleEvent popped = log.getLastEvent();
+		assertTrue(popped.getNumChainEvents() == 1);
+		LinkedList<BattleEvent> l = popped.getChainEvents();
+		l.pop();
+		assertTrue(l.size() == 0);
+		assertTrue(popped.getNumChainEvents() == 1);	// Make sure getChainEvent() returns a copy
+		assertTrue(log.getLastEvent().getNumChainEvents() == 1);	// Make sure log does not change
+	}
 
 	@Test
 	public void testMoveLog() {
