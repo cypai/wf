@@ -6,25 +6,28 @@ import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 
 public abstract class AI implements BattleObserver {
-	
+
 	protected BattleController battleController;
 	protected BattleMap map;
 	protected boolean done;
-	
+
 	public AI(BattleController battleController) {
 		this.battleController = battleController;
 		this.battleController.registerObserver(this);
 		this.map = battleController.getBattleMap();
 		done = false;
 	}
-	
+
 	/**
 	 * Indicates that the AI may start calculating its turn moves. Initialization starts here
 	 */
-	public void startTurn() {
+	public final void startTurn() {
 		done = false;
+		startTurnInit();
 	}
-	
+
+	protected void startTurnInit() {}
+
 	/**
 	 * Called when the AI has finished performing all of its moves.
 	 */
@@ -32,19 +35,19 @@ public abstract class AI implements BattleObserver {
 		done = true;
 		this.battleController.endTurn();
 	}
-	
-	public boolean isDone() {
+
+	public final boolean isDone() {
 		return done;
 	}
-	
+
 	/**
 	 * Performs either a single move, or calls endTurn()
 	 */
 	public abstract void performMove();
-	
+
 	@Override
 	public void notifyBattleEvent(BattleEvent ev) {
-		// Inherited classes can override this if they want to only use information gained through notifications 
+		// Inherited classes can override this if they want to only use information gained through notifications
 	}
-	
+
 }

@@ -22,8 +22,7 @@ public class OverwatchAI extends AI {
 	}
 
 	@Override
-	public void startTurn() {
-		super.startTurn();
+	protected void startTurnInit() {
 		this.toAct = new LinkedList<Agent>();
 		for (Agent a : this.enemyAgents) {
 			if (!a.isKO()) {

@@ -1,13 +1,16 @@
 package com.pipai.wf.battle.ai;
 
 import java.util.ArrayList;
+
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.exception.IllegalActionException;
 
 public class TopModularAI extends AI {
-	
-	protected ArrayList<Agent> enemyAgents, playerAgents;
+
+	private ArrayList<Agent> enemyAgents, playerAgents;
+	private ArrayList<ModularAI> ais;
 
 	public TopModularAI(BattleController battleController) {
 		super(battleController);
@@ -22,9 +25,28 @@ public class TopModularAI extends AI {
 		}
 	}
 
+	private void resetAIModules() {
+		this.ais = new ArrayList<ModularAI>();
+		for (Agent a : this.enemyAgents) {
+			if (!a.isKO() && a.getAP() > 0) {
+				ais.add(new GeneralModularAI(a));
+			}
+		}
+	}
+
 	@Override
 	public void performMove() {
-		
+		resetAIModules();
+		ActionScore best = null;
+		for (ModularAI ai : ais) {
+			ActionScore as = ai.getBestMove();
+			best = as.compareAndReturnBetter(best);
+		}
+		try {
+			battleController.performAction(best.action);
+		} catch (IllegalActionException e) {
+			System.out.println("AI tried to perform illegal move: " + e.getMessage());
+		}
 	}
-	
+
 }
