@@ -3,7 +3,7 @@ package com.pipai.wf.battle.map;
 import java.util.ArrayList;
 
 public class DirectionalCoverSystem {
-	
+
 	public static CoverType getDirectionalCover(BattleMap map, GridPosition pos, Direction dir) {
 		BattleMapCell cell = map.getCellInDirection(pos, dir);
 		if (cell == null) {
@@ -16,7 +16,7 @@ public class DirectionalCoverSystem {
 			return CoverType.NONE;
 		}
 	}
-	
+
 	public static CoverType getCover(BattleMap map, GridPosition pos) {
 		CoverType best = CoverType.NONE;
 		for (Direction d : Direction.getAllDirections()) {
@@ -29,7 +29,7 @@ public class DirectionalCoverSystem {
 		}
 		return best;
 	}
-	
+
 	public static ArrayList<Direction> getCoverDirections(BattleMap map, GridPosition pos) {
 		ArrayList<Direction> l = new ArrayList<Direction>();
 		for (Direction d : Direction.getAllDirections()) {
@@ -39,7 +39,7 @@ public class DirectionalCoverSystem {
 		}
 		return l;
 	}
-	
+
 	public static ArrayList<Direction> getNeededCoverDirections(GridPosition pos, GridPosition attackPos) {
 		ArrayList<Direction> l = new ArrayList<Direction>();
 		if (pos.x == attackPos.x) {
@@ -66,16 +66,16 @@ public class DirectionalCoverSystem {
 				l.add(Direction.W);
 			} else {
 				l.add(Direction.S);
-				l.add(Direction.E);
+				l.add(Direction.W);
 			}
 		}
 		return l;
 	}
-	
+
 	public static boolean isOpen(BattleMap map, GridPosition pos) {
 		return getCoverDirections(map, pos).size() == 0;
 	}
-	
+
 	public static boolean isFlankedBy(BattleMap map, GridPosition pos, GridPosition flanker) {
 		ArrayList<Direction> coveredDirs = getCoverDirections(map, pos);
 		ArrayList<Direction> neededDirs = getNeededCoverDirections(pos, flanker);
@@ -86,7 +86,7 @@ public class DirectionalCoverSystem {
 		}
 		return true;
 	}
-	
+
 	public static CoverType getBestCoverAgainstAttack(BattleMap map, GridPosition pos, GridPosition attacker) {
 		ArrayList<Direction> neededDirs = getNeededCoverDirections(pos, attacker);
 		CoverType bestCover = CoverType.NONE;
@@ -98,5 +98,5 @@ public class DirectionalCoverSystem {
 		}
 		return bestCover;
 	}
-	
+
 }

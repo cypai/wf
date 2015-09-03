@@ -124,5 +124,33 @@ public class AgentFlankingTest extends WfConfiguredTest {
 		assertTrue(player.getCoverType() == CoverType.FULL);
 		assertTrue(player.isFlanked());
 	}
-	
+
+	@Test
+	public void testVertDiagonalFlank() {
+		/*
+		 * Map looks like:
+		 * 0 A 1 0
+		 * 0 0 0 0
+		 * 0 0 0 0
+		 * E 0 0 0
+		 */
+		String rawMapString = "4 4\n"
+				+ "s 2 3";
+
+		BattleMap map = null;
+		try {
+			map = new BattleMap(new MapString(rawMapString));
+		} catch (BadStateStringException e) {
+			fail(e.getMessage());
+		}
+		GridPosition playerPos = new GridPosition(1, 3);
+		GridPosition enemyPos = new GridPosition(0, 0);
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		Agent player = map.getAgentAtPos(playerPos);
+		assertTrue(player.getCoverType() == CoverType.FULL);
+		assertTrue(player.isFlanked());
+		assertTrue(player.isFlankedBy(map.getAgentAtPos(enemyPos)));
+	}
+
 }

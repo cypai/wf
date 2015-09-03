@@ -14,6 +14,22 @@ import com.pipai.wf.exception.BadStateStringException;
 public class DirectionalCoverTest {
 
 	@Test
+	public void neededCoverDirectionsTest() {
+		GridPosition pos = new GridPosition(1, 1);
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.S));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.W));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 1)).contains(Direction.W));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.W));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.N));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(1, 2)).contains(Direction.N));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.N));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.E));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 1)).contains(Direction.E));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.E));
+		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.S));
+	}
+
+	@Test
 	public void testVerticalFlank() {
 		/*
 		 * Map looks like:
@@ -130,5 +146,32 @@ public class DirectionalCoverTest {
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 2);
 		assertFalse(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
 	}
-	
+
+	@Test
+	public void testVertDiagonalFlank() {
+		/*
+		 * Map looks like:
+		 * 0 A 1 0
+		 * 0 0 0 0
+		 * 0 0 0 0
+		 * E 0 0 0
+		 */
+		String rawMapString = "4 4\n"
+				+ "s 2 3";
+
+		BattleMap map = null;
+		try {
+			map = new BattleMap(new MapString(rawMapString));
+		} catch (BadStateStringException e) {
+			fail(e.getMessage());
+		}
+		GridPosition playerPos = new GridPosition(1, 3);
+		GridPosition enemyPos = new GridPosition(0, 0);
+		assertFalse(DirectionalCoverSystem.isOpen(map, playerPos));
+		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.E));
+		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).size() == 1);
+		System.out.println(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos));
+		assertTrue(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
+	}
+
 }
