@@ -296,6 +296,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 			}
 		}
 		animationHandlerList.removeAll(delBuffer);
+		animationHandlerBuffer.clear();
 	}
 
 	public void updatePaths() {

@@ -92,7 +92,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	public void update() {
 		if (go && !isFinished()) {
 			t += 1;
-			int time = 30;
+			int time = 6;
 			if (t <= time) {
 				float alpha = (float)t/(float)time;
 				agent.x = start.x*(1-alpha) + dest.x*(alpha);
