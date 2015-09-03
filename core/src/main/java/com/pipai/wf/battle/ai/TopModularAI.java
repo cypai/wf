@@ -37,6 +37,10 @@ public class TopModularAI extends AI {
 	@Override
 	public void performMove() {
 		resetAIModules();
+		if (this.ais.size() == 0) {
+			endTurn();
+			return;
+		}
 		ActionScore best = null;
 		for (ModularAI ai : ais) {
 			ActionScore as = ai.getBestMove();

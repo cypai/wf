@@ -25,7 +25,7 @@ public class OverwatchAnimationHandler extends AnimationHandler implements Camer
 		if (skipCamera) {
 			notifyCameraMoveEnd();
 		} else {
-			getCamera().moveTo(performer.x, performer.y);
+			getCamera().moveTo(performer.x, performer.y, this);
 		}
 	}
 

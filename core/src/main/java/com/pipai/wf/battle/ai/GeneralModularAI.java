@@ -4,11 +4,19 @@ import java.util.ArrayList;
 
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.MoveAction;
+import com.pipai.wf.battle.action.OverwatchAction;
+import com.pipai.wf.battle.action.ReadySpellAction;
+import com.pipai.wf.battle.action.ReloadAction;
+import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
+import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.battle.spell.FireballSpell;
+import com.pipai.wf.battle.weapon.SpellWeapon;
+import com.pipai.wf.battle.weapon.Weapon;
 
 public class GeneralModularAI extends ModularAI {
 
@@ -23,7 +31,52 @@ public class GeneralModularAI extends ModularAI {
 
 	@Override
 	public ActionScore getBestMove() {
-		return getBestMoveAction();
+		Agent a = getAgent();
+		ActionScore best;
+		if (a.isFlanked()) {
+			best = getBestMoveAction();
+		} else {
+			best = getBestAttackAction();
+		}
+		return best;
+	}
+
+	private ActionScore getBestAttackAction() {
+		Agent a = getAgent();
+		Weapon w = a.getCurrentWeapon();
+		if (a.enemiesInRange().size() == 0) {
+			if (w instanceof SpellWeapon) {
+				SpellWeapon sw = (SpellWeapon) w;
+				if (sw.getSpell() == null) {
+					return new ActionScore(new ReadySpellAction(a, new FireballSpell()), 20);
+				} else {
+					return new ActionScore(new OverwatchAction(a), 30);
+				}
+			} else {
+				if (!w.needsAmmunition() || (w.needsAmmunition() && w.currentAmmo() > 0)) {
+					return new ActionScore(new OverwatchAction(a), 30);
+				} else {
+					return new ActionScore(new ReloadAction(a), 20);
+				}
+			}
+		} else {
+			if (w.needsAmmunition() && w.currentAmmo() == 0) {
+				return new ActionScore(new ReloadAction(a), 20);
+			} else {
+				if (w instanceof SpellWeapon) {
+					SpellWeapon sw = (SpellWeapon) w;
+					if (sw.getSpell() == null) {
+						return new ActionScore(new ReadySpellAction(a, new FireballSpell()), 20);
+					}
+				}
+				ActionScore best = new ActionScore(null, Float.MIN_VALUE);
+				for (Agent player : playerAgents) {
+					TargetedWithAccuracyAction action = WeaponActionFactory.defaultWeaponAction(a, player);
+					best = best.compareAndReturnBetter(new ActionScore(action, action.toHit()));
+				}
+				return best;
+			}
+		}
 	}
 
 	private ActionScore getBestMoveAction() {
@@ -31,7 +84,7 @@ public class GeneralModularAI extends ModularAI {
 		ActionScore best = new ActionScore(null, Float.MIN_VALUE);
 		for (GridPosition pos : potentialTiles) {
 			float score = scorePosition(pos);
-			best.compareAndReturnBetter(new ActionScore(new MoveAction(getAgent(), mapgraph.getPath(pos), 1), score));
+			best = best.compareAndReturnBetter(new ActionScore(new MoveAction(getAgent(), mapgraph.getPath(pos), 1), score));
 		}
 		return best;
 	}

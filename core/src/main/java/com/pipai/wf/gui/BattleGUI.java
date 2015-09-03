@@ -29,7 +29,7 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.ai.AI;
 import com.pipai.wf.battle.ai.AIMoveRunnable;
-import com.pipai.wf.battle.ai.RandomAI;
+import com.pipai.wf.battle.ai.TopModularAI;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
@@ -125,7 +125,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		rayMapper = new RayMapper(camera.getCamera());
 		this.battle = new BattleController(map);
 		this.battle.registerObserver(this);
-		this.ai = new RandomAI(battle);
+		this.ai = new TopModularAI(battle);
 		this.aiTurn = false;
 		this.mode = Mode.MOVE;
 		this.renderables = new ArrayList<Renderable>();
@@ -676,6 +676,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 				this.battle.performAction(action);
 			} catch (IllegalActionException e) {
 				System.out.println("Illegal move: " + e.getMessage());
+				this.mode = Mode.MOVE;
 			}
 		}
 	}

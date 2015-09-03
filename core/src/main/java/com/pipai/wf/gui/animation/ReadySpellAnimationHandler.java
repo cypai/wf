@@ -25,7 +25,7 @@ public class ReadySpellAnimationHandler extends AnimationHandler implements Came
 		if (skipCamera) {
 			notifyCameraMoveEnd();
 		} else {
-			getCamera().moveTo(performer.x, performer.y);
+			getCamera().moveTo(performer.x, performer.y, this);
 		}
 	}
 
