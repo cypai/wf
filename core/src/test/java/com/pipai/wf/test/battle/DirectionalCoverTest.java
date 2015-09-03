@@ -170,7 +170,6 @@ public class DirectionalCoverTest {
 		assertFalse(DirectionalCoverSystem.isOpen(map, playerPos));
 		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.E));
 		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).size() == 1);
-		System.out.println(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos));
 		assertTrue(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
 	}
 
