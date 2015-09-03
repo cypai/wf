@@ -29,7 +29,7 @@ public class TopModularAI extends AI {
 		this.ais = new ArrayList<ModularAI>();
 		for (Agent a : this.enemyAgents) {
 			if (!a.isKO() && a.getAP() > 0) {
-				ais.add(new GeneralModularAI(a));
+				ais.add(new GeneralModularAI(this.map, a));
 			}
 		}
 	}

@@ -5,9 +5,9 @@ import com.pipai.wf.battle.action.Action;
 public class ActionScore {
 
 	public final Action action;
-	public final int score;
+	public final float score;
 
-	public ActionScore(Action action, int score) {
+	public ActionScore(Action action, float score) {
 		this.action = action;
 		this.score = score;
 	}
