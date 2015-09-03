@@ -121,6 +121,9 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapab
 
 	@Override
 	public String name() {
+		if (spell == null) {
+			return "No Spell";
+		}
 		return spell.name();
 	}
 

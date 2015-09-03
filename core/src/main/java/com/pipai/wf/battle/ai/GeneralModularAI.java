@@ -3,6 +3,7 @@ package com.pipai.wf.battle.ai;
 import java.util.ArrayList;
 
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.ReadySpellAction;
@@ -38,7 +39,18 @@ public class GeneralModularAI extends ModularAI {
 		} else {
 			best = getBestAttackAction();
 		}
+		if (best.action == null) {
+			return new ActionScore(reloadWeaponAction(), 20);
+		}
 		return best;
+	}
+
+	private Action reloadWeaponAction() {
+		if (getAgent().getCurrentWeapon() instanceof SpellWeapon) {
+			return new ReadySpellAction(getAgent(), new FireballSpell());
+		} else {
+			return new ReloadAction(getAgent());
+		}
 	}
 
 	private ActionScore getBestAttackAction() {
@@ -69,8 +81,11 @@ public class GeneralModularAI extends ModularAI {
 						return new ActionScore(new ReadySpellAction(a, new FireballSpell()), 20);
 					}
 				}
-				ActionScore best = new ActionScore(null, Float.MIN_VALUE);
+				ActionScore best = new ActionScore(null, Float.MIN_NORMAL);
 				for (Agent player : playerAgents) {
+					if (player.isKO()) {
+						continue;
+					}
 					TargetedWithAccuracyAction action = WeaponActionFactory.defaultWeaponAction(a, player);
 					best = best.compareAndReturnBetter(new ActionScore(action, action.toHit()));
 				}
@@ -81,7 +96,7 @@ public class GeneralModularAI extends ModularAI {
 
 	private ActionScore getBestMoveAction() {
 		ArrayList<GridPosition> potentialTiles = mapgraph.getMovableCellPositions(1);
-		ActionScore best = new ActionScore(null, Float.MIN_VALUE);
+		ActionScore best = new ActionScore(null, Float.MIN_NORMAL);
 		for (GridPosition pos : potentialTiles) {
 			float score = scorePosition(pos);
 			best = best.compareAndReturnBetter(new ActionScore(new MoveAction(getAgent(), mapgraph.getPath(pos), 1), score));
@@ -93,6 +108,9 @@ public class GeneralModularAI extends ModularAI {
 		BattleMap map = getBattleMap();
 		float min = Float.MAX_VALUE;
 		for (Agent a : playerAgents) {
+			if (a.isKO()) {
+				continue;
+			}
 			float current = DirectionalCoverSystem.getBestCoverAgainstAttack(map, pos, a.getPosition()).getDefense();
 			min = (current < min) ? current : min;
 		}

@@ -9,6 +9,7 @@ import com.pipai.wf.battle.weapon.InnateCasting;
 import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.AbilityList;
+import com.pipai.wf.unit.ability.FireActualizationAbility;
 import com.pipai.wf.unit.race.Race;
 
 public class RaceTemplateSchema implements UnitSchema {
@@ -68,7 +69,9 @@ public class RaceTemplateSchema implements UnitSchema {
 		} else {
 			l.add(new Pistol());
 		}
-		l.add(new InnateCasting());
+		if (abilities().hasAbility(FireActualizationAbility.class)) {
+			l.add(new InnateCasting());
+		}
 		return l;
 	}
 
