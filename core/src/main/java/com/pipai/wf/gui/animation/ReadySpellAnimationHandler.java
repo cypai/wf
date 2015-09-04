@@ -32,7 +32,7 @@ public class ReadySpellAnimationHandler extends AnimationHandler implements Came
 	@Override
 	public void notifyCameraMoveEnd() {
 		String text = (ev.getQuickened() ? "Quickened " : "Ready ") + ev.getSpell().name();
-		TemporaryText ttext = new TemporaryText(getGUI(), new Vector3(performer.x, performer.y, 0), 120, 24, text);
+		TemporaryText ttext = new TemporaryText(getGUI(), new Vector3(performer.x, performer.y, 0), text);
 		getGUI().createInstance(ttext);
 		finish();
 	}

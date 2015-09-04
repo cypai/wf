@@ -33,7 +33,7 @@ public class OverwatchAnimationHandler extends AnimationHandler implements Camer
 	public void notifyCameraMoveEnd() {
 		String owText = "Overwatch";
 		owText += (ev.getPreparedOWName().equals("Attack") ? "" : ": " + ev.getPreparedOWName());
-		TemporaryText ttext = new TemporaryText(getGUI(), new Vector3(performer.x, performer.y, 0), 80, 24, owText);
+		TemporaryText ttext = new TemporaryText(getGUI(), new Vector3(performer.x, performer.y, 0), owText);
 		getGUI().createInstance(ttext);
 		finish();
 	}

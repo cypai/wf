@@ -29,7 +29,7 @@ public class ReloadAnimationHandler extends AnimationHandler implements CameraMo
 
 	@Override
 	public void notifyCameraMoveEnd() {
-		TemporaryText ttext = new TemporaryText(getGUI(), new Vector3(performer.x, performer.y, 0), 80, 24, "Reload");
+		TemporaryText ttext = new TemporaryText(getGUI(), new Vector3(performer.x, performer.y, 0), "Reload");
 		getGUI().createInstance(ttext);
 		finish();
 	}

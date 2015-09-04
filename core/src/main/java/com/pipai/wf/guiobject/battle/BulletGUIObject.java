@@ -56,9 +56,9 @@ public class BulletGUIObject extends GUIObject implements Renderable {
 			TemporaryText dmgTxt;
 			Vector3 txtAnchor = new Vector3(x + 12 , y + 16*UtilFunctions.rng.nextFloat() - 12, 0);
 			if (outcome.isHit()) {
-				dmgTxt = new TemporaryText(gui, txtAnchor, 48, 24, (outcome.isCrit() ? "/!\\ " : "Hit: ") + String.valueOf(outcome.getDamage()));
+				dmgTxt = new TemporaryText(gui, txtAnchor, (outcome.isCrit() ? "/!\\ " : "Hit: ") + String.valueOf(outcome.getDamage()));
 			} else {
-				dmgTxt = new TemporaryText(gui, txtAnchor, 64, 24, "Missed");
+				dmgTxt = new TemporaryText(gui, txtAnchor, "Missed");
 			}
 			gui.createInstance(dmgTxt);
 			destroy();
