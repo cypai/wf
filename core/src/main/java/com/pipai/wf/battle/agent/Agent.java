@@ -190,7 +190,16 @@ public class Agent implements BattleEventLoggable {
 		return false;
 	}
 
-	public int getDefense(GridPosition attackerPos) {
+	public int getDefense(Agent attacker) {
+		int lowest = Integer.MAX_VALUE;
+		for (GridPosition pos : attacker.getPeekingSquares()) {
+			int curr = getDefense(pos);
+			lowest = (curr < lowest) ? curr : lowest;
+		}
+		return lowest;
+	}
+
+	protected int getDefense(GridPosition attackerPos) {
 		int situationalDef = this.defense + DirectionalCoverSystem.getBestCoverAgainstAttack(map, this.getPosition(), attackerPos).getDefense();
 		return situationalDef;
 	}

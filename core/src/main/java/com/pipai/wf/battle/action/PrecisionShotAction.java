@@ -38,7 +38,7 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 		p.add(new PercentageModifier("Aim", a.getBaseAim()));
 		p.add(new PercentageModifier("Weapon Aim", weapon.flatAimModifier()));
 		p.add(new PercentageModifier("Range", weapon.rangeAimModifier(a.getDistanceFrom(target))));
-		p.add(new PercentageModifier("Defense", -target.getDefense(a.getPosition())));
+		p.add(new PercentageModifier("Defense", -target.getDefense(a)));
 		return p;
 	}
 

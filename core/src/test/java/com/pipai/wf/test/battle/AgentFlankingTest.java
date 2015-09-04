@@ -36,11 +36,13 @@ public class AgentFlankingTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(1, 0);
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.getCoverType() == CoverType.FULL);
 		assertTrue(player.isFlanked());
+		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
 	}
 
 	@Test
@@ -63,11 +65,13 @@ public class AgentFlankingTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(1, 0);
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.getCoverType() == CoverType.FULL);
 		assertFalse(player.isFlanked());
+		assertTrue(player.getDefense(enemy) == CoverType.FULL.getDefense());
 	}
 
 	@Test
@@ -91,11 +95,13 @@ public class AgentFlankingTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(0, 3);
 		GridPosition enemyPos = new GridPosition(1, 0);
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.getCoverType() == CoverType.FULL);
 		assertTrue(player.isFlanked());
+		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
 	}
 
 	@Test
@@ -122,11 +128,13 @@ public class AgentFlankingTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(0, 5);
 		GridPosition enemyPos = new GridPosition(1, 1);
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.getCoverType() == CoverType.FULL);
 		assertTrue(player.isFlanked());
+		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
 	}
 
 	@Test
@@ -149,11 +157,13 @@ public class AgentFlankingTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(0, 3);
 		GridPosition enemyPos = new GridPosition(1, 2);
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.getCoverType() == CoverType.FULL);
 		assertTrue(player.isFlanked());
+		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
 	}
 
 	@Test
@@ -176,12 +186,14 @@ public class AgentFlankingTest extends WfConfiguredTest {
 		}
 		GridPosition playerPos = new GridPosition(1, 3);
 		GridPosition enemyPos = new GridPosition(0, 0);
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.ENEMY, enemyPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertTrue(player.getCoverType() == CoverType.FULL);
 		assertTrue(player.isFlanked());
 		assertTrue(player.isFlankedBy(map.getAgentAtPos(enemyPos)));
+		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
 	}
 
 }
