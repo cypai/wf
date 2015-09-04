@@ -26,7 +26,7 @@ public class GeneralModularAI extends ModularAI {
 
 	public GeneralModularAI(BattleMap map, Agent a) {
 		super(map, a);
-		mapgraph = new MapGraph(getBattleMap(), getAgent().getPosition(), getAgent().getBaseMobility(), 1, 2);
+		mapgraph = new MapGraph(getBattleMap(), getAgent().getPosition(), getAgent().getEffectiveMobility(), 1, 2);
 		playerAgents = getAgentsInTeam(Team.PLAYER);
 	}
 
