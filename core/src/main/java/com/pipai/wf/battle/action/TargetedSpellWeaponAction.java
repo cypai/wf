@@ -3,9 +3,9 @@ package com.pipai.wf.battle.action;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageResult;
-import com.pipai.wf.battle.damage.PercentageModifier;
 import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.SpellDamageFunction;
+import com.pipai.wf.battle.damage.TargetedActionCalculator;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.SpellWeapon;
@@ -49,27 +49,14 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapab
 	public PercentageModifierList getHitCalculation() {
 		Agent a = getPerformer();
 		Agent target = getTarget();
-		Weapon weapon = a.getCurrentWeapon();
-		PercentageModifierList p = new PercentageModifierList();
-		p.add(new PercentageModifier("Aim", a.getBaseAim()));
-		p.add(new PercentageModifier("Weapon Aim", weapon.flatAimModifier()));
-		p.add(new PercentageModifier("Range", weapon.rangeAimModifier(a.getDistanceFrom(target))));
-		p.add(new PercentageModifier("Defense", target.getDefense(a)));
-		return p;
+		return TargetedActionCalculator.baseHitCalculation(a, target);
 	}
 
 	@Override
 	public PercentageModifierList getCritCalculation() {
 		Agent a = getPerformer();
 		Agent target = getTarget();
-		Weapon weapon = a.getCurrentWeapon();
-		PercentageModifierList p = new PercentageModifierList();
-		p.add(new PercentageModifier("Weapon Base", weapon.flatCritProbabilityModifier()));
-		p.add(new PercentageModifier("Range", weapon.rangeCritModifier(a.getDistanceFrom(target))));
-		if (target.isFlankedBy(a)) {
-			p.add(new PercentageModifier("No Cover", 30));
-		}
-		return p;
+		return TargetedActionCalculator.baseCritCalculation(a, target);
 	}
 
 	@Override

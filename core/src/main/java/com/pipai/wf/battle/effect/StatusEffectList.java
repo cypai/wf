@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.pipai.wf.battle.action.Action;
+import com.pipai.wf.battle.damage.PercentageModifier;
+import com.pipai.wf.battle.damage.PercentageModifierList;
 
 public class StatusEffectList implements Iterable<StatusEffect> {
 
@@ -54,6 +56,14 @@ public class StatusEffectList implements Iterable<StatusEffect> {
 			total += se.flatMobilityModifier();
 		}
 		return total;
+	}
+
+	public PercentageModifierList aimModifierList() {
+		PercentageModifierList l = new PercentageModifierList();
+		for (StatusEffect se : list) {
+			l.add(new PercentageModifier(se.name(), se.flatAimModifier()));
+		}
+		return l;
 	}
 
 	@Override

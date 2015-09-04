@@ -17,6 +17,10 @@ public class PercentageModifierList implements Iterable<PercentageModifier> {
 		}
 	}
 
+	public void concat(PercentageModifierList other) {
+		modifierList.addAll(other.modifierList);
+	}
+
 	public int total() {
 		int total = 0;
 		for (PercentageModifier p : modifierList) {
