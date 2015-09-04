@@ -1,6 +1,5 @@
 package com.pipai.wf.unit.ability;
 
-import com.pipai.wf.battle.agent.Agent;
 
 public class RegenerationAbility extends PassiveAbility {
 
@@ -24,8 +23,8 @@ public class RegenerationAbility extends PassiveAbility {
 	}
 
 	@Override
-	protected void onRoundEndImpl(Agent a) {
-		a.heal(super.getLevel());
+	protected void onRoundEndImpl() {
+		getAgent().heal(super.getLevel());
 	}
 
 }

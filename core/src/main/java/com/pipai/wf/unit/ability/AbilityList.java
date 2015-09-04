@@ -4,17 +4,27 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.spell.SpellElement;
+import com.pipai.wf.exception.NoRegisteredAgentException;
 
 public class AbilityList implements Iterable<Ability> {
 
+	private Agent registeredAgent;
 	private LinkedList<Ability> list;
 	private HashMap<Class<? extends Spell>, Integer> spellMap;
 
 	public AbilityList() {
 		list = new LinkedList<Ability>();
 		spellMap = new HashMap<Class<? extends Spell>, Integer>();
+	}
+
+	public void registerToAgent(Agent agent) {
+		for (Ability a : list) {
+			a.registerToAgent(agent);
+		}
+		registeredAgent = agent;
 	}
 
 	public boolean hasSpell(Spell spell) {
@@ -80,11 +90,18 @@ public class AbilityList implements Iterable<Ability> {
 		return 0;
 	}
 
+	public void onRoundEnd() throws NoRegisteredAgentException {
+		for (Ability a : list) {
+			a.onRoundEnd();
+		}
+	}
+
 	public boolean add(Ability arg0) {
 		list.add(arg0);
 		if (arg0 instanceof SpellAbility) {
 			spellMap.put(arg0.getGrantedSpell().getClass(), 1);
 		}
+		arg0.registerToAgent(registeredAgent);
 		return true;
 	}
 

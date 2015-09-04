@@ -22,6 +22,7 @@ import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.exception.NoRegisteredAgentException;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.util.UtilFunctions;
@@ -62,6 +63,7 @@ public class Agent implements BattleEventLoggable {
 		weaponIndex = 0;
 		armor = state.armor;
 		abilities = state.abilities.clone();
+		abilities.registerToAgent(this);
 		name = state.name;
 		owContainer = new OverwatchContainer();
 		seList = new StatusEffectList();
@@ -265,7 +267,11 @@ public class Agent implements BattleEventLoggable {
 
 	public void onRoundEnd() {
 		for (Ability a : abilities) {
-			a.onRoundEnd(this);
+			try {
+				a.onRoundEnd();
+			} catch (NoRegisteredAgentException e) {
+				throw new IllegalStateException("Ability is not registered with this Agent");
+			}
 		}
 		seList.onRoundEnd();
 	}

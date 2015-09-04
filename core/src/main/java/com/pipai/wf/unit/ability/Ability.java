@@ -2,11 +2,13 @@ package com.pipai.wf.unit.ability;
 
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.spell.Spell;
+import com.pipai.wf.exception.NoRegisteredAgentException;
 
 public abstract class Ability {
 
 	private int cooldown;
 	private int level;
+	private Agent agent;
 
 	public Ability(int level) {
 		this.level = level;
@@ -19,6 +21,14 @@ public abstract class Ability {
 	@Override
 	public abstract Ability clone();
 
+	public void registerToAgent(Agent agent) {
+		this.agent = agent;
+	}
+
+	public Agent getAgent() {
+		return agent;
+	}
+
 	public void startCooldown() {}
 
 	public boolean isOnCooldown() {
@@ -29,14 +39,21 @@ public abstract class Ability {
 		return 0;
 	}
 
-	public final void onRoundEnd(Agent a) {
+	private void requireRegisteredAgent() throws NoRegisteredAgentException {
+		if (agent == null) {
+			throw new NoRegisteredAgentException();
+		}
+	}
+
+	public final void onRoundEnd() throws NoRegisteredAgentException {
+		requireRegisteredAgent();
 		if (cooldown > 0) {
 			cooldown -= 1;
 		}
-		onRoundEndImpl(a);
+		onRoundEndImpl();
 	}
 
-	protected void onRoundEndImpl(Agent a) {}
+	protected void onRoundEndImpl() {}
 
 	public boolean grantsSpell() {
 		return false;
