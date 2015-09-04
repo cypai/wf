@@ -265,14 +265,8 @@ public class Agent implements BattleEventLoggable {
 		}
 	}
 
-	public void onRoundEnd() {
-		for (Ability a : abilities) {
-			try {
-				a.onRoundEnd();
-			} catch (NoRegisteredAgentException e) {
-				throw new IllegalStateException("Ability is not registered with this Agent");
-			}
-		}
+	public void onRoundEnd() throws NoRegisteredAgentException {
+		abilities.onRoundEnd();
 		seList.onRoundEnd();
 	}
 
