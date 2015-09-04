@@ -3,7 +3,7 @@ package com.pipai.wf.unit.ability;
 public class ElectricActualizationAbility extends PassiveAbility {
 
 	public ElectricActualizationAbility(int level) {
-		super(AbilityType.ELECTRIC_ACTUALIZATION, level);
+		super(level);
 	}
 
 	@Override

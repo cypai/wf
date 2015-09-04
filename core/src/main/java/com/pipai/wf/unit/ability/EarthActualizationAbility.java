@@ -3,7 +3,7 @@ package com.pipai.wf.unit.ability;
 public class EarthActualizationAbility extends PassiveAbility {
 
 	public EarthActualizationAbility(int level) {
-		super(AbilityType.EARTH_ACTUALIZATION, level);
+		super(level);
 	}
 
 	@Override

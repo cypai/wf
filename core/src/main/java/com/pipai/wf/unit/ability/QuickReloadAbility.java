@@ -3,7 +3,7 @@ package com.pipai.wf.unit.ability;
 public class QuickReloadAbility extends PassiveAbility {
 
 	public QuickReloadAbility() {
-		super(AbilityType.QUICK_RELOAD, 0);
+		super(0);
 	}
 
 	@Override

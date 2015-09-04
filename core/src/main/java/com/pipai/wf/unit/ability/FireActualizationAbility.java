@@ -3,7 +3,7 @@ package com.pipai.wf.unit.ability;
 public class FireActualizationAbility extends PassiveAbility {
 
 	public FireActualizationAbility(int level) {
-		super(AbilityType.FIRE_ACTUALIZATION, level);
+		super(level);
 	}
 
 	@Override

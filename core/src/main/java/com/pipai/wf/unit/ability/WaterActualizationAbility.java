@@ -3,7 +3,7 @@ package com.pipai.wf.unit.ability;
 public class WaterActualizationAbility extends PassiveAbility {
 
 	public WaterActualizationAbility(int level) {
-		super(AbilityType.WATER_ACTUALIZATION, level);
+		super(level);
 	}
 
 	@Override

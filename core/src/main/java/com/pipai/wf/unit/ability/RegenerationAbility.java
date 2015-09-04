@@ -5,7 +5,7 @@ import com.pipai.wf.battle.agent.Agent;
 public class RegenerationAbility extends PassiveAbility {
 
 	public RegenerationAbility(int level) {
-		super(AbilityType.REGENERATION, level);
+		super(level);
 	}
 
 	@Override

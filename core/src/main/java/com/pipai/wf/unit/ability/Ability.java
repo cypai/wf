@@ -7,10 +7,8 @@ public abstract class Ability {
 
 	private int cooldown;
 	private int level;
-	private AbilityType type;
 
-	public Ability(AbilityType t, int level) {
-		type = t;
+	public Ability(int level) {
 		this.level = level;
 	}
 
@@ -46,10 +44,6 @@ public abstract class Ability {
 
 	public Spell getGrantedSpell() {
 		return null;
-	}
-
-	public final AbilityType type() {
-		return type;
 	}
 
 	public final int getLevel() {

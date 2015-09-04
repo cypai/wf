@@ -4,8 +4,8 @@ import com.pipai.wf.battle.spell.Spell;
 
 public abstract class ActiveSkillAbility extends Ability {
 
-	public ActiveSkillAbility(AbilityType t, int level) {
-		super(t, level);
+	public ActiveSkillAbility(int level) {
+		super(level);
 	}
 
 	@Override

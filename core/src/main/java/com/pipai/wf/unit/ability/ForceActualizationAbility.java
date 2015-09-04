@@ -3,7 +3,7 @@ package com.pipai.wf.unit.ability;
 public class ForceActualizationAbility extends PassiveAbility {
 
 	public ForceActualizationAbility(int level) {
-		super(AbilityType.FORCE_ACTUALIZATION, level);
+		super(level);
 	}
 
 	@Override

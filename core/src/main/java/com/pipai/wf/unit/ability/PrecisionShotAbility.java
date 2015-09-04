@@ -7,7 +7,7 @@ import com.pipai.wf.battle.agent.Agent;
 public class PrecisionShotAbility extends ActiveSkillTargetedAccAbility {
 
 	public PrecisionShotAbility() {
-		super(AbilityType.PRECISION_SHOT, 0);
+		super(0);
 	}
 
 	@Override

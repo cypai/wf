@@ -5,8 +5,8 @@ import com.pipai.wf.battle.agent.Agent;
 
 public abstract class ActiveSkillTargetedAccAbility extends ActiveSkillAbility {
 
-	public ActiveSkillTargetedAccAbility(AbilityType t, int level) {
-		super(t, level);
+	public ActiveSkillTargetedAccAbility(int level) {
+		super(level);
 	}
 
 	public abstract TargetedWithAccuracyAction getAction(Agent performer, Agent target);

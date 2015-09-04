@@ -3,7 +3,7 @@ package com.pipai.wf.unit.ability;
 public class LightActualizationAbility extends PassiveAbility {
 
 	public LightActualizationAbility(int level) {
-		super(AbilityType.LIGHT_ACTUALIZATION, level);
+		super(level);
 	}
 
 	@Override
