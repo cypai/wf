@@ -3,8 +3,11 @@ package com.pipai.wf.battle.agent;
 import java.util.ArrayList;
 
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.armor.Armor;
+import com.pipai.wf.battle.effect.StatusEffect;
+import com.pipai.wf.battle.effect.StatusEffectList;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
 import com.pipai.wf.battle.log.BattleLog;
@@ -40,6 +43,7 @@ public class Agent implements BattleEventLoggable {
 	protected BattleLog log;
 	protected OverwatchContainer owContainer;
 	protected AbilityList abilities;
+	protected StatusEffectList seList;
 
 	public Agent(BattleMap map, AgentState state) {
 		this.map = map;
@@ -60,6 +64,7 @@ public class Agent implements BattleEventLoggable {
 		abilities = state.abilities.clone();
 		name = state.name;
 		owContainer = new OverwatchContainer();
+		seList = new StatusEffectList();
 	}
 
 	public BattleMap getBattleMap() { return this.map; }
@@ -67,9 +72,12 @@ public class Agent implements BattleEventLoggable {
 	public void setTeam(Team team) { this.team = team; }
 	public int getAP() { return this.ap; }
 	public void setAP(int ap) { this.ap = ap; }
-	public void useAP(int ap) { this.ap -= ap; if (this.ap < 0) {
-		this.ap = 0;
-	} }
+	public void useAP(int ap) {
+		this.ap -= ap;
+		if (this.ap < 0) {
+			this.ap = 0;
+		}
+	}
 	public int getMaxAP() { return this.maxAP; }
 	public int getHP() { return this.hp; }
 	public void setHP(int hp) {
@@ -97,7 +105,7 @@ public class Agent implements BattleEventLoggable {
 	public void setMP(int mp) { this.mp = mp; }
 	public void useMP(int mp) { this.mp -= mp; }
 	public int getMaxMP() { return this.maxMP; }
-	public int getMobility() { return this.mobility; }
+	public int getBaseMobility() { return this.mobility; }
 	public int getBaseAim() { return this.aim; }
 	public Weapon getCurrentWeapon() {
 		if (this.weapons.size() == 0) {
@@ -128,6 +136,14 @@ public class Agent implements BattleEventLoggable {
 			}
 		}
 		return l;
+	}
+
+	public void inflictStatus(StatusEffect se) {
+		seList.add(se);
+	}
+
+	public StatusEffectList getStatusEffects() {
+		return seList;
 	}
 
 	public GridPosition getPosition() { return this.position; }
@@ -240,17 +256,22 @@ public class Agent implements BattleEventLoggable {
 		}
 	}
 
-	public void procRoundEndAbilities() {
-		for (Ability a : abilities) {
-			a.notifyRoundEnd(this);
-		}
-	}
-
-	public void postTurnReset() {
+	public void onTurnBegin() {
 		ap = maxAP;
 		if (!isKO()) {
 			state = State.NEUTRAL;
 		}
+	}
+
+	public void onRoundEnd() {
+		for (Ability a : abilities) {
+			a.notifyRoundEnd(this);
+		}
+		seList.onRoundEnd();
+	}
+
+	public void onAction(Action action) {
+		seList.onAction(action);
 	}
 
 	public void switchWeapon() {

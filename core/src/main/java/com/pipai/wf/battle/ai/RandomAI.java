@@ -75,7 +75,7 @@ public class RandomAI extends AI {
 		if (r < list.size()) {
 			return list.get(r);
 		} else {
-			MapGraph graph = new MapGraph(this.map, a.getPosition(), a.getMobility(), 1, 2);
+			MapGraph graph = new MapGraph(this.map, a.getPosition(), a.getBaseMobility(), 1, 2);
 			ArrayList<GridPosition> potentialTiles = graph.getMovableCellPositions(1);
 			GridPosition destination = potentialTiles.get(UtilFunctions.rng.nextInt(potentialTiles.size()));
 			LinkedList<GridPosition> path = graph.getPath(destination);

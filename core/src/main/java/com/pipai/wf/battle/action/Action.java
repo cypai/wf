@@ -8,51 +8,55 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.exception.IllegalActionException;
 
 public abstract class Action implements BattleEventLoggable {
-	
-    private BattleLog log;
+
+	private BattleLog log;
 	private Agent performerAgent;
 	private BattleMap map;
-	
+
 	public Action(Agent performerAgent) {
 		this.performerAgent = performerAgent;
 		this.map = performerAgent.getBattleMap();
 	}
-	
+
 	public final Agent getPerformer() {
-	    return performerAgent;
+		return performerAgent;
 	}
-	
+
 	public final BattleMap getBattleMap() {
-	    return map;
+		return map;
 	}
-	
-	public void perform() throws IllegalActionException {
+
+	public final void perform() throws IllegalActionException {
 		if (this.performerAgent.getAP() < this.getAPRequired()) {
 			throw new IllegalActionException("Not enough AP for action");
 		}
 		if (this.performerAgent.isKO()) {
 			throw new IllegalActionException("KOed unit cannot act");
 		}
+		performImpl();
+		this.performerAgent.onAction(this);
 	}
-	
+
+	protected abstract void performImpl() throws IllegalActionException;
+
 	/*
 	 * Returns the minimum AP required to perform the action
 	 */
 	public abstract int getAPRequired();
-	
+
 	public abstract String name();
-	
+
 	public abstract String description();
-	
+
 	@Override
-    public final void register(BattleLog log) {
-        this.log = log;
-    }
-    
-    protected final void log(BattleEvent ev) {
-    	if (log != null) {
-    		log.logEvent(ev);
-    	}
-    }
-	
+	public final void register(BattleLog log) {
+		this.log = log;
+	}
+
+	protected final void log(BattleEvent ev) {
+		if (log != null) {
+			log.logEvent(ev);
+		}
+	}
+
 }

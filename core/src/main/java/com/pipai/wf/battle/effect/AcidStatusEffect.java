@@ -25,7 +25,7 @@ public class AcidStatusEffect extends StatusEffect {
 
 	@Override
 	public int flatMobilityModifier() {
-		return -getAgent().getMobility()/2;
+		return -getAgent().getBaseMobility()/2;
 	}
 
 	@Override

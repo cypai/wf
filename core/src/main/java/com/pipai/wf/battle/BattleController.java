@@ -14,17 +14,17 @@ import com.pipai.wf.exception.IllegalActionException;
  */
 
 public class BattleController {
-	
+
 	public enum Result {
 		NONE, VICTORY, DEFEAT;
 	}
-	
+
 	private BattleMap map;
 	private BattleLog log;
 	private Team currentTeam;
 	private LinkedList<BattleObserver> observerList;
 	private LinkedList<Agent> playerList, enemyList;
-	
+
 	public BattleController(BattleMap map) {
 		log = new BattleLog();
 		this.map = map;
@@ -42,53 +42,53 @@ public class BattleController {
 			}
 		}
 	}
-	
+
 	public BattleMap getBattleMap() {
 		return this.map;
 	}
-	
+
 	public Team getCurrentTeam() {
 		return this.currentTeam;
 	}
-	
+
 	public void registerObserver(BattleObserver o) {
 		this.observerList.add(o);
 	}
-	
+
 	private void notifyObservers(BattleEvent ev) {
 		for (BattleObserver o : this.observerList) {
 			o.notifyBattleEvent(ev);
 		}
 	}
-	
+
 	public void endTurn() {
 		if (this.currentTeam == Team.PLAYER) {
 			this.currentTeam = Team.ENEMY;
 			for (Agent a : this.enemyList) {
-				a.postTurnReset();
+				a.onTurnBegin();
 			}
 			notifyObservers(BattleEvent.startTurnEvent(Team.ENEMY));
 		} else {
 			// Round ended
 			for (Agent a : this.map.getAgents()) {
-				a.procRoundEndAbilities();
+				a.onRoundEnd();
 			}
 			// Start Player turn
 			this.currentTeam = Team.PLAYER;
 			for (Agent a : this.playerList) {
-				a.postTurnReset();
+				a.onTurnBegin();
 			}
 			notifyObservers(BattleEvent.startTurnEvent(Team.PLAYER));
 		}
 	}
-	
+
 	public void performAction(Action a) throws IllegalActionException {
 		log.clear();
 		a.register(log);
 		a.perform();
 		this.notifyObservers(log.getLastEvent());
 	}
-	
+
 	public Result battleResult() {
 		int ko_amount = 0;
 		for (Agent a : enemyList) {
@@ -110,9 +110,9 @@ public class BattleController {
 		}
 		return Result.NONE;
 	}
-	
+
 	public BattleLog getLog() {
 		return log;
 	}
-	
+
 }

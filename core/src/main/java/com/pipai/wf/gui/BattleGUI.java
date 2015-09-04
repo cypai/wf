@@ -302,7 +302,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	public void updatePaths() {
 		if (selectedAgent != null) {
 			Agent a = selectedAgent.getAgent();
-			MapGraph graph = new MapGraph(this.battle.getBattleMap(), a.getPosition(), a.getMobility(), a.getAP(), a.getMaxAP());
+			MapGraph graph = new MapGraph(this.battle.getBattleMap(), a.getPosition(), a.getBaseMobility(), a.getAP(), a.getMaxAP());
 			this.selectedMapGraph = graph;
 		}
 	}

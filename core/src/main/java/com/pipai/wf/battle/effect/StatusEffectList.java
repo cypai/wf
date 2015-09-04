@@ -3,6 +3,8 @@ package com.pipai.wf.battle.effect;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.pipai.wf.battle.action.Action;
+
 public class StatusEffectList implements Iterable<StatusEffect> {
 
 	private ArrayList<StatusEffect> list;
@@ -57,6 +59,18 @@ public class StatusEffectList implements Iterable<StatusEffect> {
 	@Override
 	public Iterator<StatusEffect> iterator() {
 		return list.iterator();
+	}
+
+	public final void onRoundEnd() {
+		for (StatusEffect se : list) {
+			se.onRoundEnd();
+		}
+	}
+
+	public final void onAction(Action action) {
+		for (StatusEffect se : list) {
+			se.onAction(action);
+		}
 	}
 
 }
