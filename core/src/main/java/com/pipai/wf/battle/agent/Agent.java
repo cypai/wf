@@ -265,7 +265,7 @@ public class Agent implements BattleEventLoggable {
 
 	public void onRoundEnd() {
 		for (Ability a : abilities) {
-			a.notifyRoundEnd(this);
+			a.onRoundEnd(this);
 		}
 		seList.onRoundEnd();
 	}

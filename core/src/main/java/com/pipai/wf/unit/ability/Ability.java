@@ -31,14 +31,14 @@ public abstract class Ability {
 		return 0;
 	}
 
-	public final void notifyRoundEnd(Agent a) {
+	public final void onRoundEnd(Agent a) {
 		if (cooldown > 0) {
 			cooldown -= 1;
 		}
-		onRoundEnd(a);
+		onRoundEndImpl(a);
 	}
 
-	protected void onRoundEnd(Agent a) {}
+	protected void onRoundEndImpl(Agent a) {}
 
 	public boolean grantsSpell() {
 		return false;

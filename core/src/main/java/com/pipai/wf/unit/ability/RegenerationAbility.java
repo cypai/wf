@@ -24,7 +24,7 @@ public class RegenerationAbility extends PassiveAbility {
 	}
 
 	@Override
-	protected void onRoundEnd(Agent a) {
+	protected void onRoundEndImpl(Agent a) {
 		a.heal(super.getLevel());
 	}
 
