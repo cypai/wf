@@ -108,6 +108,7 @@ public class Agent implements BattleEventLoggable {
 	public void useMP(int mp) { this.mp -= mp; }
 	public int getMaxMP() { return this.maxMP; }
 	public int getBaseMobility() { return this.mobility; }
+	public int getEffectiveMobility() { return mobility + seList.totalMobilityModifier(); }
 	public int getBaseAim() { return this.aim; }
 	public Weapon getCurrentWeapon() {
 		if (this.weapons.size() == 0) {
