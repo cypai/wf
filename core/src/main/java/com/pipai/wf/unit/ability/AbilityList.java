@@ -53,7 +53,26 @@ public class AbilityList implements Iterable<Ability> {
 				if (a instanceof FireActualizationAbility) {
 					return a.getLevel();
 				}
-				break;
+			case WATER:
+				if (a instanceof WaterActualizationAbility) {
+					return a.getLevel();
+				}
+			case EARTH:
+				if (a instanceof EarthActualizationAbility) {
+					return a.getLevel();
+				}
+			case ELECTRIC:
+				if (a instanceof ElectricActualizationAbility) {
+					return a.getLevel();
+				}
+			case LIGHT:
+				if (a instanceof LightActualizationAbility) {
+					return a.getLevel();
+				}
+			case FORCE:
+				if (a instanceof ForceActualizationAbility) {
+					return a.getLevel();
+				}
 			default:
 				break;
 			}

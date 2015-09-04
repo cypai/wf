@@ -5,7 +5,7 @@ public enum SpellElement {
 	FIRE,
 	WATER,
 	EARTH,
-	ELECTRICITY,
+	ELECTRIC,
 	LIGHT,
 	FORCE;
 
