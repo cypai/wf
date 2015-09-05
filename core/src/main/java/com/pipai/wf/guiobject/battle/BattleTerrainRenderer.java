@@ -28,12 +28,12 @@ import com.pipai.wf.battle.map.EnvironmentObject;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.BattleGUI;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.gui.BattleGui;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable3D;
 
-public class BattleTerrainRenderer extends GUIObject implements Renderable, RightClickable3D {
+public class BattleTerrainRenderer extends GuiObject implements Renderable, RightClickable3D {
 
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
@@ -52,7 +52,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		return new Vector2(pos.x*SQUARE_SIZE + SQUARE_SIZE/2, pos.y*SQUARE_SIZE + SQUARE_SIZE/2);
 	}
 
-	protected BattleGUI gui;
+	protected BattleGui gui;
 	protected BattleMap map;
 	protected List<GridPosition> moveTiles, midDashTiles, dashTiles, targetTiles, targetableTiles;
 
@@ -62,7 +62,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 	private ModelBuilder modelBuilder;
 	private Texture grassTexture;
 
-	public BattleTerrainRenderer(BattleGUI gui, BattleMap map) {
+	public BattleTerrainRenderer(BattleGui gui, BattleMap map) {
 		super(gui);
 		this.gui = gui;
 		this.map = map;

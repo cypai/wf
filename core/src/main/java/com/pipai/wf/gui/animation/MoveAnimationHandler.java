@@ -5,14 +5,14 @@ import java.util.LinkedList;
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.gui.BattleGUI;
+import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.gui.camera.CameraMovementObserver;
-import com.pipai.wf.guiobject.battle.AgentGUIObject;
+import com.pipai.wf.guiobject.battle.AgentGuiObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
 
 public class MoveAnimationHandler extends AnimationHandler implements CameraMovementObserver, AnimationObserver {
 
-	private AgentGUIObject agent;
+	private AgentGuiObject agent;
 	private LinkedList<GridPosition> path;
 	private LinkedList<BattleEvent> chainEvents;
 	private boolean noCameraFollow;
@@ -26,7 +26,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	private int t;	//Animation time t counter
 	private LinkedList<BattleEvent> currentOWChain;
 
-	public MoveAnimationHandler(BattleGUI gui, BattleEvent moveEvent, boolean noCameraFollow) {
+	public MoveAnimationHandler(BattleGui gui, BattleEvent moveEvent, boolean noCameraFollow) {
 		super(gui);
 		agent = getGUI().getAgentGUIObject(moveEvent.getPerformer());
 		path = moveEvent.getPath();

@@ -11,8 +11,8 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.BattleGUI;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.gui.BattleGui;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable3D;
@@ -20,9 +20,9 @@ import com.pipai.wf.guiobject.XYPositioned;
 import com.pipai.wf.guiobject.overlay.AnchoredAgentInfoDisplay;
 import com.pipai.wf.util.UtilFunctions;
 
-public class AgentGUIObject extends GUIObject implements XYPositioned, Renderable, LeftClickable3D, RightClickable3D {
+public class AgentGuiObject extends GuiObject implements XYPositioned, Renderable, LeftClickable3D, RightClickable3D {
 
-	private BattleGUI gui;
+	private BattleGui gui;
 	private Agent agent;
 	private boolean selected, ko;
 	public float x, y;
@@ -33,7 +33,7 @@ public class AgentGUIObject extends GUIObject implements XYPositioned, Renderabl
 	private Texture circleTex;
 	private Decal decal;
 
-	public AgentGUIObject(BattleGUI gui, Agent agent, float x, float y, int radius) {
+	public AgentGuiObject(BattleGui gui, Agent agent, float x, float y, int radius) {
 		super(gui);
 		this.gui = gui;
 		this.agent = agent;
@@ -180,7 +180,7 @@ public class AgentGUIObject extends GUIObject implements XYPositioned, Renderabl
 		Vector3 endpoint = new Vector3();
 		ray.getEndPoint(endpoint, t);
 		if (UtilFunctions.isInCircle(x, y, radius, endpoint.x, endpoint.y)) {
-			if (this.gui.getMode() == BattleGUI.Mode.TARGET_SELECT && this == this.gui.getTarget()) {
+			if (this.gui.getMode() == BattleGui.Mode.TARGET_SELECT && this == this.gui.getTarget()) {
 				this.gui.performAttackAction(this);
 			}
 		}

@@ -12,7 +12,7 @@ import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapGenerator;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
 import com.pipai.wf.unit.race.Race;
@@ -21,14 +21,14 @@ import com.pipai.wf.unit.schema.RaceTemplateSchema;
 import com.pipai.wf.unit.schema.TidusSchema;
 import com.pipai.wf.unit.schema.UnitSchema;
 
-public class PartyInfoGUI extends GUI {
+public class PartyInfoGui extends Gui {
 
 	private OrthographicCamera camera;
 	private ArrayList<Renderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;
 	private ArrayList<UnitSchema> partySchema = new ArrayList<UnitSchema>();
 	private ArrayList<AgentState> party = new ArrayList<AgentState>();
 
-	public PartyInfoGUI(WFGame game) {
+	public PartyInfoGui(WFGame game) {
 		super(game);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
@@ -50,7 +50,7 @@ public class PartyInfoGUI extends GUI {
 	}
 
 	@Override
-	public void createInstance(GUIObject o) {
+	public void createInstance(GuiObject o) {
 		super.createInstance(o);
 		if (o instanceof Renderable) {
 			renderablesCreateBuffer.add((Renderable)o);
@@ -58,7 +58,7 @@ public class PartyInfoGUI extends GUI {
 	}
 
 	@Override
-	public void deleteInstance(GUIObject o) {
+	public void deleteInstance(GuiObject o) {
 		super.deleteInstance(o);
 		if (o instanceof Renderable) {
 			renderablesDelBuffer.add((Renderable)o);
@@ -81,7 +81,7 @@ public class PartyInfoGUI extends GUI {
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
 		BattleMap map = BattleMapGenerator.generateRandomTestMap(partySchema);
-		this.game.setScreen(new BattleGUI(this.game, map));
+		this.game.setScreen(new BattleGui(this.game, map));
 		this.dispose();
 	}
 

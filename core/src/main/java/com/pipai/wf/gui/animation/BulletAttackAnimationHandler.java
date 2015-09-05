@@ -1,21 +1,21 @@
 package com.pipai.wf.gui.animation;
 
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.gui.BattleGUI;
+import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.gui.camera.CameraMovementObserver;
-import com.pipai.wf.guiobject.GUIObject;
-import com.pipai.wf.guiobject.GUIObjectDestroyEventObserver;
-import com.pipai.wf.guiobject.battle.AgentGUIObject;
-import com.pipai.wf.guiobject.battle.BulletGUIObject;
+import com.pipai.wf.guiobject.GuiObject;
+import com.pipai.wf.guiobject.GuiObjectDestroyEventObserver;
+import com.pipai.wf.guiobject.battle.AgentGuiObject;
+import com.pipai.wf.guiobject.battle.BulletGuiObject;
 import com.pipai.wf.util.Alarm;
 
-public class BulletAttackAnimationHandler extends AnimationHandler implements CameraMovementObserver, GUIObjectDestroyEventObserver {
+public class BulletAttackAnimationHandler extends AnimationHandler implements CameraMovementObserver, GuiObjectDestroyEventObserver {
 
-	private AgentGUIObject performer, target;
+	private AgentGuiObject performer, target;
 	private BattleEvent outcome;
 	private Alarm alarm;
 
-	public BulletAttackAnimationHandler(BattleGUI gui, BattleEvent outcome) {
+	public BulletAttackAnimationHandler(BattleGui gui, BattleEvent outcome) {
 		super(gui);
 		this.performer = getGUI().getAgentGUIObject(outcome.getPerformer());
 		this.target = getGUI().getAgentGUIObject(outcome.getTarget());
@@ -30,7 +30,7 @@ public class BulletAttackAnimationHandler extends AnimationHandler implements Ca
 
 	@Override
 	public void notifyCameraMoveEnd() {
-		BulletGUIObject bullet = new BulletGUIObject(getGUI(), performer.x, performer.y, target.x, target.y, target, outcome);
+		BulletGuiObject bullet = new BulletGuiObject(getGUI(), performer.x, performer.y, target.x, target.y, target, outcome);
 		bullet.registerDestroyEventObserver(this);
 		getGUI().createInstance(bullet);
 	}
@@ -41,7 +41,7 @@ public class BulletAttackAnimationHandler extends AnimationHandler implements Ca
 	}
 
 	@Override
-	public void notifyOfDestroyEvent(GUIObject obj) {
+	public void notifyOfDestroyEvent(GuiObject obj) {
 		alarm.set(60);
 	}
 

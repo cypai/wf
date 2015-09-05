@@ -9,15 +9,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.BattleGUI;
-import com.pipai.wf.guiobject.AnchoredGUIObject;
-import com.pipai.wf.guiobject.battle.AgentGUIObject;
+import com.pipai.wf.gui.BattleGui;
+import com.pipai.wf.guiobject.AnchoredGuiObject;
+import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
-public class AnchoredAgentInfoDisplay extends AnchoredGUIObject {
+public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 
-	protected AgentGUIObject a;
+	protected AgentGuiObject a;
 
-	public AnchoredAgentInfoDisplay(BattleGUI gui, AgentGUIObject agent) {
+	public AnchoredAgentInfoDisplay(BattleGui gui, AgentGuiObject agent) {
 		super(gui, gui.getRayMapper(), new Vector3(agent.x, agent.y, 0));
 		this.a = agent;
 	}

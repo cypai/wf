@@ -7,24 +7,24 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.BattleGUI;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.gui.BattleGui;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.util.UtilFunctions;
 
-public class BulletGUIObject extends GUIObject implements Renderable {
+public class BulletGuiObject extends GuiObject implements Renderable {
 
-	protected BattleGUI gui;
+	protected BattleGui gui;
 	protected float x, y, dest_x, dest_y;
 	protected int t, final_t;
 	protected Vector2 dir;
-	protected AgentGUIObject target;
+	protected AgentGuiObject target;
 	protected BattleEvent outcome;
 
 	private static final int SPEED = 16;
 
-	public BulletGUIObject(BattleGUI gui, float x, float y, float dest_x, float dest_y, AgentGUIObject target, BattleEvent outcome) {
+	public BulletGuiObject(BattleGui gui, float x, float y, float dest_x, float dest_y, AgentGuiObject target, BattleEvent outcome) {
 		super(gui);
 		this.gui = gui;
 		this.x = x;

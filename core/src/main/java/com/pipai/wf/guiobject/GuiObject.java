@@ -2,21 +2,21 @@ package com.pipai.wf.guiobject;
 
 import java.util.LinkedList;
 
-import com.pipai.wf.gui.GUI;
+import com.pipai.wf.gui.Gui;
 
-public abstract class GUIObject {
+public abstract class GuiObject {
 
 	private static int nextID = 0;
 
-	protected GUI gui;
+	protected Gui gui;
 	protected int id;
 
-	private LinkedList<GUIObjectDestroyEventObserver> destroyEvObservers;
+	private LinkedList<GuiObjectDestroyEventObserver> destroyEvObservers;
 
-	public GUIObject(GUI gui) {
+	public GuiObject(Gui gui) {
 		this.gui = gui;
-		this.id = GUIObject.nextID;
-		GUIObject.nextID += 1;
+		this.id = GuiObject.nextID;
+		GuiObject.nextID += 1;
 	}
 
 	public int getID() { return id; }
@@ -25,9 +25,9 @@ public abstract class GUIObject {
 
 	public void dispose() {}
 
-	public void registerDestroyEventObserver(GUIObjectDestroyEventObserver o) {
+	public void registerDestroyEventObserver(GuiObjectDestroyEventObserver o) {
 		if (destroyEvObservers == null) {
-			destroyEvObservers = new LinkedList<GUIObjectDestroyEventObserver>();
+			destroyEvObservers = new LinkedList<GuiObjectDestroyEventObserver>();
 		}
 		destroyEvObservers.add(o);
 	}
@@ -35,7 +35,7 @@ public abstract class GUIObject {
 	public void destroy() {
 		gui.deleteInstance(this);
 		if (destroyEvObservers != null) {
-			for (GUIObjectDestroyEventObserver o : destroyEvObservers) {
+			for (GuiObjectDestroyEventObserver o : destroyEvObservers) {
 				o.notifyOfDestroyEvent(this);
 			}
 		}

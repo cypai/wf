@@ -8,24 +8,24 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.pipai.wf.WFGame;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.guiobject.GuiObject;
 
-public abstract class GUI implements Screen, InputProcessor {
+public abstract class Gui implements Screen, InputProcessor {
 	
 	protected WFGame game;
 	protected BatchHelper batch;
 	protected int width, height;
-	protected ConcurrentHashMap<Integer, GUIObject> instanceIndex;
+	protected ConcurrentHashMap<Integer, GuiObject> instanceIndex;
 	//Maybe add BST for rendering order??
 	
 	//Input Processing
 	private HashMap<Integer, Boolean> heldKeys;
 	
-	public GUI(WFGame game) {
+	public Gui(WFGame game) {
 		this.game = game;
         Gdx.input.setInputProcessor(this);
         batch = new BatchHelper(game.sprBatch, game.shapeBatch, game.modelBatch, game.font);
-		instanceIndex = new ConcurrentHashMap<Integer, GUIObject>();
+		instanceIndex = new ConcurrentHashMap<Integer, GuiObject>();
         heldKeys = new HashMap<Integer, Boolean>();
         width = Gdx.graphics.getWidth();
         height = Gdx.graphics.getHeight();
@@ -34,10 +34,10 @@ public abstract class GUI implements Screen, InputProcessor {
 	public int getScreenWidth() { return width; }
 	public int getScreenHeight() { return height; }
 	
-	public void createInstance(GUIObject o) {
+	public void createInstance(GuiObject o) {
 		instanceIndex.put(o.getID(), o);
 	}
-	public void deleteInstance(GUIObject o) {
+	public void deleteInstance(GuiObject o) {
 		instanceIndex.remove(o.getID());
 		o.dispose();
 	}
@@ -60,7 +60,7 @@ public abstract class GUI implements Screen, InputProcessor {
 	
 	@Override
 	public void render(float delta) {
-		for (GUIObject o : this.instanceIndex.values()) {
+		for (GuiObject o : this.instanceIndex.values()) {
 			o.update();
 		}
 	}
@@ -88,7 +88,7 @@ public abstract class GUI implements Screen, InputProcessor {
 
 	@Override
 	public void dispose() {
-		for (GUIObject o : this.instanceIndex.values()) {
+		for (GuiObject o : this.instanceIndex.values()) {
 			o.dispose();
 		}
 	}

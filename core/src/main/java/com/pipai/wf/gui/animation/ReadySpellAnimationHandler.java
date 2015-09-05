@@ -2,18 +2,18 @@ package com.pipai.wf.gui.animation;
 
 import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.gui.BattleGUI;
+import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.gui.camera.CameraMovementObserver;
-import com.pipai.wf.guiobject.battle.AgentGUIObject;
+import com.pipai.wf.guiobject.battle.AgentGuiObject;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
 
 public class ReadySpellAnimationHandler extends AnimationHandler implements CameraMovementObserver {
 
-	private AgentGUIObject performer;
+	private AgentGuiObject performer;
 	private BattleEvent ev;
 	private boolean skipCamera;
 
-	public ReadySpellAnimationHandler(BattleGUI gui, BattleEvent ev, boolean skipCamera) {
+	public ReadySpellAnimationHandler(BattleGui gui, BattleEvent ev, boolean skipCamera) {
 		super(gui);
 		performer = getGUI().getAgentGUIObject(ev.getPerformer());
 		this.ev = ev;

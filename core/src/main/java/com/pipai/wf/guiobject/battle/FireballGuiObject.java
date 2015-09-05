@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.BattleGUI;
+import com.pipai.wf.gui.BattleGui;
 
-public class FireballGUIObject extends BulletGUIObject {
+public class FireballGuiObject extends BulletGuiObject {
 	
-	public FireballGUIObject(BattleGUI gui, float x, float y, float dest_x, float dest_y, AgentGUIObject target, BattleEvent outcome) {
+	public FireballGuiObject(BattleGui gui, float x, float y, float dest_x, float dest_y, AgentGuiObject target, BattleEvent outcome) {
 		super(gui, x, y, dest_x, dest_y, target, outcome);
 	}
 	

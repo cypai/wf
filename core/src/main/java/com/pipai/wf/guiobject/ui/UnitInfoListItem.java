@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.GUI;
+import com.pipai.wf.gui.Gui;
 
 public class UnitInfoListItem extends UIListItem {
 
@@ -21,7 +21,7 @@ public class UnitInfoListItem extends UIListItem {
 	protected float width, padding, stat_spacing, height;
 	protected LinkedList<String> statLine;
 
-	public UnitInfoListItem(GUI gui, AgentState state, float x, float y, float width, float padding) {
+	public UnitInfoListItem(Gui gui, AgentState state, float x, float y, float width, float padding) {
 		super(gui, x, y, width, 2 * padding + 32, Color.ORANGE);
 		this.width = width;
 		this.padding = padding;

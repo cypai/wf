@@ -11,24 +11,24 @@ import com.badlogic.gdx.utils.Align;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.BattleGUI;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.gui.BattleGui;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.Renderable;
 
-public class ActionToolTip extends GUIObject implements Renderable {
+public class ActionToolTip extends GuiObject implements Renderable {
 
 	public enum Mode {
 		GENERAL, ACCURACY_ACTION;
 	}
 
-	protected BattleGUI gui;
+	protected BattleGui gui;
 	private Mode mode;
 	private final int PADDING = 6;
 	private float x, y, width, height;
 	private String title, description;
 	private int accuracy, critProb;
 
-	public ActionToolTip(BattleGUI gui, float x, float y, float width, float height) {
+	public ActionToolTip(BattleGui gui, float x, float y, float width, float height) {
 		super(gui);
 		this.gui = gui;
 		this.x = x;
@@ -64,7 +64,7 @@ public class ActionToolTip extends GUIObject implements Renderable {
 
 	@Override
 	public void render(BatchHelper batch) {
-		if (gui.getMode() != BattleGUI.Mode.TARGET_SELECT) {
+		if (gui.getMode() != BattleGui.Mode.TARGET_SELECT) {
 			return;
 		}
 		ShapeRenderer r = batch.getShapeRenderer();

@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.pipai.wf.config.WFConfig;
-import com.pipai.wf.gui.PartyInfoGUI;
+import com.pipai.wf.gui.PartyInfoGui;
 
 public class WFGame extends Game {
 	
@@ -22,7 +22,7 @@ public class WFGame extends Game {
     	this.shapeBatch = new ShapeRenderer();
     	this.modelBatch = new ModelBatch();
     	this.font = new BitmapFont();
-        this.setScreen(new PartyInfoGUI(this));
+        this.setScreen(new PartyInfoGui(this));
     }
 
 	@Override

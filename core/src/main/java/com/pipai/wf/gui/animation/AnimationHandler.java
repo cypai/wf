@@ -1,23 +1,23 @@
 package com.pipai.wf.gui.animation;
 
-import com.pipai.wf.gui.BattleGUI;
+import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.gui.camera.AnchoredCamera;
 
 public abstract class AnimationHandler {
 
-	private BattleGUI gui;
+	private BattleGui gui;
 	private AnchoredCamera camera;
 	private AnimationObserver observer;
 	private boolean finished;
 
-	public AnimationHandler(BattleGUI gui) {
+	public AnimationHandler(BattleGui gui) {
 		this.gui = gui;
 		gui.registerAnimationHandler(this);
 		camera = gui.getCamera();
 		finished = false;
 	}
 
-	public BattleGUI getGUI() {
+	public BattleGui getGUI() {
 		return gui;
 	}
 

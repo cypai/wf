@@ -5,14 +5,14 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
 import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.gui.GUI;
+import com.pipai.wf.gui.Gui;
 
 public class PartyInfoList extends UIList {
 	
 	protected ArrayList<UnitInfoListItem> list;
 	protected float padding;
 	
-	public PartyInfoList(GUI gui, List<AgentState> party, float x, float y, float width, float height, Color color) {
+	public PartyInfoList(Gui gui, List<AgentState> party, float x, float y, float width, float height, Color color) {
 		super(gui, x, y, width, height, color);
 		padding = 4;
 		list = new ArrayList<UnitInfoListItem>();

@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pipai.wf.WFGame;
 
-public class BattleResultsGUI extends GUI {
+public class BattleResultsGui extends Gui {
 	
 	private OrthographicCamera camera;
 
-	public BattleResultsGUI(WFGame game) {
+	public BattleResultsGui(WFGame game) {
 		super(game);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
@@ -35,7 +35,7 @@ public class BattleResultsGUI extends GUI {
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-		this.game.setScreen(new PartyInfoGUI(this.game));
+		this.game.setScreen(new PartyInfoGui(this.game));
 		this.dispose();
 	}
 

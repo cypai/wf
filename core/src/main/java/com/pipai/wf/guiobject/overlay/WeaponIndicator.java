@@ -14,19 +14,19 @@ import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.BattleGUI;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.gui.BattleGui;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.Renderable;
-import com.pipai.wf.guiobject.battle.AgentGUIObject;
+import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
-public class WeaponIndicator extends GUIObject implements Renderable {
+public class WeaponIndicator extends GuiObject implements Renderable {
 	
-	protected BattleGUI gui;
+	protected BattleGui gui;
 	private float x, y, width, height;
 	private ArrayList<Weapon> weapons;
-	private AgentGUIObject agent;
+	private AgentGuiObject agent;
 
-	public WeaponIndicator(BattleGUI gui, float x, float y, float width, float height) {
+	public WeaponIndicator(BattleGui gui, float x, float y, float width, float height) {
 		super(gui);
 		this.gui = gui;
 		this.x = x;
@@ -35,7 +35,7 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 		this.height = height;
 	}
 	
-	public void updateToAgent(AgentGUIObject a) {
+	public void updateToAgent(AgentGuiObject a) {
 		weapons = a.getAgent().getWeapons();
 		agent = a;
 	}
@@ -47,7 +47,7 @@ public class WeaponIndicator extends GUIObject implements Renderable {
 
 	@Override
 	public void render(BatchHelper batch) {
-		if (gui.getMode() != BattleGUI.Mode.MOVE && gui.getMode() != BattleGUI.Mode.TARGET_SELECT) {
+		if (gui.getMode() != BattleGui.Mode.MOVE && gui.getMode() != BattleGui.Mode.TARGET_SELECT) {
 			return;
 		}
 		ShapeRenderer r = batch.getShapeRenderer();

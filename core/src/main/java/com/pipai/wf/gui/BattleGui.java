@@ -47,12 +47,12 @@ import com.pipai.wf.gui.animation.OverwatchAnimationHandler;
 import com.pipai.wf.gui.animation.ReadySpellAnimationHandler;
 import com.pipai.wf.gui.animation.ReloadAnimationHandler;
 import com.pipai.wf.gui.camera.AnchoredCamera;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.guiobject.RightClickable3D;
-import com.pipai.wf.guiobject.battle.AgentGUIObject;
+import com.pipai.wf.guiobject.battle.AgentGuiObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
@@ -67,7 +67,7 @@ import com.pipai.wf.util.RayMapper;
  * Simple 2D GUI for rendering a BattleMap
  */
 
-public class BattleGUI extends GUI implements BattleObserver, AnimationObserver {
+public class BattleGui extends Gui implements BattleObserver, AnimationObserver {
 
 	public static enum Mode {
 		MOVE(true),
@@ -93,10 +93,10 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	private OrthographicCamera overlayCamera, orthoCamera;
 	private RayMapper rayMapper;
 	private BattleController battle;
-	private HashMap<Agent, AgentGUIObject> agentMap;
-	private ArrayList<AgentGUIObject> agentList;
-	private LinkedList<AgentGUIObject> selectableAgentOrderedList, targetAgentList;
-	private AgentGUIObject selectedAgent, targetAgent;
+	private HashMap<Agent, AgentGuiObject> agentMap;
+	private ArrayList<AgentGuiObject> agentList;
+	private LinkedList<AgentGuiObject> selectableAgentOrderedList, targetAgentList;
+	private AgentGuiObject selectedAgent, targetAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable3D> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer;
@@ -114,7 +114,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	private ArrayList<AnimationHandler> animationHandlerList, animationHandlerBuffer;
 	private AnimationHandler animationHandler;
 
-	public BattleGUI(WFGame game, BattleMap map) {
+	public BattleGui(WFGame game, BattleMap map) {
 		super(game);
 		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
 		camera = new AnchoredCamera(this.getScreenWidth(), this.getScreenHeight());
@@ -140,12 +140,12 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		this.renderablesDelBuffer = new ArrayList<Renderable>();
 		this.leftClickablesDelBuffer = new ArrayList<LeftClickable3D>();
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable3D>();
-		this.agentMap = new HashMap<Agent, AgentGUIObject>();
-		this.agentList = new ArrayList<AgentGUIObject>();
-		this.selectableAgentOrderedList = new LinkedList<AgentGUIObject>();
+		this.agentMap = new HashMap<Agent, AgentGuiObject>();
+		this.agentList = new ArrayList<AgentGuiObject>();
+		this.selectableAgentOrderedList = new LinkedList<AgentGuiObject>();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
 			GridPosition pos = agent.getPosition();
-			AgentGUIObject a = new AgentGUIObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
+			AgentGuiObject a = new AgentGuiObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
 			this.agentMap.put(agent, a);
 			this.agentList.add(a);
 			if (agent.getTeam() == Team.PLAYER) {
@@ -191,7 +191,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 					this.setSelected(this.selectableAgentOrderedList.getFirst());
 				}
 			}
-			for (AgentGUIObject a : this.agentList) {
+			for (AgentGuiObject a : this.agentList) {
 				if (a.getAgent().getTeam() == Team.PLAYER && (a.getAgent().getAP() > 0 && !a.getAgent().isKO())) {
 					// Found a movable Agent, so we return and do not start AI turn
 					this.updatePaths();
@@ -211,7 +211,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		this.animationHandlerBuffer.add(a);
 	}
 
-	public void setSelected(AgentGUIObject agent) {
+	public void setSelected(AgentGuiObject agent) {
 		if (agent.getAgent().getAP() > 0) {
 			this.selectedAgent = agent;
 			this.weaponIndicator.updateToAgent(agent);
@@ -222,7 +222,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	}
 
 	@Override
-	public void createInstance(GUIObject o) {
+	public void createInstance(GuiObject o) {
 		super.createInstance(o);
 		if (o instanceof Renderable) {
 			renderablesCreateBuffer.add((Renderable)o);
@@ -236,7 +236,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 	}
 
 	@Override
-	public void deleteInstance(GUIObject o) {
+	public void deleteInstance(GuiObject o) {
 		super.deleteInstance(o);
 		if (o instanceof Renderable) {
 			renderablesDelBuffer.add((Renderable)o);
@@ -320,7 +320,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 
 	private void performVictoryCheck() {
 		if (this.battle.battleResult() != BattleController.Result.NONE) {
-			this.game.setScreen(new BattleResultsGUI(this.game));
+			this.game.setScreen(new BattleResultsGui(this.game));
 			this.dispose();
 			return;
 		}
@@ -337,7 +337,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 
 	private void runAiTurn() {
 		this.aiMoveWait += 1;
-		if (this.aiMoveWait == BattleGUI.AI_MOVE_WAIT_TIME) {
+		if (this.aiMoveWait == BattleGui.AI_MOVE_WAIT_TIME) {
 			AIMoveRunnable t = new AIMoveRunnable(this.ai);
 			t.run();
 		}
@@ -352,7 +352,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		}
 	}
 
-	public void performAttackAction(AgentGUIObject target) {
+	public void performAttackAction(AgentGuiObject target) {
 		if (selectedAgent != null) {
 			Action atk = null;
 			Weapon weapon = selectedAgent.getAgent().getCurrentWeapon();
@@ -496,7 +496,7 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 
 	public void switchToTargetMode(ActiveSkillTargetedAccAbility ability) {
 		this.terrainRenderer.clearShadedTiles();
-		this.targetAgentList = new LinkedList<AgentGUIObject>();
+		this.targetAgentList = new LinkedList<AgentGuiObject>();
 		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
 			this.targetAgentList.add(this.agentMap.get(a));
 		}
@@ -513,16 +513,16 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		this.switchTarget(this.targetAgentList.getFirst(), ability);
 	}
 
-	public void switchTarget(AgentGUIObject target) {
+	public void switchTarget(AgentGuiObject target) {
 		switchTarget(target, null);
 	}
 
-	public void switchTarget(AgentGUIObject target, ActiveSkillTargetedAccAbility ability) {
+	public void switchTarget(AgentGuiObject target, ActiveSkillTargetedAccAbility ability) {
 		if (this.mode == Mode.TARGET_SELECT) {
 			if (this.targetAgentList.contains(target)) {
 				ArrayList<GridPosition> targetTiles = new ArrayList<GridPosition>(), targetableTiles = new ArrayList<GridPosition>();
 				targetTiles.add(target.getAgent().getPosition());
-				for (AgentGUIObject a : this.targetAgentList) {
+				for (AgentGuiObject a : this.targetAgentList) {
 					targetableTiles.add(a.getAgent().getPosition());
 				}
 				this.terrainRenderer.setTargetableTiles(targetableTiles);
@@ -539,11 +539,11 @@ public class BattleGUI extends GUI implements BattleObserver, AnimationObserver 
 		}
 	}
 
-	public AgentGUIObject getTarget() {
+	public AgentGuiObject getTarget() {
 		return this.targetAgent;
 	}
 
-	public AgentGUIObject getAgentGUIObject(Agent a) {
+	public AgentGuiObject getAgentGUIObject(Agent a) {
 		return this.agentMap.get(a);
 	}
 

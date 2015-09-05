@@ -6,17 +6,17 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.GUI;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.gui.Gui;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.Renderable;
 
-public class UIList extends GUIObject implements Renderable {
+public class UIList extends GuiObject implements Renderable {
 	
 	protected ArrayList<UIListItem> list;
 	protected float x, y, width, height;
 	protected Color color;
 	
-	public UIList(GUI gui, float x, float y, float width, float height, Color color) {
+	public UIList(Gui gui, float x, float y, float width, float height, Color color) {
 		super(gui);
 		this.x = x;
 		this.y = y;

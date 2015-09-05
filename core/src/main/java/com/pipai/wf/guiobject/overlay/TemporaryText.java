@@ -8,10 +8,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.BattleGUI;
-import com.pipai.wf.guiobject.AnchoredGUIObject;
+import com.pipai.wf.gui.BattleGui;
+import com.pipai.wf.guiobject.AnchoredGuiObject;
 
-public class TemporaryText extends AnchoredGUIObject {
+public class TemporaryText extends AnchoredGuiObject {
 
 	public final boolean foreground = true;
 
@@ -19,7 +19,7 @@ public class TemporaryText extends AnchoredGUIObject {
 	private String text;
 	private GlyphLayout glayout;
 
-	public TemporaryText(BattleGUI gui, Vector3 anchorPoint, String text) {
+	public TemporaryText(BattleGui gui, Vector3 anchorPoint, String text) {
 		super(gui, gui.getRayMapper(), anchorPoint);
 		glayout = new GlyphLayout();
 		this.text = text;

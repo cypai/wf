@@ -4,17 +4,17 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.GUI;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.gui.Gui;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.Renderable;
 
-public class UIListItem extends GUIObject implements Renderable, LeftClickable {
+public class UIListItem extends GuiObject implements Renderable, LeftClickable {
 	
 	protected float x, y, width, height;
 	protected Color color;
 	
-	public UIListItem(GUI gui, float x, float y, float width, float height, Color color) {
+	public UIListItem(Gui gui, float x, float y, float width, float height, Color color) {
 		super(gui);
 		this.x = x;
 		this.y = y;

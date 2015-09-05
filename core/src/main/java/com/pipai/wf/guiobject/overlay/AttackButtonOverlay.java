@@ -6,19 +6,19 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.gui.GUI;
-import com.pipai.wf.guiobject.GUIObject;
+import com.pipai.wf.gui.Gui;
+import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.Renderable;
 import com.pipai.wf.util.UtilFunctions;
 
-public class AttackButtonOverlay extends GUIObject implements Renderable, LeftClickable {
+public class AttackButtonOverlay extends GuiObject implements Renderable, LeftClickable {
 	
 	private final int SQUARE_SIZE = 30;
 	
 	private int x, y;
 	
-	public AttackButtonOverlay(GUI gui) {
+	public AttackButtonOverlay(Gui gui) {
 		super(gui);
 	}
 	
