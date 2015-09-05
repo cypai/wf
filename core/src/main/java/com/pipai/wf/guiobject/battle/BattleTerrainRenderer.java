@@ -6,12 +6,15 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -38,62 +41,62 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 	private static final Color DASH_COLOR = new Color(1f, 0.8f, 0, 0.5f);
 	private static final Color TARGET_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color TARGETABLE_COLOR = new Color(1f, 0.8f, 0, 0.5f);
-	
+
 	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
 		int x_offset = gameX % SQUARE_SIZE;
 		int y_offset = gameY % SQUARE_SIZE;
 		return new GridPosition((gameX - x_offset)/SQUARE_SIZE, (gameY - y_offset)/SQUARE_SIZE);
 	}
-	
+
 	public static Vector2 centerOfGridPos(GridPosition pos) {
 		return new Vector2(pos.x*SQUARE_SIZE + SQUARE_SIZE/2, pos.y*SQUARE_SIZE + SQUARE_SIZE/2);
 	}
-	
+
 	protected BattleGUI gui;
 	protected BattleMap map;
 	protected List<GridPosition> moveTiles, midDashTiles, dashTiles, targetTiles, targetableTiles;
-	
+
 	private Environment environment;
 	private Model boxModel, terrainModel;
 	private ArrayList<ModelInstance> terrainModels, wallModels;
 	private ModelBuilder modelBuilder;
+	private Texture grassTexture;
 
 	public BattleTerrainRenderer(BattleGUI gui, BattleMap map) {
 		super(gui);
 		this.gui = gui;
 		this.map = map;
+		grassTexture = new Texture(Gdx.files.internal("graphics/textures/grass.png"));
 		terrainModels = new ArrayList<ModelInstance>();
 		wallModels = new ArrayList<ModelInstance>();
 		modelBuilder = new ModelBuilder();
-		boxModel = modelBuilder.createBox(SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE, 
+		boxModel = modelBuilder.createBox(SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE,
 				new Material(ColorAttribute.createDiffuse(Color.GRAY)),
 				Usage.Position | Usage.Normal);
-		terrainModel = modelBuilder.createRect(0, 0, 0, SQUARE_SIZE, 0, 0, SQUARE_SIZE, SQUARE_SIZE, 0, 0, SQUARE_SIZE, 0, 
-				0, 0, -1, 
-				new Material(ColorAttribute.createAmbient(Color.WHITE)), 
-				Usage.Position | Usage.Normal);
-        environment = new Environment();
-        environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f, 0.4f, 0.4f, 1f));
-        environment.add(new DirectionalLight().set(1f, 1f, 1f, -0.5f, 0.5f, -0.8f));
-        generateSceneModels();
+		TextureRegion grassRegion = new TextureRegion(grassTexture, 0, 0, 128, 128);
+		Material grassMat = new Material(TextureAttribute.createDiffuse(grassRegion));
+		terrainModel = modelBuilder.createRect(0, 0, 0, SQUARE_SIZE, 0, 0, SQUARE_SIZE, SQUARE_SIZE, 0, 0, SQUARE_SIZE, 0,
+				0, 0, 1,
+				grassMat,
+				Usage.Position | Usage.Normal | Usage.TextureCoordinates );
+		environment = new Environment();
+		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.1f, 0.1f, 0.1f, 1f));
+		environment.add(new DirectionalLight().set(0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.8f));
+		generateSceneModels();
 	}
-	
+
 	private void generateSceneModels() {
-//		MeshBuilder meshbuilder = new MeshBuilder();
-//		meshbuilder.begin(Usage.Position | Usage.Normal, GL20.GL_TRIANGLES);
 		for (int r = 0; r < map.getRows(); r++) {
 			for (int c = 0; c < map.getCols(); c++) {
 				terrainModels.add(new ModelInstance(terrainModel,c * SQUARE_SIZE, r * SQUARE_SIZE, 0));
-				//meshbuilder.rect(0, 0, 0, SQUARE_SIZE, 0, 0, SQUARE_SIZE, SQUARE_SIZE, 0, 0, SQUARE_SIZE, 0, 0, 0, -1);
 				EnvironmentObject env = map.getCell(new GridPosition(c, r)).getTileEnvironmentObject();
 				if (env != null && env.getCoverType() == CoverType.FULL) {
 					wallModels.add(new ModelInstance(boxModel, c * SQUARE_SIZE + SQUARE_SIZE/2, r * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2));
 				}
 			}
 		}
-//		terrain = meshbuilder.end();
 	}
-	
+
 	@Override
 	public void dispose() {
 		this.boxModel.dispose();
@@ -116,7 +119,6 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 
 	@Override
 	public void render(BatchHelper batch) {
-		//terrain.render(shader, GL20.GL_LINE_STRIP);
 		batch.getModelBatch().begin(gui.getCamera().getCamera());
 		batch.getModelBatch().render(terrainModels, environment);
 		batch.getModelBatch().end();
@@ -130,7 +132,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		batch.getModelBatch().render(wallModels, environment);
 		batch.getModelBatch().end();
 	}
-	
+
 	public void clearShadedTiles() {
 		this.moveTiles = null;
 		this.midDashTiles = null;
@@ -138,7 +140,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		this.targetTiles = null;
 		this.targetableTiles = null;
 	}
-	
+
 	public void setMovingTiles(MapGraph mapgraph) {
 		clearShadedTiles();
 		int ap = mapgraph.getAP();
@@ -161,27 +163,27 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 			}
 		}
 	}
-	
+
 	public void setMovableTiles(List<GridPosition> moveTiles) {
 		this.moveTiles = moveTiles;
 	}
-	
+
 	public void setMidDashTiles(List<GridPosition> midDashTiles) {
 		this.midDashTiles = midDashTiles;
 	}
-	
+
 	public void setDashTiles(List<GridPosition> dashTiles) {
 		this.dashTiles = dashTiles;
 	}
-	
+
 	public void setTargetTiles(List<GridPosition> targetTiles) {
 		this.targetTiles = targetTiles;
 	}
-	
+
 	public void setTargetableTiles(List<GridPosition> targetableTiles) {
 		this.targetableTiles = targetableTiles;
 	}
-	
+
 	private void drawGrid(ShapeRenderer batch, float x, float y, float width, float height, int numCols, int numRows) {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -198,7 +200,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		batch.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
-	
+
 	private void shadeSquare(ShapeRenderer batch, GridPosition pos, Color color) {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -208,7 +210,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 		batch.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
-	
+
 	private void drawMovableTiles(ShapeRenderer batch) {
 		if (this.moveTiles != null) {
 			for (GridPosition pos : this.moveTiles) {
@@ -216,7 +218,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 			}
 		}
 	}
-	
+
 	private void drawMidDashTiles(ShapeRenderer batch) {
 		if (this.midDashTiles != null) {
 			for (GridPosition pos : this.midDashTiles) {
@@ -224,7 +226,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 			}
 		}
 	}
-	
+
 	private void drawDashTiles(ShapeRenderer batch) {
 		if (this.dashTiles != null) {
 			for (GridPosition pos : this.dashTiles) {
@@ -232,7 +234,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 			}
 		}
 	}
-	
+
 	private void drawTargetTiles(ShapeRenderer batch) {
 		if (this.targetTiles != null) {
 			for (GridPosition pos : this.targetTiles) {
@@ -240,7 +242,7 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 			}
 		}
 	}
-	
+
 	private void drawTargetableTiles(ShapeRenderer batch) {
 		if (this.targetableTiles != null) {
 			for (GridPosition pos : this.targetableTiles) {
@@ -248,5 +250,5 @@ public class BattleTerrainRenderer extends GUIObject implements Renderable, Righ
 			}
 		}
 	}
-	
+
 }
