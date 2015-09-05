@@ -13,9 +13,9 @@ import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 
-public class ActionToolTip extends GuiObject implements Renderable {
+public class ActionToolTip extends GuiObject implements GuiRenderable {
 
 	public enum Mode {
 		GENERAL, ACCURACY_ACTION;

@@ -9,11 +9,11 @@ import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.util.UtilFunctions;
 
-public class BulletGuiObject extends GuiObject implements Renderable {
+public class BulletGuiObject extends GuiObject implements GuiRenderable {
 
 	protected BattleGui gui;
 	protected float x, y, dest_x, dest_y;

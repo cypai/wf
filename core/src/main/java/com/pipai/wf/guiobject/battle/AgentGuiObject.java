@@ -14,13 +14,13 @@ import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.LeftClickable3D;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.XYPositioned;
 import com.pipai.wf.guiobject.overlay.AnchoredAgentInfoDisplay;
 import com.pipai.wf.util.UtilFunctions;
 
-public class AgentGuiObject extends GuiObject implements XYPositioned, Renderable, LeftClickable3D, RightClickable3D {
+public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRenderable, LeftClickable3D, RightClickable3D {
 
 	private BattleGui gui;
 	private Agent agent;

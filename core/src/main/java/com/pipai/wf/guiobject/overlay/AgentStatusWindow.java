@@ -15,11 +15,11 @@ import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.Gui;
 import com.pipai.wf.guiobject.GuiObject;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.util.RomanNumerals;
 
-public class AgentStatusWindow extends GuiObject implements Renderable {
+public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 
 	public enum Mode {
 		AGENT_STATUS, TARGETED_ACC_STATUS;

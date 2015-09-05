@@ -7,9 +7,9 @@ import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.Gui;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.LeftClickable;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 
-public class UIListItem extends GuiObject implements Renderable, LeftClickable {
+public class UIListItem extends GuiObject implements GuiRenderable, LeftClickable {
 	
 	protected float x, y, width, height;
 	protected Color color;

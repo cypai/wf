@@ -16,10 +16,10 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
-public class WeaponIndicator extends GuiObject implements Renderable {
+public class WeaponIndicator extends GuiObject implements GuiRenderable {
 	
 	protected BattleGui gui;
 	private float x, y, width, height;

@@ -13,7 +13,7 @@ import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapGenerator;
 import com.pipai.wf.guiobject.GuiObject;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
 import com.pipai.wf.unit.race.Race;
 import com.pipai.wf.unit.schema.FlameFairySchema;
@@ -24,7 +24,7 @@ import com.pipai.wf.unit.schema.UnitSchema;
 public class PartyInfoGui extends Gui {
 
 	private OrthographicCamera camera;
-	private ArrayList<Renderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;
+	private ArrayList<GuiRenderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;
 	private ArrayList<UnitSchema> partySchema = new ArrayList<UnitSchema>();
 	private ArrayList<AgentState> party = new ArrayList<AgentState>();
 
@@ -32,9 +32,9 @@ public class PartyInfoGui extends Gui {
 		super(game);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
-		renderables = new ArrayList<Renderable>();
-		renderablesCreateBuffer = new ArrayList<Renderable>();
-		renderablesDelBuffer = new ArrayList<Renderable>();
+		renderables = new ArrayList<GuiRenderable>();
+		renderablesCreateBuffer = new ArrayList<GuiRenderable>();
+		renderablesDelBuffer = new ArrayList<GuiRenderable>();
 		partySchema = new ArrayList<UnitSchema>();
 		partySchema.add(new TidusSchema());	// Tidus
 		partySchema.add(new RaceTemplateSchema(Race.HUMAN));	// Sienna
@@ -52,16 +52,16 @@ public class PartyInfoGui extends Gui {
 	@Override
 	public void createInstance(GuiObject o) {
 		super.createInstance(o);
-		if (o instanceof Renderable) {
-			renderablesCreateBuffer.add((Renderable)o);
+		if (o instanceof GuiRenderable) {
+			renderablesCreateBuffer.add((GuiRenderable)o);
 		}
 	}
 
 	@Override
 	public void deleteInstance(GuiObject o) {
 		super.deleteInstance(o);
-		if (o instanceof Renderable) {
-			renderablesDelBuffer.add((Renderable)o);
+		if (o instanceof GuiRenderable) {
+			renderablesDelBuffer.add((GuiRenderable)o);
 		}
 	}
 
@@ -71,7 +71,7 @@ public class PartyInfoGui extends Gui {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.getSpriteBatch().setProjectionMatrix(camera.combined);
 		batch.getShapeRenderer().setProjectionMatrix(camera.combined);
-		for (Renderable r : this.renderables) {
+		for (GuiRenderable r : this.renderables) {
 			r.render(batch);
 		}
 		cleanDelBuffers();
@@ -108,14 +108,14 @@ public class PartyInfoGui extends Gui {
 	}
 
 	private void cleanCreateBuffers() {
-		for (Renderable o : renderablesCreateBuffer) {
+		for (GuiRenderable o : renderablesCreateBuffer) {
 			renderables.add(o);
 		}
 		renderablesCreateBuffer.clear();
 	}
 
 	private void cleanDelBuffers() {
-		for (Renderable o : renderablesDelBuffer) {
+		for (GuiRenderable o : renderablesDelBuffer) {
 			renderables.remove(o);
 		}
 		renderablesDelBuffer.clear();

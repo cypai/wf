@@ -9,10 +9,10 @@ import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.Gui;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.LeftClickable;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.util.UtilFunctions;
 
-public class AttackButtonOverlay extends GuiObject implements Renderable, LeftClickable {
+public class AttackButtonOverlay extends GuiObject implements GuiRenderable, LeftClickable {
 	
 	private final int SQUARE_SIZE = 30;
 	

@@ -30,10 +30,10 @@ import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.RightClickable3D;
 
-public class BattleTerrainRenderer extends GuiObject implements Renderable, RightClickable3D {
+public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, RightClickable3D {
 
 	public static final int SQUARE_SIZE = 40;
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);

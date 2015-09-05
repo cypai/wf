@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.Gui;
 import com.pipai.wf.guiobject.GuiObject;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 
-public class UIList extends GuiObject implements Renderable {
+public class UIList extends GuiObject implements GuiRenderable {
 	
 	protected ArrayList<UIListItem> list;
 	protected float x, y, width, height;

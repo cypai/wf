@@ -50,7 +50,7 @@ import com.pipai.wf.gui.camera.AnchoredCamera;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.LeftClickable3D;
-import com.pipai.wf.guiobject.Renderable;
+import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
@@ -98,7 +98,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	private LinkedList<AgentGuiObject> selectableAgentOrderedList, targetAgentList;
 	private AgentGuiObject selectedAgent, targetAgent;
 	private MapGraph selectedMapGraph;
-	private ArrayList<Renderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
+	private ArrayList<GuiRenderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
 	private ArrayList<LeftClickable3D> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer;
 	private ArrayList<LeftClickable> overlayLeftClickables;
 	private ArrayList<RightClickable3D> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
@@ -128,16 +128,16 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		this.ai = new TopModularAI(battle);
 		this.aiTurn = false;
 		this.mode = Mode.MOVE;
-		this.renderables = new ArrayList<Renderable>();
-		this.foregroundRenderables = new ArrayList<Renderable>();
+		this.renderables = new ArrayList<GuiRenderable>();
+		this.foregroundRenderables = new ArrayList<GuiRenderable>();
 		this.leftClickables = new ArrayList<LeftClickable3D>();
 		this.rightClickables = new ArrayList<RightClickable3D>();
-		this.overlayRenderables = new ArrayList<Renderable>();
+		this.overlayRenderables = new ArrayList<GuiRenderable>();
 		this.overlayLeftClickables = new ArrayList<LeftClickable>();
-		this.renderablesCreateBuffer = new ArrayList<Renderable>();
+		this.renderablesCreateBuffer = new ArrayList<GuiRenderable>();
 		this.leftClickablesCreateBuffer = new ArrayList<LeftClickable3D>();
 		this.rightClickablesCreateBuffer = new ArrayList<RightClickable3D>();
-		this.renderablesDelBuffer = new ArrayList<Renderable>();
+		this.renderablesDelBuffer = new ArrayList<GuiRenderable>();
 		this.leftClickablesDelBuffer = new ArrayList<LeftClickable3D>();
 		this.rightClickablesDelBuffer = new ArrayList<RightClickable3D>();
 		this.agentMap = new HashMap<Agent, AgentGuiObject>();
@@ -224,8 +224,8 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	@Override
 	public void createInstance(GuiObject o) {
 		super.createInstance(o);
-		if (o instanceof Renderable) {
-			renderablesCreateBuffer.add((Renderable)o);
+		if (o instanceof GuiRenderable) {
+			renderablesCreateBuffer.add((GuiRenderable)o);
 		}
 		if (o instanceof LeftClickable3D) {
 			leftClickablesCreateBuffer.add((LeftClickable3D)o);
@@ -238,8 +238,8 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	@Override
 	public void deleteInstance(GuiObject o) {
 		super.deleteInstance(o);
-		if (o instanceof Renderable) {
-			renderablesDelBuffer.add((Renderable)o);
+		if (o instanceof GuiRenderable) {
+			renderablesDelBuffer.add((GuiRenderable)o);
 		}
 		if (o instanceof LeftClickable3D) {
 			leftClickablesDelBuffer.add((LeftClickable3D)o);
@@ -250,7 +250,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	}
 
 	private void cleanCreateBuffers() {
-		for (Renderable o : renderablesCreateBuffer) {
+		for (GuiRenderable o : renderablesCreateBuffer) {
 			if (o.renderPriority() == -1) {
 				foregroundRenderables.add(o);
 			} else {
@@ -269,7 +269,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	}
 
 	private void cleanDelBuffers() {
-		for (Renderable o : renderablesDelBuffer) {
+		for (GuiRenderable o : renderablesDelBuffer) {
 			if (!renderables.remove(o)) {
 				foregroundRenderables.remove(o);
 			}
@@ -708,18 +708,18 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		batch.getShapeRenderer().setProjectionMatrix(camera.getProjectionMatrix());
 		this.terrainRenderer.render(batch);
 		//		renderShape(batch.getShapeRenderer());
-		for (Renderable r : this.renderables) {
+		for (GuiRenderable r : this.renderables) {
 			r.render(batch);
 		}
 		batch.getDecalBatch().flush();
 		batch.getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
 		batch.getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
-		for (Renderable r : this.foregroundRenderables) {
+		for (GuiRenderable r : this.foregroundRenderables) {
 			r.render(batch);
 		}
 		batch.getSpriteBatch().setProjectionMatrix(overlayCamera.combined);
 		batch.getShapeRenderer().setProjectionMatrix(overlayCamera.combined);
-		for (Renderable r : this.overlayRenderables) {
+		for (GuiRenderable r : this.overlayRenderables) {
 			r.render(batch);
 		}
 		drawFPS();
