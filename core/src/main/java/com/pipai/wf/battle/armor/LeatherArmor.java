@@ -7,4 +7,14 @@ public class LeatherArmor extends Armor {
 		return 3;
 	}
 
+	@Override
+	public String name() {
+		return "Leather Armor";
+	}
+
+	@Override
+	public String description() {
+		return "Simple leather armor.";
+	}
+
 }

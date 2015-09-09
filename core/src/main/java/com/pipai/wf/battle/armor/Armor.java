@@ -1,17 +1,19 @@
 package com.pipai.wf.battle.armor;
 
-public abstract class Armor {
-	
+import com.pipai.wf.battle.item.Item;
+
+public abstract class Armor extends Item {
+
 	protected int hp;
-	
+
 	public Armor() {
 		hp = maxHP();
 	}
-	
+
 	public int getHP() {
 		return hp;
 	}
-	
+
 	/**
 	 * @return Amount of damage that went through the armor
 	 */
@@ -25,7 +27,7 @@ public abstract class Armor {
 			return 0;
 		}
 	}
-	
+
 	public abstract int maxHP();
-	
+
 }
