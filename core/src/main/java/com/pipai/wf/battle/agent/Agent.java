@@ -19,6 +19,7 @@ import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.misc.OverwatchContainer;
 import com.pipai.wf.battle.spell.Spell;
+import com.pipai.wf.battle.vision.VisionCalculator;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.exception.IllegalActionException;
@@ -227,7 +228,7 @@ public class Agent implements BattleEventLoggable {
 		for (GridPosition peekSquare : this.getPeekingSquares()) {
 			for (GridPosition otherPeekSquare : other.getPeekingSquares()) {
 				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < WFConfig.battleProps().sightRange()) {
-					if (this.map.lineOfSight(peekSquare, otherPeekSquare)) {
+					if (VisionCalculator.lineOfSight(map, peekSquare, otherPeekSquare)) {
 						return true;
 					}
 				}
