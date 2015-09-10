@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
@@ -129,12 +130,17 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		return 0;
 	}
 
+	public void updateFogOfWar() {
+
+	}
+
 	@Override
 	public void render(BatchHelper batch) {
+		ModelBatch modelBatch = batch.getModelBatch();
 		if (renderTex) {
-			batch.getModelBatch().begin(gui.getCamera().getCamera());
-			batch.getModelBatch().render(terrainModels, environment);
-			batch.getModelBatch().end();
+			modelBatch.begin(gui.getCamera().getCamera());
+			modelBatch.render(terrainModels, environment);
+			modelBatch.end();
 		}
 		this.drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawMovableTiles(batch.getShapeRenderer());
@@ -142,9 +148,9 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		this.drawDashTiles(batch.getShapeRenderer());
 		this.drawTargetableTiles(batch.getShapeRenderer());
 		this.drawTargetTiles(batch.getShapeRenderer());
-		batch.getModelBatch().begin(gui.getCamera().getCamera());
-		batch.getModelBatch().render(wallModels, environment);
-		batch.getModelBatch().end();
+		modelBatch.begin(gui.getCamera().getCamera());
+		modelBatch.render(wallModels, environment);
+		modelBatch.end();
 	}
 
 	public void clearShadedTiles() {
