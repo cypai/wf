@@ -10,11 +10,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 public class BattleProperties {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(BattleProperties.class);
-	
+
 	private final Properties battleConfig = new Properties();
-	
+
 	public BattleProperties() {
     	try {
     		FileHandle configFile = Gdx.files.local("config/battle.properties");
@@ -23,14 +23,18 @@ public class BattleProperties {
 			logger.error(e.getMessage());
 		}
 	}
-	
+
 	private int getInt(String key, int defaultVal) {
 		String result = battleConfig.getProperty(key);
 		return result == null ? defaultVal : Integer.parseInt(result);
 	}
-	
+
 	public int sightRange() {
 		return getInt("RANGE", 17);
 	}
-	
+
+	public float sightRangeAdjusted() {
+		return sightRange() + (float)Math.sqrt(2)/2.0f;
+	}
+
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.battle.Team;
@@ -34,18 +35,19 @@ public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRender
 	private Texture circleTex;
 	private Decal decal;
 
-	public AgentGuiObject(BattleGui gui, Agent agent, float x, float y, int radius) {
+	public AgentGuiObject(BattleGui gui, Agent agent) {
 		super(gui);
 		this.gui = gui;
 		this.agent = agent;
 		displayHP = agent.getHP();
 		displayArmorHP = agent.getArmor().getHP();
 		this.selected = false;
-		this.x = x;
-		this.y = y;
-		this.radius = radius;
-		ko = false;
 		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
+		Vector2 xy = BattleTerrainRenderer.centerOfGridPos(agent.getPosition());
+		this.x = xy.x;
+		this.y = xy.y;
+		radius = SQUARE_SIZE/2;
+		ko = false;
 		Pixmap pixmap = new Pixmap(SQUARE_SIZE, SQUARE_SIZE, Pixmap.Format.RGBA8888);
 		pixmap.fill();
 		pixmap.setColor(Color.RED);

@@ -116,7 +116,6 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 
 	public BattleGui(WFGame game, BattleMap map) {
 		super(game);
-		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
 		camera = new AnchoredCamera(this.getScreenWidth(), this.getScreenHeight());
 		overlayCamera = new OrthographicCamera();
 		orthoCamera = new OrthographicCamera();
@@ -144,8 +143,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		this.agentList = new ArrayList<AgentGuiObject>();
 		this.selectableAgentOrderedList = new LinkedList<AgentGuiObject>();
 		for (Agent agent : this.battle.getBattleMap().getAgents()) {
-			GridPosition pos = agent.getPosition();
-			AgentGuiObject a = new AgentGuiObject(this, agent, (float)pos.x * SQUARE_SIZE + SQUARE_SIZE/2, (float)pos.y * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2);
+			AgentGuiObject a = new AgentGuiObject(this, agent);
 			this.agentMap.put(agent, a);
 			this.agentList.add(a);
 			if (agent.getTeam() == Team.PLAYER) {

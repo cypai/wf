@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.pipai.wf.battle.map.BattleMap;
+import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
@@ -53,7 +54,8 @@ public class FogOfWar {
 			GridPosition tile = queue.poll();
 			visibleTiles.add(tile);
 			agentVisibleTiles.get(a).add(tile);
-			if (!map.getCell(tile).hasTileSightBlocker() && center.distance(tile) < WFConfig.battleProps().sightRange()) {
+			BattleMapCell cell = map.getCell(tile);
+			if (cell != null && !cell.hasTileSightBlocker() && center.distance(tile) < WFConfig.battleProps().sightRange()) {
 				passLight(queue, center, tile);
 			}
 		}
