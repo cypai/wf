@@ -27,7 +27,7 @@ public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 
 	@Override
 	public void render(BatchHelper batch) {
-		if (a.isShowingKO()) {
+		if (!a.visible()) {
 			return;
 		}
 		ShapeRenderer shapeBatch = batch.getShapeRenderer();

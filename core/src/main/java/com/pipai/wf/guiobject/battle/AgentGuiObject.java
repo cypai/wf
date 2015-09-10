@@ -13,8 +13,8 @@ import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
-import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.GuiRenderable;
+import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.XYPositioned;
 import com.pipai.wf.guiobject.overlay.AnchoredAgentInfoDisplay;
@@ -105,46 +105,22 @@ public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRender
 		decal.setRotation(gui.getCamera().getCamera().direction, gui.getCamera().getCamera().up);
 	}
 
+	public boolean visible() {
+		if (isShowingKO()) {
+			return false;
+		}
+		if (agent.getTeam() != Team.PLAYER) {
+			if (agent.enemiesInRange().size() == 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public void render(BatchHelper batch) {
-		if (!ko) {
+		if (visible()) {
 			batch.getDecalBatch().add(decal);
-			//			r.begin(ShapeType.Filled);
-			//			if (agent.getTeam() == Team.PLAYER) {
-			//				r.setColor(0, 0.8f, 0, 1);
-			//			} else {
-			//				r.setColor(0.8f, 0, 0, 1);
-			//			}
-			//			r.circle(x, y, radius);
-			//			r.end();
-			//			if (this.selected) {
-			//				r.begin(ShapeType.Line);
-			//				r.setColor(0.8f, 0.8f, 0, 1);
-			//				r.circle(x, y, radius);
-			//				r.end();
-			//			}
-			//			SpriteBatch spr = batch.getSpriteBatch();
-			//			BitmapFont font = batch.getFont();
-			//			spr.begin();
-			//			font.setColor(Color.BLACK);
-			//			font.draw(spr, String.valueOf(agent.getAP()), x, y+15);
-			//			if (!agent.isOpen() && agent.isFlanked()) {
-			//				font.setColor(Color.ORANGE);
-			//			}
-			//			String cover = "-";
-			//			switch (agent.getCoverType()) {
-			//			case FULL:
-			//				cover = "F";
-			//				break;
-			//			case HALF:
-			//				cover = "H";
-			//				break;
-			//			default:
-			//				cover = "-";
-			//				break;
-			//			}
-			//			font.draw(spr, cover, x, y);
-			//			spr.end();
 		}
 	}
 
