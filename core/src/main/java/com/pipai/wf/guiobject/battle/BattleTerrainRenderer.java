@@ -42,10 +42,12 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private static final Color TARGET_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color TARGETABLE_COLOR = new Color(1f, 0.8f, 0, 0.5f);
 
-	public static GridPosition gamePosToGridPos(int gameX, int gameY) {
-		int x_offset = gameX % SQUARE_SIZE;
-		int y_offset = gameY % SQUARE_SIZE;
-		return new GridPosition((gameX - x_offset)/SQUARE_SIZE, (gameY - y_offset)/SQUARE_SIZE);
+	public static GridPosition gamePosToGridPos(float gameX, float gameY) {
+		int gameX_i = (int)gameX;
+		int gameY_i = (int)gameY;
+		int x_offset = gameX_i % SQUARE_SIZE;
+		int y_offset = gameY_i % SQUARE_SIZE;
+		return new GridPosition((gameX_i - x_offset)/SQUARE_SIZE, (gameY_i - y_offset)/SQUARE_SIZE);
 	}
 
 	public static Vector2 centerOfGridPos(GridPosition pos) {

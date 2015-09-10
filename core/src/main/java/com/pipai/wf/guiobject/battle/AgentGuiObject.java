@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
@@ -67,6 +68,10 @@ public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRender
 
 	@Override
 	public void setY(float y) { this.y = y; }
+
+	public GridPosition getDisplayPosition() {
+		return BattleTerrainRenderer.gamePosToGridPos(x, y);
+	}
 
 	@Override
 	public int renderPriority() { return 0; }
