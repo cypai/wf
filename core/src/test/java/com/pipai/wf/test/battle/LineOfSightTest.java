@@ -1,14 +1,17 @@
 package com.pipai.wf.test.battle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
 
 import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.map.MapString;
+import com.pipai.wf.battle.vision.VisionCalculator;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class LineOfSightTest {
@@ -22,8 +25,7 @@ public class LineOfSightTest {
 		 * 0 0 0 0
 		 * A x x E
 		 */
-		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,0)).supercover;
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(3,0)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(1, 0));
 		req.add(new GridPosition(2, 0));
@@ -32,7 +34,7 @@ public class LineOfSightTest {
 		}
 		assertTrue(supercover.size() == req.size());
 	}
-	
+
 	@Test
 	public void testVerticalSupercover() {
 		/*
@@ -42,8 +44,7 @@ public class LineOfSightTest {
 		 * x 0 0 0
 		 * A 0 0 0
 		 */
-		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(0,3)).supercover;
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(0,3)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(0, 2));
@@ -52,7 +53,7 @@ public class LineOfSightTest {
 		}
 		assertTrue(supercover.size() == req.size());
 	}
-	
+
 	@Test
 	public void testDiagonalSupercover() {
 		/*
@@ -62,8 +63,7 @@ public class LineOfSightTest {
 		 * 0 x 0 0
 		 * A 0 0 0
 		 */
-		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,3)).supercover;
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(3,3)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(1, 1));
 		req.add(new GridPosition(2, 2));
@@ -82,8 +82,7 @@ public class LineOfSightTest {
 		 * 0 0 x E
 		 * A x 0 0
 		 */
-		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(3,1)).supercover;
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(3,1)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(1, 0));
 		req.add(new GridPosition(2, 1));
@@ -102,8 +101,7 @@ public class LineOfSightTest {
 		 * x x 0 0
 		 * A 0 0 0
 		 */
-		BattleMap map = new BattleMap(4, 4);
-		ArrayList<GridPosition> supercover = map.supercover(new GridPosition(0,0), new GridPosition(2,3)).supercover;
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(2,3)).supercover;
 		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(1, 1));
@@ -131,7 +129,7 @@ public class LineOfSightTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		assertFalse(map.lineOfSight(new GridPosition(0, 0), new GridPosition(3, 0)));
+		assertFalse(VisionCalculator.lineOfSight(map, new GridPosition(0, 0), new GridPosition(3, 0)));
 	}
 
 	@Test
@@ -142,7 +140,7 @@ public class LineOfSightTest {
 		 * A 0 0 0
 		 */
 		BattleMap map = new BattleMap(2, 4);
-		assertTrue(map.lineOfSight(new GridPosition(0, 0), new GridPosition(3, 0)));
+		assertTrue(VisionCalculator.lineOfSight(map, new GridPosition(0, 0), new GridPosition(3, 0)));
 	}
-	
+
 }

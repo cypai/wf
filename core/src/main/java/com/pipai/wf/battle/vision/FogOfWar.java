@@ -11,17 +11,21 @@ import com.pipai.wf.guiobject.battle.AgentGuiObject;
 public class FogOfWar {
 
 	private BattleMap map;
-	// private HashMap<GridPosition, Boolean>
+	private HashSet<GridPosition> visibleTiles;
 	private List<AgentGuiObject> agents;
 
 	public FogOfWar(BattleMap map, List<AgentGuiObject> agents) {
+		visibleTiles = new HashSet<GridPosition>();
 		this.map = map;
 		this.agents = agents;
 	}
 
 	public Set<GridPosition> visibleTiles() {
-		Set<GridPosition> l = new HashSet<GridPosition>();
-		return l;
+		return visibleTiles;
+	}
+
+	public void update() {
+
 	}
 
 }
