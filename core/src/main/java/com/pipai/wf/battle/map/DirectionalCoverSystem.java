@@ -19,7 +19,7 @@ public class DirectionalCoverSystem {
 
 	public static CoverType getCover(BattleMap map, GridPosition pos) {
 		CoverType best = CoverType.NONE;
-		for (Direction d : Direction.getAllDirections()) {
+		for (Direction d : Direction.getCardinalDirections()) {
 			if (getDirectionalCover(map, pos, d) == CoverType.FULL) {
 				return CoverType.FULL;
 			}
@@ -32,7 +32,7 @@ public class DirectionalCoverSystem {
 
 	public static ArrayList<Direction> getCoverDirections(BattleMap map, GridPosition pos) {
 		ArrayList<Direction> l = new ArrayList<Direction>();
-		for (Direction d : Direction.getAllDirections()) {
+		for (Direction d : Direction.getCardinalDirections()) {
 			if (getDirectionalCover(map, pos, d) != CoverType.NONE) {
 				l.add(d);
 			}
@@ -42,34 +42,33 @@ public class DirectionalCoverSystem {
 
 	public static ArrayList<Direction> getNeededCoverDirections(GridPosition pos, GridPosition attackPos) {
 		ArrayList<Direction> l = new ArrayList<Direction>();
-		if (pos.x == attackPos.x) {
-			if (attackPos.y > pos.y) {
-				l.add(Direction.N);
-			} else {
-				l.add(Direction.S);
-			}
-		} else if (pos.y == attackPos.y) {
-			if (attackPos.x > pos.x) {
-				l.add(Direction.E);
-			} else {
-				l.add(Direction.W);
-			}
+		Direction d = pos.directionTo(attackPos);
+		if (d.isCardinal) {
+			l.add(d);
+			return l;
 		} else {
-			if (attackPos.x > pos.x && attackPos.y > pos.y) {
-				l.add(Direction.N);
-				l.add(Direction.E);
-			} else if (attackPos.x > pos.x && attackPos.y < pos.y) {
-				l.add(Direction.S);
-				l.add(Direction.E);
-			} else if (attackPos.x < pos.x && attackPos.y > pos.y) {
+			switch (d) {
+			case NW:
 				l.add(Direction.N);
 				l.add(Direction.W);
-			} else {
+				break;
+			case SW:
 				l.add(Direction.S);
 				l.add(Direction.W);
+				break;
+			case NE:
+				l.add(Direction.N);
+				l.add(Direction.E);
+				break;
+			case SE:
+				l.add(Direction.S);
+				l.add(Direction.E);
+				break;
+			default:
+				throw new RuntimeException(d.toString() + " was unexpectedly sent to switch statement");
 			}
+			return l;
 		}
-		return l;
 	}
 
 	public static boolean isOpen(BattleMap map, GridPosition pos) {
