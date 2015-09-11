@@ -28,6 +28,7 @@ import com.pipai.wf.battle.map.CoverType;
 import com.pipai.wf.battle.map.EnvironmentObject;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.graphics.FogOfWarShader;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
@@ -64,6 +65,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private ArrayList<ModelInstance> terrainModels, wallModels;
 	private ModelBuilder modelBuilder;
 	private Texture grassTexture;
+	private FogOfWarShader fogOfWarShader;
 
 	private boolean renderTex = true;
 
@@ -71,6 +73,8 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		super(gui);
 		this.gui = gui;
 		this.map = map;
+		fogOfWarShader = new FogOfWarShader();
+		fogOfWarShader.init();
 		grassTexture = new Texture(Gdx.files.internal("graphics/textures/grass.png"));
 		terrainModels = new ArrayList<ModelInstance>();
 		wallModels = new ArrayList<ModelInstance>();
