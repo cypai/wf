@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.attributes.DirectionalLightsAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class FogOfWarShader implements Shader {
@@ -15,7 +15,8 @@ public class FogOfWarShader implements Shader {
 	private ShaderProgram program;
 	private int u_projViewTrans;
 	private int u_worldTrans;
-	private int u_color;
+	private int u_texture;
+	private int v_lightColor;
 
 	@Override
 	public void dispose() {
@@ -32,6 +33,7 @@ public class FogOfWarShader implements Shader {
 		}
 		u_projViewTrans = program.getUniformLocation("u_projViewTrans");
 		u_worldTrans = program.getUniformLocation("u_worldTrans");
+		v_lightColor = program.getUniformLocation("v_lightColor");
 	}
 
 	@Override
@@ -54,8 +56,10 @@ public class FogOfWarShader implements Shader {
 
 	@Override
 	public void render(Renderable renderable) {
+		DirectionalLightsAttribute light = (DirectionalLightsAttribute)renderable.environment.get(DirectionalLightsAttribute.Type);
 		program.setUniformMatrix(u_worldTrans, renderable.worldTransform);
-		program.setUniformf(u_color, MathUtils.random(), MathUtils.random(), MathUtils.random());
+		program.setUniformi(u_texture, 0);
+		program.setUniformf(v_lightColor, light.lights.first().color);
 		renderable.mesh.render(program,
 				renderable.primitiveType,
 				renderable.meshPartOffset,

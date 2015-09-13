@@ -14,10 +14,12 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -66,6 +68,8 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private ModelBuilder modelBuilder;
 	private Texture grassTexture;
 	private FogOfWarShader fogOfWarShader;
+	public RenderContext renderContext;
+	public Renderable renderable;
 
 	private boolean renderTex = true;
 
@@ -142,8 +146,9 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	public void render(BatchHelper batch) {
 		ModelBatch modelBatch = batch.getModelBatch();
 		if (renderTex) {
+			grassTexture.bind();
 			modelBatch.begin(gui.getCamera().getCamera());
-			modelBatch.render(terrainModels, environment);
+			modelBatch.render(terrainModels, environment, fogOfWarShader);
 			modelBatch.end();
 		}
 		this.drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
