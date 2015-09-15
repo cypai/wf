@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.GridPosition;
@@ -15,6 +18,8 @@ import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
 public class FogOfWar {
 
+	private Texture visibilityTexture;
+	private Pixmap visibilityPixmap;
 	private BattleMap map;
 	private HashSet<GridPosition> visibleTiles;
 	private HashMap<AgentGuiObject, ArrayList<GridPosition>> agentVisibleTiles;
@@ -28,10 +33,32 @@ public class FogOfWar {
 		}
 		this.map = map;
 		this.agents = agents;
+		visibilityPixmap = new Pixmap(map.getCols(), map.getRows(), Format.RGBA8888);
+		visibilityPixmap.setColor(1,1,1,1);
+		visibilityPixmap.fillCircle(12, 12, 5);
+		setVisible(new GridPosition(0, 0));
+		setVisible(new GridPosition(5, 5));
+		visibilityTexture = new Texture(visibilityPixmap);
+	}
+
+	public Texture getFogOfWarTexture() {
+		return visibilityTexture;
 	}
 
 	public Set<GridPosition> visibleTiles() {
 		return visibleTiles;
+	}
+
+	public void setVisible(GridPosition tile) {
+		visibleTiles.add(tile);
+		visibilityPixmap.setColor(1, 1, 1, 1);
+		visibilityPixmap.drawPixel(tile.x, tile.y);
+	}
+
+	public void setNotVisible(GridPosition tile) {
+		visibleTiles.remove(tile);
+		visibilityPixmap.setColor(0.5f, 0, 0, 1);
+		visibilityPixmap.drawPixel(tile.x, tile.y);
 	}
 
 	public void fullScan() {
@@ -52,7 +79,7 @@ public class FogOfWar {
 		initializeSpiralPathQueue(queue, center);
 		while (queue.size() > 0) {
 			GridPosition tile = queue.poll();
-			visibleTiles.add(tile);
+			setVisible(tile);
 			agentVisibleTiles.get(a).add(tile);
 			BattleMapCell cell = map.getCell(tile);
 			if (cell != null && !cell.hasTileSightBlocker() && center.distance(tile) < WFConfig.battleProps().sightRange()) {

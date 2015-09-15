@@ -15,8 +15,9 @@ public class FogOfWarShader implements Shader {
 	private ShaderProgram program;
 	private int u_projViewTrans;
 	private int u_worldTrans;
-	private int u_texture;
+	private int u_texture, u_fogOfWarTexture;
 	private int v_lightColor;
+	private int v_gridPos;
 
 	@Override
 	public void dispose() {
@@ -34,6 +35,9 @@ public class FogOfWarShader implements Shader {
 		u_projViewTrans = program.getUniformLocation("u_projViewTrans");
 		u_worldTrans = program.getUniformLocation("u_worldTrans");
 		v_lightColor = program.getUniformLocation("v_lightColor");
+		u_texture = program.getUniformLocation("u_texture");
+		u_fogOfWarTexture = program.getUniformLocation("u_fogOfWarTexture");
+		v_gridPos = program.getUniformLocation("v_gridPos");
 	}
 
 	@Override
@@ -57,9 +61,12 @@ public class FogOfWarShader implements Shader {
 	@Override
 	public void render(Renderable renderable) {
 		DirectionalLightsAttribute light = (DirectionalLightsAttribute)renderable.environment.get(DirectionalLightsAttribute.Type);
+		GridPositionAttribute gpos = (GridPositionAttribute)renderable.material.get(GridPositionAttribute.Type);
 		program.setUniformMatrix(u_worldTrans, renderable.worldTransform);
 		program.setUniformi(u_texture, 0);
+		program.setUniformi(u_fogOfWarTexture, 1);
 		program.setUniformf(v_lightColor, light.lights.first().color);
+		program.setUniformf(v_gridPos, gpos.value.x, gpos.value.y);
 		renderable.mesh.render(program,
 				renderable.primitiveType,
 				renderable.meshPartOffset,

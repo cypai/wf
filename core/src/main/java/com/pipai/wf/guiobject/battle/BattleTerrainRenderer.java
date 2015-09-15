@@ -30,7 +30,9 @@ import com.pipai.wf.battle.map.CoverType;
 import com.pipai.wf.battle.map.EnvironmentObject;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.battle.vision.FogOfWar;
 import com.pipai.wf.graphics.FogOfWarShader;
+import com.pipai.wf.graphics.GridPositionAttribute;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
@@ -58,9 +60,10 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		return new Vector2(pos.x*SQUARE_SIZE + SQUARE_SIZE/2, pos.y*SQUARE_SIZE + SQUARE_SIZE/2);
 	}
 
-	protected BattleGui gui;
-	protected BattleMap map;
-	protected List<GridPosition> moveTiles, midDashTiles, dashTiles, targetTiles, targetableTiles;
+	private BattleGui gui;
+	private BattleMap map;
+	private List<GridPosition> moveTiles, midDashTiles, dashTiles, targetTiles, targetableTiles;
+	private FogOfWar fogOfWar;
 
 	private Environment environment;
 	private Model boxModel, terrainModel;
@@ -73,10 +76,11 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 
 	private boolean renderTex = true;
 
-	public BattleTerrainRenderer(BattleGui gui, BattleMap map) {
+	public BattleTerrainRenderer(BattleGui gui, BattleMap map, FogOfWar fogOfWar) {
 		super(gui);
 		this.gui = gui;
 		this.map = map;
+		this.fogOfWar = fogOfWar;
 		fogOfWarShader = new FogOfWarShader();
 		fogOfWarShader.init();
 		grassTexture = new Texture(Gdx.files.internal("graphics/textures/grass.png"));
@@ -109,7 +113,9 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private void generateSceneModels() {
 		for (int r = 0; r < map.getRows(); r++) {
 			for (int c = 0; c < map.getCols(); c++) {
-				terrainModels.add(new ModelInstance(terrainModel,c * SQUARE_SIZE, r * SQUARE_SIZE, 0));
+				ModelInstance model = new ModelInstance(terrainModel,c * SQUARE_SIZE, r * SQUARE_SIZE, 0);
+				model.materials.first().set(new GridPositionAttribute(new GridPosition(c, r)));
+				terrainModels.add(model);
 				EnvironmentObject env = map.getCell(new GridPosition(c, r)).getTileEnvironmentObject();
 				if (env != null && env.getCoverType() == CoverType.FULL) {
 					wallModels.add(new ModelInstance(boxModel, c * SQUARE_SIZE + SQUARE_SIZE/2, r * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2));
@@ -146,7 +152,8 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	public void render(BatchHelper batch) {
 		ModelBatch modelBatch = batch.getModelBatch();
 		if (renderTex) {
-			grassTexture.bind();
+			fogOfWar.getFogOfWarTexture().bind(1);
+			grassTexture.bind(0);
 			modelBatch.begin(gui.getCamera().getCamera());
 			modelBatch.render(terrainModels, environment, fogOfWarShader);
 			modelBatch.end();

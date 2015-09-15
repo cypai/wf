@@ -35,6 +35,7 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.battle.spell.FireballSpell;
+import com.pipai.wf.battle.vision.FogOfWar;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
@@ -113,6 +114,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	private TargetedAction targetedAction;
 	private ArrayList<AnimationHandler> animationHandlerList, animationHandlerBuffer;
 	private AnimationHandler animationHandler;
+	private FogOfWar fogOfWar;
 
 	public BattleGui(WFGame game, BattleMap map) {
 		super(game);
@@ -152,7 +154,9 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 			this.createInstance(a);
 		}
 		this.batch.set3DCamera(this.camera.getCamera());
-		this.terrainRenderer = new BattleTerrainRenderer(this, map);
+		this.fogOfWar = new FogOfWar(map, this.selectableAgentOrderedList);
+		//this.fogOfWar.fullScan();
+		this.terrainRenderer = new BattleTerrainRenderer(this, map, fogOfWar);
 		this.createInstance(this.terrainRenderer);
 		this.generateOverlays();
 		animationHandlerList = new ArrayList<AnimationHandler>();
@@ -723,6 +727,9 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		for (GuiRenderable r : this.overlayRenderables) {
 			r.render(batch);
 		}
+		batch.getSpriteBatch().begin();
+		batch.getSpriteBatch().draw(fogOfWar.getFogOfWarTexture(), 0, 0);
+		batch.getSpriteBatch().end();
 		drawFPS();
 		if (aiTurn) {
 			runAiTurn();

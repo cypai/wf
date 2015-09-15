@@ -11,6 +11,11 @@ public class GridPosition {
 		this.y = y;
 	}
 
+	public GridPosition(GridPosition other) {
+		this.x = other.x;
+		this.y = other.y;
+	}
+
 	@Override
 	public String toString() {
 		return "g(" + Integer.toString(this.x) + ", " + Integer.toString(this.y) + ")";
