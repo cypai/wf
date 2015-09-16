@@ -32,12 +32,10 @@ public class FogOfWar {
 			agentVisibleTiles.put(a, new ArrayList<GridPosition>());
 		}
 		this.map = map;
-		this.agents = agents;
+		this.agents = new ArrayList<AgentGuiObject>(agents);
 		visibilityPixmap = new Pixmap(map.getCols(), map.getRows(), Format.RGBA8888);
 		visibilityPixmap.setColor(0, 0, 0, 1);
-		visibilityPixmap.fillCircle(12, 12, 5);
-		setVisible(new GridPosition(0, 0));
-		setVisible(new GridPosition(5, 5));
+		fullScan();
 		visibilityTexture = new Texture(visibilityPixmap);
 	}
 
@@ -63,8 +61,14 @@ public class FogOfWar {
 
 	public void fullScan() {
 		visibleTiles.clear();
+		visibilityPixmap.setColor(0, 0, 0, 0);
+		visibilityPixmap.fill();
+		visibilityPixmap.setColor(0, 0, 0, 1);
+
 		for (AgentGuiObject a : agents) {
-			spiralPathScan(a);
+			GridPosition pos = a.getDisplayPosition();
+			visibilityPixmap.fillCircle(pos.x, pos.y, 17);
+//			spiralPathScan(a);
 		}
 	}
 
@@ -72,6 +76,10 @@ public class FogOfWar {
 		fullScan();
 	}
 
+	/**
+	 * TODO: Will be finished later
+	 */
+	@SuppressWarnings("unused")
 	private void spiralPathScan(AgentGuiObject a) {
 		agentVisibleTiles.get(a).clear();
 		GridPosition center = a.getDisplayPosition();

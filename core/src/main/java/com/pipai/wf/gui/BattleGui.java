@@ -184,6 +184,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 			this.mode = Mode.AI;
 			this.aiMoveWait = 0;
 		} else {
+			this.fogOfWar.fullScan();
 			this.populateSelectableAgentList();
 			this.mode = Mode.MOVE;
 			// Check if we need to change selected Agent
