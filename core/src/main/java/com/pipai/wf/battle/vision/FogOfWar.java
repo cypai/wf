@@ -67,7 +67,7 @@ public class FogOfWar {
 
 		for (AgentGuiObject a : agents) {
 			GridPosition pos = a.getDisplayPosition();
-			visibilityPixmap.fillCircle(pos.x, pos.y, 17);
+			visibilityPixmap.fillCircle(pos.x, pos.y, WFConfig.battleProps().sightRange());
 //			spiralPathScan(a);
 		}
 	}
