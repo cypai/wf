@@ -34,7 +34,7 @@ public class FogOfWar {
 		this.map = map;
 		this.agents = agents;
 		visibilityPixmap = new Pixmap(map.getCols(), map.getRows(), Format.RGBA8888);
-		visibilityPixmap.setColor(1,1,1,1);
+		visibilityPixmap.setColor(0, 0, 0, 1);
 		visibilityPixmap.fillCircle(12, 12, 5);
 		setVisible(new GridPosition(0, 0));
 		setVisible(new GridPosition(5, 5));
@@ -51,13 +51,13 @@ public class FogOfWar {
 
 	public void setVisible(GridPosition tile) {
 		visibleTiles.add(tile);
-		visibilityPixmap.setColor(1, 1, 1, 1);
+		visibilityPixmap.setColor(0, 0, 0, 1);
 		visibilityPixmap.drawPixel(tile.x, tile.y);
 	}
 
 	public void setNotVisible(GridPosition tile) {
 		visibleTiles.remove(tile);
-		visibilityPixmap.setColor(0.5f, 0, 0, 1);
+		visibilityPixmap.setColor(0, 0, 0, 0.5f);
 		visibilityPixmap.drawPixel(tile.x, tile.y);
 	}
 

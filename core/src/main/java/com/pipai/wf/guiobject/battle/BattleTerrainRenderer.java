@@ -152,8 +152,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	public void render(BatchHelper batch) {
 		ModelBatch modelBatch = batch.getModelBatch();
 		if (renderTex) {
-			fogOfWar.getFogOfWarTexture().bind(1);
-			grassTexture.bind(0);
+			fogOfWarShader.preRenderBindTextures(grassTexture, fogOfWar.getFogOfWarTexture());
 			modelBatch.begin(gui.getCamera().getCamera());
 			modelBatch.render(terrainModels, environment, fogOfWarShader);
 			modelBatch.end();

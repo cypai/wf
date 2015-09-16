@@ -3,6 +3,7 @@ package com.pipai.wf.graphics;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.DirectionalLightsAttribute;
@@ -17,7 +18,8 @@ public class FogOfWarShader implements Shader {
 	private int u_worldTrans;
 	private int u_texture, u_fogOfWarTexture;
 	private int v_lightColor;
-	private int v_gridPos;
+	private int v_fogOfWarColor;
+	private Texture fogOfWarTex;
 
 	@Override
 	public void dispose() {
@@ -37,7 +39,7 @@ public class FogOfWarShader implements Shader {
 		v_lightColor = program.getUniformLocation("v_lightColor");
 		u_texture = program.getUniformLocation("u_texture");
 		u_fogOfWarTexture = program.getUniformLocation("u_fogOfWarTexture");
-		v_gridPos = program.getUniformLocation("v_gridPos");
+		v_fogOfWarColor = program.getUniformLocation("v_fogOfWarColor");
 	}
 
 	@Override
@@ -58,15 +60,22 @@ public class FogOfWarShader implements Shader {
 		context.setCullFace(GL20.GL_BACK);
 	}
 
+	public void preRenderBindTextures(Texture grassTex, Texture fogOfWarTex) {
+		fogOfWarTex.bind(1);
+		program.setUniformi(u_fogOfWarTexture, 1);
+		this.fogOfWarTex = fogOfWarTex;
+		grassTex.bind(0);
+		program.setUniformi(u_texture, 0);
+	}
+
 	@Override
 	public void render(Renderable renderable) {
 		DirectionalLightsAttribute light = (DirectionalLightsAttribute)renderable.environment.get(DirectionalLightsAttribute.Type);
 		GridPositionAttribute gpos = (GridPositionAttribute)renderable.material.get(GridPositionAttribute.Type);
+		int rgba = fogOfWarTex.getTextureData().consumePixmap().getPixel(gpos.value.x, gpos.value.y);
 		program.setUniformMatrix(u_worldTrans, renderable.worldTransform);
-		program.setUniformi(u_texture, 0);
-		program.setUniformi(u_fogOfWarTexture, 1);
 		program.setUniformf(v_lightColor, light.lights.first().color);
-		program.setUniformf(v_gridPos, gpos.value.x, gpos.value.y);
+		program.setUniformf(v_fogOfWarColor, (float)rgba/255);
 		renderable.mesh.render(program,
 				renderable.primitiveType,
 				renderable.meshPartOffset,
