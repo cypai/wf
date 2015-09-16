@@ -57,7 +57,6 @@ import com.pipai.wf.guiobject.battle.AgentGuiObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
-import com.pipai.wf.guiobject.overlay.AttackButtonOverlay;
 import com.pipai.wf.guiobject.overlay.WeaponIndicator;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.ActiveSkillTargetedAccAbility;
@@ -165,9 +164,6 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	}
 
 	private void generateOverlays() {
-		AttackButtonOverlay atkBtn = new AttackButtonOverlay(this);
-		this.overlayRenderables.add(atkBtn);
-		this.overlayLeftClickables.add(atkBtn);
 		this.tooltip = new ActionToolTip(this, 0, 120, 320, 120);
 		this.weaponIndicator = new WeaponIndicator(this, this.getScreenWidth() - 120, 80, 120, 80);
 		this.agentStatusWindow = new AgentStatusWindow(this);
