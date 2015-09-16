@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
@@ -26,7 +27,6 @@ import com.pipai.wf.battle.action.TargetedActionable;
 import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.ai.AI;
 import com.pipai.wf.battle.ai.AIMoveRunnable;
 import com.pipai.wf.battle.ai.TopModularAI;
@@ -48,9 +48,9 @@ import com.pipai.wf.gui.animation.ReadySpellAnimationHandler;
 import com.pipai.wf.gui.animation.ReloadAnimationHandler;
 import com.pipai.wf.gui.camera.AnchoredCamera;
 import com.pipai.wf.guiobject.GuiObject;
+import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.LeftClickable3D;
-import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.RightClickable3D;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
@@ -666,6 +666,9 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 				}
 			}
 			this.agentStatusWindow.setVisible(true);
+			break;
+		case Keys.BACKSLASH:
+			terrainRenderer.setIsRenderingTextures(!terrainRenderer.getIsRenderingTextures());
 			break;
 		default:
 			break;

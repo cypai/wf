@@ -62,6 +62,8 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private ModelBuilder modelBuilder;
 	private Texture grassTexture;
 
+	private boolean renderTex = true;
+
 	public BattleTerrainRenderer(BattleGui gui, BattleMap map) {
 		super(gui);
 		this.gui = gui;
@@ -83,6 +85,14 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.1f, 0.1f, 0.1f, 1f));
 		environment.add(new DirectionalLight().set(0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.8f));
 		generateSceneModels();
+	}
+
+	public void setIsRenderingTextures(boolean renderTex) {
+		this.renderTex = renderTex;
+	}
+
+	public boolean getIsRenderingTextures() {
+		return renderTex;
 	}
 
 	private void generateSceneModels() {
@@ -119,9 +129,11 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 
 	@Override
 	public void render(BatchHelper batch) {
-		batch.getModelBatch().begin(gui.getCamera().getCamera());
-		batch.getModelBatch().render(terrainModels, environment);
-		batch.getModelBatch().end();
+		if (renderTex) {
+			batch.getModelBatch().begin(gui.getCamera().getCamera());
+			batch.getModelBatch().render(terrainModels, environment);
+			batch.getModelBatch().end();
+		}
 		this.drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawMovableTiles(batch.getShapeRenderer());
 		this.drawMidDashTiles(batch.getShapeRenderer());
