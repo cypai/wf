@@ -40,7 +40,6 @@ public class FogOfWar {
 		this.agents = new ArrayList<AgentGuiObject>(agents);
 		visibilityPixmap = new Pixmap(map.getCols(), map.getRows(), Format.RGBA8888);
 		fullScan();
-		visibilityTexture = new Texture(visibilityPixmap);
 	}
 
 	public Texture getFogOfWarTexture() {
@@ -65,6 +64,9 @@ public class FogOfWar {
 
 	public void fullScan() {
 		visibleTiles.clear();
+		if (visibilityTexture != null) {
+			visibilityTexture.dispose();
+		}
 		visibilityPixmap.setColor(NEVER_SEEN_COLOR);
 		visibilityPixmap.fill();
 		visibilityPixmap.setColor(VISIBLE_COLOR);
@@ -74,6 +76,7 @@ public class FogOfWar {
 			visibilityPixmap.fillCircle(pos.x, pos.y, WFConfig.battleProps().sightRange());
 			// spiralPathScan(a);
 		}
+		visibilityTexture = new Texture(visibilityPixmap);
 	}
 
 	public void update(AgentGuiObject changedAgent) {

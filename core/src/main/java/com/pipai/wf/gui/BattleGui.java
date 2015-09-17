@@ -70,11 +70,7 @@ import com.pipai.wf.util.RayMapper;
 public class BattleGui extends Gui implements BattleObserver, AnimationObserver {
 
 	public static enum Mode {
-		MOVE(true),
-		TARGET_SELECT(true),
-		PRE_ANIMATION(false),
-		ANIMATION(false),
-		AI(false);
+		MOVE(true), TARGET_SELECT(true), PRE_ANIMATION(false), ANIMATION(false), AI(false);
 
 		private boolean allowInput;
 
@@ -154,7 +150,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		}
 		this.batch.set3DCamera(this.camera.getCamera());
 		this.fogOfWar = new FogOfWar(map, this.selectableAgentOrderedList);
-		//this.fogOfWar.fullScan();
+		// this.fogOfWar.fullScan();
 		this.terrainRenderer = new BattleTerrainRenderer(this, map, fogOfWar);
 		this.createInstance(this.terrainRenderer);
 		this.generateOverlays();
@@ -172,7 +168,10 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		this.overlayRenderables.add(this.agentStatusWindow);
 	}
 
-	private void beginAnimation() { this.mode = Mode.ANIMATION; }
+	private void beginAnimation() {
+		this.mode = Mode.ANIMATION;
+	}
+
 	public void endAnimation() {
 		this.animationHandler = null;
 		performVictoryCheck();
@@ -192,7 +191,8 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 			}
 			for (AgentGuiObject a : this.agentList) {
 				if (a.getAgent().getTeam() == Team.PLAYER && (a.getAgent().getAP() > 0 && !a.getAgent().isKO())) {
-					// Found a movable Agent, so we return and do not start AI turn
+					// Found a movable Agent, so we return and do not start AI
+					// turn
 					this.updatePaths();
 					this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
 					return;
@@ -203,9 +203,18 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		}
 	}
 
-	public Mode getMode() { return this.mode; }
-	public RayMapper getRayMapper() { return this.rayMapper; }
-	public AnchoredCamera getCamera() { return this.camera; }
+	public Mode getMode() {
+		return this.mode;
+	}
+
+	public RayMapper getRayMapper() {
+		return this.rayMapper;
+	}
+
+	public AnchoredCamera getCamera() {
+		return this.camera;
+	}
+
 	public void registerAnimationHandler(AnimationHandler a) {
 		this.animationHandlerBuffer.add(a);
 	}
@@ -224,13 +233,13 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	public void createInstance(GuiObject o) {
 		super.createInstance(o);
 		if (o instanceof GuiRenderable) {
-			renderablesCreateBuffer.add((GuiRenderable)o);
+			renderablesCreateBuffer.add((GuiRenderable) o);
 		}
 		if (o instanceof LeftClickable3D) {
-			leftClickablesCreateBuffer.add((LeftClickable3D)o);
+			leftClickablesCreateBuffer.add((LeftClickable3D) o);
 		}
 		if (o instanceof RightClickable3D) {
-			rightClickablesCreateBuffer.add((RightClickable3D)o);
+			rightClickablesCreateBuffer.add((RightClickable3D) o);
 		}
 	}
 
@@ -238,13 +247,13 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	public void deleteInstance(GuiObject o) {
 		super.deleteInstance(o);
 		if (o instanceof GuiRenderable) {
-			renderablesDelBuffer.add((GuiRenderable)o);
+			renderablesDelBuffer.add((GuiRenderable) o);
 		}
 		if (o instanceof LeftClickable3D) {
-			leftClickablesDelBuffer.add((LeftClickable3D)o);
+			leftClickablesDelBuffer.add((LeftClickable3D) o);
 		}
 		if (o instanceof RightClickable3D) {
-			rightClickablesDelBuffer.add((RightClickable3D)o);
+			rightClickablesDelBuffer.add((RightClickable3D) o);
 		}
 	}
 
@@ -307,8 +316,8 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	}
 
 	private Vector2 screenPosToGraphicPos(int screenX, int screenY) {
-		float x = camera.position().x - this.getScreenWidth()/2 + screenX;
-		float y = camera.position().y - this.getScreenHeight()/2 + screenY;
+		float x = camera.position().x - this.getScreenWidth() / 2 + screenX;
+		float y = camera.position().y - this.getScreenHeight() / 2 + screenY;
 		return new Vector2(x, y);
 	}
 
@@ -400,8 +409,8 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		}
 		Ray ray = this.rayMapper.screenToRay(screenX, screenY);
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
-		int gameX = (int)gamePos.x;
-		int gameY = (int)gamePos.y;
+		int gameX = (int) gamePos.x;
+		int gameY = (int) gamePos.y;
 		if (this.mode != Mode.ANIMATION) {
 			for (LeftClickable o : overlayLeftClickables) {
 				o.onLeftClick(screenX, screenY, gameX, gameY);
@@ -537,7 +546,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 					this.targetedAction = ability.getAction(this.selectedAgent.getAgent(), target.getAgent());
 				}
 				this.tooltip.setToActionDescription(this.targetedAction);
-				this.moveCameraToPos((this.selectedAgent.x + target.x)/2, (this.selectedAgent.y + target.y)/2);
+				this.moveCameraToPos((this.selectedAgent.x + target.x) / 2, (this.selectedAgent.y + target.y) / 2);
 			}
 		}
 	}
@@ -631,7 +640,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 			if (this.mode == Mode.MOVE) {
 				for (Ability a : selectedAgent.getAgent().getAbilities()) {
 					if (a instanceof PrecisionShotAbility) {
-						this.switchToTargetMode((PrecisionShotAbility)a);
+						this.switchToTargetMode((PrecisionShotAbility) a);
 						break;
 					}
 				}
@@ -663,8 +672,8 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 				this.agentStatusWindow.setAgentStatus(this.selectedAgent.getAgent());
 			} else if (this.mode == Mode.TARGET_SELECT) {
 				if (this.targetedAction instanceof TargetedWithAccuracyAction) {
-					this.agentStatusWindow.setTargetedWithAccuracyAction((TargetedWithAccuracyAction)this.targetedAction);
-				}  else {
+					this.agentStatusWindow.setTargetedWithAccuracyAction((TargetedWithAccuracyAction) this.targetedAction);
+				} else {
 					this.agentStatusWindow.setAgentStatus(this.targetedAction.getTarget());
 				}
 			}
@@ -695,7 +704,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-		//this.camera.setToOrtho(false, width, height);
+		// this.camera.setToOrtho(false, width, height);
 		this.camera.setViewport(width, height);
 		this.orthoCamera.setToOrtho(false, width, height);
 		this.overlayCamera.setToOrtho(false, width, height);
@@ -713,7 +722,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		batch.getSpriteBatch().setProjectionMatrix(camera.getProjectionMatrix());
 		batch.getShapeRenderer().setProjectionMatrix(camera.getProjectionMatrix());
 		this.terrainRenderer.render(batch);
-		//		renderShape(batch.getShapeRenderer());
+		// renderShape(batch.getShapeRenderer());
 		for (GuiRenderable r : this.renderables) {
 			r.render(batch);
 		}
@@ -728,6 +737,9 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		for (GuiRenderable r : this.overlayRenderables) {
 			r.render(batch);
 		}
+		batch.getSpriteBatch().begin();
+		batch.getSpriteBatch().draw(fogOfWar.getFogOfWarTexture(), 0, 0);
+		batch.getSpriteBatch().end();
 		drawFPS();
 		if (aiTurn) {
 			runAiTurn();
@@ -741,7 +753,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		BitmapFont font = batch.getFont();
 		batch.getSpriteBatch().begin();
 		font.setColor(Color.WHITE);
-		font.draw(batch.getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), this.getScreenWidth() - 24, this.getScreenHeight() - font.getLineHeight()/2);
+		font.draw(batch.getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), this.getScreenWidth() - 24, this.getScreenHeight() - font.getLineHeight() / 2);
 		batch.getSpriteBatch().end();
 	}
 
