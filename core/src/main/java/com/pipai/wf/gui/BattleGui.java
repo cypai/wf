@@ -438,6 +438,10 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	}
 
 	public void animateEvent(BattleEvent event) {
+		if (event.getPerformer() != null && !agentMap.get(event.getPerformer()).visible()) {
+			endAnimation();
+			return;
+		}
 		switch (event.getType()) {
 		case MOVE:
 			animationHandler = new MoveAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
