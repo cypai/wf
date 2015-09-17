@@ -40,6 +40,20 @@ public abstract class Ability {
 		return 0;
 	}
 
+	public int getCooldown() {
+		return cooldown;
+	}
+
+	public void setCooldown(int cooldown) {
+		this.cooldown = cooldown;
+	}
+
+	public void decrementCooldown() {
+		if (cooldown > 0) {
+			this.cooldown--;
+		}
+	}
+
 	private void requireRegisteredAgent() throws NoRegisteredAgentException {
 		if (agent == null) {
 			throw new NoRegisteredAgentException();

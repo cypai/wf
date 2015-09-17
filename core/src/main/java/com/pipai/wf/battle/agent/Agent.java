@@ -183,10 +183,19 @@ public class Agent implements BattleEventLoggable {
 
 	public AbilityList getAbilities() {
 		AbilityList allAbilities = this.abilities.clone();
-		if (this.getCurrentWeapon() != null) {
-			allAbilities.add(getCurrentWeapon().getGrantedAbilities());
-		}
+		allAbilities.add(getWeaponGrantedAbilities());
 		return allAbilities;
+	}
+
+	public AbilityList getInnateAbilities() {
+		return this.abilities;
+	}
+
+	public AbilityList getWeaponGrantedAbilities() {
+		if (this.getCurrentWeapon() != null) {
+			return getCurrentWeapon().getGrantedAbilities();
+		}
+		return new AbilityList();
 	}
 
 	public String getName() {
@@ -335,6 +344,10 @@ public class Agent implements BattleEventLoggable {
 		}
 	}
 
+	public void onTurnEnd() {
+		decrementCooldowns();
+	}
+
 	public void onRoundEnd() {
 		try {
 			abilities.onRoundEnd();
@@ -346,6 +359,16 @@ public class Agent implements BattleEventLoggable {
 
 	public void onAction(Action action) {
 		seList.onAction(action);
+	}
+
+	public void decrementCooldowns() {
+		for (Ability a : this.getInnateAbilities())
+		{
+			if (a.isOnCooldown())
+			{
+				a.decrementCooldown();
+			}
+		}
 	}
 
 	public void switchWeapon() {

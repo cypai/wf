@@ -639,7 +639,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 			// Skill
 			if (this.mode == Mode.MOVE) {
 				for (Ability a : selectedAgent.getAgent().getAbilities()) {
-					if (a instanceof PrecisionShotAbility) {
+					if (a instanceof PrecisionShotAbility && !a.isOnCooldown()) {
 						this.switchToTargetMode((PrecisionShotAbility) a);
 						break;
 					}

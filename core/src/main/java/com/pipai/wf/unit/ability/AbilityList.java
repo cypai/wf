@@ -52,6 +52,15 @@ public class AbilityList implements Iterable<Ability> {
 		return false;
 	}
 
+	public Ability getAbility(Class<? extends Ability> abilityClass) {
+		for (Ability a : list) {
+			if (abilityClass.isInstance(a)) {
+				return a;
+			}
+		}
+		return null;
+	}
+
 	public int getActualizationLevel(SpellElement e) {
 		for (Ability a : list) {
 			switch (e) {

@@ -1,11 +1,14 @@
 package com.pipai.wf.test.battle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.action.PrecisionShotAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
@@ -16,6 +19,7 @@ import com.pipai.wf.battle.spell.FireballSpell;
 import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.unit.ability.FireballAbility;
+import com.pipai.wf.unit.ability.PrecisionShotAbility;
 import com.pipai.wf.unit.ability.QuickReloadAbility;
 import com.pipai.wf.unit.ability.RegenerationAbility;
 
@@ -84,6 +88,45 @@ public class AbilityTest {
 			fail(e.getMessage());
 		}
 		assertTrue(agent.getAP() == 1);
+	}
+
+	@Test
+	public void testPrecisionShotCooldown() {
+		BattleMap map = new BattleMap(3, 4);
+		GridPosition playerPos = new GridPosition(1, 0);
+		GridPosition enemyPos = new GridPosition(2, 2);
+		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.abilities.add(new PrecisionShotAbility());
+		playerState.weapons.add(new Pistol());
+		map.addAgent(playerState);
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map);
+		Agent agent = map.getAgentAtPos(playerPos);
+		Agent target = map.getAgentAtPos(enemyPos);
+		try {
+			battle.performAction(new PrecisionShotAction(agent, target));
+			assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).isOnCooldown());
+		} catch (IllegalActionException e) {
+			fail(e.getMessage());
+		}
+
+		battle.endTurn();
+		assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).isOnCooldown());
+		try {
+			battle.performAction(new PrecisionShotAction(agent, target));
+			fail("Expected IllegalActionException not thrown");
+		} catch (IllegalActionException e) {}
+
+		battle.endTurn();
+		assertFalse(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).isOnCooldown());
+		try {
+			battle.performAction(new PrecisionShotAction(agent, target));
+		} catch (IllegalActionException e) {
+			fail(e.getMessage());
+		}
+
+
+
 	}
 
 }

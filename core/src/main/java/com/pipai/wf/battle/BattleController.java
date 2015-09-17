@@ -62,7 +62,11 @@ public class BattleController {
 	}
 
 	public void endTurn() {
+
 		if (this.currentTeam == Team.PLAYER) {
+			for (Agent a : this.playerList) {
+				a.onTurnEnd();
+			}
 			this.currentTeam = Team.ENEMY;
 			for (Agent a : this.enemyList) {
 				a.onTurnBegin();
@@ -70,6 +74,9 @@ public class BattleController {
 			notifyObservers(BattleEvent.startTurnEvent(Team.ENEMY));
 		} else {
 			// Round ended
+			for (Agent a : this.enemyList) {
+				a.onTurnEnd();
+			}
 			for (Agent a : this.map.getAgents()) {
 				a.onRoundEnd();
 			}

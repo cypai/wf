@@ -10,6 +10,8 @@ import com.pipai.wf.battle.damage.WeaponDamageFunction;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.unit.ability.Ability;
+import com.pipai.wf.unit.ability.PrecisionShotAbility;
 import com.pipai.wf.util.UtilFunctions;
 
 public class PrecisionShotAction extends TargetedWithAccuracyAction {
@@ -49,6 +51,7 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		Agent a = getPerformer();
+		Ability ability = a.getInnateAbilities().getAbility(PrecisionShotAbility.class);
 		Agent target = getTarget();
 		Weapon w = a.getCurrentWeapon();
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
@@ -58,6 +61,7 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 		DamageResult adjustedResult = new DamageResult(result.hit, result.crit, result.damage + (result.hit ? 1 : 0), result.damageReduction);
 		target.takeDamage(result.damage);
 		a.setAP(0);
+		ability.setCooldown(2);
 		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, adjustedResult));
 	}
 
