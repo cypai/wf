@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,6 +18,10 @@ import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
 public class FogOfWar {
+
+	public static final Color NEVER_SEEN_COLOR = Color.BLACK;
+	public static final Color SEEN_COLOR = Color.GRAY;
+	public static final Color VISIBLE_COLOR = Color.WHITE;
 
 	private Texture visibilityTexture;
 	private Pixmap visibilityPixmap;
@@ -34,7 +39,6 @@ public class FogOfWar {
 		this.map = map;
 		this.agents = new ArrayList<AgentGuiObject>(agents);
 		visibilityPixmap = new Pixmap(map.getCols(), map.getRows(), Format.RGBA8888);
-		visibilityPixmap.setColor(0, 0, 0, 1);
 		fullScan();
 		visibilityTexture = new Texture(visibilityPixmap);
 	}
@@ -49,26 +53,26 @@ public class FogOfWar {
 
 	public void setVisible(GridPosition tile) {
 		visibleTiles.add(tile);
-		visibilityPixmap.setColor(0, 0, 0, 1);
+		visibilityPixmap.setColor(VISIBLE_COLOR);
 		visibilityPixmap.drawPixel(tile.x, tile.y);
 	}
 
 	public void setNotVisible(GridPosition tile) {
 		visibleTiles.remove(tile);
-		visibilityPixmap.setColor(0, 0, 0, 0.5f);
+		visibilityPixmap.setColor(SEEN_COLOR);
 		visibilityPixmap.drawPixel(tile.x, tile.y);
 	}
 
 	public void fullScan() {
 		visibleTiles.clear();
-		visibilityPixmap.setColor(0, 0, 0, 0);
+		visibilityPixmap.setColor(NEVER_SEEN_COLOR);
 		visibilityPixmap.fill();
-		visibilityPixmap.setColor(0, 0, 0, 1);
+		visibilityPixmap.setColor(VISIBLE_COLOR);
 
 		for (AgentGuiObject a : agents) {
 			GridPosition pos = a.getDisplayPosition();
 			visibilityPixmap.fillCircle(pos.x, pos.y, WFConfig.battleProps().sightRange());
-//			spiralPathScan(a);
+			// spiralPathScan(a);
 		}
 	}
 

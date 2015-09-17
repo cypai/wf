@@ -12,5 +12,5 @@ varying vec2 v_gridPos;
 void main() {
 	vec4 diffuseColor = texture2D(u_texture, v_texCoord);
 	vec4 fogOfWarColor = texture2D(u_fogOfWarTexture, v_gridPos);
-	gl_FragColor = diffuseColor;
+	gl_FragColor = diffuseColor * fogOfWarColor;
 }
