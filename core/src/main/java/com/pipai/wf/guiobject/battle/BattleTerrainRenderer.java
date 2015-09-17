@@ -6,9 +6,9 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -16,23 +16,23 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.DirectionalLightsAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.CoverType;
 import com.pipai.wf.battle.map.EnvironmentObject;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.battle.vision.FogOfWar;
-import com.pipai.wf.graphics.FogOfWarShader;
-import com.pipai.wf.graphics.GridPositionAttribute;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
@@ -49,15 +49,15 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private static final Color TARGETABLE_COLOR = new Color(1f, 0.8f, 0, 0.5f);
 
 	public static GridPosition gamePosToGridPos(float gameX, float gameY) {
-		int gameX_i = (int)gameX;
-		int gameY_i = (int)gameY;
+		int gameX_i = (int) gameX;
+		int gameY_i = (int) gameY;
 		int x_offset = gameX_i % SQUARE_SIZE;
 		int y_offset = gameY_i % SQUARE_SIZE;
-		return new GridPosition((gameX_i - x_offset)/SQUARE_SIZE, (gameY_i - y_offset)/SQUARE_SIZE);
+		return new GridPosition((gameX_i - x_offset) / SQUARE_SIZE, (gameY_i - y_offset) / SQUARE_SIZE);
 	}
 
 	public static Vector2 centerOfGridPos(GridPosition pos) {
-		return new Vector2(pos.x*SQUARE_SIZE + SQUARE_SIZE/2, pos.y*SQUARE_SIZE + SQUARE_SIZE/2);
+		return new Vector2(pos.x * SQUARE_SIZE + SQUARE_SIZE / 2, pos.y * SQUARE_SIZE + SQUARE_SIZE / 2);
 	}
 
 	private BattleGui gui;
@@ -66,13 +66,16 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private FogOfWar fogOfWar;
 
 	private Environment environment;
-	private Model boxModel, terrainModel;
-	private ArrayList<ModelInstance> terrainModels, wallModels;
+	private Model boxModel;
+	private Mesh terrainMesh;
+	private ArrayList<ModelInstance> wallModels;
 	private ModelBuilder modelBuilder;
 	private Texture grassTexture;
-	private FogOfWarShader fogOfWarShader;
-	public RenderContext renderContext;
+	private ShaderProgram fogOfWarShader;
 	public Renderable renderable;
+
+	private int u_projViewTrans, u_worldTrans, u_lightColor;
+	private int u_texture, u_fogOfWarTexture;
 
 	private boolean renderTex = true;
 
@@ -81,23 +84,25 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		this.gui = gui;
 		this.map = map;
 		this.fogOfWar = fogOfWar;
-		fogOfWarShader = new FogOfWarShader();
-		fogOfWarShader.init();
+		String vert = Gdx.files.internal("graphics/shaders/fogofwar.vertex.glsl").readString();
+		String frag = Gdx.files.internal("graphics/shaders/fogofwar.fragment.glsl").readString();
+		fogOfWarShader = new ShaderProgram(vert, frag);
+		if (!fogOfWarShader.isCompiled()) {
+			throw new GdxRuntimeException(fogOfWarShader.getLog());
+		}
+		u_projViewTrans = fogOfWarShader.getUniformLocation("u_projViewTrans");
+		u_worldTrans = fogOfWarShader.getUniformLocation("u_worldTrans");
+		u_lightColor = fogOfWarShader.getUniformLocation("u_lightColor");
+		u_texture = fogOfWarShader.getUniformLocation("u_texture");
+		u_fogOfWarTexture = fogOfWarShader.getUniformLocation("u_fogOfWarTexture");
+		terrainMesh = TerrainMeshGenerator.generateMeshFromBattleMap(map, SQUARE_SIZE);
 		grassTexture = new Texture(Gdx.files.internal("graphics/textures/grass.png"));
-		terrainModels = new ArrayList<ModelInstance>();
 		wallModels = new ArrayList<ModelInstance>();
 		modelBuilder = new ModelBuilder();
 		boxModel = modelBuilder.createBox(SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE,
 				new Material(ColorAttribute.createDiffuse(Color.GRAY)),
 				Usage.Position | Usage.Normal);
-		TextureRegion grassRegion = new TextureRegion(grassTexture, 0, 0, 128, 128);
-		Material grassMat = new Material(TextureAttribute.createDiffuse(grassRegion));
-		terrainModel = modelBuilder.createRect(0, 0, 0, SQUARE_SIZE, 0, 0, SQUARE_SIZE, SQUARE_SIZE, 0, 0, SQUARE_SIZE, 0,
-				0, 0, 1,
-				grassMat,
-				Usage.Position | Usage.Normal | Usage.TextureCoordinates );
 		environment = new Environment();
-		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.1f, 0.1f, 0.1f, 1f));
 		environment.add(new DirectionalLight().set(0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.8f));
 		generateSceneModels();
 	}
@@ -113,12 +118,9 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private void generateSceneModels() {
 		for (int r = 0; r < map.getRows(); r++) {
 			for (int c = 0; c < map.getCols(); c++) {
-				ModelInstance model = new ModelInstance(terrainModel,c * SQUARE_SIZE, r * SQUARE_SIZE, 0);
-				model.materials.first().set(new GridPositionAttribute(new GridPosition(c, r)));
-				terrainModels.add(model);
 				EnvironmentObject env = map.getCell(new GridPosition(c, r)).getTileEnvironmentObject();
 				if (env != null && env.getCoverType() == CoverType.FULL) {
-					wallModels.add(new ModelInstance(boxModel, c * SQUARE_SIZE + SQUARE_SIZE/2, r * SQUARE_SIZE + SQUARE_SIZE/2, SQUARE_SIZE/2));
+					wallModels.add(new ModelInstance(boxModel, c * SQUARE_SIZE + SQUARE_SIZE / 2, r * SQUARE_SIZE + SQUARE_SIZE / 2, SQUARE_SIZE / 2));
 				}
 			}
 		}
@@ -131,10 +133,10 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 
 	@Override
 	public boolean onRightClick(Ray ray) {
-		float t = -ray.origin.z/ray.direction.z;
+		float t = -ray.origin.z / ray.direction.z;
 		Vector3 endpoint = new Vector3();
 		ray.getEndPoint(endpoint, t);
-		GridPosition dest = gamePosToGridPos((int)endpoint.x, (int)endpoint.y);
+		GridPosition dest = gamePosToGridPos((int) endpoint.x, (int) endpoint.y);
 		gui.performMoveWithSelectedAgent(dest);
 		return true;
 	}
@@ -152,10 +154,18 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	public void render(BatchHelper batch) {
 		ModelBatch modelBatch = batch.getModelBatch();
 		if (renderTex) {
-			fogOfWarShader.preRenderBindTextures(grassTexture, fogOfWar.getFogOfWarTexture());
-			modelBatch.begin(gui.getCamera().getCamera());
-			modelBatch.render(terrainModels, environment, fogOfWarShader);
-			modelBatch.end();
+			// Gdx.gl20.glCullFace(GL20.GL_BACK);
+			fogOfWarShader.begin();
+			fogOfWarShader.setUniformMatrix(u_projViewTrans, gui.getCamera().getProjectionMatrix());
+			fogOfWarShader.setUniformMatrix(u_worldTrans, new Matrix4());
+			DirectionalLightsAttribute envlights = ((DirectionalLightsAttribute) environment.get(DirectionalLightsAttribute.Type));
+			fogOfWarShader.setUniformf(u_lightColor, envlights.lights.first().color);
+			grassTexture.bind(0);
+			fogOfWarShader.setUniformi(u_texture, 0);
+			fogOfWar.getFogOfWarTexture().bind(1);
+			fogOfWarShader.setUniformi(u_fogOfWarTexture, 1);
+			terrainMesh.render(fogOfWarShader, GL20.GL_TRIANGLES);
+			fogOfWarShader.end();
 		}
 		this.drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
 		this.drawMovableTiles(batch.getShapeRenderer());
@@ -224,12 +234,12 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.begin(ShapeType.Line);
 		batch.setColor(0, 0.7f, 0.7f, 0.5f);
-		for (int i = 0; i<=numCols; i++) {
-			float horiz_pos = x + i*width/numCols;
+		for (int i = 0; i <= numCols; i++) {
+			float horiz_pos = x + i * width / numCols;
 			batch.line(horiz_pos, y, horiz_pos, y + height);
 		}
-		for (int i = 0; i<=numRows; i++) {
-			float vert_pos = y + i*height/numRows;
+		for (int i = 0; i <= numRows; i++) {
+			float vert_pos = y + i * height / numRows;
 			batch.line(x, vert_pos, x + width, vert_pos);
 		}
 		batch.end();

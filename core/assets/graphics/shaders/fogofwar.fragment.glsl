@@ -4,13 +4,13 @@ precision mediump float;
 
 uniform sampler2D u_texture;
 uniform sampler2D u_fogOfWarTexture;
+uniform vec4 u_lightColor;
 
 varying vec2 v_texCoord;
-
-uniform vec4 v_lightColor;
-uniform float v_fogOfWarColor;
+varying vec2 v_gridPos;
 
 void main() {
 	vec4 diffuseColor = texture2D(u_texture, v_texCoord);
-	gl_FragColor = diffuseColor * v_lightColor * v_fogOfWarColor;
+	vec4 fogOfWarColor = texture2D(u_fogOfWarTexture, v_gridPos);
+	gl_FragColor = diffuseColor;
 }
