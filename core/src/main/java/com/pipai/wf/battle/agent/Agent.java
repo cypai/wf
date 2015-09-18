@@ -369,6 +369,14 @@ public class Agent implements BattleEventLoggable {
 				a.decrementCooldown();
 			}
 		}
+
+		for (Ability a : this.getWeaponGrantedAbilities())
+		{
+			if (a.isOnCooldown())
+			{
+				a.decrementCooldown();
+			}
+		}
 	}
 
 	public void switchWeapon() {

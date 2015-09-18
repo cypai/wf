@@ -9,8 +9,11 @@ public abstract class Weapon {
 
 	protected int currentAmmo;
 
+	protected AbilityList grantedAbilities;
+
 	public Weapon() {
 		currentAmmo = baseAmmoCapacity();
+		grantedAbilities = new AbilityList();
 	}
 
 	public abstract int flatAimModifier();
@@ -48,7 +51,7 @@ public abstract class Weapon {
 	public abstract String name();
 
 	public AbilityList getGrantedAbilities() {
-		return new AbilityList();
+		return grantedAbilities;
 	}
 
 }
