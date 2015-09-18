@@ -8,6 +8,7 @@ import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.effect.StatusEffect;
 import com.pipai.wf.battle.effect.StatusEffectList;
+import com.pipai.wf.battle.effect.SuppressedStatusEffect;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
 import com.pipai.wf.battle.log.BattleLog;
@@ -31,7 +32,7 @@ import com.pipai.wf.util.UtilFunctions;
 public class Agent implements BattleEventLoggable {
 
 	public enum State {
-		NEUTRAL, KO, OVERWATCH
+		NEUTRAL, KO, OVERWATCH, SUPPRESSING
 	};
 
 	protected Team team;
@@ -417,6 +418,11 @@ public class Agent implements BattleEventLoggable {
 		} catch (IllegalActionException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public void suppressOther(Agent other) {
+		this.state = State.SUPPRESSING;
+		other.inflictStatus(new SuppressedStatusEffect(other));
 	}
 
 	@Override

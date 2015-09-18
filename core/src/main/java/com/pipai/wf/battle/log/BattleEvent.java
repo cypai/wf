@@ -3,6 +3,7 @@ package com.pipai.wf.battle.log;
 import java.util.LinkedList;
 
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
@@ -16,7 +17,7 @@ import com.pipai.wf.battle.weapon.Weapon;
 public final class BattleEvent {
 
 	public static enum Type {
-		MOVE, RANGED_WEAPON_ATTACK, ATTACK, READY, CAST_TARGET, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, SWITCH_WEAPON, START_TURN;
+		MOVE, RANGED_WEAPON_ATTACK, ATTACK, READY, CAST_TARGET, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, SWITCH_WEAPON, TARGETED_ACTION, START_TURN;
 	}
 
 	private Team team;
@@ -29,6 +30,7 @@ public final class BattleEvent {
 	private LinkedList<BattleEvent> chainedEvents;
 	private GridPosition targetTile;
 	private String actionName;
+	private TargetedAction targetedAction;
 	private TargetedWithAccuracyActionOWCapable owActivatedAction;
 	private boolean quickenFlag;
 
@@ -83,6 +85,12 @@ public final class BattleEvent {
 		return event;
 	}
 
+	public static BattleEvent targetedActionEvent(Agent performer, Agent target, TargetedAction action) {
+		BattleEvent event = new BattleEvent(Type.TARGETED_ACTION, performer, target);
+		event.targetedAction = action;
+		return event;
+	}
+
 	public static BattleEvent startTurnEvent(Team team) {
 		BattleEvent event = new BattleEvent(Type.START_TURN, null, null);
 		event.team = team;
@@ -130,6 +138,10 @@ public final class BattleEvent {
 
 	public TargetedWithAccuracyActionOWCapable getActivatedOWAction() {
 		return this.owActivatedAction;
+	}
+
+	public TargetedAction getTargetedAction() {
+		return this.targetedAction;
 	}
 
 	public Spell getSpell() {
