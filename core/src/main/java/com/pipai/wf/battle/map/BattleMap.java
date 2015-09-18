@@ -84,6 +84,18 @@ public class BattleMap implements BattleEventLoggable {
 		case S:
 			cellPos = new GridPosition(pos.x, pos.y - 1);
 			break;
+		case NW:
+			cellPos = new GridPosition(pos.x - 1, pos.y + 1);
+			break;
+		case NE:
+			cellPos = new GridPosition(pos.x + 1, pos.y + 1);
+			break;
+		case SW:
+			cellPos = new GridPosition(pos.x - 1, pos.y - 1);
+			break;
+		case SE:
+			cellPos = new GridPosition(pos.x + 1, pos.y - 1);
+			break;
 		}
 		return this.cellMap.get(this.coordinatesToKey(cellPos));
 	}
