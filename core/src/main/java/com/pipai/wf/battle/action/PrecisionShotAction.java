@@ -51,9 +51,9 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		Agent a = getPerformer();
-		Ability ability = a.getInnateAbilities().getAbility(PrecisionShotAbility.class);
+		Ability ability = a.getAbility(PrecisionShotAbility.class);
 		if (ability == null) {
-			ability = a.getWeaponGrantedAbilities().getAbility(PrecisionShotAbility.class);
+			throw new IllegalActionException(a.getName() + "does not have Precision Shot ability");
 		}
 		Agent target = getTarget();
 		Weapon w = a.getCurrentWeapon();

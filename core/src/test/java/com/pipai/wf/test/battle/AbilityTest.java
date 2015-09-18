@@ -124,9 +124,5 @@ public class AbilityTest {
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
-
-
-
 	}
-
 }

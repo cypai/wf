@@ -198,6 +198,21 @@ public class Agent implements BattleEventLoggable {
 		return new AbilityList();
 	}
 
+	public Ability getAbility(Class<? extends Ability> abilityClass) {
+		for (Ability a : abilities) {
+			if (abilityClass.isInstance(a)) {
+				return a;
+			}
+		}
+		for (Ability a : getCurrentWeapon().getGrantedAbilities()) {
+			if (abilityClass.isInstance(a)) {
+				return a;
+			}
+		}
+		return null;
+	}
+
+
 	public String getName() {
 		return name;
 	}
@@ -362,18 +377,14 @@ public class Agent implements BattleEventLoggable {
 	}
 
 	public void decrementCooldowns() {
-		for (Ability a : this.getInnateAbilities())
-		{
-			if (a.isOnCooldown())
-			{
+		for (Ability a : this.getInnateAbilities()) {
+			if (a.isOnCooldown()) {
 				a.decrementCooldown();
 			}
 		}
 
-		for (Ability a : this.getWeaponGrantedAbilities())
-		{
-			if (a.isOnCooldown())
-			{
+		for (Ability a : this.getWeaponGrantedAbilities()) {
+			if (a.isOnCooldown()) {
 				a.decrementCooldown();
 			}
 		}

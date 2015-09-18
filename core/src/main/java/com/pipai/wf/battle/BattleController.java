@@ -62,7 +62,6 @@ public class BattleController {
 	}
 
 	public void endTurn() {
-
 		if (this.currentTeam == Team.PLAYER) {
 			for (Agent a : this.playerList) {
 				a.onTurnEnd();
