@@ -46,12 +46,12 @@ public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRender
 		Vector2 xy = BattleTerrainRenderer.centerOfGridPos(agent.getPosition());
 		this.x = xy.x;
 		this.y = xy.y;
-		radius = SQUARE_SIZE/2;
+		radius = SQUARE_SIZE / 2;
 		ko = false;
 		Pixmap pixmap = new Pixmap(SQUARE_SIZE, SQUARE_SIZE, Pixmap.Format.RGBA8888);
 		pixmap.fill();
 		pixmap.setColor(Color.RED);
-		pixmap.fillCircle(SQUARE_SIZE/2, SQUARE_SIZE/2, SQUARE_SIZE/2-1);
+		pixmap.fillCircle(SQUARE_SIZE / 2, SQUARE_SIZE / 2, SQUARE_SIZE / 2 - 1);
 		circleTex = new Texture(pixmap);
 		pixmap.dispose();
 		decal = Decal.newDecal(new TextureRegion(circleTex), true);
@@ -60,38 +60,65 @@ public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRender
 	}
 
 	@Override
-	public float getX() { return x; }
+	public float getX() {
+		return x;
+	}
 
 	@Override
-	public float getY() { return y; }
+	public float getY() {
+		return y;
+	}
 
 	@Override
-	public void setX(float x) { this.x = x; }
+	public void setX(float x) {
+		this.x = x;
+	}
 
 	@Override
-	public void setY(float y) { this.y = y; }
+	public void setY(float y) {
+		this.y = y;
+	}
 
 	public GridPosition getDisplayPosition() {
 		return BattleTerrainRenderer.gamePosToGridPos(x, y);
 	}
 
 	@Override
-	public int renderPriority() { return 0; }
+	public int renderPriority() {
+		return 0;
+	}
 
-	public Agent getAgent() { return this.agent; }
+	public Agent getAgent() {
+		return this.agent;
+	}
 
 	public void select() {
 		selected = true;
 		gui.setSelected(this);
 	}
-	public void deselect() { selected = false; }
-	public boolean isSelected() { return selected; }
+
+	public void deselect() {
+		selected = false;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
 	/**
 	 * @return If displaying as KOed, not necessarily the Agent
 	 */
-	public boolean isShowingKO() { return ko; }
-	public int getDisplayHP() { return displayHP; }
-	public int getDisplayArmorHP() { return displayArmorHP; }
+	public boolean isShowingKO() {
+		return ko;
+	}
+
+	public int getDisplayHP() {
+		return displayHP;
+	}
+
+	public int getDisplayArmorHP() {
+		return displayArmorHP;
+	}
 
 	public void hit(BattleEvent outcome) {
 		int dmg = outcome.getDamage();
@@ -144,7 +171,7 @@ public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRender
 	@Override
 	public boolean onLeftClick(Ray ray) {
 		// ray.origin + t * ray.direction = 0
-		float t = -ray.origin.z/ray.direction.z;
+		float t = -ray.origin.z / ray.direction.z;
 		Vector3 endpoint = new Vector3();
 		ray.getEndPoint(endpoint, t);
 		if (UtilFunctions.isInCircle(x, y, radius, endpoint.x, endpoint.y)) {
@@ -159,7 +186,7 @@ public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRender
 
 	@Override
 	public boolean onRightClick(Ray ray) {
-		float t = -ray.origin.z/ray.direction.z;
+		float t = -ray.origin.z / ray.direction.z;
 		Vector3 endpoint = new Vector3();
 		ray.getEndPoint(endpoint, t);
 		if (UtilFunctions.isInCircle(x, y, radius, endpoint.x, endpoint.y)) {

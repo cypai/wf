@@ -49,7 +49,8 @@ public class SpellTest extends WfConfiguredTest {
 		try {
 			battle.performAction(ready);
 			fail("Did not throw expected IllegalActionException");
-		} catch (IllegalActionException e) {}
+		} catch (IllegalActionException e) {
+		}
 	}
 
 	@Test
@@ -65,7 +66,8 @@ public class SpellTest extends WfConfiguredTest {
 		try {
 			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
 			fail("Did not throw expected exception");
-		} catch (IllegalActionException e) {}
+		} catch (IllegalActionException e) {
+		}
 	}
 
 	@Test
@@ -140,7 +142,7 @@ public class SpellTest extends WfConfiguredTest {
 		Agent target = map.getAgentAtPos(enemyPos);
 		try {
 			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
-			assertTrue(((SpellWeapon)agent.getCurrentWeapon()).getSpell() != null);
+			assertTrue(((SpellWeapon) agent.getCurrentWeapon()).getSpell() != null);
 			battle.performAction(WeaponActionFactory.defaultWeaponAction(agent, target));
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
@@ -156,7 +158,7 @@ public class SpellTest extends WfConfiguredTest {
 		int expectedHP = UtilFunctions.clamp(0, target.getMaxHP(), target.getMaxHP() - ev.getDamage());
 		assertTrue(target.getHP() == expectedHP);
 		assertTrue(agent.getHP() == agent.getMaxHP());
-		assertTrue(((SpellWeapon)agent.getCurrentWeapon()).getSpell() == null);
+		assertTrue(((SpellWeapon) agent.getCurrentWeapon()).getSpell() == null);
 	}
 
 	@Test
@@ -178,7 +180,7 @@ public class SpellTest extends WfConfiguredTest {
 		assertFalse(player == null || enemy == null);
 		try {
 			battle.performAction(new ReadySpellAction(player, new FireballSpell()));
-			assertTrue(((SpellWeapon)player.getCurrentWeapon()).getSpell() != null);
+			assertTrue(((SpellWeapon) player.getCurrentWeapon()).getSpell() != null);
 			battle.performAction(new OverwatchAction(player));
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
@@ -186,10 +188,10 @@ public class SpellTest extends WfConfiguredTest {
 		BattleEvent ev = observer.ev;
 		assertTrue(ev.getType() == BattleEvent.Type.OVERWATCH);
 		assertTrue(ev.getPerformer() == player);
-		assertTrue(ev.getPreparedOWName() == "Fireball");
+		assertTrue(ev.getPreparedOWName().equals("Fireball"));
 		assertTrue(ev.getChainEvents().size() == 0);
-		//Test Overwatch Activation
-		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		// Test Overwatch Activation
+		LinkedList<GridPosition> path = new LinkedList<>();
 		GridPosition dest = new GridPosition(2, 1);
 		path.add(enemy.getPosition());
 		path.add(dest);
@@ -214,6 +216,6 @@ public class SpellTest extends WfConfiguredTest {
 		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv.getDamage());
 		assertTrue(enemy.getHP() == expectedHP);
 		assertTrue(player.getHP() == player.getMaxHP());
-		assertTrue(((SpellWeapon)player.getCurrentWeapon()).getSpell() == null);
+		assertTrue(((SpellWeapon) player.getCurrentWeapon()).getSpell() == null);
 	}
 }

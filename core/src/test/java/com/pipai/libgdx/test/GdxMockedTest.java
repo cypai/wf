@@ -22,18 +22,18 @@ public class GdxMockedTest {
 			@Override
 			public FileHandle answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();
-				return new FileHandle("assets/" + (String)args[0]);
+				return new FileHandle("assets/" + (String) args[0]);
 			}
 		});
 		when(Gdx.files.local(anyString())).thenAnswer(new Answer<FileHandle>() {
 			@Override
 			public FileHandle answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();
-				return new FileHandle((String)args[0]);
+				return new FileHandle((String) args[0]);
 			}
 		});
 	}
-	
+
 	@AfterClass
 	public static void unmock() {
 		Gdx.files = null;

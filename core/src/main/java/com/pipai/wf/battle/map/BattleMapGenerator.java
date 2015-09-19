@@ -11,7 +11,7 @@ import com.pipai.wf.util.UtilFunctions;
 
 public class BattleMapGenerator {
 
-	private static ArrayList<GridPosition> partyRelativeStartingPositions = new ArrayList<GridPosition>();
+	private static ArrayList<GridPosition> partyRelativeStartingPositions = new ArrayList<>();
 
 	static {
 		partyRelativeStartingPositions.add(new GridPosition(-1, 1));
@@ -69,7 +69,7 @@ public class BattleMapGenerator {
 	private static void generateEnemyPod(BattleMap map) {
 		int amt = UtilFunctions.randInt(2, 3);
 		GridPosition center = randPos(new GridPosition(8, 8), new GridPosition(map.getCols() - 8, map.getRows() - 8));
-		List<GridPosition> enemyPos = new ArrayList<GridPosition>();
+		List<GridPosition> enemyPos = new ArrayList<>();
 		for (int i = 0; i < amt; i++) {
 			enemyPos.add(randPos(new GridPosition(center.x - 2, center.y - 2), new GridPosition(center.x + 2, center.y + 2)));
 		}

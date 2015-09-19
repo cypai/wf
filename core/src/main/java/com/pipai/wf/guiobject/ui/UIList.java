@@ -11,11 +11,11 @@ import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 
 public class UIList extends GuiObject implements GuiRenderable {
-	
+
 	protected ArrayList<UIListItem> list;
 	protected float x, y, width, height;
 	protected Color color;
-	
+
 	public UIList(Gui gui, float x, float y, float width, float height, Color color) {
 		super(gui);
 		this.x = x;
@@ -26,7 +26,9 @@ public class UIList extends GuiObject implements GuiRenderable {
 	}
 
 	@Override
-	public int renderPriority() { return 0; }
+	public int renderPriority() {
+		return 0;
+	}
 
 	@Override
 	public void render(BatchHelper batch) {
@@ -36,6 +38,5 @@ public class UIList extends GuiObject implements GuiRenderable {
 		r.rect(x, y, width, -height);
 		r.end();
 	}
-	
-	
+
 }

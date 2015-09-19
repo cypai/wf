@@ -19,11 +19,15 @@ public abstract class GuiObject {
 		GuiObject.nextID += 1;
 	}
 
-	public int getID() { return id; }
+	public int getID() {
+		return id;
+	}
 
-	public void update() {}
+	public void update() {
+	}
 
-	public void dispose() {}
+	public void dispose() {
+	}
 
 	public void registerDestroyEventObserver(GuiObjectDestroyEventObserver o) {
 		if (destroyEvObservers == null) {

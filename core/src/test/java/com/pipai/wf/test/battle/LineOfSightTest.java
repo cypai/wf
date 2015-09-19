@@ -25,8 +25,8 @@ public class LineOfSightTest {
 		 * 0 0 0 0
 		 * A x x E
 		 */
-		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(3,0)).supercover;
-		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0, 0), new GridPosition(3, 0)).supercover;
+		ArrayList<GridPosition> req = new ArrayList<>();
 		req.add(new GridPosition(1, 0));
 		req.add(new GridPosition(2, 0));
 		for (GridPosition r : req) {
@@ -44,8 +44,8 @@ public class LineOfSightTest {
 		 * x 0 0 0
 		 * A 0 0 0
 		 */
-		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(0,3)).supercover;
-		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0, 0), new GridPosition(0, 3)).supercover;
+		ArrayList<GridPosition> req = new ArrayList<>();
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(0, 2));
 		for (GridPosition r : req) {
@@ -63,8 +63,8 @@ public class LineOfSightTest {
 		 * 0 x 0 0
 		 * A 0 0 0
 		 */
-		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(3,3)).supercover;
-		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0, 0), new GridPosition(3, 3)).supercover;
+		ArrayList<GridPosition> req = new ArrayList<>();
 		req.add(new GridPosition(1, 1));
 		req.add(new GridPosition(2, 2));
 		for (GridPosition r : req) {
@@ -82,8 +82,8 @@ public class LineOfSightTest {
 		 * 0 0 x E
 		 * A x 0 0
 		 */
-		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(3,1)).supercover;
-		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0, 0), new GridPosition(3, 1)).supercover;
+		ArrayList<GridPosition> req = new ArrayList<>();
 		req.add(new GridPosition(1, 0));
 		req.add(new GridPosition(2, 1));
 		for (GridPosition r : req) {
@@ -101,8 +101,8 @@ public class LineOfSightTest {
 		 * x x 0 0
 		 * A 0 0 0
 		 */
-		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0,0), new GridPosition(2,3)).supercover;
-		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> supercover = VisionCalculator.supercover(new GridPosition(0, 0), new GridPosition(2, 3)).supercover;
+		ArrayList<GridPosition> req = new ArrayList<>();
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(1, 1));
 		req.add(new GridPosition(1, 2));

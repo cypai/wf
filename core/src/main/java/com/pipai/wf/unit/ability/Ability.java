@@ -29,7 +29,8 @@ public abstract class Ability {
 		return agent;
 	}
 
-	public void startCooldown() {}
+	public void startCooldown() {
+	}
 
 	public boolean isOnCooldown() {
 		return cooldown > 0;
@@ -53,7 +54,8 @@ public abstract class Ability {
 		onRoundEndImpl();
 	}
 
-	protected void onRoundEndImpl() {}
+	protected void onRoundEndImpl() {
+	}
 
 	public boolean grantsSpell() {
 		return false;
@@ -67,11 +69,16 @@ public abstract class Ability {
 		return level;
 	}
 
-	public boolean equals(Ability other) {
-		if (!this.getClass().isInstance(other)) {
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Ability) {
+			if (!this.getClass().isInstance(other)) {
+				return false;
+			}
+			return (this.getLevel() == ((Ability) other).getLevel());
+		} else {
 			return false;
 		}
-		return (this.getLevel() == other.getLevel());
 	}
 
 	public boolean equalsIgnoreLevel(Ability other) {

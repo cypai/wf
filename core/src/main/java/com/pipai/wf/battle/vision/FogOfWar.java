@@ -90,7 +90,7 @@ public class FogOfWar {
 	private void spiralPathScan(AgentGuiObject a) {
 		agentVisibleTiles.get(a).clear();
 		GridPosition center = a.getDisplayPosition();
-		LinkedList<GridPosition> queue = new LinkedList<GridPosition>();
+		LinkedList<GridPosition> queue = new LinkedList<>();
 		initializeSpiralPathQueue(queue, center);
 		while (queue.size() > 0) {
 			GridPosition tile = queue.poll();

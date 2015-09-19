@@ -11,53 +11,60 @@ import com.pipai.wf.WFGame;
 import com.pipai.wf.guiobject.GuiObject;
 
 public abstract class Gui implements Screen, InputProcessor {
-	
+
 	protected WFGame game;
 	protected BatchHelper batch;
 	protected int width, height;
 	protected ConcurrentHashMap<Integer, GuiObject> instanceIndex;
-	//Maybe add BST for rendering order??
-	
-	//Input Processing
+	// Maybe add BST for rendering order??
+
+	// Input Processing
 	private HashMap<Integer, Boolean> heldKeys;
-	
+
 	public Gui(WFGame game) {
 		this.game = game;
-        Gdx.input.setInputProcessor(this);
-        batch = new BatchHelper(game.sprBatch, game.shapeBatch, game.modelBatch, game.font);
+		Gdx.input.setInputProcessor(this);
+		batch = new BatchHelper(game.sprBatch, game.shapeBatch, game.modelBatch, game.font);
 		instanceIndex = new ConcurrentHashMap<Integer, GuiObject>();
-        heldKeys = new HashMap<Integer, Boolean>();
-        width = Gdx.graphics.getWidth();
-        height = Gdx.graphics.getHeight();
+		heldKeys = new HashMap<Integer, Boolean>();
+		width = Gdx.graphics.getWidth();
+		height = Gdx.graphics.getHeight();
 	}
-	
-	public int getScreenWidth() { return width; }
-	public int getScreenHeight() { return height; }
-	
+
+	public int getScreenWidth() {
+		return width;
+	}
+
+	public int getScreenHeight() {
+		return height;
+	}
+
 	public void createInstance(GuiObject o) {
 		instanceIndex.put(o.getID(), o);
 	}
+
 	public void deleteInstance(GuiObject o) {
 		instanceIndex.remove(o.getID());
 		o.dispose();
 	}
+
 	public void deleteInstance(int id) {
 		instanceIndex.remove(id);
 	}
-	
+
 	public boolean checkKey(int keycode) {
-		if (!this.heldKeys.containsKey(keycode)) {
-			return false;
-		} else {
+		if (this.heldKeys.containsKey(keycode)) {
 			return this.heldKeys.get(keycode);
+		} else {
+			return false;
 		}
 	}
 
 	@Override
 	public void show() {
-		
+
 	}
-	
+
 	@Override
 	public void render(float delta) {
 		for (GuiObject o : this.instanceIndex.values()) {
@@ -73,17 +80,17 @@ public abstract class Gui implements Screen, InputProcessor {
 
 	@Override
 	public void pause() {
-		
+
 	}
 
 	@Override
 	public void resume() {
-		
+
 	}
 
 	@Override
 	public void hide() {
-		
+
 	}
 
 	@Override
@@ -97,7 +104,7 @@ public abstract class Gui implements Screen, InputProcessor {
 	public final boolean keyDown(int keycode) {
 		this.heldKeys.put(keycode, true);
 		this.onKeyDown(keycode);
-        return true;
+		return true;
 	}
 
 	@Override
@@ -113,13 +120,15 @@ public abstract class Gui implements Screen, InputProcessor {
 	}
 
 	public abstract void onLeftClick(int screenX, int screenY);
+
 	public abstract void onRightClick(int screenX, int screenY);
-	
+
 	public abstract void onKeyDown(int keycode);
+
 	public abstract void onKeyUp(int keycode);
-	
+
 	public abstract void mouseScrolled(int amount);
-	
+
 	@Override
 	public final boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		if (button == Buttons.LEFT) {
@@ -150,5 +159,5 @@ public abstract class Gui implements Screen, InputProcessor {
 		mouseScrolled(amount);
 		return true;
 	}
-	
+
 }

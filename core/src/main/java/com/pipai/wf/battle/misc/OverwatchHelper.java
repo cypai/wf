@@ -1,5 +1,7 @@
 package com.pipai.wf.battle.misc;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.agent.Agent;
@@ -15,10 +17,11 @@ public class OverwatchHelper {
 	}
 
 	public static TargetedWithAccuracyActionOWCapable generateAction(Class<? extends TargetedWithAccuracyActionOWCapable> actionClass, Agent performer, Agent target) {
+		TargetedWithAccuracyActionOWCapable action;
 		try {
-			TargetedWithAccuracyActionOWCapable action = (actionClass.getDeclaredConstructor(Agent.class, Agent.class).newInstance(performer, target));
+			action = (actionClass.getDeclaredConstructor(Agent.class, Agent.class).newInstance(performer, target));
 			return action;
-		} catch (Exception e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			e.printStackTrace();
 			return null;
 		}

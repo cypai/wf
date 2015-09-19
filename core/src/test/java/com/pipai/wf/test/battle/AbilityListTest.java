@@ -1,6 +1,7 @@
 package com.pipai.wf.test.battle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -14,7 +15,7 @@ import com.pipai.wf.unit.ability.FireballAbility;
 import com.pipai.wf.unit.ability.RegenerationAbility;
 
 public class AbilityListTest {
-	
+
 	@Test
 	public void testEmpty() {
 		AbilityList alist = new AbilityList();
@@ -22,7 +23,7 @@ public class AbilityListTest {
 		assertTrue(alist.size() == 0);
 		assertFalse(alist.hasSpell(FireballSpell.class));
 	}
-	
+
 	@Test
 	public void testHasSpell() {
 		AbilityList alist = new AbilityList();
@@ -30,7 +31,7 @@ public class AbilityListTest {
 		assertTrue(alist.size() == 1);
 		assertTrue(alist.hasSpell(FireballSpell.class));
 	}
-	
+
 	@Test
 	public void testHasSpellWithNonspell() {
 		AbilityList alist = new AbilityList();
@@ -39,10 +40,10 @@ public class AbilityListTest {
 		assertTrue(alist.size() == 2);
 		assertTrue(alist.hasSpell(FireballSpell.class));
 	}
-	
+
 	@Test
 	public void testForEachGetSpell() {
-		ArrayList<Spell> spellList = new ArrayList<Spell>();
+		ArrayList<Spell> spellList = new ArrayList<>();
 		AbilityList alist = new AbilityList();
 		alist.add(new FireballAbility());
 		alist.add(new RegenerationAbility(1));
@@ -54,5 +55,5 @@ public class AbilityListTest {
 		assertTrue(spellList.size() == 1);
 		assertTrue(spellList.get(0).getClass() == FireballSpell.class);
 	}
-	
+
 }

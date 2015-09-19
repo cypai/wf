@@ -27,7 +27,7 @@ public class SlimeSchema implements UnitSchema {
 
 	@Override
 	public int mp() {
-		return 7 + level/2;
+		return 7 + level / 2;
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class SlimeSchema implements UnitSchema {
 	@Override
 	public AbilityList abilities() {
 		AbilityList l = new AbilityList();
-		l.add(new RegenerationAbility(UtilFunctions.clamp(1, 5, level/2)));
+		l.add(new RegenerationAbility(UtilFunctions.clamp(1, 5, level / 2)));
 		l.add(new FireActualizationAbility(1));
 		l.add(new FireballAbility());
 		return l;
@@ -66,7 +66,7 @@ public class SlimeSchema implements UnitSchema {
 
 	@Override
 	public ArrayList<Weapon> weapons() {
-		ArrayList<Weapon> l = new ArrayList<Weapon>();
+		ArrayList<Weapon> l = new ArrayList<>();
 		l.add(new InnateCasting());
 		return l;
 	}

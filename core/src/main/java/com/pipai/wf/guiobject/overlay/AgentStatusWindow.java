@@ -39,8 +39,8 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		visible = false;
 		x = padding;
 		y = padding;
-		width = gui.getScreenWidth() - padding*2;
-		height = gui.getScreenHeight() - padding*2;
+		width = gui.getScreenWidth() - padding * 2;
+		height = gui.getScreenHeight() - padding * 2;
 	}
 
 	public void setAgentStatus(Agent a) {
@@ -68,7 +68,9 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 
 	@Override
 	public void render(BatchHelper batch) {
-		if (!visible) { return; }
+		if (!visible) {
+			return;
+		}
 		ShapeRenderer r = batch.getShapeRenderer();
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -89,7 +91,7 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
-		f.draw(spr, agent.getName(), padding + width/2, padding + height - f.getLineHeight(), 0, Align.center, true);
+		f.draw(spr, agent.getName(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
 		spr.end();
 		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 2, agent);
 	}
@@ -99,7 +101,7 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
-		f.draw(spr, targetAccAction.getTarget().getName(), padding + width/2, padding + height - f.getLineHeight(), 0, Align.center, true);
+		f.draw(spr, targetAccAction.getTarget().getName(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
 		spr.end();
 		renderCalc(batch, padding * 2, height - f.getLineHeight() * 2, targetAccAction.getHitCalculation(), "Hit Calculation");
 		renderCalc(batch, width - padding - 120, height - f.getLineHeight() * 2, targetAccAction.getCritCalculation(), "Crit Calculation");
@@ -139,8 +141,8 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		float currY = abilityY - f.getLineHeight() * 2;
 		for (Ability a : the_agent.getAbilities()) {
 			String abilityName = a.name() + (a.getLevel() > 0 ? " " + RomanNumerals.romanNumeralify(a.getLevel()) : "");
-			f.draw(spr, abilityName, abilityX, currY, width/3, Align.left, true);
-			f.draw(spr, a.description(), abilityX, currY - f.getLineHeight(), width/3, Align.left, true);
+			f.draw(spr, abilityName, abilityX, currY, width / 3, Align.left, true);
+			f.draw(spr, a.description(), abilityX, currY - f.getLineHeight(), width / 3, Align.left, true);
 			currY -= f.getLineHeight() * 3;
 		}
 		spr.end();

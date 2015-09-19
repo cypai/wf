@@ -6,8 +6,8 @@ public abstract class Armor extends Item {
 
 	protected int hp;
 
-	public Armor() {
-		hp = maxHP();
+	public Armor(int hp) {
+		this.hp = hp;
 	}
 
 	public int getHP() {

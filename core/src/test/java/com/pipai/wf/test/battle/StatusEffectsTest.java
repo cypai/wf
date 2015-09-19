@@ -34,7 +34,7 @@ public class StatusEffectsTest {
 		assertTrue(agent.getEffectiveMobility() < agent.getBaseMobility());
 		BattleController battle = new BattleController(map);
 		assertTrue(agent.getHP() == agent.getMaxHP());
-		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		LinkedList<GridPosition> path = new LinkedList<>();
 		path.add(new GridPosition(1, 0));
 		try {
 			battle.performAction(new MoveAction(agent, path, 1));

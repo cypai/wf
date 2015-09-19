@@ -14,13 +14,13 @@ import com.pipai.wf.exception.BadStateStringException;
  */
 
 public class MapString {
-	
+
 	private String header;
 	private String map;
 	private int m, n;
 	private ArrayList<GridPosition> solidPosList;
 	private ArrayList<AgentState> agentStateList;
-	
+
 	public MapString(String mapString) throws BadStateStringException {
 		this.header = mapString.substring(0, mapString.indexOf("\n"));
 		this.map = mapString.substring(mapString.indexOf("\n") + 1);
@@ -29,7 +29,7 @@ public class MapString {
 		this.n = Integer.parseInt(dimensions[1]);
 		this.parse();
 	}
-	
+
 	public MapString(int m, int n, String mapOnlyString) throws BadStateStringException {
 		this.header = Integer.toString(m) + " " + Integer.toString(n);
 		this.map = mapOnlyString;
@@ -37,7 +37,7 @@ public class MapString {
 		this.n = n;
 		this.parse();
 	}
-	
+
 	public MapString(BattleMap map) {
 		this.m = map.getRows();
 		this.n = map.getCols();
@@ -54,7 +54,7 @@ public class MapString {
 			}
 		}
 	}
-	
+
 	private void parse() throws BadStateStringException {
 		this.solidPosList = new ArrayList<GridPosition>();
 		this.agentStateList = new ArrayList<AgentState>();
@@ -69,20 +69,26 @@ public class MapString {
 			}
 		}
 	}
-	
-	public int getRows() { return this.m; }
-	public int getCols() { return this.n; }
-	
+
+	public int getRows() {
+		return this.m;
+	}
+
+	public int getCols() {
+		return this.n;
+	}
+
 	public ArrayList<GridPosition> getSolidPositions() {
 		return this.solidPosList;
 	}
-	
+
 	public ArrayList<AgentState> getAgentStates() {
 		return this.agentStateList;
 	}
-	
+
+	@Override
 	public String toString() {
 		return this.header + "\n" + this.map;
 	}
-	
+
 }

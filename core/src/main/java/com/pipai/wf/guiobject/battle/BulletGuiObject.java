@@ -33,16 +33,18 @@ public class BulletGuiObject extends GuiObject implements GuiRenderable {
 		this.dest_y = dest_y;
 		dir = new Vector2(dest_x - x, dest_y - y);
 		dir.nor();
-		final_t = (int)Math.ceil((dest_x - x)/(SPEED * dir.x));
+		final_t = (int) Math.ceil((dest_x - x) / (SPEED * dir.x));
 		if (final_t == 0) {
-			final_t = (int)Math.ceil((dest_y - y)/(SPEED * dir.y));
+			final_t = (int) Math.ceil((dest_y - y) / (SPEED * dir.y));
 		}
 		this.target = target;
 		this.outcome = outcome;
 	}
 
 	@Override
-	public int renderPriority() { return 0; }
+	public int renderPriority() {
+		return 0;
+	}
 
 	@Override
 	public void update() {
@@ -54,7 +56,7 @@ public class BulletGuiObject extends GuiObject implements GuiRenderable {
 			x = dest_x;
 			y = dest_y;
 			TemporaryText dmgTxt;
-			Vector3 txtAnchor = new Vector3(x + 12 , y + 16*UtilFunctions.rng.nextFloat() - 12, 0);
+			Vector3 txtAnchor = new Vector3(x + 12, y + 16 * UtilFunctions.rng.nextFloat() - 12, 0);
 			if (outcome.isHit()) {
 				dmgTxt = new TemporaryText(gui, txtAnchor, (outcome.isCrit() ? "/!\\ " : "Hit: ") + String.valueOf(outcome.getDamage()));
 			} else {

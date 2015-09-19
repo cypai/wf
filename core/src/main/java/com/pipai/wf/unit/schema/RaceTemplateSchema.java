@@ -63,7 +63,7 @@ public class RaceTemplateSchema implements UnitSchema {
 
 	@Override
 	public ArrayList<Weapon> weapons() {
-		ArrayList<Weapon> l = new ArrayList<Weapon>();
+		ArrayList<Weapon> l = new ArrayList<>();
 		if (race == Race.FAIRY) {
 			l.add(new Bow());
 		} else {

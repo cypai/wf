@@ -16,7 +16,9 @@ public class ReadySpellAction extends AlterStateAction {
 	}
 
 	@Override
-	public int getAPRequired() { return 1; }
+	public int getAPRequired() {
+		return 1;
+	}
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
@@ -40,7 +42,7 @@ public class ReadySpellAction extends AlterStateAction {
 			a.setAP(a.getAP() - 1);
 			quicken = false;
 		}
-		((SpellWeapon)a.getCurrentWeapon()).ready(spell);
+		((SpellWeapon) a.getCurrentWeapon()).ready(spell);
 		log(BattleEvent.readySpellEvent(a, spell, quicken));
 	}
 

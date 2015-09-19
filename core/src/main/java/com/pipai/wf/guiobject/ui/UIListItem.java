@@ -6,14 +6,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.Gui;
 import com.pipai.wf.guiobject.GuiObject;
-import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.GuiRenderable;
+import com.pipai.wf.guiobject.LeftClickable;
 
 public class UIListItem extends GuiObject implements GuiRenderable, LeftClickable {
-	
+
 	protected float x, y, width, height;
 	protected Color color;
-	
+
 	public UIListItem(Gui gui, float x, float y, float width, float height, Color color) {
 		super(gui);
 		this.x = x;
@@ -24,11 +24,13 @@ public class UIListItem extends GuiObject implements GuiRenderable, LeftClickabl
 	}
 
 	@Override
-	public int renderPriority() { return 0; }
+	public int renderPriority() {
+		return 0;
+	}
 
 	@Override
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
-		
+
 	}
 
 	@Override
@@ -39,5 +41,5 @@ public class UIListItem extends GuiObject implements GuiRenderable, LeftClickabl
 		r.rect(x, y, width, -height);
 		r.end();
 	}
-	
+
 }

@@ -12,7 +12,7 @@ public enum Direction {
 	}
 
 	public static ArrayList<Direction> getCardinalDirections() {
-		ArrayList<Direction> l = new ArrayList<Direction>();
+		ArrayList<Direction> l = new ArrayList<>();
 		l.add(N);
 		l.add(S);
 		l.add(E);
@@ -21,7 +21,7 @@ public enum Direction {
 	}
 
 	public static ArrayList<Direction> getPerpendicular(Direction d) {
-		ArrayList<Direction> l = new ArrayList<Direction>();
+		ArrayList<Direction> l = new ArrayList<>();
 		switch (d) {
 		case N:
 		case S:

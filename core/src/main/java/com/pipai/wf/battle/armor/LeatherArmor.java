@@ -2,9 +2,15 @@ package com.pipai.wf.battle.armor;
 
 public class LeatherArmor extends Armor {
 
+	public static final int MAX_HP = 3;
+
+	public LeatherArmor() {
+		super(MAX_HP);
+	}
+
 	@Override
 	public int maxHP() {
-		return 3;
+		return MAX_HP;
 	}
 
 	@Override

@@ -6,7 +6,7 @@ public class DamageCalculator {
 
 	protected static boolean rollToHit(AccuracyPercentages a, int owPenalty) {
 		int diceroll = 1 + UtilFunctions.rng.nextInt(100);
-		return diceroll <= (int)(a.toHit() * Math.pow(0.7, owPenalty));
+		return diceroll <= (int) (a.toHit() * Math.pow(0.7, owPenalty));
 	}
 
 	protected static boolean rollToCrit(AccuracyPercentages a) {

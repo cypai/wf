@@ -19,11 +19,11 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 
 	private BulletAttackAnimationHandler owAniHandler;
 
-	//Animation variables
+	// Animation variables
 	private boolean cameraDone, go;
 	private LinkedList<Vector2> moveSeq;
 	private Vector2 start, dest;
-	private int t;	//Animation time t counter
+	private int t;	// Animation time t counter
 	private LinkedList<BattleEvent> currentOWChain;
 
 	public MoveAnimationHandler(BattleGui gui, BattleEvent moveEvent, boolean noCameraFollow) {
@@ -65,7 +65,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	 * @return all chain events given current position
 	 */
 	private LinkedList<BattleEvent> getOWActivationEvents() {
-		LinkedList<BattleEvent> retEv = new LinkedList<BattleEvent>();
+		LinkedList<BattleEvent> retEv = new LinkedList<>();
 		if (chainEvents.size() > 0) {
 			for (BattleEvent ev : chainEvents) {
 				Vector2 owtile = BattleTerrainRenderer.centerOfGridPos(ev.getTargetTile());
@@ -94,9 +94,9 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 			t += 1;
 			int time = 6;
 			if (t <= time) {
-				float alpha = (float)t/(float)time;
-				agent.x = start.x*(1-alpha) + dest.x*(alpha);
-				agent.y = start.y*(1-alpha) + dest.y*(alpha);
+				float alpha = (float) t / (float) time;
+				agent.x = start.x * (1 - alpha) + dest.x * (alpha);
+				agent.y = start.y * (1 - alpha) + dest.y * (alpha);
 			}
 			if (t > time) {
 				currentOWChain = getOWActivationEvents();
@@ -117,7 +117,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	}
 
 	private LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
-		LinkedList<Vector2> vectorized = new LinkedList<Vector2>();
+		LinkedList<Vector2> vectorized = new LinkedList<>();
 		for (GridPosition p : path) {
 			vectorized.add(BattleTerrainRenderer.centerOfGridPos(p));
 		}

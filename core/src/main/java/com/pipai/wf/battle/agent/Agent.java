@@ -30,7 +30,9 @@ import com.pipai.wf.util.UtilFunctions;
 
 public class Agent implements BattleEventLoggable {
 
-	public enum State {NEUTRAL, KO, OVERWATCH};
+	public enum State {
+		NEUTRAL, KO, OVERWATCH
+	};
 
 	protected Team team;
 	protected int maxHP, maxAP, maxMP, hp, ap, mp;
@@ -70,19 +72,41 @@ public class Agent implements BattleEventLoggable {
 		seList = new StatusEffectList();
 	}
 
-	public BattleMap getBattleMap() { return this.map; }
-	public Team getTeam() { return this.team; }
-	public void setTeam(Team team) { this.team = team; }
-	public int getAP() { return this.ap; }
-	public void setAP(int ap) { this.ap = ap; }
+	public BattleMap getBattleMap() {
+		return this.map;
+	}
+
+	public Team getTeam() {
+		return this.team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	public int getAP() {
+		return this.ap;
+	}
+
+	public void setAP(int ap) {
+		this.ap = ap;
+	}
+
 	public void useAP(int ap) {
 		this.ap -= ap;
 		if (this.ap < 0) {
 			this.ap = 0;
 		}
 	}
-	public int getMaxAP() { return this.maxAP; }
-	public int getHP() { return this.hp; }
+
+	public int getMaxAP() {
+		return this.maxAP;
+	}
+
+	public int getHP() {
+		return this.hp;
+	}
+
 	public void setHP(int hp) {
 		this.hp = hp;
 		if (this.hp <= 0) {
@@ -93,33 +117,70 @@ public class Agent implements BattleEventLoggable {
 			this.state = State.NEUTRAL;
 		}
 	}
+
 	public void takeDamage(int amt) {
 		int pierceDmg = this.armor.takeDamage(amt);
 		this.setHP(this.getHP() - pierceDmg);
 	}
+
 	public void heal(int amt) {
 		this.hp += amt;
 		if (this.hp > this.maxHP) {
 			this.hp = this.maxHP;
 		}
 	}
-	public int getMaxHP() { return this.maxHP; }
-	public int getMP() { return this.mp; }
-	public void setMP(int mp) { this.mp = mp; }
-	public void useMP(int mp) { this.mp -= mp; }
-	public int getMaxMP() { return this.maxMP; }
-	public int getBaseMobility() { return this.mobility; }
-	public int getEffectiveMobility() { return mobility + seList.totalMobilityModifier(); }
-	public int getBaseAim() { return this.aim; }
+
+	public int getMaxHP() {
+		return this.maxHP;
+	}
+
+	public int getMP() {
+		return this.mp;
+	}
+
+	public void setMP(int mp) {
+		this.mp = mp;
+	}
+
+	public void useMP(int mp) {
+		this.mp -= mp;
+	}
+
+	public int getMaxMP() {
+		return this.maxMP;
+	}
+
+	public int getBaseMobility() {
+		return this.mobility;
+	}
+
+	public int getEffectiveMobility() {
+		return mobility + seList.totalMobilityModifier();
+	}
+
+	public int getBaseAim() {
+		return this.aim;
+	}
+
 	public Weapon getCurrentWeapon() {
 		if (this.weapons.size() == 0) {
 			return null;
 		}
 		return this.weapons.get(this.weaponIndex);
 	}
-	public Armor getArmor() { return this.armor; }
-	public boolean isKO() { return this.state == State.KO; }
-	public boolean isOverwatching() { return this.state == State.OVERWATCH; }
+
+	public Armor getArmor() {
+		return this.armor;
+	}
+
+	public boolean isKO() {
+		return this.state == State.KO;
+	}
+
+	public boolean isOverwatching() {
+		return this.state == State.OVERWATCH;
+	}
+
 	public AbilityList getAbilities() {
 		AbilityList allAbilities = this.abilities.clone();
 		if (this.getCurrentWeapon() != null) {
@@ -127,13 +188,18 @@ public class Agent implements BattleEventLoggable {
 		}
 		return allAbilities;
 	}
-	public String getName() { return name; }
+
+	public String getName() {
+		return name;
+	}
 
 	@SuppressWarnings("unchecked")
-	public ArrayList<Weapon> getWeapons() { return (ArrayList<Weapon>) this.weapons.clone(); }
+	public ArrayList<Weapon> getWeapons() {
+		return (ArrayList<Weapon>) this.weapons.clone();
+	}
 
 	public ArrayList<Spell> getSpellList() {
-		ArrayList<Spell> l = new ArrayList<Spell>();
+		ArrayList<Spell> l = new ArrayList<>();
 		for (Ability a : abilities) {
 			if (a.grantsSpell()) {
 				l.add(a.getGrantedSpell());
@@ -150,7 +216,9 @@ public class Agent implements BattleEventLoggable {
 		return seList;
 	}
 
-	public GridPosition getPosition() { return this.position; }
+	public GridPosition getPosition() {
+		return this.position;
+	}
 
 	public void setPosition(GridPosition pos) {
 		this.map.getCell(this.position).removeAgent();
@@ -163,7 +231,7 @@ public class Agent implements BattleEventLoggable {
 	}
 
 	public ArrayList<GridPosition> getPeekingSquares() {
-		ArrayList<GridPosition> l = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> l = new ArrayList<>();
 		l.add(this.getPosition());
 		ArrayList<Direction> coverDirs = DirectionalCoverSystem.getCoverDirections(this.map, this.getPosition());
 		for (Direction coverDir : coverDirs) {
@@ -242,9 +310,9 @@ public class Agent implements BattleEventLoggable {
 	}
 
 	public ArrayList<Agent> enemiesInRange() {
-		ArrayList<Agent> l = new ArrayList<Agent>();
+		ArrayList<Agent> l = new ArrayList<>();
 		for (Agent a : this.map.getAgents()) {
-			if (!a.isKO() && a.team != this.team && this.canSee(a)) {
+			if (a.team != this.team && !a.isKO() && this.canSee(a)) {
 				l.add(a);
 			}
 		}
@@ -252,7 +320,7 @@ public class Agent implements BattleEventLoggable {
 	}
 
 	public ArrayList<Agent> targetableEnemies() {
-		ArrayList<Agent> list = new ArrayList<Agent>();
+		ArrayList<Agent> list = new ArrayList<>();
 		if (this.getCurrentWeapon().currentAmmo() == 0) {
 			return list;
 		} else {
@@ -271,7 +339,7 @@ public class Agent implements BattleEventLoggable {
 		try {
 			abilities.onRoundEnd();
 		} catch (NoRegisteredAgentException e) {
-			throw new IllegalStateException("Ability not registered with this Agent");
+			throw new IllegalStateException(e);
 		}
 		seList.onRoundEnd();
 	}

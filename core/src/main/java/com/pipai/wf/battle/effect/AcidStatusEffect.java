@@ -8,7 +8,7 @@ import com.pipai.wf.battle.agent.Agent;
 
 public class AcidStatusEffect extends StatusEffect {
 
-	private static final ArrayList<Class<? extends Action>> actionWhitelist = new ArrayList<Class<? extends Action>>();
+	private static final ArrayList<Class<? extends Action>> actionWhitelist = new ArrayList<>();
 
 	static {
 		actionWhitelist.add(SwitchWeaponAction.class);
@@ -25,7 +25,7 @@ public class AcidStatusEffect extends StatusEffect {
 
 	@Override
 	public int flatMobilityModifier() {
-		return -getAgent().getBaseMobility()/2;
+		return -getAgent().getBaseMobility() / 2;
 	}
 
 	@Override

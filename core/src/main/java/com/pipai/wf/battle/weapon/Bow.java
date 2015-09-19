@@ -26,11 +26,11 @@ public class Bow extends Weapon implements TargetedActionable {
 		int goodBonusMax = 30;
 		float goodBonusRange = range * 0.3f;
 		if (distance <= slightBonusRange && distance > betterBonusRange) {
-			return (int)(new LinearFunction(slightBonusRange, 0, betterBonusRange, slightBonusMax)).eval(distance);
+			return (int) (new LinearFunction(slightBonusRange, 0, betterBonusRange, slightBonusMax)).eval(distance);
 		} else if (distance <= betterBonusRange && distance > goodBonusRange) {
-			return (int)(new LinearFunction(betterBonusRange, slightBonusMax, goodBonusRange, betterBonusMax)).eval(distance);
+			return (int) (new LinearFunction(betterBonusRange, slightBonusMax, goodBonusRange, betterBonusMax)).eval(distance);
 		} else if (distance <= goodBonusRange) {
-			return (int)(new LinearFunction(goodBonusRange, betterBonusMax, 0, goodBonusMax)).eval(distance);
+			return (int) (new LinearFunction(goodBonusRange, betterBonusMax, 0, goodBonusMax)).eval(distance);
 		}
 		return 0;
 	}

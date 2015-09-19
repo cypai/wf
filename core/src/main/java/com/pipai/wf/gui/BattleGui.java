@@ -191,8 +191,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 			}
 			for (AgentGuiObject a : this.agentList) {
 				if (a.getAgent().getTeam() == Team.PLAYER && (a.getAgent().getAP() > 0 && !a.getAgent().isKO())) {
-					// Found a movable Agent, so we return and do not start AI
-					// turn
+					// Found a movable Agent, so we return and do not start AI turn
 					this.updatePaths();
 					this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
 					return;
@@ -297,7 +296,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		for (AnimationHandler a : animationHandlerBuffer) {
 			animationHandlerList.add(a);
 		}
-		ArrayList<AnimationHandler> delBuffer = new ArrayList<AnimationHandler>();
+		ArrayList<AnimationHandler> delBuffer = new ArrayList<>();
 		for (AnimationHandler a : animationHandlerList) {
 			if (a.isFinished()) {
 				delBuffer.add(a);
@@ -532,7 +531,8 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	public void switchTarget(AgentGuiObject target, ActiveSkillTargetedAccAbility ability) {
 		if (this.mode == Mode.TARGET_SELECT) {
 			if (this.targetAgentList.contains(target)) {
-				ArrayList<GridPosition> targetTiles = new ArrayList<GridPosition>(), targetableTiles = new ArrayList<GridPosition>();
+				ArrayList<GridPosition> targetTiles = new ArrayList<>();
+				ArrayList<GridPosition> targetableTiles = new ArrayList<>();
 				targetTiles.add(target.getAgent().getPosition());
 				for (AgentGuiObject a : this.targetAgentList) {
 					targetableTiles.add(a.getAgent().getPosition());
@@ -593,14 +593,14 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 				this.agentStatusWindow.setVisible(false);
 				return;
 			}
-			if (this.mode != Mode.TARGET_SELECT) {
-				Gdx.app.exit();
-			} else {
+			if (this.mode == Mode.TARGET_SELECT) {
 				this.switchToMoveMode();
 				return;
+			} else {
+				Gdx.app.exit();
 			}
 		}
-		if (!this.mode.allowsInput() || selectedAgent == null) {
+		if (selectedAgent == null || !this.mode.allowsInput()) {
 			return;
 		}
 		Action action = null;

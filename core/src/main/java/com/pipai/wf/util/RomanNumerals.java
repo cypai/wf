@@ -24,11 +24,11 @@ public class RomanNumerals {
 		roman_numerals.put("I", 1);
 	}
 
-
-	public static String romanNumeralify(int i) {
+	public static String romanNumeralify(int num) {
+		int i = num;
 		String res = "";
-		for(Map.Entry<String, Integer> entry : roman_numerals.entrySet()){
-			int matches = i/entry.getValue();
+		for (Map.Entry<String, Integer> entry : roman_numerals.entrySet()) {
+			int matches = i / entry.getValue();
 			res += repeat(entry.getKey(), matches);
 			i = i % entry.getValue();
 		}
@@ -36,11 +36,11 @@ public class RomanNumerals {
 	}
 
 	private static String repeat(String s, int n) {
-		if(s == null) {
+		if (s == null) {
 			return null;
 		}
 		final StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < n; i++) {
+		for (int i = 0; i < n; i++) {
 			sb.append(s);
 		}
 		return sb.toString();

@@ -15,41 +15,41 @@ import com.pipai.wf.unit.race.Race;
 
 public class TidusSchema extends RaceTemplateSchema {
 
-    public TidusSchema() {
-        super(Race.HUMAN);
-    }
+	public TidusSchema() {
+		super(Race.HUMAN);
+	}
 
-    @Override
-    public int aim() {
-        // For testing purposes
-        return 100;
-    }
+	@Override
+	public int aim() {
+		// For testing purposes
+		return 100;
+	}
 
-    @Override
-    public AbilityList abilities() {
-        AbilityList l = new AbilityList();
-        l.add(new FireActualizationAbility(1));
-        l.add(new FireballAbility());
-        l.add(new PrecisionShotAbility());
-        return l;
-    }
+	@Override
+	public AbilityList abilities() {
+		AbilityList l = new AbilityList();
+		l.add(new FireActualizationAbility(1));
+		l.add(new FireballAbility());
+		l.add(new PrecisionShotAbility());
+		return l;
+	}
 
-    @Override
-    public Armor armor() {
-        return new LeatherArmor();
-    }
+	@Override
+	public Armor armor() {
+		return new LeatherArmor();
+	}
 
-    @Override
-    public ArrayList<Weapon> weapons() {
-        ArrayList<Weapon> l = new ArrayList<Weapon>();
-        l.add(new Bow());
-        l.add(new InnateCasting());
-        return l;
-    }
+	@Override
+	public ArrayList<Weapon> weapons() {
+		ArrayList<Weapon> l = new ArrayList<>();
+		l.add(new Bow());
+		l.add(new InnateCasting());
+		return l;
+	}
 
-    @Override
-    public String name() {
-        return "Tidus";
-    }
+	@Override
+	public String name() {
+		return "Tidus";
+	}
 
 }

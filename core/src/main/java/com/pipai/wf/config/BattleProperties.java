@@ -16,8 +16,8 @@ public class BattleProperties {
 	private final Properties battleConfig = new Properties();
 
 	public BattleProperties() {
-    	try {
-    		FileHandle configFile = Gdx.files.local("config/battle.properties");
+		try {
+			FileHandle configFile = Gdx.files.local("config/battle.properties");
 			battleConfig.load(configFile.reader());
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -34,7 +34,7 @@ public class BattleProperties {
 	}
 
 	public float sightRangeAdjusted() {
-		return sightRange() + (float)Math.sqrt(2)/2.0f;
+		return sightRange() + (float) Math.sqrt(2) / 2.0f;
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.pipai.wf.test.battle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -16,13 +18,13 @@ import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class PathfindingTest {
-	
+
 	@Test
 	public void testOneMobilityMovableList() {
 		BattleMap map = new BattleMap(3, 4);
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 1, 1, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
-		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> req = new ArrayList<>();
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(1, 0));
 		req.add(new GridPosition(1, 2));
@@ -32,13 +34,13 @@ public class PathfindingTest {
 		}
 		assertTrue(movableList.size() == req.size());
 	}
-	
+
 	@Test
 	public void testTwoMobilityMovableList() {
 		BattleMap map = new BattleMap(4, 4);
 		MapGraph graph = new MapGraph(map, new GridPosition(0, 1), 2, 1, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
-		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> req = new ArrayList<>();
 		req.add(new GridPosition(0, 0));
 		req.add(new GridPosition(0, 2));
 		req.add(new GridPosition(0, 3));
@@ -51,7 +53,7 @@ public class PathfindingTest {
 		}
 		assertTrue(movableList.size() == req.size());
 	}
-	
+
 	@Test
 	public void testObstacleMovableList() {
 		/*
@@ -73,7 +75,7 @@ public class PathfindingTest {
 		}
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 3, 1, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
-		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> req = new ArrayList<>();
 		req.add(new GridPosition(0, 0));
 		req.add(new GridPosition(0, 1));
 		req.add(new GridPosition(0, 2));
@@ -89,13 +91,13 @@ public class PathfindingTest {
 		}
 		assertTrue(movableList.size() == req.size());
 	}
-	
+
 	@Test
 	public void testThreeMobilityMovableList() {
 		BattleMap map = new BattleMap(8, 8);
 		MapGraph graph = new MapGraph(map, new GridPosition(3, 3), 3, 1, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
-		ArrayList<GridPosition> req = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> req = new ArrayList<>();
 		req.add(new GridPosition(0, 3));
 		req.add(new GridPosition(1, 3));
 		req.add(new GridPosition(2, 3));
@@ -115,9 +117,9 @@ public class PathfindingTest {
 		for (GridPosition r : req) {
 			assertTrue("Does not contain " + r, movableList.contains(r));
 		}
-		//assertTrue(movableList.size() == req.size());
+		// assertTrue(movableList.size() == req.size());
 	}
-	
+
 	/*
 	 * Checks to see if the list contains a valid path from start to end
 	 */
@@ -136,7 +138,7 @@ public class PathfindingTest {
 		}
 		return true;
 	}
-	
+
 	@Test
 	public void testCorrectPathing() {
 		BattleMap map = new BattleMap(4, 4);
@@ -147,7 +149,7 @@ public class PathfindingTest {
 		assertTrue("Invalid path", checkPathingList(path, start, end));
 		assertTrue("Path too long: Expected 4 but got " + String.valueOf(path.size()), path.size() == 4);
 	}
-	
+
 	@Test
 	public void testTooFarPathing() {
 		BattleMap map = new BattleMap(4, 4);
@@ -155,9 +157,9 @@ public class PathfindingTest {
 		GridPosition end = new GridPosition(3, 2);
 		MapGraph graph = new MapGraph(map, start, 3, 1, 1);
 		LinkedList<GridPosition> path = graph.getPath(end);
-		assertTrue(path == null);
+		assertTrue(path.size() == 0);
 	}
-	
+
 	@Test
 	public void testCannotMoveToNonEmpty() {
 		String rawMapString = "4 4\n"
@@ -168,37 +170,37 @@ public class PathfindingTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, new GridPosition(1, 1), 3, 5, 2, 5, 65, 0));
-        map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, new GridPosition(2, 1), 3, 5, 2, 5, 65, 0));
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, new GridPosition(1, 1), 3, 5, 2, 5, 65, 0));
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, new GridPosition(2, 1), 3, 5, 2, 5, 65, 0));
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1, 1);
 		assertFalse("Failed to return false on moving to solid tile", graph.canMoveTo(new GridPosition(3, 0)));
 		assertFalse("Failed to return false on moving to tile with other agent", graph.canMoveTo(new GridPosition(2, 1)));
 	}
-	
+
 	@Test
 	public void testIllegalSquares() {
 		BattleMap map = new BattleMap(4, 4);
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1, 1);
 		GridPosition illegal = new GridPosition(4, 1);
 		assertFalse("Failed to return false on moving to tile outside map", graph.canMoveTo(illegal));
-		assertTrue("Failed to return null on path to tile outside map", graph.getPath(illegal) == null);
+		assertTrue("Failed to return no path to tile outside map", graph.getPath(illegal).size() == 0);
 	}
-	
+
 	@Test
 	public void testNoAP() {
 		BattleMap map = new BattleMap(3, 3);
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 0, 1);
 		GridPosition any = new GridPosition(0, 0);
 		assertFalse("Failed to return false on moving to a tile", graph.canMoveTo(any));
-		assertTrue("Failed to return null on path to a tile", graph.getPath(any) == null);
+		assertTrue("Failed to return no path to tile outside map", graph.getPath(any).size() == 0);
 	}
-	
+
 	@Test
 	public void testTwoAP() {
 		BattleMap map = new BattleMap(5, 5);
 		MapGraph graph = new MapGraph(map, new GridPosition(2, 2), 2, 2, 2);
 		ArrayList<GridPosition> movableList1 = graph.getMovableCellPositions(1);
-		ArrayList<GridPosition> req1 = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> req1 = new ArrayList<>();
 		req1.add(new GridPosition(1, 2));
 		req1.add(new GridPosition(2, 3));
 		req1.add(new GridPosition(2, 1));
@@ -208,7 +210,7 @@ public class PathfindingTest {
 		}
 		assertTrue(movableList1.size() == req1.size());
 		ArrayList<GridPosition> movableList2 = graph.getMovableCellPositions(2);
-		ArrayList<GridPosition> req2 = new ArrayList<GridPosition>();
+		ArrayList<GridPosition> req2 = new ArrayList<>();
 		req2.add(new GridPosition(0, 2));
 		req2.add(new GridPosition(1, 3));
 		req2.add(new GridPosition(1, 1));
@@ -222,5 +224,5 @@ public class PathfindingTest {
 		}
 		assertTrue(movableList2.size() == req2.size());
 	}
-	
+
 }

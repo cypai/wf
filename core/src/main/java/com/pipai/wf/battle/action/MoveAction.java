@@ -9,17 +9,20 @@ import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class MoveAction extends AlterStateAction {
-	
+
 	protected LinkedList<GridPosition> path;
 	protected int useAP;
-	
+
 	public MoveAction(Agent performerAgent, LinkedList<GridPosition> path, int useAP) {
 		super(performerAgent);
 		this.path = path;
 		this.useAP = useAP;
 	}
 
-	public int getAPRequired() { return 1; }
+	@Override
+	public int getAPRequired() {
+		return 1;
+	}
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
@@ -29,7 +32,9 @@ public class MoveAction extends AlterStateAction {
 		boolean isValid = true;
 		BattleEvent event = BattleEvent.moveEvent(getPerformer(), path);
 		for (GridPosition pos : path) {
-			if (pos.equals(getPerformer().getPosition())) { continue; }
+			if (pos.equals(getPerformer().getPosition())) {
+				continue;
+			}
 			BattleMapCell cell = getBattleMap().getCell(pos);
 			if (cell == null || !cell.isEmpty()) {
 				isValid = false;
@@ -66,5 +71,5 @@ public class MoveAction extends AlterStateAction {
 	public String description() {
 		return "Move to a different location";
 	}
-	
+
 }

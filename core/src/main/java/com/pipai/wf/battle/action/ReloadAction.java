@@ -12,7 +12,9 @@ public class ReloadAction extends AlterStateAction {
 	}
 
 	@Override
-	public int getAPRequired() { return 1; }
+	public int getAPRequired() {
+		return 1;
+	}
 
 	@Override
 	protected void performImpl() throws IllegalActionException {

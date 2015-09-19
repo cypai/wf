@@ -43,7 +43,7 @@ public class FogOfWarTest extends WfConfiguredTest {
 		GridPosition playerPos = new GridPosition(2, 2);
 		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		AgentGuiObject playerGuiObj = generateMockAgent(map.getAgentAtPos(playerPos));
-		ArrayList<AgentGuiObject> playerList = new ArrayList<AgentGuiObject>();
+		ArrayList<AgentGuiObject> playerList = new ArrayList<>();
 		playerList.add(playerGuiObj);
 		FogOfWar fog = new FogOfWar(map, playerList);
 		fog.fullScan();
@@ -66,7 +66,7 @@ public class FogOfWarTest extends WfConfiguredTest {
 		GridPosition playerPos = new GridPosition(2, 2);
 		map.addAgent(AgentStateFactory.battleAgentFromStats(Team.PLAYER, playerPos, AgentStateFactory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		AgentGuiObject playerGuiObj = generateMockAgent(map.getAgentAtPos(playerPos));
-		ArrayList<AgentGuiObject> playerList = new ArrayList<AgentGuiObject>();
+		ArrayList<AgentGuiObject> playerList = new ArrayList<>();
 		playerList.add(playerGuiObj);
 		FogOfWar fog = new FogOfWar(map, playerList);
 		fog.fullScan();

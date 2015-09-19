@@ -38,7 +38,9 @@ public class ActionToolTip extends GuiObject implements GuiRenderable {
 	}
 
 	@Override
-	public int renderPriority() { return 0;	}
+	public int renderPriority() {
+		return 0;
+	}
 
 	public void setToGeneralDescription(String title, String description) {
 		mode = Mode.GENERAL;
@@ -48,7 +50,7 @@ public class ActionToolTip extends GuiObject implements GuiRenderable {
 
 	public void setToActionDescription(Action a) {
 		if (a instanceof TargetedWithAccuracyAction) {
-			setToTargetedAccuracyActionDescription((TargetedWithAccuracyAction)a);
+			setToTargetedAccuracyActionDescription((TargetedWithAccuracyAction) a);
 		} else {
 			setToGeneralDescription(a.name(), a.description());
 		}
@@ -79,8 +81,8 @@ public class ActionToolTip extends GuiObject implements GuiRenderable {
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 		spr.begin();
 		f.setColor(Color.WHITE);
-		f.draw(spr, title, (x + width)/2, y - f.getLineHeight(), 0, Align.center, true);
-		f.draw(spr, description, x, y - 2.5f * f.getLineHeight(), width - PADDING*2, Align.center, true);
+		f.draw(spr, title, (x + width) / 2, y - f.getLineHeight(), 0, Align.center, true);
+		f.draw(spr, description, x, y - 2.5f * f.getLineHeight(), width - PADDING * 2, Align.center, true);
 		if (this.mode == Mode.ACCURACY_ACTION) {
 			f.draw(spr, "Acc: " + String.valueOf(accuracy) + "%", x + PADDING, y - height + f.getLineHeight());
 			f.draw(spr, "Crit: " + String.valueOf(critProb) + "%", x + width - PADDING, y - height + f.getLineHeight(), 0, Align.right, true);

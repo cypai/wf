@@ -27,7 +27,9 @@ public class TemporaryText extends AnchoredGuiObject {
 	}
 
 	@Override
-	public int renderPriority() { return -1; }
+	public int renderPriority() {
+		return -1;
+	}
 
 	@Override
 	public void update() {

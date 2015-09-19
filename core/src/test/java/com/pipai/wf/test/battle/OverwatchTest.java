@@ -43,7 +43,8 @@ public class OverwatchTest extends WfConfiguredTest {
 		try {
 			battle.performAction(ow);
 			fail("Expected exception not thrown");
-		} catch (IllegalActionException e) {}
+		} catch (IllegalActionException e) {
+		}
 	}
 
 	@Test
@@ -64,7 +65,8 @@ public class OverwatchTest extends WfConfiguredTest {
 		try {
 			battle.performAction(ow);
 			fail("Expected exception not thrown");
-		} catch (IllegalActionException e) {}
+		} catch (IllegalActionException e) {
+		}
 	}
 
 	@Test
@@ -91,10 +93,10 @@ public class OverwatchTest extends WfConfiguredTest {
 		BattleEvent ev = observer.ev;
 		assertTrue(ev.getType() == BattleEvent.Type.OVERWATCH);
 		assertTrue(ev.getPerformer() == player);
-		assertTrue(ev.getPreparedOWName() == "Attack");
+		assertTrue(ev.getPreparedOWName().equals("Attack"));
 		assertTrue(ev.getChainEvents().size() == 0);
-		//Test Overwatch Activation
-		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		// Test Overwatch Activation
+		LinkedList<GridPosition> path = new LinkedList<>();
 		GridPosition dest = new GridPosition(2, 1);
 		path.add(enemy.getPosition());
 		path.add(dest);
@@ -148,8 +150,8 @@ public class OverwatchTest extends WfConfiguredTest {
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
-		//Test Overwatch Activation
-		LinkedList<GridPosition> path = new LinkedList<GridPosition>();
+		// Test Overwatch Activation
+		LinkedList<GridPosition> path = new LinkedList<>();
 		GridPosition dest = new GridPosition(2, 1);
 		path.add(enemy.getPosition());
 		path.add(dest);

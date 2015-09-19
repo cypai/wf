@@ -33,11 +33,7 @@ public class AbilityList implements Iterable<Ability> {
 	}
 
 	public boolean hasSpell(Class<? extends Spell> spellClass) {
-		if (spellMap.containsKey(spellClass) && spellMap.get(spellClass) > 0) {
-			return true;
-		} else {
-			return false;
-		}
+		return spellMap.containsKey(spellClass) && spellMap.get(spellClass) > 0;
 	}
 
 	/**
@@ -63,26 +59,32 @@ public class AbilityList implements Iterable<Ability> {
 				if (a instanceof FireActualizationAbility) {
 					return a.getLevel();
 				}
+				break;
 			case WATER:
 				if (a instanceof WaterActualizationAbility) {
 					return a.getLevel();
 				}
+				break;
 			case EARTH:
 				if (a instanceof EarthActualizationAbility) {
 					return a.getLevel();
 				}
+				break;
 			case ELECTRIC:
 				if (a instanceof ElectricActualizationAbility) {
 					return a.getLevel();
 				}
+				break;
 			case LIGHT:
 				if (a instanceof LightActualizationAbility) {
 					return a.getLevel();
 				}
+				break;
 			case FORCE:
 				if (a instanceof ForceActualizationAbility) {
 					return a.getLevel();
 				}
+				break;
 			default:
 				break;
 			}

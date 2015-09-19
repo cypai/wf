@@ -55,8 +55,7 @@ public class VisionCalculator {
 		int ddy, ddx; // compulsory variables: the double values of dy and dx
 		int dx = (int) b.x - (int) a.x;
 		int dy = (int) b.y - (int) a.y;
-		// NB the last point can't be here, because of its previous point (which
-		// has to be verified)
+		// NB the last point can't be here, because of its previous point (which has to be verified)
 		if (dy < 0) {
 			ystep = -1;
 			dy = -dy;
@@ -72,18 +71,16 @@ public class VisionCalculator {
 		ddy = 2 * dy; // work with double values for full precision
 		ddx = 2 * dx;
 		if (ddx >= ddy) { // first octant (0 <= slope <= 1)
-			// compulsory initialization (even for errorprev, needed when
-			// dx==dy)
-			errorprev = error = dx; // start in the middle of the square
-			for (i = 0; i < dx; i++) { // do not use the first point (already
-										// done)
+			// compulsory initialization (even for errorprev, needed when dx==dy)
+			error = dx; // start in the middle of the square
+			errorprev = error;
+			for (i = 0; i < dx; i++) { // do not use the first point (already done)
 				x += xstep;
 				error += ddy;
 				if (error > ddx) { // increment y if AFTER the middle ( > )
 					y += ystep;
 					error -= ddx;
-					// three cases (octant == right->right-top for directions
-					// below):
+					// three cases (octant == right->right-top for directions below):
 					if (error + errorprev < ddx) {
 						points.add(new GridPosition(x, y - ystep));
 					} else if (error + errorprev > ddx) {
@@ -96,7 +93,8 @@ public class VisionCalculator {
 				errorprev = error;
 			}
 		} else { // the same as above
-			errorprev = error = dy;
+			error = dy;
+			errorprev = error;
 			for (i = 0; i < dy; i++) {
 				y += ystep;
 				error += ddx;

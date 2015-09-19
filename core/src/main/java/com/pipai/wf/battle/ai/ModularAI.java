@@ -18,12 +18,16 @@ public abstract class ModularAI {
 
 	public abstract ActionScore getBestMove();
 
-	public Agent getAgent() { return aiAgent; }
+	public Agent getAgent() {
+		return aiAgent;
+	}
 
-	public BattleMap getBattleMap() { return map; }
+	public BattleMap getBattleMap() {
+		return map;
+	}
 
 	public ArrayList<Agent> getAgentsInTeam(Team t) {
-		ArrayList<Agent> l = new ArrayList<Agent>();
+		ArrayList<Agent> l = new ArrayList<>();
 		for (Agent a : map.getAgents()) {
 			if (a.getTeam() == t) {
 				l.add(a);

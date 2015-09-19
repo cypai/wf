@@ -23,7 +23,9 @@ public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 	}
 
 	@Override
-	public int renderPriority() { return -1; }
+	public int renderPriority() {
+		return -1;
+	}
 
 	@Override
 	public void render(BatchHelper batch) {
@@ -38,10 +40,10 @@ public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 		Vector2 agentPoint = screenPosition;
 		Vector2 barLeftTop = new Vector2(screenPosition.x + 24, screenPosition.y + 24);
 		Vector2 barRightFullTop = new Vector2(screenPosition.x + 24 + bar_width, screenPosition.y + 24);
-		Vector2 barRightTop = new Vector2(screenPosition.x + 24 + bar_width * ((float)a.getDisplayArmorHP() / (float)a.getAgent().getArmor().maxHP()), screenPosition.y + 24);
+		Vector2 barRightTop = new Vector2(screenPosition.x + 24 + bar_width * ((float) a.getDisplayArmorHP() / (float) a.getAgent().getArmor().maxHP()), screenPosition.y + 24);
 		Vector2 barLeftBot = new Vector2(screenPosition.x + 24, screenPosition.y + 18);
 		Vector2 barRightFullBot = new Vector2(screenPosition.x + 24 + bar_width, screenPosition.y + 18);
-		Vector2 barRightBot = new Vector2(screenPosition.x + 24 + bar_width * ((float)a.getDisplayHP() / (float)a.getAgent().getMaxHP()), screenPosition.y + 18);
+		Vector2 barRightBot = new Vector2(screenPosition.x + 24 + bar_width * ((float) a.getDisplayHP() / (float) a.getAgent().getMaxHP()), screenPosition.y + 18);
 		float alpha = (a.getAgent().getTeam() == Team.PLAYER && a.getAgent().getAP() == 0) ? -0.5f : 0;
 		shapeBatch.setColor(Color.BLUE.cpy().add(0, 0, 0, alpha));
 		shapeBatch.rectLine(agentPoint, barLeftTop, 3);
@@ -65,7 +67,7 @@ public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 		if (a.getAgent().isOverwatching()) {
 			shapeBatch.begin(ShapeType.Filled);
 			shapeBatch.setColor(Color.GRAY);
-			shapeBatch.circle(barRightFullTop.x + 8, (barRightFullTop.y + barRightFullBot.y)/2, 6);
+			shapeBatch.circle(barRightFullTop.x + 8, (barRightFullTop.y + barRightFullBot.y) / 2, 6);
 			shapeBatch.end();
 		}
 	}

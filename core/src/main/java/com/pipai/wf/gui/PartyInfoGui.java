@@ -25,8 +25,8 @@ public class PartyInfoGui extends Gui {
 
 	private OrthographicCamera camera;
 	private ArrayList<GuiRenderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;
-	private ArrayList<UnitSchema> partySchema = new ArrayList<UnitSchema>();
-	private ArrayList<AgentState> party = new ArrayList<AgentState>();
+	private ArrayList<UnitSchema> partySchema = new ArrayList<>();
+	private ArrayList<AgentState> party = new ArrayList<>();
 
 	public PartyInfoGui(WFGame game) {
 		super(game);
@@ -46,14 +46,14 @@ public class PartyInfoGui extends Gui {
 		for (UnitSchema us : partySchema) {
 			party.add(AgentStateFactory.createFromSchema(us));
 		}
-		this.createInstance(new PartyInfoList(this, party, 4, this.getScreenHeight() - 4, this.getScreenWidth()/2, this.getScreenHeight()/2, Color.CYAN));
+		this.createInstance(new PartyInfoList(this, party, 4, this.getScreenHeight() - 4, this.getScreenWidth() / 2, this.getScreenHeight() / 2, Color.CYAN));
 	}
 
 	@Override
 	public void createInstance(GuiObject o) {
 		super.createInstance(o);
 		if (o instanceof GuiRenderable) {
-			renderablesCreateBuffer.add((GuiRenderable)o);
+			renderablesCreateBuffer.add((GuiRenderable) o);
 		}
 	}
 
@@ -61,7 +61,7 @@ public class PartyInfoGui extends Gui {
 	public void deleteInstance(GuiObject o) {
 		super.deleteInstance(o);
 		if (o instanceof GuiRenderable) {
-			renderablesDelBuffer.add((GuiRenderable)o);
+			renderablesDelBuffer.add((GuiRenderable) o);
 		}
 	}
 

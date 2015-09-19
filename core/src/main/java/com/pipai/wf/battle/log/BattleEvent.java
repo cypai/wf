@@ -13,7 +13,7 @@ import com.pipai.wf.battle.weapon.Weapon;
 /*
  * For use in BattleLog and reporting back to a GUI on battle events/actions/outcomes
  */
-public class BattleEvent {
+public final class BattleEvent {
 
 	public static enum Type {
 		MOVE, RANGED_WEAPON_ATTACK, ATTACK, READY, CAST_TARGET, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, SWITCH_WEAPON, START_TURN;
@@ -96,26 +96,77 @@ public class BattleEvent {
 		this.chainedEvents = new LinkedList<BattleEvent>();
 	}
 
-	public Team getTeam() { return this.team; }
-	public Type getType() { return this.type; }
-	public Agent getPerformer() { return this.performer; }
-	public Agent getTarget() { return this.target; }
-	public LinkedList<GridPosition> getPath() { return this.path; }
-	public Weapon getWeapon() { return this.wpn; }
-	public String getActionName() { return this.actionName; }
-	public String getPreparedOWName() { return this.actionName; }
-	public TargetedWithAccuracyActionOWCapable getActivatedOWAction() { return this.owActivatedAction; }
-	public Spell getSpell() { return this.spell; }
-	public DamageResult getDamageResult() { return this.dmgResult; }
-	public boolean isHit() { return this.dmgResult.hit; }
-	public boolean isCrit() { return this.dmgResult.crit; }
-	public int getDamage() { return this.dmgResult.damage; }
-	public int getDamageReduction() { return this.dmgResult.damageReduction; }
-	public GridPosition getTargetTile() { return this.targetTile; }
+	public Team getTeam() {
+		return this.team;
+	}
 
-	public boolean getQuickened() { return this.quickenFlag; }
+	public Type getType() {
+		return this.type;
+	}
 
-	public int getNumChainEvents() { return this.chainedEvents.size(); }
+	public Agent getPerformer() {
+		return this.performer;
+	}
+
+	public Agent getTarget() {
+		return this.target;
+	}
+
+	public LinkedList<GridPosition> getPath() {
+		return this.path;
+	}
+
+	public Weapon getWeapon() {
+		return this.wpn;
+	}
+
+	public String getActionName() {
+		return this.actionName;
+	}
+
+	public String getPreparedOWName() {
+		return this.actionName;
+	}
+
+	public TargetedWithAccuracyActionOWCapable getActivatedOWAction() {
+		return this.owActivatedAction;
+	}
+
+	public Spell getSpell() {
+		return this.spell;
+	}
+
+	public DamageResult getDamageResult() {
+		return this.dmgResult;
+	}
+
+	public boolean isHit() {
+		return this.dmgResult.hit;
+	}
+
+	public boolean isCrit() {
+		return this.dmgResult.crit;
+	}
+
+	public int getDamage() {
+		return this.dmgResult.damage;
+	}
+
+	public int getDamageReduction() {
+		return this.dmgResult.damageReduction;
+	}
+
+	public GridPosition getTargetTile() {
+		return this.targetTile;
+	}
+
+	public boolean getQuickened() {
+		return this.quickenFlag;
+	}
+
+	public int getNumChainEvents() {
+		return this.chainedEvents.size();
+	}
 
 	@SuppressWarnings("unchecked")
 	public LinkedList<BattleEvent> getChainEvents() {

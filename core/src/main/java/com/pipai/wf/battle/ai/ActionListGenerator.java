@@ -11,7 +11,7 @@ import com.pipai.wf.battle.weapon.Weapon;
 public class ActionListGenerator {
 
 	public static ArrayList<Action> generateWeaponActionList(Agent a) {
-		ArrayList<Action> list = new ArrayList<Action>();
+		ArrayList<Action> list = new ArrayList<>();
 		ArrayList<Weapon> weaponList = a.getWeapons();
 		if (weaponList.size() > 0) {
 			for (Agent target : a.targetableEnemies()) {
