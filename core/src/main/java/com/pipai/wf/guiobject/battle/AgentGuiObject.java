@@ -18,11 +18,11 @@ import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.LeftClickable3D;
 import com.pipai.wf.guiobject.RightClickable3D;
-import com.pipai.wf.guiobject.XYPositioned;
+import com.pipai.wf.guiobject.XYZPositioned;
 import com.pipai.wf.guiobject.overlay.AnchoredAgentInfoDisplay;
 import com.pipai.wf.util.UtilFunctions;
 
-public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRenderable, LeftClickable3D, RightClickable3D {
+public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRenderable, LeftClickable3D, RightClickable3D {
 
 	private BattleGui gui;
 	private Agent agent;
@@ -70,6 +70,11 @@ public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRender
 	}
 
 	@Override
+	public float getZ() {
+		return 0;
+	}
+
+	@Override
 	public void setX(float x) {
 		this.x = x;
 	}
@@ -77,6 +82,16 @@ public class AgentGuiObject extends GuiObject implements XYPositioned, GuiRender
 	@Override
 	public void setY(float y) {
 		this.y = y;
+	}
+
+	@Override
+	public void setZ(float z) {
+		return;
+	}
+
+	@Override
+	public Vector3 getPosition() {
+		return new Vector3(x, y, 0);
 	}
 
 	public GridPosition getDisplayPosition() {

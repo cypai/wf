@@ -15,26 +15,36 @@ public class ReadySpellAnimationHandler extends AnimationHandler implements Came
 
 	public ReadySpellAnimationHandler(BattleGui gui, BattleEvent ev, boolean skipCamera) {
 		super(gui);
-		performer = getGUI().getAgentGUIObject(ev.getPerformer());
+		performer = getGui().getAgentGUIObject(ev.getPerformer());
 		this.ev = ev;
 		this.skipCamera = skipCamera;
 	}
 
 	@Override
-	protected void beginAnimation() {
-		if (skipCamera) {
-			notifyCameraMoveEnd();
-		} else {
+	protected void initAnimation() {
+		if (!skipCamera) {
 			getCamera().moveTo(performer.x, performer.y, this);
 		}
 	}
 
 	@Override
-	public void notifyCameraMoveEnd() {
+	public void update() {
+		if (skipCamera) {
+			performAnimation();
+			finish();
+		}
+	}
+
+	private void performAnimation() {
 		String text = (ev.getQuickened() ? "Quickened " : "Ready ") + ev.getSpell().name();
-		TemporaryText ttext = new TemporaryText(getGUI(), new Vector3(performer.x, performer.y, 0), text);
-		getGUI().createInstance(ttext);
+		TemporaryText ttext = new TemporaryText(getGui(), new Vector3(performer.x, performer.y, 0), text);
+		getGui().createInstance(ttext);
 		finish();
+	}
+
+	@Override
+	public void notifyCameraMoveEnd() {
+		performAnimation();
 	}
 
 	@Override
