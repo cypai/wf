@@ -1,5 +1,6 @@
 package com.pipai.wf.unit.ability;
 
+import com.pipai.wf.battle.action.SuppressionAction;
 import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.agent.Agent;
 
@@ -11,7 +12,7 @@ public class SuppressionAbility extends ActiveSkillTargetedAbility {
 
 	@Override
 	public TargetedAction getAction(Agent performer, Agent target) {
-		return null;
+		return new SuppressionAction(performer, target);
 	}
 
 	@Override

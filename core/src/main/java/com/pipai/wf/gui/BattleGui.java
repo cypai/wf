@@ -47,6 +47,7 @@ import com.pipai.wf.gui.animation.MoveAnimationHandler;
 import com.pipai.wf.gui.animation.OverwatchAnimationHandler;
 import com.pipai.wf.gui.animation.ReadySpellAnimationHandler;
 import com.pipai.wf.gui.animation.ReloadAnimationHandler;
+import com.pipai.wf.gui.animation.SuppressionAnimationHandler;
 import com.pipai.wf.gui.camera.AnchoredCamera;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
@@ -59,8 +60,9 @@ import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
 import com.pipai.wf.guiobject.overlay.WeaponIndicator;
 import com.pipai.wf.unit.ability.Ability;
-import com.pipai.wf.unit.ability.ActiveSkillTargetedAccAbility;
+import com.pipai.wf.unit.ability.ActiveSkillTargetedAbility;
 import com.pipai.wf.unit.ability.PrecisionShotAbility;
+import com.pipai.wf.unit.ability.SuppressionAbility;
 import com.pipai.wf.util.RayMapper;
 
 /*
@@ -450,6 +452,9 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 		case READY:
 			animationController.startAnimation(new ReadySpellAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER));
 			break;
+		case TARGETED_ACTION:
+			animationController.startAnimation(new SuppressionAnimationHandler(this, event));
+			break;
 		case START_TURN:
 			if (event.getTeam() == Team.PLAYER) {
 				this.mode = Mode.MOVE;
@@ -486,7 +491,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 		switchToTargetMode(null);
 	}
 
-	public void switchToTargetMode(ActiveSkillTargetedAccAbility ability) {
+	public void switchToTargetMode(ActiveSkillTargetedAbility ability) {
 		this.terrainRenderer.clearShadedTiles();
 		this.targetAgentList = new LinkedList<AgentGuiObject>();
 		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
@@ -509,7 +514,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 		switchTarget(target, null);
 	}
 
-	public void switchTarget(AgentGuiObject target, ActiveSkillTargetedAccAbility ability) {
+	public void switchTarget(AgentGuiObject target, ActiveSkillTargetedAbility ability) {
 		if (this.mode == Mode.TARGET_SELECT) {
 			if (this.targetAgentList.contains(target)) {
 				ArrayList<GridPosition> targetTiles = new ArrayList<>();
@@ -622,6 +627,9 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 				for (Ability a : selectedAgent.getAgent().getAbilities()) {
 					if (a instanceof PrecisionShotAbility && !a.isOnCooldown()) {
 						this.switchToTargetMode((PrecisionShotAbility) a);
+						break;
+					} else if (a instanceof SuppressionAbility) {
+						this.switchToTargetMode((SuppressionAbility) a);
 						break;
 					}
 				}

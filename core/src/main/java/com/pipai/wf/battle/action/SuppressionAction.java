@@ -15,6 +15,7 @@ public class SuppressionAction extends TargetedAction {
 		Agent a = getPerformer();
 		Agent target = getTarget();
 		a.suppressOther(target);
+		a.setAP(0);
 		log(BattleEvent.targetedActionEvent(a, target, this));
 	}
 

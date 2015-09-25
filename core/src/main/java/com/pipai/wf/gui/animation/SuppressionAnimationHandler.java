@@ -12,10 +12,10 @@ public class SuppressionAnimationHandler extends AnimationHandler implements Cam
 	private AgentGuiObject performer, target;
 	private Alarm alarm;
 
-	public SuppressionAnimationHandler(BattleGui gui, BattleEvent outcome) {
+	public SuppressionAnimationHandler(BattleGui gui, BattleEvent event) {
 		super(gui);
-		this.performer = getGui().getAgentGUIObject(outcome.getPerformer());
-		this.target = getGui().getAgentGUIObject(outcome.getTarget());
+		this.performer = getGui().getAgentGUIObject(event.getPerformer());
+		this.target = getGui().getAgentGUIObject(event.getTarget());
 		alarm = new Alarm();
 	}
 
@@ -26,7 +26,7 @@ public class SuppressionAnimationHandler extends AnimationHandler implements Cam
 
 	@Override
 	public void notifyCameraMoveEnd() {
-		alarm.set(30);
+		alarm.set(1);
 		releaseControl();
 	}
 
