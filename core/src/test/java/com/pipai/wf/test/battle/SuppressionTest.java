@@ -17,6 +17,7 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.weapon.Bow;
 import com.pipai.wf.battle.weapon.Pistol;
+import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.test.MockGUIObserver;
 import com.pipai.wf.test.WfConfiguredTest;
@@ -28,7 +29,7 @@ public class SuppressionTest extends WfConfiguredTest {
 	public void testSuppression() {
 		BattleMap map = new BattleMap(2, 2);
 		GridPosition playerPos = new GridPosition(0, 0);
-		GridPosition enemyPos = new GridPosition(0, 0);
+		GridPosition enemyPos = new GridPosition(0, 1);
 		AgentState as = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
 		as.abilities.add(new SuppressionAbility());
 		as.weapons.add(new Bow());
@@ -49,6 +50,31 @@ public class SuppressionTest extends WfConfiguredTest {
 		int suppressedToHit = new RangedWeaponAttackAction(enemy, player).getHitCalculation().total();
 		assertTrue(suppressedToHit == toHit - 30);
 		assertTrue(player.getAP() == 0);
+		Weapon weapon = player.getCurrentWeapon();
+		assertTrue(weapon.currentAmmo() == weapon.baseAmmoCapacity() - 2);
+	}
+
+	@Test
+	public void testNoAmmoSuppression() {
+		BattleMap map = new BattleMap(2, 2);
+		GridPosition playerPos = new GridPosition(0, 0);
+		GridPosition enemyPos = new GridPosition(0, 1);
+		AgentState as = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		as.abilities.add(new SuppressionAbility());
+		as.weapons.add(new Bow());
+		map.addAgent(as);
+		AgentState enemyAs = AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0);
+		map.addAgent(enemyAs);
+		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
+		assertTrue(player.getCurrentWeapon() != null);
+		player.getCurrentWeapon().expendAmmo(player.getCurrentWeapon().baseAmmoCapacity() + 1);
+		BattleController battle = new BattleController(map);
+		try {
+			battle.performAction(new SuppressionAction(player, enemy));
+			fail("Expected not enough ammo exception not thrown");
+		} catch (IllegalActionException e) {
+		}
 	}
 
 	@Test

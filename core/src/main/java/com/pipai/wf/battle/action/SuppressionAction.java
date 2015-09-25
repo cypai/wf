@@ -13,9 +13,13 @@ public class SuppressionAction extends TargetedAction {
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		Agent a = getPerformer();
+		if (a.getCurrentWeapon().currentAmmo() < 2) {
+			throw new IllegalActionException("Not enough ammo to suppress");
+		}
 		Agent target = getTarget();
 		a.suppressOther(target);
 		a.setAP(0);
+		a.getCurrentWeapon().expendAmmo(2);
 		log(BattleEvent.targetedActionEvent(a, target, this));
 	}
 
