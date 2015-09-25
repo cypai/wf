@@ -103,7 +103,7 @@ public class AbilityTest {
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
 		playerState.abilities.add(new PrecisionShotAbility());
-		playerState.weapons.add(new Pistol());
+		playerState.weapons.add(new Rifle());
 		map.addAgent(playerState);
 		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map);
@@ -131,6 +131,27 @@ public class AbilityTest {
 			fail(e.getMessage());
 		}
 	}
+
+	@Test
+	public void testPrecisionShotWeaponReq() {
+		BattleMap map = new BattleMap(3, 4);
+		GridPosition playerPos = new GridPosition(1, 0);
+		GridPosition enemyPos = new GridPosition(2, 2);
+		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.abilities.add(new PrecisionShotAbility());
+		playerState.weapons.add(new Pistol());
+		map.addAgent(playerState);
+		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map);
+		Agent agent = map.getAgentAtPos(playerPos);
+		Agent target = map.getAgentAtPos(enemyPos);
+		try {
+			battle.performAction(new PrecisionShotAction(agent, target));
+			fail("Expected exception not thrown");
+		} catch (IllegalActionException e) {
+		}
+	}
+
 
 	@Test
 	public void testNoSnapShot() {

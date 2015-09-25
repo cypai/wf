@@ -34,15 +34,11 @@ public class RifleAttackAction extends RangedWeaponAttackAction{
 		Agent a = getPerformer();
 		Agent target = getTarget();
 		Weapon w = a.getCurrentWeapon();
-		if (!a.getAbilities().hasAbility(SnapShotAbility.class) && a.hasUsedAP())
-		{
+		if (!a.getAbilities().hasAbility(SnapShotAbility.class) && a.hasUsedAP()) {
 			throw new IllegalActionException("Cannot fire rifle after moving");
 		}
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
 			throw new IllegalActionException("Not enough ammo to fire " + w.name());
-		}
-		if (a.hasUsedAP()) {
-
 		}
 		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
 		a.setAP(0);
