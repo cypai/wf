@@ -3,6 +3,9 @@ package com.pipai.wf.battle.ai;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
@@ -14,6 +17,8 @@ import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.UtilFunctions;
 
 public class RandomAI extends AI {
+
+	private static final Logger logger = LoggerFactory.getLogger(RandomAI.class);
 
 	protected LinkedList<Agent> enemyAgents, playerAgents, toAct;
 
@@ -52,7 +57,7 @@ public class RandomAI extends AI {
 			try {
 				this.battleController.performAction(act);
 			} catch (IllegalActionException e) {
-				System.out.println("AI tried to perform illegal move: " + e.getMessage());
+				logger.error("AI tried to perform illegal move: " + e.getMessage());
 			}
 		}
 	}

@@ -2,6 +2,9 @@ package com.pipai.wf.battle.agent;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
@@ -30,6 +33,8 @@ import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.util.UtilFunctions;
 
 public class Agent implements BattleEventLoggable {
+
+	private static final Logger logger = LoggerFactory.getLogger(Agent.class);
 
 	public enum State {
 		NEUTRAL, KO, OVERWATCH, SUPPRESSING
@@ -420,7 +425,7 @@ public class Agent implements BattleEventLoggable {
 				this.getCurrentWeapon().expendAmmo(1);
 			}
 		} catch (IllegalActionException e) {
-			System.out.println(e.getMessage());
+			logger.error(e.getMessage());
 		}
 	}
 

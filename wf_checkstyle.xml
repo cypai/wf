@@ -93,5 +93,10 @@
     <module name="NoMainMethodInAbstractClass"/>
     <module name="ForbidWildcardAsReturnType"/>
     <module name="PublicReferenceToPrivateTypeCheck"/>
+    <module name="EitherLogOrThrowCheck"/>
+  </module>
+  <module name="RegexpSingleline">
+    <property name="format" value="^.*System.out.print.*$"/>
+    <property name="message" value="Cannot use System.out.print"/>
   </module>
 </module>

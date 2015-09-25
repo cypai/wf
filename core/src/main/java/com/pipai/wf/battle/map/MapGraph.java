@@ -6,11 +6,16 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /*
  * To be used as a disposable BattleMap representation for Dijkstra's and other pathfinding algorithms
  */
 
 public class MapGraph {
+
+	private static final Logger logger = LoggerFactory.getLogger(MapGraph.class);
 
 	private Node root;
 	private HashMap<String, Node> nodeMap;
@@ -225,18 +230,18 @@ public class MapGraph {
 			}
 			current.visit();
 			if (DEBUG) {
-				System.out.println("Current " + current);
+				logger.debug("Current " + current);
 			}
 			for (Edge edge : current.getEdges()) {
 				Node node = edge.getDestination();
 				if (DEBUG) {
-					System.out.println("Checking " + node.getPosition());
+					logger.debug("Checking " + node.getPosition());
 				}
 				if (!node.isVisited() && !node.isAdded()) {
 					float totalCost = edge.cost() + current.getTotalCost();
 					if (totalCost <= maxMove) {
 						if (DEBUG) {
-							System.out.println("Added " + node.getPosition() + " Dist " + String.valueOf(totalCost));
+							logger.debug("Added " + node.getPosition() + " Dist " + String.valueOf(totalCost));
 						}
 						node.setAdded();
 						node.setTotalCost(totalCost);

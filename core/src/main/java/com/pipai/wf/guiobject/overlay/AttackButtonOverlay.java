@@ -1,5 +1,8 @@
 package com.pipai.wf.guiobject.overlay;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +16,8 @@ import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.util.UtilFunctions;
 
 public class AttackButtonOverlay extends GuiObject implements GuiRenderable, LeftClickable {
+
+	private static final Logger logger = LoggerFactory.getLogger(AttackButtonOverlay.class);
 
 	private final int SQUARE_SIZE = 30;
 
@@ -30,7 +35,7 @@ public class AttackButtonOverlay extends GuiObject implements GuiRenderable, Lef
 	@Override
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
 		if (UtilFunctions.isInBoundingBox(x, y, SQUARE_SIZE, SQUARE_SIZE, screenX, screenY)) {
-			System.out.println("hi");
+			logger.info("hi");
 		}
 	}
 

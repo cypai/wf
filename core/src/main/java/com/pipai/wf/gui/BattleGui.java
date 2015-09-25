@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -70,6 +73,8 @@ import com.pipai.wf.util.RayMapper;
  */
 
 public class BattleGui extends Gui implements BattleObserver, AnimationControllerObserver {
+
+	private static final Logger logger = LoggerFactory.getLogger(BattleGui.class);
 
 	public static enum Mode {
 		MOVE(true), TARGET_SELECT(true), PRE_ANIMATION(false), ANIMATION(false), AI(false);
@@ -361,7 +366,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 			try {
 				this.battle.performAction(atk);
 			} catch (IllegalActionException e) {
-				System.out.println("Illegal move: " + e.getMessage());
+				logger.error("Illegal move: " + e.getMessage());
 			}
 		}
 	}
@@ -376,7 +381,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 				try {
 					this.battle.performAction(move);
 				} catch (IllegalActionException e) {
-					System.out.println("IllegalMoveException detected: " + e.getMessage());
+					logger.error("IllegalMoveException detected: " + e.getMessage());
 				}
 			}
 		}
@@ -679,7 +684,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 				this.mode = Mode.PRE_ANIMATION;
 				this.battle.performAction(action);
 			} catch (IllegalActionException e) {
-				System.out.println("Illegal move: " + e.getMessage());
+				logger.error("Illegal move: " + e.getMessage());
 				this.mode = Mode.MOVE;
 			}
 		}

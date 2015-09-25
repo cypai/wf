@@ -2,12 +2,17 @@ package com.pipai.wf.battle.ai;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class TopModularAI extends AI {
+
+	private static final Logger logger = LoggerFactory.getLogger(TopModularAI.class);
 
 	private ArrayList<Agent> enemyAgents, playerAgents;
 	private ArrayList<ModularAI> ais;
@@ -49,7 +54,7 @@ public class TopModularAI extends AI {
 		try {
 			battleController.performAction(best.action);
 		} catch (IllegalActionException e) {
-			System.out.println("AI tried to perform illegal move: " + e.getMessage());
+			logger.error("AI tried to perform illegal move: " + e.getMessage());
 		}
 	}
 
