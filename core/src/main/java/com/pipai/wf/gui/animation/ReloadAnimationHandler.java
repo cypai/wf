@@ -14,24 +14,34 @@ public class ReloadAnimationHandler extends AnimationHandler implements CameraMo
 
 	public ReloadAnimationHandler(BattleGui gui, BattleEvent ev, boolean skipCamera) {
 		super(gui);
-		performer = getGUI().getAgentGUIObject(ev.getPerformer());
+		performer = getGui().getAgentGUIObject(ev.getPerformer());
 		this.skipCamera = skipCamera;
 	}
 
 	@Override
-	protected void beginAnimation() {
-		if (skipCamera) {
-			notifyCameraMoveEnd();
-		} else {
+	protected void initAnimation() {
+		if (!skipCamera) {
 			getCamera().moveTo(performer.x, performer.y, this);
 		}
 	}
 
 	@Override
-	public void notifyCameraMoveEnd() {
-		TemporaryText ttext = new TemporaryText(getGUI(), new Vector3(performer.x, performer.y, 0), "Reload");
-		getGUI().createInstance(ttext);
+	public void update() {
+		if (skipCamera) {
+			performAnimation();
+			finish();
+		}
+	}
+
+	private void performAnimation() {
+		TemporaryText ttext = new TemporaryText(getGui(), new Vector3(performer.x, performer.y, 0), "Reload");
+		getGui().createInstance(ttext);
 		finish();
+	}
+
+	@Override
+	public void notifyCameraMoveEnd() {
+		performAnimation();
 	}
 
 	@Override

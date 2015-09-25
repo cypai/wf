@@ -10,7 +10,7 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.FireActualizationAbility;
 import com.pipai.wf.unit.ability.FireballAbility;
-import com.pipai.wf.unit.ability.PrecisionShotAbility;
+import com.pipai.wf.unit.ability.SuppressionAbility;
 import com.pipai.wf.unit.race.Race;
 
 public class TidusSchema extends RaceTemplateSchema {
@@ -30,7 +30,7 @@ public class TidusSchema extends RaceTemplateSchema {
 		AbilityList l = new AbilityList();
 		l.add(new FireActualizationAbility(1));
 		l.add(new FireballAbility());
-		l.add(new PrecisionShotAbility());
+		l.add(new SuppressionAbility());
 		return l;
 	}
 

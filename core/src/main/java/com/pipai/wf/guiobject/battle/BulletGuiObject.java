@@ -5,26 +5,23 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
-import com.pipai.wf.guiobject.overlay.TemporaryText;
-import com.pipai.wf.util.UtilFunctions;
+import com.pipai.wf.guiobject.XYZPositioned;
 
-public class BulletGuiObject extends GuiObject implements GuiRenderable {
+public class BulletGuiObject extends GuiObject implements GuiRenderable, XYZPositioned {
 
 	protected BattleGui gui;
 	protected float x, y, dest_x, dest_y;
 	protected int t, final_t;
 	protected Vector2 dir;
 	protected AgentGuiObject target;
-	protected BattleEvent outcome;
 
 	private static final int SPEED = 16;
 
-	public BulletGuiObject(BattleGui gui, float x, float y, float dest_x, float dest_y, AgentGuiObject target, BattleEvent outcome) {
+	public BulletGuiObject(BattleGui gui, float x, float y, float dest_x, float dest_y, AgentGuiObject target) {
 		super(gui);
 		this.gui = gui;
 		this.x = x;
@@ -38,7 +35,6 @@ public class BulletGuiObject extends GuiObject implements GuiRenderable {
 			final_t = (int) Math.ceil((dest_y - y) / (SPEED * dir.y));
 		}
 		this.target = target;
-		this.outcome = outcome;
 	}
 
 	@Override
@@ -55,16 +51,7 @@ public class BulletGuiObject extends GuiObject implements GuiRenderable {
 		} else if (t == final_t) {
 			x = dest_x;
 			y = dest_y;
-			TemporaryText dmgTxt;
-			Vector3 txtAnchor = new Vector3(x + 12, y + 16 * UtilFunctions.rng.nextFloat() - 12, 0);
-			if (outcome.isHit()) {
-				dmgTxt = new TemporaryText(gui, txtAnchor, (outcome.isCrit() ? "/!\\ " : "Hit: ") + String.valueOf(outcome.getDamage()));
-			} else {
-				dmgTxt = new TemporaryText(gui, txtAnchor, "Missed");
-			}
-			gui.createInstance(dmgTxt);
 			destroy();
-			target.hit(outcome);
 		}
 	}
 
@@ -80,5 +67,40 @@ public class BulletGuiObject extends GuiObject implements GuiRenderable {
 		r.setColor(Color.BLACK);
 		r.circle(x, y, 5);
 		r.end();
+	}
+
+	@Override
+	public float getX() {
+		return x;
+	}
+
+	@Override
+	public float getY() {
+		return y;
+	}
+
+	@Override
+	public void setX(float x) {
+		this.x = x;
+	}
+
+	@Override
+	public void setY(float y) {
+		this.y = y;
+	}
+
+	@Override
+	public float getZ() {
+		return 0;
+	}
+
+	@Override
+	public void setZ(float z) {
+		return;
+	}
+
+	@Override
+	public Vector3 getPosition() {
+		return new Vector3(x, y, 0);
 	}
 }

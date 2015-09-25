@@ -8,16 +8,17 @@ public abstract class AnimationHandler {
 	private BattleGui gui;
 	private AnchoredCamera camera;
 	private AnimationObserver observer;
-	private boolean finished;
+	private boolean initialized, controlReleased, finished;
 
 	public AnimationHandler(BattleGui gui) {
 		this.gui = gui;
-		gui.registerAnimationHandler(this);
 		camera = gui.getCamera();
+		initialized = false;
+		controlReleased = false;
 		finished = false;
 	}
 
-	public BattleGui getGUI() {
+	public BattleGui getGui() {
 		return gui;
 	}
 
@@ -25,22 +26,42 @@ public abstract class AnimationHandler {
 		return camera;
 	}
 
-	public void begin(AnimationObserver observer) {
+	public final void begin(AnimationObserver observer) {
 		if (finished) {
 			throw new IllegalStateException("Cannot call begin on finished AnimationHandler");
 		}
 		this.observer = observer;
-		beginAnimation();
+		initAnimation();
+		initialized = true;
 	}
 
-	protected abstract void beginAnimation();
+	protected abstract void initAnimation();
 
-	public void update() {}
+	public void update() {
+	}
 
-	protected void finish() {
+	protected final void releaseControl() {
+		validateInitialized();
+		if (controlReleased) {
+			return;
+		}
+		controlReleased = true;
+		if (observer != null) {
+			observer.notifyControlReleased(this);
+		}
+	}
+
+	protected final void finish() {
+		releaseControl();
 		finished = true;
 		if (observer != null) {
 			observer.notifyAnimationEnd(this);
+		}
+	}
+
+	private void validateInitialized() {
+		if (!initialized) {
+			throw new IllegalStateException(this.getClass().toString() + " was not initialized");
 		}
 	}
 

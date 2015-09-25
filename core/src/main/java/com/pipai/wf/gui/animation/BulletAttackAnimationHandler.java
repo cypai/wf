@@ -7,6 +7,7 @@ import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiObjectDestroyEventObserver;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
 import com.pipai.wf.guiobject.battle.BulletGuiObject;
+import com.pipai.wf.guiobject.overlay.TemporaryText;
 import com.pipai.wf.util.Alarm;
 
 public class BulletAttackAnimationHandler extends AnimationHandler implements CameraMovementObserver, GuiObjectDestroyEventObserver {
@@ -17,22 +18,22 @@ public class BulletAttackAnimationHandler extends AnimationHandler implements Ca
 
 	public BulletAttackAnimationHandler(BattleGui gui, BattleEvent outcome) {
 		super(gui);
-		this.performer = getGUI().getAgentGUIObject(outcome.getPerformer());
-		this.target = getGUI().getAgentGUIObject(outcome.getTarget());
+		this.performer = getGui().getAgentGUIObject(outcome.getPerformer());
+		this.target = getGui().getAgentGUIObject(outcome.getTarget());
 		this.outcome = outcome;
 		alarm = new Alarm();
 	}
 
 	@Override
-	protected void beginAnimation() {
-		getCamera().moveTo((performer.x + target.x)/2, (performer.y + target.y)/2, this);
+	protected void initAnimation() {
+		getCamera().moveTo((performer.x + target.x) / 2, (performer.y + target.y) / 2, this);
 	}
 
 	@Override
 	public void notifyCameraMoveEnd() {
-		BulletGuiObject bullet = new BulletGuiObject(getGUI(), performer.x, performer.y, target.x, target.y, target, outcome);
+		BulletGuiObject bullet = new BulletGuiObject(getGui(), performer.x, performer.y, target.x, target.y, target);
 		bullet.registerDestroyEventObserver(this);
-		getGUI().createInstance(bullet);
+		getGui().createInstance(bullet);
 	}
 
 	@Override
@@ -43,6 +44,14 @@ public class BulletAttackAnimationHandler extends AnimationHandler implements Ca
 	@Override
 	public void notifyOfDestroyEvent(GuiObject obj) {
 		alarm.set(60);
+		TemporaryText dmgTxt;
+		if (outcome.isHit()) {
+			dmgTxt = new TemporaryText(getGui(), target.getPosition(), (outcome.isCrit() ? "/!\\ " : "Hit: ") + String.valueOf(outcome.getDamage()));
+		} else {
+			dmgTxt = new TemporaryText(getGui(), target.getPosition(), "Missed");
+		}
+		getGui().createInstance(dmgTxt);
+		target.hit(outcome);
 	}
 
 	@Override

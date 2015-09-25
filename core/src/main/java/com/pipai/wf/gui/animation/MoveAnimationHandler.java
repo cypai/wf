@@ -17,6 +17,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	private LinkedList<BattleEvent> chainEvents;
 	private boolean noCameraFollow;
 
+	private AnimationController controller;
 	private BulletAttackAnimationHandler owAniHandler;
 
 	// Animation variables
@@ -26,19 +27,20 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	private int t;	// Animation time t counter
 	private LinkedList<BattleEvent> currentOWChain;
 
-	public MoveAnimationHandler(BattleGui gui, BattleEvent moveEvent, boolean noCameraFollow) {
+	public MoveAnimationHandler(BattleGui gui, AnimationController controller, BattleEvent moveEvent, boolean noCameraFollow) {
 		super(gui);
-		agent = getGUI().getAgentGUIObject(moveEvent.getPerformer());
+		agent = getGui().getAgentGUIObject(moveEvent.getPerformer());
 		path = moveEvent.getPath();
 		moveSeq = vectorizePath(path);
 		chainEvents = moveEvent.getChainEvents();
+		this.controller = controller;
 		this.noCameraFollow = noCameraFollow;
 		go = false;
 		cameraDone = false;
 	}
 
 	@Override
-	public void beginAnimation() {
+	public void initAnimation() {
 		if (noCameraFollow) {
 			getCamera().moveTo(agent.x, agent.y);
 			notifyCameraMoveEnd();
@@ -111,8 +113,8 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 
 	private void handleOWActivation() {
 		BattleEvent ow = currentOWChain.pollFirst();
-		owAniHandler = new BulletAttackAnimationHandler(getGUI(), ow);
-		owAniHandler.begin(this);
+		owAniHandler = new BulletAttackAnimationHandler(getGui(), ow);
+		controller.startAnimation(owAniHandler);
 		go = false;
 	}
 
@@ -135,6 +137,11 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 		} else {
 			handleOWActivation();
 		}
+	}
+
+	@Override
+	public void notifyControlReleased(AnimationHandler finishedHandler) {
+		notifyAnimationEnd(finishedHandler);
 	}
 
 }

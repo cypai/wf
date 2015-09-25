@@ -1,6 +1,5 @@
 package com.pipai.wf.gui.animation;
 
-import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.gui.camera.CameraMovementObserver;
@@ -15,27 +14,37 @@ public class OverwatchAnimationHandler extends AnimationHandler implements Camer
 
 	public OverwatchAnimationHandler(BattleGui gui, BattleEvent ev, boolean skipCamera) {
 		super(gui);
-		performer = getGUI().getAgentGUIObject(ev.getPerformer());
+		performer = getGui().getAgentGUIObject(ev.getPerformer());
 		this.ev = ev;
 		this.skipCamera = skipCamera;
 	}
 
 	@Override
-	protected void beginAnimation() {
-		if (skipCamera) {
-			notifyCameraMoveEnd();
-		} else {
+	protected void initAnimation() {
+		if (!skipCamera) {
 			getCamera().moveTo(performer.x, performer.y, this);
 		}
 	}
 
 	@Override
-	public void notifyCameraMoveEnd() {
+	public void update() {
+		if (skipCamera) {
+			performAnimation();
+			finish();
+		}
+	}
+
+	private void performAnimation() {
 		String owText = "Overwatch";
 		owText += (ev.getPreparedOWName().equals("Attack") ? "" : ": " + ev.getPreparedOWName());
-		TemporaryText ttext = new TemporaryText(getGUI(), new Vector3(performer.x, performer.y, 0), owText);
-		getGUI().createInstance(ttext);
+		TemporaryText ttext = new TemporaryText(getGui(), performer.getPosition(), owText);
+		getGui().createInstance(ttext);
 		finish();
+	}
+
+	@Override
+	public void notifyCameraMoveEnd() {
+		performAnimation();
 	}
 
 	@Override

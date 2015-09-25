@@ -39,14 +39,15 @@ import com.pipai.wf.battle.vision.FogOfWar;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
-import com.pipai.wf.gui.animation.AnimationHandler;
-import com.pipai.wf.gui.animation.AnimationObserver;
+import com.pipai.wf.gui.animation.AnimationController;
+import com.pipai.wf.gui.animation.AnimationControllerObserver;
 import com.pipai.wf.gui.animation.BulletAttackAnimationHandler;
 import com.pipai.wf.gui.animation.CastTargetAnimationHandler;
 import com.pipai.wf.gui.animation.MoveAnimationHandler;
 import com.pipai.wf.gui.animation.OverwatchAnimationHandler;
 import com.pipai.wf.gui.animation.ReadySpellAnimationHandler;
 import com.pipai.wf.gui.animation.ReloadAnimationHandler;
+import com.pipai.wf.gui.animation.SuppressionAnimationHandler;
 import com.pipai.wf.gui.camera.AnchoredCamera;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
@@ -59,15 +60,16 @@ import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
 import com.pipai.wf.guiobject.overlay.WeaponIndicator;
 import com.pipai.wf.unit.ability.Ability;
-import com.pipai.wf.unit.ability.ActiveSkillTargetedAccAbility;
+import com.pipai.wf.unit.ability.ActiveSkillTargetedAbility;
 import com.pipai.wf.unit.ability.PrecisionShotAbility;
+import com.pipai.wf.unit.ability.SuppressionAbility;
 import com.pipai.wf.util.RayMapper;
 
 /*
  * Simple 2D GUI for rendering a BattleMap
  */
 
-public class BattleGui extends Gui implements BattleObserver, AnimationObserver {
+public class BattleGui extends Gui implements BattleObserver, AnimationControllerObserver {
 
 	public static enum Mode {
 		MOVE(true), TARGET_SELECT(true), PRE_ANIMATION(false), ANIMATION(false), AI(false);
@@ -107,8 +109,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	private WeaponIndicator weaponIndicator;
 	private AgentStatusWindow agentStatusWindow;
 	private TargetedAction targetedAction;
-	private ArrayList<AnimationHandler> animationHandlerList, animationHandlerBuffer;
-	private AnimationHandler animationHandler;
+	private AnimationController animationController;
 	private FogOfWar fogOfWar;
 
 	public BattleGui(WFGame game, BattleMap map) {
@@ -154,8 +155,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		this.terrainRenderer = new BattleTerrainRenderer(this, map, fogOfWar);
 		this.createInstance(this.terrainRenderer);
 		this.generateOverlays();
-		animationHandlerList = new ArrayList<AnimationHandler>();
-		animationHandlerBuffer = new ArrayList<AnimationHandler>();
+		this.animationController = new AnimationController(this);
 		this.setSelected(this.selectableAgentOrderedList.getFirst());
 	}
 
@@ -173,7 +173,6 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	}
 
 	public void endAnimation() {
-		this.animationHandler = null;
 		performVictoryCheck();
 		if (aiTurn) {
 			this.mode = Mode.AI;
@@ -212,10 +211,6 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 
 	public AnchoredCamera getCamera() {
 		return this.camera;
-	}
-
-	public void registerAnimationHandler(AnimationHandler a) {
-		this.animationHandlerBuffer.add(a);
 	}
 
 	public void setSelected(AgentGuiObject agent) {
@@ -290,20 +285,6 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		renderablesDelBuffer.clear();
 		leftClickablesDelBuffer.clear();
 		rightClickablesDelBuffer.clear();
-	}
-
-	private void cleanAnimationHandlerBuffers() {
-		for (AnimationHandler a : animationHandlerBuffer) {
-			animationHandlerList.add(a);
-		}
-		ArrayList<AnimationHandler> delBuffer = new ArrayList<>();
-		for (AnimationHandler a : animationHandlerList) {
-			if (a.isFinished()) {
-				delBuffer.add(a);
-			}
-		}
-		animationHandlerList.removeAll(delBuffer);
-		animationHandlerBuffer.clear();
 	}
 
 	public void updatePaths() {
@@ -450,25 +431,29 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 			endAnimation();
 			return;
 		}
+		boolean animating = true;
 		switch (event.getType()) {
 		case MOVE:
-			animationHandler = new MoveAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
+			animationController.startAnimation(new MoveAnimationHandler(this, animationController, event, event.getPerformer().getTeam() == Team.PLAYER));
 			break;
 		case ATTACK:
 		case RANGED_WEAPON_ATTACK:
-			animationHandler = new BulletAttackAnimationHandler(this, event);
+			animationController.startAnimation(new BulletAttackAnimationHandler(this, event));
 			break;
 		case CAST_TARGET:
-			animationHandler = new CastTargetAnimationHandler(this, event);
+			animationController.startAnimation(new CastTargetAnimationHandler(this, event));
 			break;
 		case OVERWATCH:
-			animationHandler = new OverwatchAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
+			animationController.startAnimation(new OverwatchAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER));
 			break;
 		case RELOAD:
-			animationHandler = new ReloadAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
+			animationController.startAnimation(new ReloadAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER));
 			break;
 		case READY:
-			animationHandler = new ReadySpellAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER);
+			animationController.startAnimation(new ReadySpellAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER));
+			break;
+		case TARGETED_ACTION:
+			animationController.startAnimation(new SuppressionAnimationHandler(this, event));
 			break;
 		case START_TURN:
 			if (event.getTeam() == Team.PLAYER) {
@@ -477,13 +462,14 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 				this.populateSelectableAgentList();
 				this.setSelected(this.selectableAgentOrderedList.getFirst());
 			}
+			animating = false;
 			break;
 		default:
+			animating = false;
 			break;
 		}
-		if (animationHandler != null) {
+		if (animating) {
 			beginAnimation();
-			animationHandler.begin(this);
 		} else {
 			// No animation yet, just end now
 			endAnimation();
@@ -491,7 +477,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	}
 
 	@Override
-	public void notifyAnimationEnd(AnimationHandler finishedHandler) {
+	public void notifyControlReleased() {
 		endAnimation();
 	}
 
@@ -505,7 +491,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		switchToTargetMode(null);
 	}
 
-	public void switchToTargetMode(ActiveSkillTargetedAccAbility ability) {
+	public void switchToTargetMode(ActiveSkillTargetedAbility ability) {
 		this.terrainRenderer.clearShadedTiles();
 		this.targetAgentList = new LinkedList<AgentGuiObject>();
 		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
@@ -528,7 +514,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		switchTarget(target, null);
 	}
 
-	public void switchTarget(AgentGuiObject target, ActiveSkillTargetedAccAbility ability) {
+	public void switchTarget(AgentGuiObject target, ActiveSkillTargetedAbility ability) {
 		if (this.mode == Mode.TARGET_SELECT) {
 			if (this.targetAgentList.contains(target)) {
 				ArrayList<GridPosition> targetTiles = new ArrayList<>();
@@ -642,6 +628,9 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 					if (a instanceof PrecisionShotAbility && !a.isOnCooldown()) {
 						this.switchToTargetMode((PrecisionShotAbility) a);
 						break;
+					} else if (a instanceof SuppressionAbility) {
+						this.switchToTargetMode((SuppressionAbility) a);
+						break;
 					}
 				}
 			}
@@ -713,9 +702,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 	@Override
 	public void render(float delta) {
 		super.render(delta);
-		for (AnimationHandler a : animationHandlerList) {
-			a.update();
-		}
+		animationController.update();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		globalUpdate();
@@ -746,7 +733,6 @@ public class BattleGui extends Gui implements BattleObserver, AnimationObserver 
 		}
 		cleanDelBuffers();
 		cleanCreateBuffers();
-		cleanAnimationHandlerBuffers();
 	}
 
 	private void drawFPS() {
