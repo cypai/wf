@@ -213,7 +213,6 @@ public class Agent implements BattleEventLoggable {
 		return null;
 	}
 
-
 	public String getName() {
 		return name;
 	}
@@ -258,7 +257,8 @@ public class Agent implements BattleEventLoggable {
 	public ArrayList<GridPosition> getPeekingSquares() {
 		ArrayList<GridPosition> l = new ArrayList<>();
 		l.add(this.getPosition());
-		ArrayList<Direction> coverDirs = DirectionalCoverSystem.getCoverDirections(this.map, this.getPosition());
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
+		ArrayList<Direction> coverDirs = coverSystem.getCoverDirections(this.getPosition());
 		for (Direction coverDir : coverDirs) {
 			ArrayList<Direction> perpendicularDirs = Direction.getPerpendicular(coverDir);
 			for (Direction perpendicular : perpendicularDirs) {
@@ -277,11 +277,13 @@ public class Agent implements BattleEventLoggable {
 	}
 
 	public CoverType getCoverType() {
-		return DirectionalCoverSystem.getCover(this.map, this.getPosition());
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
+		return coverSystem.getCover(this.getPosition());
 	}
 
 	public boolean isOpen() {
-		return DirectionalCoverSystem.isOpen(map, this.getPosition());
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
+		return coverSystem.isOpen(this.getPosition());
 	}
 
 	public boolean isFlanked() {
@@ -295,8 +297,9 @@ public class Agent implements BattleEventLoggable {
 
 	public boolean isFlankedBy(Agent other) {
 		ArrayList<GridPosition> otherPosList = other.getPeekingSquares();
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
 		for (GridPosition otherPos : otherPosList) {
-			if (DirectionalCoverSystem.isFlankedBy(map, this.getPosition(), otherPos)) {
+			if (coverSystem.isFlankedBy(this.getPosition(), otherPos)) {
 				return true;
 			}
 		}
@@ -313,7 +316,8 @@ public class Agent implements BattleEventLoggable {
 	}
 
 	protected int getDefense(GridPosition attackerPos) {
-		int situationalDef = this.defense + DirectionalCoverSystem.getBestCoverAgainstAttack(map, this.getPosition(), attackerPos).getDefense();
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
+		int situationalDef = this.defense + coverSystem.getBestCoverAgainstAttack(this.getPosition(), attackerPos).getDefense();
 		return situationalDef;
 	}
 

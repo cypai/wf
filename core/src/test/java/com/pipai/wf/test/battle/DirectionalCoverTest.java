@@ -1,6 +1,8 @@
 package com.pipai.wf.test.battle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -49,12 +51,13 @@ public class DirectionalCoverTest {
 		}
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(1, 0);
-		assertFalse(DirectionalCoverSystem.isOpen(map, playerPos));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.E));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).size() == 1);
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+		assertFalse(coverSystem.isOpen(playerPos));
+		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.E));
+		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 1);
+		assertTrue(coverSystem.isFlankedBy(playerPos, enemyPos));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 1);
-		assertTrue(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
 	}
 
 	@Test
@@ -78,13 +81,14 @@ public class DirectionalCoverTest {
 		}
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(1, 0);
-		assertFalse(DirectionalCoverSystem.isOpen(map, playerPos));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.E));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.S));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).size() == 2);
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+		assertFalse(coverSystem.isOpen(playerPos));
+		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.E));
+		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.S));
+		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 2);
+		assertFalse(coverSystem.isFlankedBy(playerPos, enemyPos));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 1);
-		assertFalse(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
 	}
 
 	@Test
@@ -108,14 +112,15 @@ public class DirectionalCoverTest {
 		}
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(2, 0);
-		assertFalse(DirectionalCoverSystem.isOpen(map, playerPos));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.W));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.N));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).size() == 2);
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+		assertFalse(coverSystem.isOpen(playerPos));
+		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.W));
+		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.N));
+		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 2);
+		assertTrue(coverSystem.isFlankedBy(playerPos, enemyPos));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.E));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 2);
-		assertTrue(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
 	}
 
 	@Test
@@ -138,13 +143,14 @@ public class DirectionalCoverTest {
 		}
 		GridPosition playerPos = new GridPosition(1, 3);
 		GridPosition enemyPos = new GridPosition(3, 1);
-		assertFalse(DirectionalCoverSystem.isOpen(map, playerPos));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.S));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).size() == 1);
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+		assertFalse(coverSystem.isOpen(playerPos));
+		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.S));
+		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 1);
+		assertFalse(coverSystem.isFlankedBy(playerPos, enemyPos));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.E));
 		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 2);
-		assertFalse(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
 	}
 
 	@Test
@@ -167,10 +173,11 @@ public class DirectionalCoverTest {
 		}
 		GridPosition playerPos = new GridPosition(1, 3);
 		GridPosition enemyPos = new GridPosition(0, 0);
-		assertFalse(DirectionalCoverSystem.isOpen(map, playerPos));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).contains(Direction.E));
-		assertTrue(DirectionalCoverSystem.getCoverDirections(map, playerPos).size() == 1);
-		assertTrue(DirectionalCoverSystem.isFlankedBy(map, playerPos, enemyPos));
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+		assertFalse(coverSystem.isOpen(playerPos));
+		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.E));
+		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 1);
+		assertTrue(coverSystem.isFlankedBy(playerPos, enemyPos));
 	}
 
 }

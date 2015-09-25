@@ -4,7 +4,13 @@ import java.util.ArrayList;
 
 public class DirectionalCoverSystem {
 
-	public static CoverType getDirectionalCover(BattleMap map, GridPosition pos, Direction dir) {
+	private BattleMap map;
+
+	public DirectionalCoverSystem(BattleMap map) {
+		this.map = map;
+	}
+
+	public CoverType getDirectionalCover(GridPosition pos, Direction dir) {
 		BattleMapCell cell = map.getCellInDirection(pos, dir);
 		if (cell == null) {
 			return CoverType.NONE;
@@ -17,27 +23,54 @@ public class DirectionalCoverSystem {
 		}
 	}
 
-	public static CoverType getCover(BattleMap map, GridPosition pos) {
+	public CoverType getCover(GridPosition pos) {
 		CoverType best = CoverType.NONE;
 		for (Direction d : Direction.getCardinalDirections()) {
-			if (getDirectionalCover(map, pos, d) == CoverType.FULL) {
+			if (getDirectionalCover(pos, d) == CoverType.FULL) {
 				return CoverType.FULL;
 			}
-			if (getDirectionalCover(map, pos, d) == CoverType.HALF) {
+			if (getDirectionalCover(pos, d) == CoverType.HALF) {
 				best = CoverType.HALF;
 			}
 		}
 		return best;
 	}
 
-	public static ArrayList<Direction> getCoverDirections(BattleMap map, GridPosition pos) {
+	public ArrayList<Direction> getCoverDirections(GridPosition pos) {
 		ArrayList<Direction> l = new ArrayList<>();
 		for (Direction d : Direction.getCardinalDirections()) {
-			if (getDirectionalCover(map, pos, d) != CoverType.NONE) {
+			if (getDirectionalCover(pos, d) != CoverType.NONE) {
 				l.add(d);
 			}
 		}
 		return l;
+	}
+
+	public boolean isOpen(GridPosition pos) {
+		return getCoverDirections(pos).size() == 0;
+	}
+
+	public boolean isFlankedBy(GridPosition pos, GridPosition flanker) {
+		ArrayList<Direction> coveredDirs = getCoverDirections(pos);
+		ArrayList<Direction> neededDirs = getNeededCoverDirections(pos, flanker);
+		for (Direction needed : neededDirs) {
+			if (coveredDirs.contains(needed)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public CoverType getBestCoverAgainstAttack(GridPosition pos, GridPosition attacker) {
+		ArrayList<Direction> neededDirs = getNeededCoverDirections(pos, attacker);
+		CoverType bestCover = CoverType.NONE;
+		for (Direction neededDir : neededDirs) {
+			CoverType cover = getDirectionalCover(pos, neededDir);
+			if (cover.getDefense() > bestCover.getDefense()) {
+				bestCover = cover;
+			}
+		}
+		return bestCover;
 	}
 
 	public static ArrayList<Direction> getNeededCoverDirections(GridPosition pos, GridPosition attackPos) {
@@ -69,33 +102,6 @@ public class DirectionalCoverSystem {
 			}
 			return l;
 		}
-	}
-
-	public static boolean isOpen(BattleMap map, GridPosition pos) {
-		return getCoverDirections(map, pos).size() == 0;
-	}
-
-	public static boolean isFlankedBy(BattleMap map, GridPosition pos, GridPosition flanker) {
-		ArrayList<Direction> coveredDirs = getCoverDirections(map, pos);
-		ArrayList<Direction> neededDirs = getNeededCoverDirections(pos, flanker);
-		for (Direction needed : neededDirs) {
-			if (coveredDirs.contains(needed)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public static CoverType getBestCoverAgainstAttack(BattleMap map, GridPosition pos, GridPosition attacker) {
-		ArrayList<Direction> neededDirs = getNeededCoverDirections(pos, attacker);
-		CoverType bestCover = CoverType.NONE;
-		for (Direction neededDir : neededDirs) {
-			CoverType cover = getDirectionalCover(map, pos, neededDir);
-			if (cover.getDefense() > bestCover.getDefense()) {
-				bestCover = cover;
-			}
-		}
-		return bestCover;
 	}
 
 }

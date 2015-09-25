@@ -111,7 +111,8 @@ public class GeneralModularAI extends ModularAI {
 			if (a.isKO()) {
 				continue;
 			}
-			float current = DirectionalCoverSystem.getBestCoverAgainstAttack(map, pos, a.getPosition()).getDefense();
+			DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+			float current = coverSystem.getBestCoverAgainstAttack(pos, a.getPosition()).getDefense();
 			min = (current < min) ? current : min;
 		}
 		return min;
