@@ -1,34 +1,39 @@
 package com.pipai.wf.battle.weapon;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.spell.Spell;
 
 public class Wand extends SpellWeapon {
 
-    @Override
-    public boolean needsAmmunition() {
-        return true;
-    }
+	public Wand(BattleConfiguration config) {
+		super(config);
+	}
 
-    @Override
-    public int baseAmmoCapacity() {
-        return 1;
-    }
+	@Override
+	public boolean needsAmmunition() {
+		return true;
+	}
 
-    @Override
-    public void ready(Spell spell) {
-        super.ready(spell);
-        this.reload();
-    }
+	@Override
+	public int baseAmmoCapacity() {
+		return 1;
+	}
 
-    @Override
-    public void cast() {
-        super.cast();
-        this.expendAmmo(1);
-    }
+	@Override
+	public void ready(Spell spell) {
+		super.ready(spell);
+		this.reload();
+	}
 
-    @Override
-    public String name() {
-        return "Wand";
-    }
+	@Override
+	public void cast() {
+		super.cast();
+		this.expendAmmo(1);
+	}
+
+	@Override
+	public String name() {
+		return "Wand";
+	}
 
 }

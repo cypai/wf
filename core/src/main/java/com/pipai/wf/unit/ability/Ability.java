@@ -36,10 +36,6 @@ public abstract class Ability {
 		return cooldown > 0;
 	}
 
-	public int getCooldownTimer() {
-		return 0;
-	}
-
 	public int getCooldown() {
 		return cooldown;
 	}

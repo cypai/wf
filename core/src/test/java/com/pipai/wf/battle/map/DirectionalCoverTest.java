@@ -1,4 +1,4 @@
-package com.pipai.wf.test.battle;
+package com.pipai.wf.battle.map;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -6,11 +6,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.Direction;
-import com.pipai.wf.battle.map.DirectionalCoverSystem;
-import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class DirectionalCoverTest {

@@ -1,5 +1,6 @@
 package com.pipai.wf.battle.action;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleEventLoggable;
@@ -26,18 +27,18 @@ public abstract class Action implements BattleEventLoggable {
 		return map;
 	}
 
-	public final void perform() throws IllegalActionException {
+	public final void perform(BattleConfiguration config) throws IllegalActionException {
 		if (this.performerAgent.getAP() < this.getAPRequired()) {
 			throw new IllegalActionException("Not enough AP for action");
 		}
 		if (this.performerAgent.isKO()) {
 			throw new IllegalActionException("KOed unit cannot act");
 		}
-		performImpl();
+		performImpl(config);
 		this.performerAgent.onAction(this);
 	}
 
-	protected abstract void performImpl() throws IllegalActionException;
+	protected abstract void performImpl(BattleConfiguration config) throws IllegalActionException;
 
 	/*
 	 * Returns the minimum AP required to perform the action

@@ -2,6 +2,7 @@ package com.pipai.wf.unit.schema;
 
 import java.util.ArrayList;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.LeatherArmor;
 import com.pipai.wf.battle.weapon.Bow;
@@ -40,10 +41,10 @@ public class TidusSchema extends RaceTemplateSchema {
 	}
 
 	@Override
-	public ArrayList<Weapon> weapons() {
+	public ArrayList<Weapon> weapons(BattleConfiguration config) {
 		ArrayList<Weapon> l = new ArrayList<>();
-		l.add(new Bow());
-		l.add(new InnateCasting());
+		l.add(new Bow(config));
+		l.add(new InnateCasting(config));
 		return l;
 	}
 

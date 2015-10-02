@@ -8,10 +8,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pipai.wf.WFGame;
+import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.battle.BattleFactory;
+import com.pipai.wf.battle.BattleSchema;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.AgentStateFactory;
-import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.BattleMapGenerator;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
@@ -43,8 +44,9 @@ public class PartyInfoGui extends Gui {
 		partySchema.add(new FlameFairySchema());	// Sunny
 		partySchema.add(new RaceTemplateSchema(Race.FOX));	// Nolan
 		party = new ArrayList<AgentState>();
+		AgentStateFactory factory = new AgentStateFactory(new BattleConfiguration());
 		for (UnitSchema us : partySchema) {
-			party.add(AgentStateFactory.createFromSchema(us));
+			party.add(factory.createFromSchema(us));
 		}
 		this.createInstance(new PartyInfoList(this, party, 4, this.getScreenHeight() - 4, this.getScreenWidth() / 2, this.getScreenHeight() / 2, Color.CYAN));
 	}
@@ -80,8 +82,8 @@ public class PartyInfoGui extends Gui {
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-		BattleMap map = BattleMapGenerator.generateRandomTestMap(partySchema);
-		this.game.setScreen(new BattleGui(this.game, map));
+		BattleFactory factory = new BattleFactory(new BattleConfiguration());
+		this.game.setScreen(new BattleGui(this.game, factory.build(new BattleSchema(partySchema))));
 		this.dispose();
 	}
 

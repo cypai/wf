@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
@@ -13,8 +14,6 @@ import com.pipai.wf.battle.effect.StatusEffect;
 import com.pipai.wf.battle.effect.StatusEffectList;
 import com.pipai.wf.battle.effect.SuppressedStatusEffect;
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.log.BattleEventLoggable;
-import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.CoverType;
@@ -25,14 +24,13 @@ import com.pipai.wf.battle.misc.OverwatchContainer;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.vision.VisionCalculator;
 import com.pipai.wf.battle.weapon.Weapon;
-import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.exception.NoRegisteredAgentException;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.util.UtilFunctions;
 
-public class Agent implements BattleEventLoggable {
+public class Agent {
 
 	private static final Logger logger = LoggerFactory.getLogger(Agent.class);
 
@@ -40,22 +38,22 @@ public class Agent implements BattleEventLoggable {
 		NEUTRAL, KO, OVERWATCH, SUPPRESSING
 	};
 
-	protected Team team;
-	protected int maxHP, maxAP, maxMP, hp, ap, mp;
-	protected int mobility, aim, defense;
-	protected String name;
-	protected State state;
-	protected ArrayList<Weapon> weapons;
-	protected int weaponIndex;
-	protected Armor armor;
-	protected BattleMap map;
-	protected GridPosition position;
-	protected BattleLog log;
-	protected OverwatchContainer owContainer;
-	protected AbilityList abilities;
-	protected StatusEffectList seList;
+	private Team team;
+	private int maxHP, maxAP, maxMP, hp, ap, mp;
+	private int mobility, aim, defense;
+	private String name;
+	private State state;
+	private ArrayList<Weapon> weapons;
+	private int weaponIndex;
+	private Armor armor;
+	private BattleMap map;
+	private GridPosition position;
+	private OverwatchContainer owContainer;
+	private AbilityList abilities;
+	private StatusEffectList seList;
+	private BattleConfiguration config;
 
-	public Agent(BattleMap map, AgentState state) {
+	public Agent(AgentState state, BattleMap map) {
 		this.map = map;
 		team = state.team;
 		position = state.position;
@@ -76,6 +74,7 @@ public class Agent implements BattleEventLoggable {
 		name = state.name;
 		owContainer = new OverwatchContainer();
 		seList = new StatusEffectList();
+		config = state.getBattleConfiguration();
 	}
 
 	public BattleMap getBattleMap() {
@@ -329,7 +328,7 @@ public class Agent implements BattleEventLoggable {
 	public boolean canSee(Agent other) {
 		for (GridPosition peekSquare : this.getPeekingSquares()) {
 			for (GridPosition otherPeekSquare : other.getPeekingSquares()) {
-				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < WFConfig.battleProps().sightRange()) {
+				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < config.sightRange()) {
 					if (VisionCalculator.lineOfSight(map, peekSquare, otherPeekSquare)) {
 						return true;
 					}
@@ -405,7 +404,6 @@ public class Agent implements BattleEventLoggable {
 		if (weaponIndex == weapons.size()) {
 			weaponIndex = 0;
 		}
-		logEvent(BattleEvent.switchWeaponEvent(this));
 	}
 
 	public void overwatch(Class<? extends TargetedWithAccuracyActionOWCapable> attack) {
@@ -418,7 +416,7 @@ public class Agent implements BattleEventLoggable {
 		TargetedWithAccuracyActionOWCapable action = this.owContainer.generateAction(this, other);
 		try {
 			other.setPosition(activatedTile);
-			action.performOnOverwatch(activationLogEvent);
+			action.performOnOverwatch(activationLogEvent, config);
 			this.owContainer.clear();
 			this.state = State.NEUTRAL;
 			if (this.getCurrentWeapon().needsAmmunition()) {
@@ -432,17 +430,6 @@ public class Agent implements BattleEventLoggable {
 	public void suppressOther(Agent other) {
 		this.state = State.SUPPRESSING;
 		other.inflictStatus(new SuppressedStatusEffect(other));
-	}
-
-	@Override
-	public void register(BattleLog log) {
-		this.log = log;
-	}
-
-	private void logEvent(BattleEvent ev) {
-		if (log != null) {
-			log.logEvent(ev);
-		}
 	}
 
 }

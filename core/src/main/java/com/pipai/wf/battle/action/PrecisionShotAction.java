@@ -1,7 +1,7 @@
 package com.pipai.wf.battle.action;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifier;
 import com.pipai.wf.battle.damage.PercentageModifierList;
@@ -49,7 +49,7 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
 		Agent a = getPerformer();
 		Ability ability = a.getAbility(PrecisionShotAbility.class);
 		if (ability == null) {
@@ -60,7 +60,7 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
 			throw new IllegalActionException("Not enough ammo to fire " + w.name());
 		}
-		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
+		DamageResult result = config.getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
 		DamageResult adjustedResult = new DamageResult(result.hit, result.crit, result.damage + (result.hit ? 1 : 0), result.damageReduction);
 		target.takeDamage(result.damage);
 		a.setAP(0);

@@ -24,15 +24,16 @@ public class BattleController {
 	private Team currentTeam;
 	private LinkedList<BattleObserver> observerList;
 	private LinkedList<Agent> playerList, enemyList;
+	private BattleConfiguration config;
 
-	public BattleController(BattleMap map) {
+	public BattleController(BattleMap map, BattleConfiguration config) {
 		log = new BattleLog();
 		this.map = map;
-		this.map.register(log);
 		this.currentTeam = Team.PLAYER;
 		this.observerList = new LinkedList<BattleObserver>();
 		this.playerList = new LinkedList<Agent>();
 		this.enemyList = new LinkedList<Agent>();
+		this.config = config;
 
 		for (Agent a : this.map.getAgents()) {
 			if (a.getTeam() == Team.PLAYER) {
@@ -41,6 +42,10 @@ public class BattleController {
 				this.enemyList.add(a);
 			}
 		}
+	}
+
+	public BattleConfiguration getBattleConfiguration() {
+		return config;
 	}
 
 	public BattleMap getBattleMap() {
@@ -91,7 +96,7 @@ public class BattleController {
 	public void performAction(Action a) throws IllegalActionException {
 		log.clear();
 		a.register(log);
-		a.perform();
+		a.perform(config);
 		this.notifyObservers(log.getLastEvent());
 	}
 

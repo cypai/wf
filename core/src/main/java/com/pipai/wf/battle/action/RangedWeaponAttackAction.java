@@ -1,7 +1,7 @@
 package com.pipai.wf.battle.action;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.TargetedActionCalculator;
@@ -44,14 +44,14 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapabl
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
 		Agent a = getPerformer();
 		Agent target = getTarget();
 		Weapon w = a.getCurrentWeapon();
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
 			throw new IllegalActionException("Not enough ammo to fire " + w.name());
 		}
-		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
+		DamageResult result = config.getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
 		a.setAP(0);
 		target.takeDamage(result.damage);
 		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, result));
@@ -63,14 +63,14 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapabl
 	}
 
 	@Override
-	public void performOnOverwatch(BattleEvent parent) throws IllegalActionException {
+	public void performOnOverwatch(BattleEvent parent, BattleConfiguration config) throws IllegalActionException {
 		Agent a = getPerformer();
 		Agent target = getTarget();
 		Weapon w = a.getCurrentWeapon();
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
 			throw new IllegalActionException("Not enough ammo to fire " + w.name());
 		}
-		DamageResult result = DamageCalculator.rollDamageGeneral(this, new WeaponDamageFunction(w), 1);
+		DamageResult result = config.getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 1);
 		a.setAP(0);
 		target.takeDamage(result.damage);
 		parent.addChainEvent(BattleEvent.overwatchActivationEvent(a, target, this, target.getPosition(), result));

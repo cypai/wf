@@ -1,4 +1,4 @@
-package com.pipai.wf.test.misc;
+package com.pipai.wf.util;
 
 import static org.junit.Assert.assertTrue;
 

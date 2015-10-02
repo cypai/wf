@@ -1,20 +1,18 @@
-package com.pipai.wf.test.battle;
+package com.pipai.wf.battle.map;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.junit.Test;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.AgentStateFactory;
-import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.map.MapGraph;
-import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class PathfindingTest {
@@ -164,14 +162,16 @@ public class PathfindingTest {
 	public void testCannotMoveToNonEmpty() {
 		String rawMapString = "4 4\n"
 				+ "s 3 0";
+		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		BattleMap map = null;
 		try {
 			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, new GridPosition(1, 1), 3, 5, 2, 5, 65, 0));
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, new GridPosition(2, 1), 3, 5, 2, 5, 65, 0));
+		AgentStateFactory factory = new AgentStateFactory(mockConfig);
+		map.addAgent(factory.newBattleAgentState(Team.PLAYER, new GridPosition(1, 1), 3, 5, 2, 5, 65, 0));
+		map.addAgent(factory.newBattleAgentState(Team.PLAYER, new GridPosition(2, 1), 3, 5, 2, 5, 65, 0));
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1, 1);
 		assertFalse("Failed to return false on moving to solid tile", graph.canMoveTo(new GridPosition(3, 0)));
 		assertFalse("Failed to return false on moving to tile with other agent", graph.canMoveTo(new GridPosition(2, 1)));

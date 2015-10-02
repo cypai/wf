@@ -1,21 +1,30 @@
-package com.pipai.wf.test.battle;
+package com.pipai.wf.battle.agent;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class PeekingSquaresTest {
+
+	private static BattleMap generateMap(String mapString, GridPosition playerPos) throws BadStateStringException {
+		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
+		when(mockConfig.sightRange()).thenReturn(17);
+		AgentStateFactory factory = new AgentStateFactory(mockConfig);
+		BattleMap map = new BattleMap(new MapString(mapString));
+		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		return map;
+	}
 
 	@Test
 	public void testPeekSquaresOpen() {
@@ -25,9 +34,11 @@ public class PeekingSquaresTest {
 		 * 0 A 0
 		 * 0 0 0
 		 */
+		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		BattleMap map = new BattleMap(3, 3);
 		GridPosition playerPos = new GridPosition(1, 1);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		AgentStateFactory factory = new AgentStateFactory(mockConfig);
+		map.addAgent(factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -35,7 +46,7 @@ public class PeekingSquaresTest {
 	}
 
 	@Test
-	public void testPeekSquaresOneCover() {
+	public void testPeekSquaresOneCover() throws BadStateStringException {
 		/*
 		 * Map looks like: (with peeking squares marked with x)
 		 * 0 1 0
@@ -45,14 +56,8 @@ public class PeekingSquaresTest {
 		String rawMapString = "3 3\n"
 				+ "s 1 2";
 
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
 		GridPosition playerPos = new GridPosition(1, 1);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		BattleMap map = generateMap(rawMapString, playerPos);
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -62,7 +67,7 @@ public class PeekingSquaresTest {
 	}
 
 	@Test
-	public void testPeekSquaresLineCover() {
+	public void testPeekSquaresLineCover() throws BadStateStringException {
 		/*
 		 * Map looks like: (with peeking squares marked with x)
 		 * 1 1 1
@@ -74,14 +79,8 @@ public class PeekingSquaresTest {
 				+ "s 1 2\n"
 				+ "s 2 2";
 
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
 		GridPosition playerPos = new GridPosition(1, 1);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		BattleMap map = generateMap(rawMapString, playerPos);
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -89,7 +88,7 @@ public class PeekingSquaresTest {
 	}
 
 	@Test
-	public void testPeekSquaresPartialLineCover() {
+	public void testPeekSquaresPartialLineCover() throws BadStateStringException {
 		/*
 		 * Map looks like: (with peeking squares marked with x)
 		 * 0 1 1
@@ -100,14 +99,8 @@ public class PeekingSquaresTest {
 				+ "s 1 2\n"
 				+ "s 2 2";
 
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
 		GridPosition playerPos = new GridPosition(1, 1);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		BattleMap map = generateMap(rawMapString, playerPos);
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -116,7 +109,7 @@ public class PeekingSquaresTest {
 	}
 
 	@Test
-	public void testPeekSquaresCornerCover() {
+	public void testPeekSquaresCornerCover() throws BadStateStringException {
 		/*
 		 * Map looks like: (with peeking squares marked with x)
 		 * 0 1 0
@@ -127,14 +120,8 @@ public class PeekingSquaresTest {
 				+ "s 1 2\n"
 				+ "s 2 1";
 
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
 		GridPosition playerPos = new GridPosition(1, 1);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		BattleMap map = generateMap(rawMapString, playerPos);
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -144,7 +131,7 @@ public class PeekingSquaresTest {
 	}
 
 	@Test
-	public void testPeekSquaresOppositeCover() {
+	public void testPeekSquaresOppositeCover() throws BadStateStringException {
 		/*
 		 * Map looks like: (with peeking squares marked with x)
 		 * 0 1 0
@@ -155,14 +142,8 @@ public class PeekingSquaresTest {
 				+ "s 1 2\n"
 				+ "s 1 0";
 
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
 		GridPosition playerPos = new GridPosition(1, 1);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		BattleMap map = generateMap(rawMapString, playerPos);
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -172,7 +153,7 @@ public class PeekingSquaresTest {
 	}
 
 	@Test
-	public void testPeekSquaresMapSideCover() {
+	public void testPeekSquaresMapSideCover() throws BadStateStringException {
 		/*
 		 * Map looks like: (with peeking squares marked with x)
 		 * 0 0 1
@@ -182,14 +163,8 @@ public class PeekingSquaresTest {
 		String rawMapString = "3 3\n"
 				+ "s 2 2";
 
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
 		GridPosition playerPos = new GridPosition(2, 1);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		BattleMap map = generateMap(rawMapString, playerPos);
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));
@@ -198,7 +173,7 @@ public class PeekingSquaresTest {
 	}
 
 	@Test
-	public void testCloseRangePeek() {
+	public void testCloseRangePeek() throws BadStateStringException {
 		/*
 		 * Map looks like: (with peeking squares marked with x)
 		 * E 1 0
@@ -208,16 +183,11 @@ public class PeekingSquaresTest {
 		String rawMapString = "3 3\n"
 				+ "s 1 2";
 
-		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			fail(e.getMessage());
-		}
 		GridPosition playerPos = new GridPosition(1, 1);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		BattleMap map = generateMap(rawMapString, playerPos);
 		GridPosition enemyPos = new GridPosition(0, 2);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		AgentStateFactory factory = new AgentStateFactory(mock(BattleConfiguration.class));
+		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		Agent a = map.getAgentAtPos(playerPos);
 		ArrayList<GridPosition> peekSquares = a.getPeekingSquares();
 		assertTrue(peekSquares.contains(a.getPosition()));

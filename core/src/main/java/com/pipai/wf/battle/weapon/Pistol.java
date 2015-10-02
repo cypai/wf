@@ -1,11 +1,18 @@
 package com.pipai.wf.battle.weapon;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.action.TargetedActionable;
 import com.pipai.wf.battle.agent.Agent;
 
 public class Pistol extends Weapon implements TargetedActionable {
+
+	public static final int BASE_AMMO = 2;
+
+	public Pistol(BattleConfiguration config) {
+		super(BASE_AMMO, config);
+	}
 
 	@Override
 	public int flatAimModifier() {
@@ -47,7 +54,7 @@ public class Pistol extends Weapon implements TargetedActionable {
 
 	@Override
 	public int baseAmmoCapacity() {
-		return 2;
+		return BASE_AMMO;
 	}
 
 	@Override

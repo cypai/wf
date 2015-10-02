@@ -11,10 +11,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
 public class FogOfWar {
@@ -29,8 +29,14 @@ public class FogOfWar {
 	private HashSet<GridPosition> visibleTiles;
 	private HashMap<AgentGuiObject, ArrayList<GridPosition>> agentVisibleTiles;
 	private List<AgentGuiObject> agents;
+	private BattleConfiguration config;
 
 	public FogOfWar(BattleMap map, List<AgentGuiObject> agents) {
+		this(map, agents, new BattleConfiguration());
+	}
+
+	public FogOfWar(BattleMap map, List<AgentGuiObject> agents, BattleConfiguration config) {
+		this.config = config;
 		visibleTiles = new HashSet<GridPosition>();
 		agentVisibleTiles = new HashMap<AgentGuiObject, ArrayList<GridPosition>>();
 		for (AgentGuiObject a : agents) {
@@ -73,7 +79,7 @@ public class FogOfWar {
 
 		for (AgentGuiObject a : agents) {
 			GridPosition pos = a.getDisplayPosition();
-			visibilityPixmap.fillCircle(pos.x, pos.y, WFConfig.battleProps().sightRange());
+			visibilityPixmap.fillCircle(pos.x, pos.y, config.sightRange());
 			// spiralPathScan(a);
 		}
 		visibilityTexture = new Texture(visibilityPixmap);
@@ -97,7 +103,7 @@ public class FogOfWar {
 			setVisible(tile);
 			agentVisibleTiles.get(a).add(tile);
 			BattleMapCell cell = map.getCell(tile);
-			if (cell != null && !cell.hasTileSightBlocker() && center.distance(tile) < WFConfig.battleProps().sightRange()) {
+			if (cell != null && !cell.hasTileSightBlocker() && center.distance(tile) < config.sightRange()) {
 				passLight(queue, center, tile);
 			}
 		}

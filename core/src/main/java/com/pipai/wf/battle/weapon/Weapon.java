@@ -1,19 +1,23 @@
 package com.pipai.wf.battle.weapon;
 
+import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
-import com.pipai.wf.util.UtilFunctions;
 
 public abstract class Weapon {
 
-	public static final int STANDARD_RANGE = 12;
+	private int currentAmmo;
+	private AbilityList grantedAbilities;
+	private BattleConfiguration config;
 
-	protected int currentAmmo;
-
-	protected AbilityList grantedAbilities;
-
-	public Weapon() {
-		currentAmmo = baseAmmoCapacity();
+	public Weapon(int initialAmmo, BattleConfiguration config) {
+		currentAmmo = initialAmmo;
 		grantedAbilities = new AbilityList();
+		this.config = config;
+	}
+
+	protected final void addGrantedAbility(Ability a) {
+		grantedAbilities.add(a);
 	}
 
 	public abstract int flatAimModifier();
@@ -27,10 +31,6 @@ public abstract class Weapon {
 	public abstract int minBaseDamage();
 
 	public abstract int maxBaseDamage();
-
-	public int rollForDamage() {
-		return UtilFunctions.randInt(minBaseDamage(), maxBaseDamage());
-	}
 
 	public abstract boolean needsAmmunition();
 
@@ -50,8 +50,12 @@ public abstract class Weapon {
 
 	public abstract String name();
 
-	public AbilityList getGrantedAbilities() {
+	public final AbilityList getGrantedAbilities() {
 		return grantedAbilities;
+	}
+
+	public final BattleConfiguration getConfig() {
+		return config;
 	}
 
 }

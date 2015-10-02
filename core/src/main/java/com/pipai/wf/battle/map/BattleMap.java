@@ -5,19 +5,15 @@ import java.util.HashMap;
 
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.log.BattleEventLoggable;
-import com.pipai.wf.battle.log.BattleLog;
 
-public class BattleMap implements BattleEventLoggable {
+public class BattleMap {
 
 	private int m, n; // Size of the map
 	private HashMap<String, BattleMapCell> cellMap;
 	private ArrayList<Agent> agents;
-	private BattleLog log;
 
 	public BattleMap(int m, int n) {
 		this.agents = new ArrayList<Agent>();
-		this.log = null;
 		initializeMap(m, n);
 	}
 
@@ -105,13 +101,12 @@ public class BattleMap implements BattleEventLoggable {
 	}
 
 	public void addAgent(AgentState state) {
-		Agent agent = new Agent(this, state);
+		Agent agent = new Agent(state, this);
 		BattleMapCell cell = this.getCell(agent.getPosition());
 		if (cell == null) {
 			throw new IllegalArgumentException("Cell " + agent.getPosition().toString() + " does not exist");
 		}
 		cell.setAgent(agent);
-		agent.register(log);
 		this.agents.add(agent);
 	}
 
@@ -129,14 +124,6 @@ public class BattleMap implements BattleEventLoggable {
 
 	public MapString getMapString() {
 		return new MapString(this);
-	}
-
-	@Override
-	public void register(BattleLog log) {
-		this.log = log;
-		for (Agent a : agents) {
-			a.register(log);
-		}
 	}
 
 }

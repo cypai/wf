@@ -1,18 +1,18 @@
-package com.pipai.wf.test.battle;
+package com.pipai.wf.battle.action;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 
 import java.util.LinkedList;
 
 import org.junit.Test;
 
+import com.pipai.libgdx.test.GdxMockedTest;
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.action.MoveAction;
-import com.pipai.wf.battle.action.OverwatchAction;
-import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.AgentStateFactory;
@@ -22,20 +22,21 @@ import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.test.MockGUIObserver;
-import com.pipai.wf.test.WfConfiguredTest;
 import com.pipai.wf.util.UtilFunctions;
 
-public class OverwatchTest extends WfConfiguredTest {
+public class OverwatchActionTest extends GdxMockedTest {
 
 	@Test
 	public void testNoWeaponOverwatch() {
+		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		AgentStateFactory factory = new AgentStateFactory(mockConfig);
+		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
 		map.addAgent(playerState);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
-		BattleController battle = new BattleController(map);
+		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map, mockConfig);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
@@ -49,15 +50,17 @@ public class OverwatchTest extends WfConfiguredTest {
 
 	@Test
 	public void testNoAmmoOverwatch() {
+		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		playerState.weapons.add(new Pistol());
-		playerState.weapons.get(0).expendAmmo(new Pistol().baseAmmoCapacity());
+		AgentStateFactory factory = new AgentStateFactory(mockConfig);
+		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.weapons.add(new Pistol(mockConfig));
+		playerState.weapons.get(0).expendAmmo(new Pistol(mockConfig).baseAmmoCapacity());
 		map.addAgent(playerState);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
-		BattleController battle = new BattleController(map);
+		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map, mockConfig);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		assertFalse(player == null || enemy == null);
@@ -71,14 +74,16 @@ public class OverwatchTest extends WfConfiguredTest {
 
 	@Test
 	public void testOverwatchLog() {
+		BattleConfiguration config = new BattleConfiguration();
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-		AgentState playerState = AgentStateFactory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		playerState.weapons.add(new Pistol());
+		AgentStateFactory factory = new AgentStateFactory(config);
+		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.weapons.add(new Pistol(config));
 		map.addAgent(playerState);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
-		BattleController battle = new BattleController(map);
+		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map, config);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
 		Agent player = map.getAgentAtPos(playerPos);
@@ -125,20 +130,22 @@ public class OverwatchTest extends WfConfiguredTest {
 
 	@Test
 	public void testDualOverwatchLog() {
+		BattleConfiguration config = new BattleConfiguration();
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition player1Pos = new GridPosition(1, 1);
 		GridPosition player2Pos = new GridPosition(0, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-		AgentState player1State = AgentStateFactory.newBattleAgentState(Team.PLAYER, player1Pos, 3, 5, 2, 5, 65, 0);
-		player1State.weapons.add(new Pistol());
+		AgentStateFactory factory = new AgentStateFactory(config);
+		AgentState player1State = factory.newBattleAgentState(Team.PLAYER, player1Pos, 3, 5, 2, 5, 65, 0);
+		player1State.weapons.add(new Pistol(config));
 		map.addAgent(player1State);
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
-		AgentState player2State = AgentStateFactory.newBattleAgentState(Team.PLAYER, player2Pos, 3, 5, 2, 5, 65, 0);
-		player2State.weapons.add(new Pistol());
+		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		AgentState player2State = factory.newBattleAgentState(Team.PLAYER, player2Pos, 3, 5, 2, 5, 65, 0);
+		player2State.weapons.add(new Pistol(config));
 		map.addAgent(player2State);
 		// Enemy needs more HP to more accurately test damage
-		map.addAgent(AgentStateFactory.newBattleAgentState(Team.ENEMY, enemyPos, 10, 5, 2, 5, 65, 0));
-		BattleController battle = new BattleController(map);
+		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 10, 5, 2, 5, 65, 0));
+		BattleController battle = new BattleController(map, config);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);
 		Agent player1 = map.getAgentAtPos(player1Pos);

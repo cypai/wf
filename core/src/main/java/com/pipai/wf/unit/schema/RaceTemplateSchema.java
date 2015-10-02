@@ -2,6 +2,7 @@ package com.pipai.wf.unit.schema;
 
 import java.util.ArrayList;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.LeatherArmor;
 import com.pipai.wf.battle.weapon.Bow;
@@ -62,15 +63,15 @@ public class RaceTemplateSchema implements UnitSchema {
 	}
 
 	@Override
-	public ArrayList<Weapon> weapons() {
+	public ArrayList<Weapon> weapons(BattleConfiguration config) {
 		ArrayList<Weapon> l = new ArrayList<>();
 		if (race == Race.FAIRY) {
-			l.add(new Bow());
+			l.add(new Bow(config));
 		} else {
-			l.add(new Pistol());
+			l.add(new Pistol(config));
 		}
 		if (abilities().hasAbility(FireActualizationAbility.class)) {
-			l.add(new InnateCasting());
+			l.add(new InnateCasting(config));
 		}
 		return l;
 	}

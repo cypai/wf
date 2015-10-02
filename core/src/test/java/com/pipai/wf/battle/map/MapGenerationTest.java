@@ -1,13 +1,11 @@
-package com.pipai.wf.test.battle;
+package com.pipai.wf.battle.map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.MapString;
-import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.map.Direction;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class MapGenerationTest {
@@ -28,15 +26,15 @@ public class MapGenerationTest {
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
-		//Testing cell solids
+		// Testing cell solids
 		assertTrue(map.getCell(new GridPosition(0, 0)).isEmpty());
 		assertTrue(map.getCell(new GridPosition(1, 0)).isEmpty());
 		assertTrue(map.getCell(new GridPosition(2, 0)).isEmpty());
 		assertTrue(map.getCell(new GridPosition(0, 1)).isEmpty());
 		assertFalse(map.getCell(new GridPosition(1, 1)).isEmpty());
 		assertFalse(map.getCell(new GridPosition(2, 1)).isEmpty());
-		
-		//Testing traversable
+
+		// Testing traversable
 		GridPosition checkPos = new GridPosition(1, 0);
 		assertTrue(map.getCell(checkPos).isTraversable(Direction.E));
 		assertTrue(map.getCell(checkPos).isTraversable(Direction.W));

@@ -1,5 +1,6 @@
 package com.pipai.wf.battle.ai;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.log.BattleEvent;
@@ -7,15 +8,29 @@ import com.pipai.wf.battle.map.BattleMap;
 
 public abstract class AI implements BattleObserver {
 
-	protected BattleController battleController;
-	protected BattleMap map;
-	protected boolean done;
+	private BattleController battleController;
+	private BattleConfiguration config;
+	private BattleMap map;
+	private boolean done;
 
 	public AI(BattleController battleController) {
 		this.battleController = battleController;
 		this.battleController.registerObserver(this);
-		this.map = battleController.getBattleMap();
+		config = battleController.getBattleConfiguration();
+		map = battleController.getBattleMap();
 		done = false;
+	}
+
+	public final BattleController getBattleController() {
+		return battleController;
+	}
+
+	public final BattleConfiguration getBattleConfiguration() {
+		return config;
+	}
+
+	public final BattleMap getBattleMap() {
+		return map;
 	}
 
 	/**
@@ -26,7 +41,8 @@ public abstract class AI implements BattleObserver {
 		startTurnInit();
 	}
 
-	protected void startTurnInit() {}
+	protected void startTurnInit() {
+	}
 
 	/**
 	 * Called when the AI has finished performing all of its moves.

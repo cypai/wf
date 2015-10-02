@@ -2,6 +2,7 @@ package com.pipai.wf.battle.action;
 
 import java.util.LinkedList;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMapCell;
@@ -25,7 +26,7 @@ public class MoveAction extends AlterStateAction {
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
 		if (useAP > getPerformer().getAP()) {
 			throw new IllegalActionException("AP required for movement greater than current AP");
 		}

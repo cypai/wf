@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.WFGame;
+import com.pipai.wf.battle.Battle;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.Team;
@@ -34,7 +35,6 @@ import com.pipai.wf.battle.ai.AI;
 import com.pipai.wf.battle.ai.AIMoveRunnable;
 import com.pipai.wf.battle.ai.TopModularAI;
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.battle.spell.FireballSpell;
@@ -95,7 +95,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 	private AnchoredCamera camera;
 	private OrthographicCamera overlayCamera, orthoCamera;
 	private RayMapper rayMapper;
-	private BattleController battle;
+	private BattleController battleController;
 	private HashMap<Agent, AgentGuiObject> agentMap;
 	private ArrayList<AgentGuiObject> agentList;
 	private LinkedList<AgentGuiObject> selectableAgentOrderedList, targetAgentList;
@@ -117,7 +117,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 	private AnimationController animationController;
 	private FogOfWar fogOfWar;
 
-	public BattleGui(WFGame game, BattleMap map) {
+	public BattleGui(WFGame game, Battle battle) {
 		super(game);
 		camera = new AnchoredCamera(this.getScreenWidth(), this.getScreenHeight());
 		overlayCamera = new OrthographicCamera();
@@ -125,9 +125,9 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 		overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
 		orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
 		rayMapper = new RayMapper(camera.getCamera());
-		this.battle = new BattleController(map);
-		this.battle.registerObserver(this);
-		this.ai = new TopModularAI(battle);
+		this.battleController = battle.getBattleController();
+		this.battleController.registerObserver(this);
+		this.ai = new TopModularAI(battleController);
 		this.aiTurn = false;
 		this.mode = Mode.MOVE;
 		this.renderables = new ArrayList<GuiRenderable>();
@@ -145,7 +145,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 		this.agentMap = new HashMap<Agent, AgentGuiObject>();
 		this.agentList = new ArrayList<AgentGuiObject>();
 		this.selectableAgentOrderedList = new LinkedList<AgentGuiObject>();
-		for (Agent agent : this.battle.getBattleMap().getAgents()) {
+		for (Agent agent : this.battleController.getBattleMap().getAgents()) {
 			AgentGuiObject a = new AgentGuiObject(this, agent);
 			this.agentMap.put(agent, a);
 			this.agentList.add(a);
@@ -155,9 +155,9 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 			this.createInstance(a);
 		}
 		this.batch.set3DCamera(this.camera.getCamera());
-		this.fogOfWar = new FogOfWar(map, this.selectableAgentOrderedList);
+		this.fogOfWar = new FogOfWar(battle.getBattleMap(), this.selectableAgentOrderedList);
 		// this.fogOfWar.fullScan();
-		this.terrainRenderer = new BattleTerrainRenderer(this, map, fogOfWar);
+		this.terrainRenderer = new BattleTerrainRenderer(this, battle.getBattleMap(), fogOfWar);
 		this.createInstance(this.terrainRenderer);
 		this.generateOverlays();
 		this.animationController = new AnimationController(this);
@@ -295,7 +295,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 	public void updatePaths() {
 		if (selectedAgent != null) {
 			Agent a = selectedAgent.getAgent();
-			MapGraph graph = new MapGraph(this.battle.getBattleMap(), a.getPosition(), a.getEffectiveMobility(), a.getAP(), a.getMaxAP());
+			MapGraph graph = new MapGraph(this.battleController.getBattleMap(), a.getPosition(), a.getEffectiveMobility(), a.getAP(), a.getMaxAP());
 			this.selectedMapGraph = graph;
 		}
 	}
@@ -312,7 +312,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 	}
 
 	private void performVictoryCheck() {
-		if (this.battle.battleResult() != BattleController.Result.NONE) {
+		if (this.battleController.battleResult() != BattleController.Result.NONE) {
 			this.game.setScreen(new BattleResultsGui(this.game));
 			this.dispose();
 			return;
@@ -324,7 +324,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 		this.mode = Mode.AI;
 		this.aiTurn = true;
 		this.aiMoveWait = 0;
-		this.battle.endTurn();
+		this.battleController.endTurn();
 		this.ai.startTurn();
 	}
 
@@ -338,7 +338,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 
 	private void populateSelectableAgentList() {
 		this.selectableAgentOrderedList.clear();
-		for (Agent agent : this.battle.getBattleMap().getAgents()) {
+		for (Agent agent : this.battleController.getBattleMap().getAgents()) {
 			if (agent.getTeam() == Team.PLAYER && agent.getAP() > 0 && !agent.isKO()) {
 				this.selectableAgentOrderedList.add(this.agentMap.get(agent));
 			}
@@ -364,7 +364,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 				}
 			}
 			try {
-				this.battle.performAction(atk);
+				this.battleController.performAction(atk);
 			} catch (IllegalActionException e) {
 				logger.error("Illegal move: " + e.getMessage());
 			}
@@ -379,7 +379,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 				MoveAction move = new MoveAction(selectedAgent.getAgent(), path, useAP);
 				this.terrainRenderer.clearShadedTiles();
 				try {
-					this.battle.performAction(move);
+					this.battleController.performAction(move);
 				} catch (IllegalActionException e) {
 					logger.error("IllegalMoveException detected: " + e.getMessage());
 				}
@@ -682,7 +682,7 @@ public class BattleGui extends Gui implements BattleObserver, AnimationControlle
 		if (action != null) {
 			try {
 				this.mode = Mode.PRE_ANIMATION;
-				this.battle.performAction(action);
+				this.battleController.performAction(action);
 			} catch (IllegalActionException e) {
 				logger.error("Illegal move: " + e.getMessage());
 				this.mode = Mode.MOVE;

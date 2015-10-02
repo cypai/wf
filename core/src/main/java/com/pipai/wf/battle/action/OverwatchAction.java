@@ -1,5 +1,6 @@
 package com.pipai.wf.battle.action;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.misc.OverwatchHelper;
@@ -20,7 +21,7 @@ public class OverwatchAction extends AlterStateAction {
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
 		Agent performer = getPerformer();
 		if (performer.getCurrentWeapon() == null) {
 			throw new IllegalActionException("Not currently wielding a weapon");

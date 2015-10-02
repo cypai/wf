@@ -1,4 +1,4 @@
-package com.pipai.wf.test.battle;
+package com.pipai.wf.unit.ability;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -9,10 +9,6 @@ import org.junit.Test;
 
 import com.pipai.wf.battle.spell.FireballSpell;
 import com.pipai.wf.battle.spell.Spell;
-import com.pipai.wf.unit.ability.Ability;
-import com.pipai.wf.unit.ability.AbilityList;
-import com.pipai.wf.unit.ability.FireballAbility;
-import com.pipai.wf.unit.ability.RegenerationAbility;
 
 public class AbilityListTest {
 

@@ -1,10 +1,12 @@
 package com.pipai.wf.battle.agent;
 
 import java.util.ArrayList;
+
+import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.NoArmor;
-import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.unit.ability.Ability;
@@ -23,11 +25,17 @@ public class AgentState {
 	public ArrayList<Weapon> weapons;
 	public Armor armor;
 	public String name;
+	private final BattleConfiguration config;
 
-	public AgentState() {
+	public AgentState(BattleConfiguration config) {
+		this.config = config;
 		abilities = new AbilityList();
 		weapons = new ArrayList<Weapon>();
 		armor = new NoArmor();
+	}
+
+	public BattleConfiguration getBattleConfiguration() {
+		return config;
 	}
 
 	public void addAbilities(AbilityList abilityList) {
@@ -66,7 +74,8 @@ public class AgentState {
 	}
 
 	public AgentState statsOnlyCopy() {
-		return AgentStateFactory.statsOnlyState(maxHP, maxMP, maxAP, mobility, aim, defense);
+		AgentStateFactory factory = new AgentStateFactory(config);
+		return factory.statsOnlyState(maxHP, maxMP, maxAP, mobility, aim, defense);
 	}
 
 }

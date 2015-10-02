@@ -14,19 +14,19 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.exception.IllegalActionException;
-import com.pipai.wf.util.UtilFunctions;
+import com.pipai.wf.util.Rng;
 
 public class RandomAI extends AI {
 
 	private static final Logger logger = LoggerFactory.getLogger(RandomAI.class);
 
-	protected LinkedList<Agent> enemyAgents, playerAgents, toAct;
+	private LinkedList<Agent> enemyAgents, playerAgents, toAct;
 
 	public RandomAI(BattleController battleController) {
 		super(battleController);
 		this.enemyAgents = new LinkedList<Agent>();
 		this.playerAgents = new LinkedList<Agent>();
-		for (Agent a : this.map.getAgents()) {
+		for (Agent a : getBattleMap().getAgents()) {
 			if (a.getTeam() == Team.ENEMY) {
 				this.enemyAgents.add(a);
 			} else if (a.getTeam() == Team.PLAYER) {
@@ -55,7 +55,7 @@ public class RandomAI extends AI {
 		if (a.getAP() > 0) {
 			Action act = generateRandomAction(a);
 			try {
-				this.battleController.performAction(act);
+				getBattleController().performAction(act);
 			} catch (IllegalActionException e) {
 				logger.error("AI tried to perform illegal move: " + e.getMessage());
 			}
@@ -75,14 +75,15 @@ public class RandomAI extends AI {
 	}
 
 	protected Action generateRandomAction(Agent a) {
+		Rng rng = getBattleConfiguration().getRng();
 		ArrayList<Action> list = ActionListGenerator.generateWeaponActionList(a);
-		int r = UtilFunctions.rng.nextInt(list.size() * 2 + 1);
+		int r = rng.nextInt(list.size() * 2 + 1);
 		if (r < list.size()) {
 			return list.get(r);
 		} else {
-			MapGraph graph = new MapGraph(this.map, a.getPosition(), a.getEffectiveMobility(), 1, 2);
+			MapGraph graph = new MapGraph(getBattleMap(), a.getPosition(), a.getEffectiveMobility(), 1, 2);
 			ArrayList<GridPosition> potentialTiles = graph.getMovableCellPositions(1);
-			GridPosition destination = potentialTiles.get(UtilFunctions.rng.nextInt(potentialTiles.size()));
+			GridPosition destination = potentialTiles.get(rng.nextInt(potentialTiles.size()));
 			LinkedList<GridPosition> path = graph.getPath(destination);
 			return new MoveAction(a, path, 1);
 		}

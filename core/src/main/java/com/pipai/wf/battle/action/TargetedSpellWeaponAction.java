@@ -1,7 +1,7 @@
 package com.pipai.wf.battle.action;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.SpellDamageFunction;
@@ -60,7 +60,7 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapab
 	}
 
 	@Override
-	public void performOnOverwatch(BattleEvent parent) throws IllegalActionException {
+	public void performOnOverwatch(BattleEvent parent, BattleConfiguration config) throws IllegalActionException {
 		Agent a = getPerformer();
 		Agent target = getTarget();
 		SpellWeapon w = getWeapon();
@@ -74,7 +74,7 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapab
 		if (!readiedSpell.canTargetAgent()) {
 			throw new IllegalActionException("Cannot target with " + readiedSpell.name());
 		}
-		DamageResult result = DamageCalculator.rollDamageGeneral(this, new SpellDamageFunction(spell), 1);
+		DamageResult result = config.getDamageCalculator().rollDamageGeneral(this, new SpellDamageFunction(spell), 1);
 		a.setAP(0);
 		w.cast();
 		target.takeDamage(result.damage);
@@ -82,7 +82,7 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapab
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
 		Agent a = getPerformer();
 		Agent target = getTarget();
 		SpellWeapon w = getWeapon();
@@ -96,7 +96,7 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapab
 		if (!readiedSpell.canTargetAgent()) {
 			throw new IllegalActionException("Cannot target with " + readiedSpell.name());
 		}
-		DamageResult result = DamageCalculator.rollDamageGeneral(this, new SpellDamageFunction(spell), 0);
+		DamageResult result = config.getDamageCalculator().rollDamageGeneral(this, new SpellDamageFunction(spell), 0);
 		a.setAP(0);
 		w.cast();
 		target.takeDamage(result.damage);

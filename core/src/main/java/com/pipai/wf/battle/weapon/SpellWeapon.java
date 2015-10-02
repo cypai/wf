@@ -1,13 +1,14 @@
 package com.pipai.wf.battle.weapon;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.spell.Spell;
 
 public abstract class SpellWeapon extends Weapon {
 
 	private Spell spell;
 
-	public SpellWeapon() {
-		currentAmmo = 0;
+	public SpellWeapon(BattleConfiguration config) {
+		super(0, config);
 	}
 
 	public void ready(Spell spell) {

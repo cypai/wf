@@ -21,7 +21,7 @@ public class TopModularAI extends AI {
 		super(battleController);
 		this.enemyAgents = new ArrayList<Agent>();
 		this.playerAgents = new ArrayList<Agent>();
-		for (Agent a : this.map.getAgents()) {
+		for (Agent a : getBattleMap().getAgents()) {
 			if (a.getTeam() == Team.ENEMY) {
 				this.enemyAgents.add(a);
 			} else if (a.getTeam() == Team.PLAYER) {
@@ -34,7 +34,7 @@ public class TopModularAI extends AI {
 		this.ais = new ArrayList<ModularAI>();
 		for (Agent a : this.enemyAgents) {
 			if (!a.isKO() && a.getAP() > 0) {
-				ais.add(new GeneralModularAI(this.map, a));
+				ais.add(new GeneralModularAI(getBattleMap(), a));
 			}
 		}
 	}
@@ -52,7 +52,7 @@ public class TopModularAI extends AI {
 			best = as.compareAndReturnBetter(best);
 		}
 		try {
-			battleController.performAction(best.action);
+			getBattleController().performAction(best.action);
 		} catch (IllegalActionException e) {
 			logger.error("AI tried to perform illegal move: " + e.getMessage());
 		}

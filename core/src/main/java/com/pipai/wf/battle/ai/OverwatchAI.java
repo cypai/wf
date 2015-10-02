@@ -20,7 +20,7 @@ public class OverwatchAI extends AI {
 	public OverwatchAI(BattleController battleController) {
 		super(battleController);
 		this.enemyAgents = new LinkedList<Agent>();
-		for (Agent a : this.map.getAgents()) {
+		for (Agent a : getBattleMap().getAgents()) {
 			if (a.getTeam() == Team.ENEMY) {
 				this.enemyAgents.add(a);
 			}
@@ -47,7 +47,7 @@ public class OverwatchAI extends AI {
 		if (a.getAP() > 0) {
 			OverwatchAction ow = new OverwatchAction(a);
 			try {
-				this.battleController.performAction(ow);
+				getBattleController().performAction(ow);
 			} catch (IllegalActionException e) {
 				logger.error("AI tried to perform illegal move: " + e.getMessage());
 			}

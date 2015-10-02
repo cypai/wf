@@ -1,18 +1,24 @@
 package com.pipai.wf.battle.weapon;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.action.TargetedActionable;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.config.WFConfig;
 import com.pipai.wf.math.LinearFunction;
 import com.pipai.wf.unit.ability.QuickReloadAbility;
 
 public class Bow extends Weapon implements TargetedActionable {
 
-	public Bow() {
-		super();
-		grantedAbilities.add(new QuickReloadAbility());
+	public static final int BASE_AMMO = 3;
+
+	public Bow(BattleConfiguration config) {
+		super(BASE_AMMO, config);
+		init();
+	}
+
+	private final void init() {
+		addGrantedAbility(new QuickReloadAbility());
 	}
 
 	@Override
@@ -22,7 +28,7 @@ public class Bow extends Weapon implements TargetedActionable {
 
 	@Override
 	public int rangeAimModifier(float distance) {
-		float range = WFConfig.battleProps().sightRange();
+		float range = getConfig().sightRange();
 		int slightBonusMax = 5;
 		float slightBonusRange = range * 0.7f;
 		int betterBonusMax = 15;
@@ -66,7 +72,7 @@ public class Bow extends Weapon implements TargetedActionable {
 
 	@Override
 	public int baseAmmoCapacity() {
-		return 3;
+		return BASE_AMMO;
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package com.pipai.wf.battle.action;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class SwitchWeaponAction extends AlterStateAction {
@@ -15,8 +17,9 @@ public class SwitchWeaponAction extends AlterStateAction {
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
 		getPerformer().switchWeapon();
+		log(BattleEvent.switchWeaponEvent(getPerformer()));
 	}
 
 	@Override
