@@ -108,13 +108,17 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 					animateNextMoveInSeq();
 				}
 			}
+		} else {
+			if (owAniHandler != null) {
+				owAniHandler.update();
+			}
 		}
 	}
 
 	private void handleOWActivation() {
 		BattleEvent ow = currentOWChain.pollFirst();
 		owAniHandler = new BulletAttackAnimationHandler(getGui(), ow);
-		controller.startAnimation(owAniHandler);
+		owAniHandler.begin(this);
 		go = false;
 	}
 
