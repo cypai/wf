@@ -7,8 +7,10 @@ import com.pipai.wf.battle.log.BattleEventLoggable;
 import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.misc.HasDescription;
+import com.pipai.wf.misc.HasName;
 
-public abstract class Action implements BattleEventLoggable {
+public abstract class Action implements HasName, HasDescription, BattleEventLoggable {
 
 	private BattleLog log;
 	private Agent performerAgent;
@@ -44,10 +46,6 @@ public abstract class Action implements BattleEventLoggable {
 	 * Returns the minimum AP required to perform the action
 	 */
 	public abstract int getAPRequired();
-
-	public abstract String name();
-
-	public abstract String description();
 
 	@Override
 	public final void register(BattleLog log) {

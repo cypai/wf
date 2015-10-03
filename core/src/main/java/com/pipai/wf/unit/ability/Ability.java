@@ -3,8 +3,10 @@ package com.pipai.wf.unit.ability;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.exception.NoRegisteredAgentException;
+import com.pipai.wf.misc.HasDescription;
+import com.pipai.wf.misc.HasName;
 
-public abstract class Ability {
+public abstract class Ability implements HasName, HasDescription {
 
 	private int cooldown;
 	private int level;
@@ -13,10 +15,6 @@ public abstract class Ability {
 	public Ability(int level) {
 		this.level = level;
 	}
-
-	public abstract String name();
-
-	public abstract String description();
 
 	@Override
 	public abstract Ability clone();

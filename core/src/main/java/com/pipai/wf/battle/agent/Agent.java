@@ -26,11 +26,12 @@ import com.pipai.wf.battle.vision.VisionCalculator;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.exception.NoRegisteredAgentException;
+import com.pipai.wf.misc.HasName;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.util.UtilFunctions;
 
-public class Agent {
+public class Agent implements HasName {
 
 	private static final Logger logger = LoggerFactory.getLogger(Agent.class);
 
@@ -217,7 +218,8 @@ public class Agent {
 		return null;
 	}
 
-	public String getName() {
+	@Override
+	public String name() {
 		return name;
 	}
 

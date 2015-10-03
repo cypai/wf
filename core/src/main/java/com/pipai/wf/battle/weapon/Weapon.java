@@ -1,10 +1,11 @@
 package com.pipai.wf.battle.weapon;
 
 import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.misc.HasName;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
 
-public abstract class Weapon {
+public abstract class Weapon implements HasName {
 
 	private int currentAmmo;
 	private AbilityList grantedAbilities;
@@ -47,8 +48,6 @@ public abstract class Weapon {
 	public void reload() {
 		currentAmmo = baseAmmoCapacity();
 	}
-
-	public abstract String name();
 
 	public final AbilityList getGrantedAbilities() {
 		return grantedAbilities;

@@ -1,9 +1,8 @@
 package com.pipai.wf.battle.item;
 
-public abstract class Item {
+import com.pipai.wf.misc.HasDescription;
+import com.pipai.wf.misc.HasName;
 
-	public abstract String name();
-
-	public abstract String description();
+public abstract class Item implements HasName, HasDescription {
 
 }
