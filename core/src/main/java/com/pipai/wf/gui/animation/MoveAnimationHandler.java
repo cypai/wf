@@ -17,7 +17,6 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	private LinkedList<BattleEvent> chainEvents;
 	private boolean noCameraFollow;
 
-	private AnimationController controller;
 	private BulletAttackAnimationHandler owAniHandler;
 
 	// Animation variables
@@ -33,7 +32,6 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 		path = moveEvent.getPath();
 		moveSeq = vectorizePath(path);
 		chainEvents = moveEvent.getChainEvents();
-		this.controller = controller;
 		this.noCameraFollow = noCameraFollow;
 		go = false;
 		cameraDone = false;

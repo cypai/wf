@@ -3,13 +3,11 @@ package com.pipai.wf.battle.vision;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapString;
@@ -124,7 +122,6 @@ public class VisionCalculatorLineOfSightTest {
 		String rawMapString = "2 4\n"
 				+ "s 2 0";
 
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		BattleMap map = null;
 		try {
 			map = new BattleMap(new MapString(rawMapString));

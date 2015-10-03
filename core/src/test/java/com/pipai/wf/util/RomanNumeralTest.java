@@ -4,8 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.pipai.wf.util.RomanNumerals;
-
 public class RomanNumeralTest {
 
 	@Test
