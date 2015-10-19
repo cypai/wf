@@ -22,7 +22,7 @@ import com.pipai.wf.unit.schema.RaceTemplateSchema;
 import com.pipai.wf.unit.schema.TidusSchema;
 import com.pipai.wf.unit.schema.UnitSchema;
 
-public class PartyInfoGui extends Gui {
+public final class PartyInfoGui extends Gui {
 
 	private OrthographicCamera camera;
 	private ArrayList<GuiRenderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;

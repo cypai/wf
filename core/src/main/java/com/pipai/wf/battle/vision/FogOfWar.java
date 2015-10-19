@@ -17,7 +17,7 @@ import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
-public class FogOfWar {
+public final class FogOfWar {
 
 	public static final Color NEVER_SEEN_COLOR = Color.BLACK;
 	public static final Color SEEN_COLOR = Color.GRAY;

@@ -142,15 +142,14 @@ public class MapGraph {
 		this.ap = ap;
 		this.apmax = apMax;
 		this.reachableLists = new ArrayList<ArrayList<GridPosition>>();
-		if (ap == 0) {
-			return;
+		if (ap > 0) {
+			for (int i = 0; i < ap; i++) {
+				this.reachableLists.add(new ArrayList<GridPosition>());
+			}
+			calcApMoveBounds(mobility, ap, apMax);
+			initialize(map, start);
+			runDijkstra(this.moveBounds[this.moveBounds.length - 1], ap, apMax);
 		}
-		for (int i = 0; i < ap; i++) {
-			this.reachableLists.add(new ArrayList<GridPosition>());
-		}
-		calcApMoveBounds(mobility, ap, apMax);
-		initialize(map, start);
-		runDijkstra(this.moveBounds[this.moveBounds.length - 1], ap, apMax);
 	}
 
 	private void initialize(BattleMap map, GridPosition rootPos) {

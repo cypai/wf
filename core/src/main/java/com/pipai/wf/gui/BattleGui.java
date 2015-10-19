@@ -72,7 +72,7 @@ import com.pipai.wf.util.RayMapper;
  * Simple 2D GUI for rendering a BattleMap
  */
 
-public class BattleGui extends Gui implements BattleObserver, AnimationControllerObserver {
+public final class BattleGui extends Gui implements BattleObserver, AnimationControllerObserver {
 
 	private static final Logger logger = LoggerFactory.getLogger(BattleGui.class);
 
