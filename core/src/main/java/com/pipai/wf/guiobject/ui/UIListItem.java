@@ -29,7 +29,7 @@ public class UIListItem extends GuiObject implements GuiRenderable, LeftClickabl
 	}
 
 	@Override
-	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
+	public void onLeftClick(int gameX, int gameY) {
 
 	}
 

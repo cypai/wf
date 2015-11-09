@@ -52,6 +52,11 @@ public abstract class Gui implements Screen, InputProcessor {
 		instanceIndex.remove(id);
 	}
 
+	public void switchGui(Gui gui) {
+		dispose();
+		game.setScreen(gui);
+	}
+
 	public boolean checkKey(int keycode) {
 		if (heldKeys.containsKey(keycode)) {
 			return heldKeys.get(keycode);

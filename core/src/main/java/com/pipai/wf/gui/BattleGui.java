@@ -383,7 +383,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		int gameY = (int) gamePos.y;
 		if (mode != Mode.ANIMATION) {
 			for (LeftClickable o : overlayLeftClickables) {
-				o.onLeftClick(screenX, screenY, gameX, gameY);
+				o.onLeftClick(gameX, gameY);
 			}
 			for (LeftClickable3D o : leftClickables.getAll()) {
 				o.onLeftClick(ray);
