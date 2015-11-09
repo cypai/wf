@@ -13,7 +13,7 @@ public class ActionScore {
 	}
 
 	public ActionScore compareAndReturnBetter(ActionScore other) {
-		if (other == null || this.score >= other.score) {
+		if (other == null || score >= other.score) {
 			return this;
 		} else {
 			return other;

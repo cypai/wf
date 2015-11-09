@@ -20,7 +20,7 @@ import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
 public class WeaponIndicator extends GuiObject implements GuiRenderable {
-	
+
 	protected BattleGui gui;
 	private float x, y, width, height;
 	private ArrayList<Weapon> weapons;
@@ -34,7 +34,7 @@ public class WeaponIndicator extends GuiObject implements GuiRenderable {
 		this.width = width;
 		this.height = height;
 	}
-	
+
 	public void updateToAgent(AgentGuiObject a) {
 		weapons = a.getAgent().getWeapons();
 		agent = a;

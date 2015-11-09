@@ -49,7 +49,7 @@ public abstract class AI implements BattleObserver {
 	 */
 	protected void endTurn() {
 		done = true;
-		this.battleController.endTurn();
+		battleController.endTurn();
 	}
 
 	public final boolean isDone() {

@@ -22,13 +22,13 @@ public class Wand extends SpellWeapon {
 	@Override
 	public void ready(Spell spell) {
 		super.ready(spell);
-		this.reload();
+		reload();
 	}
 
 	@Override
 	public void cast() {
 		super.cast();
-		this.expendAmmo(1);
+		expendAmmo(1);
 	}
 
 	@Override

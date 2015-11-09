@@ -14,8 +14,8 @@ public class SuppressionAnimationHandler extends AnimationHandler implements Cam
 
 	public SuppressionAnimationHandler(BattleGui gui, BattleEvent event) {
 		super(gui);
-		this.performer = getGui().getAgentGUIObject(event.getPerformer());
-		this.target = getGui().getAgentGUIObject(event.getTarget());
+		performer = getGui().getAgentGUIObject(event.getPerformer());
+		target = getGui().getAgentGUIObject(event.getTarget());
 		alarm = new Alarm();
 	}
 

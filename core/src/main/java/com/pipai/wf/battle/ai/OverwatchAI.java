@@ -19,31 +19,31 @@ public class OverwatchAI extends AI {
 
 	public OverwatchAI(BattleController battleController) {
 		super(battleController);
-		this.enemyAgents = new LinkedList<Agent>();
+		enemyAgents = new LinkedList<Agent>();
 		for (Agent a : getBattleMap().getAgents()) {
 			if (a.getTeam() == Team.ENEMY) {
-				this.enemyAgents.add(a);
+				enemyAgents.add(a);
 			}
 		}
 	}
 
 	@Override
 	protected void startTurnInit() {
-		this.toAct = new LinkedList<Agent>();
-		for (Agent a : this.enemyAgents) {
+		toAct = new LinkedList<Agent>();
+		for (Agent a : enemyAgents) {
 			if (!a.isKO()) {
-				this.toAct.add(a);
+				toAct.add(a);
 			}
 		}
 	}
 
 	@Override
 	public void performMove() {
-		if (this.toAct.isEmpty()) {
-			this.endTurn();
+		if (toAct.isEmpty()) {
+			endTurn();
 			return;
 		}
-		Agent a = this.toAct.poll();
+		Agent a = toAct.poll();
 		if (a.getAP() > 0) {
 			OverwatchAction ow = new OverwatchAction(a);
 			try {

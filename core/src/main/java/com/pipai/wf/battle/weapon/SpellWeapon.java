@@ -16,11 +16,11 @@ public abstract class SpellWeapon extends Weapon {
 	}
 
 	public void cast() {
-		this.spell = null;
+		spell = null;
 	}
 
 	public Spell getSpell() {
-		return this.spell;
+		return spell;
 	}
 
 	@Override

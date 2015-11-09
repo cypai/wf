@@ -9,7 +9,7 @@ import static org.mockito.Mockito.when;
 import java.util.LinkedList;
 
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.Matchers;
 
 import com.pipai.libgdx.test.GdxMockedTest;
 import com.pipai.wf.battle.BattleConfiguration;
@@ -41,9 +41,9 @@ public class CastFireballTest extends GdxMockedTest {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		DamageCalculator mockDamageCalculator = mock(DamageCalculator.class);
 		when(mockDamageCalculator.rollDamageGeneral(
-				Mockito.any(AccuracyPercentages.class),
-				Mockito.any(DamageFunction.class),
-				Mockito.anyInt())).thenReturn(new DamageResult(true, false, 1, 0));
+				Matchers.any(AccuracyPercentages.class),
+				Matchers.any(DamageFunction.class),
+				Matchers.anyInt())).thenReturn(new DamageResult(true, false, 1, 0));
 		when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
@@ -87,9 +87,9 @@ public class CastFireballTest extends GdxMockedTest {
 		when(mockConfig.sightRange()).thenReturn(17);
 		DamageCalculator mockDamageCalculator = mock(DamageCalculator.class);
 		when(mockDamageCalculator.rollDamageGeneral(
-				Mockito.any(AccuracyPercentages.class),
-				Mockito.any(DamageFunction.class),
-				Mockito.anyInt())).thenReturn(new DamageResult(false, false, 0, 0));
+				Matchers.any(AccuracyPercentages.class),
+				Matchers.any(DamageFunction.class),
+				Matchers.anyInt())).thenReturn(new DamageResult(false, false, 0, 0));
 		when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);

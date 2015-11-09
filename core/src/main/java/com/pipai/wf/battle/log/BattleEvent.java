@@ -101,92 +101,92 @@ public final class BattleEvent {
 		this.type = type;
 		this.performer = performer;
 		this.target = target;
-		this.chainedEvents = new LinkedList<BattleEvent>();
+		chainedEvents = new LinkedList<BattleEvent>();
 	}
 
 	public Team getTeam() {
-		return this.team;
+		return team;
 	}
 
 	public Type getType() {
-		return this.type;
+		return type;
 	}
 
 	public Agent getPerformer() {
-		return this.performer;
+		return performer;
 	}
 
 	public Agent getTarget() {
-		return this.target;
+		return target;
 	}
 
 	public LinkedList<GridPosition> getPath() {
-		return this.path;
+		return path;
 	}
 
 	public Weapon getWeapon() {
-		return this.wpn;
+		return wpn;
 	}
 
 	public String getActionName() {
-		return this.actionName;
+		return actionName;
 	}
 
 	public String getPreparedOWName() {
-		return this.actionName;
+		return actionName;
 	}
 
 	public TargetedWithAccuracyActionOWCapable getActivatedOWAction() {
-		return this.owActivatedAction;
+		return owActivatedAction;
 	}
 
 	public TargetedAction getTargetedAction() {
-		return this.targetedAction;
+		return targetedAction;
 	}
 
 	public Spell getSpell() {
-		return this.spell;
+		return spell;
 	}
 
 	public DamageResult getDamageResult() {
-		return this.dmgResult;
+		return dmgResult;
 	}
 
 	public boolean isHit() {
-		return this.dmgResult.hit;
+		return dmgResult.hit;
 	}
 
 	public boolean isCrit() {
-		return this.dmgResult.crit;
+		return dmgResult.crit;
 	}
 
 	public int getDamage() {
-		return this.dmgResult.damage;
+		return dmgResult.damage;
 	}
 
 	public int getDamageReduction() {
-		return this.dmgResult.damageReduction;
+		return dmgResult.damageReduction;
 	}
 
 	public GridPosition getTargetTile() {
-		return this.targetTile;
+		return targetTile;
 	}
 
 	public boolean getQuickened() {
-		return this.quickenFlag;
+		return quickenFlag;
 	}
 
 	public int getNumChainEvents() {
-		return this.chainedEvents.size();
+		return chainedEvents.size();
 	}
 
 	@SuppressWarnings("unchecked")
 	public LinkedList<BattleEvent> getChainEvents() {
-		return (LinkedList<BattleEvent>) this.chainedEvents.clone();
+		return (LinkedList<BattleEvent>) chainedEvents.clone();
 	}
 
 	public void addChainEvent(BattleEvent event) {
-		this.chainedEvents.add(event);
+		chainedEvents.add(event);
 	}
 
 }

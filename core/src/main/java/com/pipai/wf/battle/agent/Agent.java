@@ -79,11 +79,11 @@ public class Agent implements HasName {
 	}
 
 	public BattleMap getBattleMap() {
-		return this.map;
+		return map;
 	}
 
 	public Team getTeam() {
-		return this.team;
+		return team;
 	}
 
 	public void setTeam(Team team) {
@@ -91,7 +91,7 @@ public class Agent implements HasName {
 	}
 
 	public int getAP() {
-		return this.ap;
+		return ap;
 	}
 
 	public void setAP(int ap) {
@@ -106,42 +106,42 @@ public class Agent implements HasName {
 	}
 
 	public int getMaxAP() {
-		return this.maxAP;
+		return maxAP;
 	}
 
 	public int getHP() {
-		return this.hp;
+		return hp;
 	}
 
 	public void setHP(int hp) {
 		this.hp = hp;
 		if (this.hp <= 0) {
 			this.hp = 0;
-			this.state = State.KO;
-			this.map.getCell(this.position).makeAgentInactive();
+			state = State.KO;
+			map.getCell(position).makeAgentInactive();
 		} else {
-			this.state = State.NEUTRAL;
+			state = State.NEUTRAL;
 		}
 	}
 
 	public void takeDamage(int amt) {
-		int pierceDmg = this.armor.takeDamage(amt);
-		this.setHP(this.getHP() - pierceDmg);
+		int pierceDmg = armor.takeDamage(amt);
+		setHP(getHP() - pierceDmg);
 	}
 
 	public void heal(int amt) {
-		this.hp += amt;
-		if (this.hp > this.maxHP) {
-			this.hp = this.maxHP;
+		hp += amt;
+		if (hp > maxHP) {
+			hp = maxHP;
 		}
 	}
 
 	public int getMaxHP() {
-		return this.maxHP;
+		return maxHP;
 	}
 
 	public int getMP() {
-		return this.mp;
+		return mp;
 	}
 
 	public void setMP(int mp) {
@@ -153,11 +153,11 @@ public class Agent implements HasName {
 	}
 
 	public int getMaxMP() {
-		return this.maxMP;
+		return maxMP;
 	}
 
 	public int getBaseMobility() {
-		return this.mobility;
+		return mobility;
 	}
 
 	public int getEffectiveMobility() {
@@ -165,40 +165,40 @@ public class Agent implements HasName {
 	}
 
 	public int getBaseAim() {
-		return this.aim;
+		return aim;
 	}
 
 	public Weapon getCurrentWeapon() {
-		if (this.weapons.size() == 0) {
+		if (weapons.size() == 0) {
 			return null;
 		}
-		return this.weapons.get(this.weaponIndex);
+		return weapons.get(weaponIndex);
 	}
 
 	public Armor getArmor() {
-		return this.armor;
+		return armor;
 	}
 
 	public boolean isKO() {
-		return this.state == State.KO;
+		return state == State.KO;
 	}
 
 	public boolean isOverwatching() {
-		return this.state == State.OVERWATCH;
+		return state == State.OVERWATCH;
 	}
 
 	public AbilityList getAbilities() {
-		AbilityList allAbilities = this.abilities.clone();
+		AbilityList allAbilities = abilities.clone();
 		allAbilities.add(getWeaponGrantedAbilities());
 		return allAbilities;
 	}
 
 	public AbilityList getInnateAbilities() {
-		return this.abilities;
+		return abilities;
 	}
 
 	public AbilityList getWeaponGrantedAbilities() {
-		if (this.getCurrentWeapon() != null) {
+		if (getCurrentWeapon() != null) {
 			return getCurrentWeapon().getGrantedAbilities();
 		}
 		return new AbilityList();
@@ -225,7 +225,7 @@ public class Agent implements HasName {
 
 	@SuppressWarnings("unchecked")
 	public ArrayList<Weapon> getWeapons() {
-		return (ArrayList<Weapon>) this.weapons.clone();
+		return (ArrayList<Weapon>) weapons.clone();
 	}
 
 	public ArrayList<Spell> getSpellList() {
@@ -247,13 +247,13 @@ public class Agent implements HasName {
 	}
 
 	public GridPosition getPosition() {
-		return this.position;
+		return position;
 	}
 
 	public void setPosition(GridPosition pos) {
-		this.map.getCell(this.position).removeAgent();
-		this.map.getCell(pos).setAgent(this);
-		this.position = pos;
+		map.getCell(position).removeAgent();
+		map.getCell(pos).setAgent(this);
+		position = pos;
 	}
 
 	public float getDistanceFrom(Agent other) {
@@ -262,16 +262,16 @@ public class Agent implements HasName {
 
 	public ArrayList<GridPosition> getPeekingSquares() {
 		ArrayList<GridPosition> l = new ArrayList<>();
-		l.add(this.getPosition());
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
-		ArrayList<Direction> coverDirs = coverSystem.getCoverDirections(this.getPosition());
+		l.add(getPosition());
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+		ArrayList<Direction> coverDirs = coverSystem.getCoverDirections(getPosition());
 		for (Direction coverDir : coverDirs) {
 			ArrayList<Direction> perpendicularDirs = Direction.getPerpendicular(coverDir);
 			for (Direction perpendicular : perpendicularDirs) {
-				BattleMapCell peekSquare = this.map.getCellInDirection(this.getPosition(), perpendicular);
+				BattleMapCell peekSquare = map.getCellInDirection(getPosition(), perpendicular);
 				if (peekSquare != null) {
 					GridPosition pos = peekSquare.getPosition();
-					BattleMapCell peekCoverSquare = this.map.getCellInDirection(pos, coverDir);
+					BattleMapCell peekCoverSquare = map.getCellInDirection(pos, coverDir);
 
 					if (peekSquare.isEmpty() && !peekCoverSquare.hasTileSightBlocker() && !l.contains(pos)) {
 						l.add(peekSquare.getPosition());
@@ -283,18 +283,18 @@ public class Agent implements HasName {
 	}
 
 	public CoverType getCoverType() {
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
-		return coverSystem.getCover(this.getPosition());
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+		return coverSystem.getCover(getPosition());
 	}
 
 	public boolean isOpen() {
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
-		return coverSystem.isOpen(this.getPosition());
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+		return coverSystem.isOpen(getPosition());
 	}
 
 	public boolean isFlanked() {
-		for (Agent a : this.enemiesInRange()) {
-			if (this.isFlankedBy(a)) {
+		for (Agent a : enemiesInRange()) {
+			if (isFlankedBy(a)) {
 				return true;
 			}
 		}
@@ -303,9 +303,9 @@ public class Agent implements HasName {
 
 	public boolean isFlankedBy(Agent other) {
 		ArrayList<GridPosition> otherPosList = other.getPeekingSquares();
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
 		for (GridPosition otherPos : otherPosList) {
-			if (coverSystem.isFlankedBy(this.getPosition(), otherPos)) {
+			if (coverSystem.isFlankedBy(getPosition(), otherPos)) {
 				return true;
 			}
 		}
@@ -322,13 +322,13 @@ public class Agent implements HasName {
 	}
 
 	protected int getDefense(GridPosition attackerPos) {
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(this.map);
-		int situationalDef = this.defense + coverSystem.getBestCoverAgainstAttack(this.getPosition(), attackerPos).getDefense();
+		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
+		int situationalDef = defense + coverSystem.getBestCoverAgainstAttack(getPosition(), attackerPos).getDefense();
 		return situationalDef;
 	}
 
 	public boolean canSee(Agent other) {
-		for (GridPosition peekSquare : this.getPeekingSquares()) {
+		for (GridPosition peekSquare : getPeekingSquares()) {
 			for (GridPosition otherPeekSquare : other.getPeekingSquares()) {
 				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < config.sightRange()) {
 					if (VisionCalculator.lineOfSight(map, peekSquare, otherPeekSquare)) {
@@ -346,8 +346,8 @@ public class Agent implements HasName {
 
 	public ArrayList<Agent> enemiesInRange() {
 		ArrayList<Agent> l = new ArrayList<>();
-		for (Agent a : this.map.getAgents()) {
-			if (a.team != this.team && !a.isKO() && this.canSee(a)) {
+		for (Agent a : map.getAgents()) {
+			if (a.team != team && !a.isKO() && canSee(a)) {
 				l.add(a);
 			}
 		}
@@ -356,10 +356,10 @@ public class Agent implements HasName {
 
 	public ArrayList<Agent> targetableEnemies() {
 		ArrayList<Agent> list = new ArrayList<>();
-		if (this.getCurrentWeapon().currentAmmo() == 0) {
+		if (getCurrentWeapon().currentAmmo() == 0) {
 			return list;
 		} else {
-			return this.enemiesInRange();
+			return enemiesInRange();
 		}
 	}
 
@@ -388,13 +388,13 @@ public class Agent implements HasName {
 	}
 
 	public void decrementCooldowns() {
-		for (Ability a : this.getInnateAbilities()) {
+		for (Ability a : getInnateAbilities()) {
 			if (a.isOnCooldown()) {
 				a.decrementCooldown();
 			}
 		}
 
-		for (Ability a : this.getWeaponGrantedAbilities()) {
+		for (Ability a : getWeaponGrantedAbilities()) {
 			if (a.isOnCooldown()) {
 				a.decrementCooldown();
 			}
@@ -409,20 +409,20 @@ public class Agent implements HasName {
 	}
 
 	public void overwatch(Class<? extends TargetedWithAccuracyActionOWCapable> attack) {
-		this.owContainer.prepareAction(attack);
-		this.state = State.OVERWATCH;
-		this.setAP(0);
+		owContainer.prepareAction(attack);
+		state = State.OVERWATCH;
+		setAP(0);
 	}
 
 	public void activateOverwatch(Agent other, BattleEvent activationLogEvent, GridPosition activatedTile) {
-		TargetedWithAccuracyActionOWCapable action = this.owContainer.generateAction(this, other);
+		TargetedWithAccuracyActionOWCapable action = owContainer.generateAction(this, other);
 		try {
 			other.setPosition(activatedTile);
 			action.performOnOverwatch(activationLogEvent, config);
-			this.owContainer.clear();
-			this.state = State.NEUTRAL;
-			if (this.getCurrentWeapon().needsAmmunition()) {
-				this.getCurrentWeapon().expendAmmo(1);
+			owContainer.clear();
+			state = State.NEUTRAL;
+			if (getCurrentWeapon().needsAmmunition()) {
+				getCurrentWeapon().expendAmmo(1);
 			}
 		} catch (IllegalActionException e) {
 			logger.error(e.getMessage());
@@ -430,7 +430,7 @@ public class Agent implements HasName {
 	}
 
 	public void suppressOther(Agent other) {
-		this.state = State.SUPPRESSING;
+		state = State.SUPPRESSING;
 		other.inflictStatus(new SuppressedStatusEffect(other));
 	}
 

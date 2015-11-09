@@ -41,11 +41,11 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 		this.agent = agent;
 		displayHP = agent.getHP();
 		displayArmorHP = agent.getArmor().getHP();
-		this.selected = false;
+		selected = false;
 		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
 		Vector2 xy = BattleTerrainRenderer.centerOfGridPos(agent.getPosition());
-		this.x = xy.x;
-		this.y = xy.y;
+		x = xy.x;
+		y = xy.y;
 		radius = SQUARE_SIZE / 2;
 		ko = false;
 		Pixmap pixmap = new Pixmap(SQUARE_SIZE, SQUARE_SIZE, Pixmap.Format.RGBA8888);
@@ -104,7 +104,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 	}
 
 	public Agent getAgent() {
-		return this.agent;
+		return agent;
 	}
 
 	public void select() {
@@ -175,10 +175,10 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 
 	public void onLeftClick(int screenX, int screenY, int gameX, int gameY) {
 		if (UtilFunctions.isInCircle(x, y, radius, gameX, gameY)) {
-			if (this.agent.getTeam() == Team.PLAYER) {
-				this.select();
+			if (agent.getTeam() == Team.PLAYER) {
+				select();
 			} else {
-				this.gui.switchTarget(this);
+				gui.switchTarget(this);
 			}
 		}
 	}
@@ -190,10 +190,10 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 		Vector3 endpoint = new Vector3();
 		ray.getEndPoint(endpoint, t);
 		if (UtilFunctions.isInCircle(x, y, radius, endpoint.x, endpoint.y)) {
-			if (this.agent.getTeam() == Team.PLAYER) {
-				this.select();
+			if (agent.getTeam() == Team.PLAYER) {
+				select();
 			} else {
-				this.gui.switchTarget(this);
+				gui.switchTarget(this);
 			}
 		}
 		return true;
@@ -205,8 +205,8 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 		Vector3 endpoint = new Vector3();
 		ray.getEndPoint(endpoint, t);
 		if (UtilFunctions.isInCircle(x, y, radius, endpoint.x, endpoint.y)) {
-			if (this.gui.getMode() == BattleGui.Mode.TARGET_SELECT && this == this.gui.getTarget()) {
-				this.gui.performAttackAction(this);
+			if (gui.getMode() == BattleGui.Mode.TARGET_SELECT && this == gui.getTarget()) {
+				gui.performAttackAction(this);
 			}
 		}
 		return true;

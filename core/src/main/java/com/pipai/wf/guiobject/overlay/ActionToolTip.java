@@ -60,8 +60,8 @@ public class ActionToolTip extends GuiObject implements GuiRenderable {
 		mode = Mode.ACCURACY_ACTION;
 		title = a.name();
 		description = a.description();
-		this.accuracy = a.toHit();
-		this.critProb = a.toCrit();
+		accuracy = a.toHit();
+		critProb = a.toCrit();
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class ActionToolTip extends GuiObject implements GuiRenderable {
 		f.setColor(Color.WHITE);
 		f.draw(spr, title, (x + width) / 2, y - f.getLineHeight(), 0, Align.center, true);
 		f.draw(spr, description, x, y - 2.5f * f.getLineHeight(), width - PADDING * 2, Align.center, true);
-		if (this.mode == Mode.ACCURACY_ACTION) {
+		if (mode == Mode.ACCURACY_ACTION) {
 			f.draw(spr, "Acc: " + String.valueOf(accuracy) + "%", x + PADDING, y - height + f.getLineHeight());
 			f.draw(spr, "Crit: " + String.valueOf(critProb) + "%", x + width - PADDING, y - height + f.getLineHeight(), 0, Align.right, true);
 		}

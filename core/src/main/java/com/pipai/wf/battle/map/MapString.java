@@ -22,26 +22,26 @@ public class MapString {
 	private ArrayList<AgentState> agentStateList;
 
 	public MapString(String mapString) throws BadStateStringException {
-		this.header = mapString.substring(0, mapString.indexOf("\n"));
-		this.map = mapString.substring(mapString.indexOf("\n") + 1);
-		String dimensions[] = this.header.split(" ");
-		this.m = Integer.parseInt(dimensions[0]);
-		this.n = Integer.parseInt(dimensions[1]);
-		this.parse();
+		header = mapString.substring(0, mapString.indexOf("\n"));
+		map = mapString.substring(mapString.indexOf("\n") + 1);
+		String dimensions[] = header.split(" ");
+		m = Integer.parseInt(dimensions[0]);
+		n = Integer.parseInt(dimensions[1]);
+		parse();
 	}
 
 	public MapString(int m, int n, String mapOnlyString) throws BadStateStringException {
-		this.header = Integer.toString(m) + " " + Integer.toString(n);
-		this.map = mapOnlyString;
+		header = Integer.toString(m) + " " + Integer.toString(n);
+		map = mapOnlyString;
 		this.m = m;
 		this.n = n;
-		this.parse();
+		parse();
 	}
 
 	public MapString(BattleMap map) {
-		this.m = map.getRows();
-		this.n = map.getCols();
-		this.header = Integer.toString(map.getRows()) + " " + Integer.toString(map.getCols());
+		m = map.getRows();
+		n = map.getCols();
+		header = Integer.toString(map.getRows()) + " " + Integer.toString(map.getCols());
 		this.map = "";
 		for (int x = 0; x < map.getCols(); x++) {
 			for (int y = 0; y < map.getRows(); y++) {
@@ -56,14 +56,14 @@ public class MapString {
 	}
 
 	private void parse() throws BadStateStringException {
-		this.solidPosList = new ArrayList<GridPosition>();
-		this.agentStateList = new ArrayList<AgentState>();
-		String lines[] = this.map.split("\n");
+		solidPosList = new ArrayList<GridPosition>();
+		agentStateList = new ArrayList<AgentState>();
+		String lines[] = map.split("\n");
 		for (String line : lines) {
 			String params[] = line.split(" ");
 			String type = params[0];
 			if (type.equals("s")) {
-				this.solidPosList.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
+				solidPosList.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
 			} else {
 				throw new BadStateStringException("Unknown line type");
 			}
@@ -71,24 +71,24 @@ public class MapString {
 	}
 
 	public int getRows() {
-		return this.m;
+		return m;
 	}
 
 	public int getCols() {
-		return this.n;
+		return n;
 	}
 
 	public ArrayList<GridPosition> getSolidPositions() {
-		return this.solidPosList;
+		return solidPosList;
 	}
 
 	public ArrayList<AgentState> getAgentStates() {
-		return this.agentStateList;
+		return agentStateList;
 	}
 
 	@Override
 	public String toString() {
-		return this.header + "\n" + this.map;
+		return header + "\n" + map;
 	}
 
 }

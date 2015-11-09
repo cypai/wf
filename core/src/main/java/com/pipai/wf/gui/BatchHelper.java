@@ -21,31 +21,31 @@ public class BatchHelper {
 		this.shape = shape;
 		this.model = model;
 		this.font = font;
-		this.decal = null;
+		decal = null;
 	}
 
 	public SpriteBatch getSpriteBatch() {
-		return this.spr;
+		return spr;
 	}
 
 	public ShapeRenderer getShapeRenderer() {
-		return this.shape;
+		return shape;
 	}
 
 	public ModelBatch getModelBatch() {
-		return this.model;
+		return model;
 	}
 
 	public BitmapFont getFont() {
-		return this.font;
+		return font;
 	}
 
 	public void set3DCamera(Camera cam) {
-		this.decal = new DecalBatch(new CameraGroupStrategy(cam));
+		decal = new DecalBatch(new CameraGroupStrategy(cam));
 	}
 
 	public DecalBatch getDecalBatch() {
-		return this.decal;
+		return decal;
 	}
 
 }

@@ -32,7 +32,7 @@ public final class PartyInfoGui extends Gui {
 	public PartyInfoGui(WFGame game) {
 		super(game);
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
+		camera.setToOrtho(false, getScreenWidth(), getScreenHeight());
 		renderables = new ArrayList<GuiRenderable>();
 		renderablesCreateBuffer = new ArrayList<GuiRenderable>();
 		renderablesDelBuffer = new ArrayList<GuiRenderable>();
@@ -48,7 +48,7 @@ public final class PartyInfoGui extends Gui {
 		for (UnitSchema us : partySchema) {
 			party.add(factory.createFromSchema(us));
 		}
-		this.createInstance(new PartyInfoList(this, party, 4, this.getScreenHeight() - 4, this.getScreenWidth() / 2, this.getScreenHeight() / 2, Color.CYAN));
+		createInstance(new PartyInfoList(this, party, 4, getScreenHeight() - 4, getScreenWidth() / 2, getScreenHeight() / 2, Color.CYAN));
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public final class PartyInfoGui extends Gui {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.getSpriteBatch().setProjectionMatrix(camera.combined);
 		batch.getShapeRenderer().setProjectionMatrix(camera.combined);
-		for (GuiRenderable r : this.renderables) {
+		for (GuiRenderable r : renderables) {
 			r.render(batch);
 		}
 		cleanDelBuffers();
@@ -83,8 +83,8 @@ public final class PartyInfoGui extends Gui {
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
 		BattleFactory factory = new BattleFactory(new BattleConfiguration());
-		this.game.setScreen(new BattleGui(this.game, factory.build(new BattleSchema(partySchema))));
-		this.dispose();
+		game.setScreen(new BattleGui(game, factory.build(new BattleSchema(partySchema))));
+		dispose();
 	}
 
 	@Override

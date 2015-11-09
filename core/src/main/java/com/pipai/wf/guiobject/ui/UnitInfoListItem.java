@@ -11,10 +11,10 @@ import com.pipai.wf.gui.Gui;
 
 public class UnitInfoListItem extends UIListItem {
 
-	//	public static final int PADDING = 4;
-	//	public static final int STAT_SPACING = 64;
-	//	public static final int WIDTH = 2 * PADDING + STAT_SPACING * 6;
-	//	public static final int HEIGHT = 2 * PADDING + 32;
+	// public static final int PADDING = 4;
+	// public static final int STAT_SPACING = 64;
+	// public static final int WIDTH = 2 * PADDING + STAT_SPACING * 6;
+	// public static final int HEIGHT = 2 * PADDING + 32;
 
 	protected String name;
 	protected int hp, mp, ap, mobility, aim, defense;
@@ -25,8 +25,8 @@ public class UnitInfoListItem extends UIListItem {
 		super(gui, x, y, width, 2 * padding + 32, Color.ORANGE);
 		this.width = width;
 		this.padding = padding;
-		this.stat_spacing = (width - 2 * padding)/6;
-		this.height = 2 * padding + 32;
+		stat_spacing = (width - 2 * padding) / 6;
+		height = 2 * padding + 32;
 		hp = state.maxHP;
 		mp = state.maxMP;
 		ap = state.maxAP;

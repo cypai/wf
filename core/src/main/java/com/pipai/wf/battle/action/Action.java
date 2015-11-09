@@ -18,7 +18,7 @@ public abstract class Action implements HasName, HasDescription, BattleEventLogg
 
 	public Action(Agent performerAgent) {
 		this.performerAgent = performerAgent;
-		this.map = performerAgent.getBattleMap();
+		map = performerAgent.getBattleMap();
 	}
 
 	public final Agent getPerformer() {
@@ -30,14 +30,14 @@ public abstract class Action implements HasName, HasDescription, BattleEventLogg
 	}
 
 	public final void perform(BattleConfiguration config) throws IllegalActionException {
-		if (this.performerAgent.getAP() < this.getAPRequired()) {
+		if (performerAgent.getAP() < getAPRequired()) {
 			throw new IllegalActionException("Not enough AP for action");
 		}
-		if (this.performerAgent.isKO()) {
+		if (performerAgent.isKO()) {
 			throw new IllegalActionException("KOed unit cannot act");
 		}
 		performImpl(config);
-		this.performerAgent.onAction(this);
+		performerAgent.onAction(this);
 	}
 
 	protected abstract void performImpl(BattleConfiguration config) throws IllegalActionException;

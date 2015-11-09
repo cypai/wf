@@ -14,9 +14,11 @@ public abstract class StatusEffect {
 	}
 
 	public abstract int flatAimModifier();
+
 	public abstract int flatMobilityModifier();
 
 	public abstract String name();
+
 	public abstract String description();
 
 	public Agent getAgent() {
@@ -35,12 +37,14 @@ public abstract class StatusEffect {
 		onRoundEndImpl();
 	}
 
-	protected void onRoundEndImpl() {}
+	protected void onRoundEndImpl() {
+	}
 
 	public final void onAction(Action action) {
 		onActionImpl(action);
 	}
 
-	protected void onActionImpl(Action action) {}
+	protected void onActionImpl(Action action) {
+	}
 
 }

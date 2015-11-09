@@ -44,7 +44,7 @@ public abstract class Ability implements HasName, HasDescription {
 
 	public void decrementCooldown() {
 		if (cooldown > 0) {
-			this.cooldown--;
+			cooldown--;
 		}
 	}
 
@@ -83,7 +83,7 @@ public abstract class Ability implements HasName, HasDescription {
 			if (!this.getClass().isInstance(other)) {
 				return false;
 			}
-			return (this.getLevel() == ((Ability) other).getLevel());
+			return (getLevel() == ((Ability) other).getLevel());
 		} else {
 			return false;
 		}

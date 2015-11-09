@@ -29,17 +29,17 @@ public class BattleController {
 	public BattleController(BattleMap map, BattleConfiguration config) {
 		log = new BattleLog();
 		this.map = map;
-		this.currentTeam = Team.PLAYER;
-		this.observerList = new LinkedList<BattleObserver>();
-		this.playerList = new LinkedList<Agent>();
-		this.enemyList = new LinkedList<Agent>();
+		currentTeam = Team.PLAYER;
+		observerList = new LinkedList<BattleObserver>();
+		playerList = new LinkedList<Agent>();
+		enemyList = new LinkedList<Agent>();
 		this.config = config;
 
 		for (Agent a : this.map.getAgents()) {
 			if (a.getTeam() == Team.PLAYER) {
-				this.playerList.add(a);
+				playerList.add(a);
 			} else {
-				this.enemyList.add(a);
+				enemyList.add(a);
 			}
 		}
 	}
@@ -49,44 +49,44 @@ public class BattleController {
 	}
 
 	public BattleMap getBattleMap() {
-		return this.map;
+		return map;
 	}
 
 	public Team getCurrentTeam() {
-		return this.currentTeam;
+		return currentTeam;
 	}
 
 	public void registerObserver(BattleObserver o) {
-		this.observerList.add(o);
+		observerList.add(o);
 	}
 
 	private void notifyObservers(BattleEvent ev) {
-		for (BattleObserver o : this.observerList) {
+		for (BattleObserver o : observerList) {
 			o.notifyBattleEvent(ev);
 		}
 	}
 
 	public void endTurn() {
-		if (this.currentTeam == Team.PLAYER) {
-			for (Agent a : this.playerList) {
+		if (currentTeam == Team.PLAYER) {
+			for (Agent a : playerList) {
 				a.onTurnEnd();
 			}
-			this.currentTeam = Team.ENEMY;
-			for (Agent a : this.enemyList) {
+			currentTeam = Team.ENEMY;
+			for (Agent a : enemyList) {
 				a.onTurnBegin();
 			}
 			notifyObservers(BattleEvent.startTurnEvent(Team.ENEMY));
 		} else {
 			// Round ended
-			for (Agent a : this.enemyList) {
+			for (Agent a : enemyList) {
 				a.onTurnEnd();
 			}
-			for (Agent a : this.map.getAgents()) {
+			for (Agent a : map.getAgents()) {
 				a.onRoundEnd();
 			}
 			// Start Player turn
-			this.currentTeam = Team.PLAYER;
-			for (Agent a : this.playerList) {
+			currentTeam = Team.PLAYER;
+			for (Agent a : playerList) {
 				a.onTurnBegin();
 			}
 			notifyObservers(BattleEvent.startTurnEvent(Team.PLAYER));
@@ -97,7 +97,7 @@ public class BattleController {
 		log.clear();
 		a.register(log);
 		a.perform(config);
-		this.notifyObservers(log.getLastEvent());
+		notifyObservers(log.getLastEvent());
 	}
 
 	public Result battleResult() {

@@ -24,23 +24,23 @@ public class RandomAI extends AI {
 
 	public RandomAI(BattleController battleController) {
 		super(battleController);
-		this.enemyAgents = new LinkedList<Agent>();
-		this.playerAgents = new LinkedList<Agent>();
+		enemyAgents = new LinkedList<Agent>();
+		playerAgents = new LinkedList<Agent>();
 		for (Agent a : getBattleMap().getAgents()) {
 			if (a.getTeam() == Team.ENEMY) {
-				this.enemyAgents.add(a);
+				enemyAgents.add(a);
 			} else if (a.getTeam() == Team.PLAYER) {
-				this.playerAgents.add(a);
+				playerAgents.add(a);
 			}
 		}
 	}
 
 	@Override
 	protected void startTurnInit() {
-		this.toAct = new LinkedList<Agent>();
-		for (Agent a : this.enemyAgents) {
+		toAct = new LinkedList<Agent>();
+		for (Agent a : enemyAgents) {
 			if (!a.isKO()) {
-				this.toAct.add(a);
+				toAct.add(a);
 			}
 		}
 	}
@@ -49,7 +49,7 @@ public class RandomAI extends AI {
 	public void performMove() {
 		Agent a = getFirstMovableAgent();
 		if (a == null) {
-			this.endTurn();
+			endTurn();
 			return;
 		}
 		if (a.getAP() > 0) {
@@ -66,7 +66,7 @@ public class RandomAI extends AI {
 	 * Returns null if there are no more Agents with AP
 	 */
 	protected Agent getFirstMovableAgent() {
-		for (Agent a : this.enemyAgents) {
+		for (Agent a : enemyAgents) {
 			if (!a.isKO() && a.getAP() > 0) {
 				return a;
 			}

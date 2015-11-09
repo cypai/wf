@@ -19,7 +19,7 @@ public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapab
 
 	public TargetedSpellWeaponAction(Agent performerAgent, Agent targetAgent) {
 		super(performerAgent, targetAgent);
-		this.spell = getWeapon().getSpell();
+		spell = getWeapon().getSpell();
 	}
 
 	private SpellWeapon getWeapon() {

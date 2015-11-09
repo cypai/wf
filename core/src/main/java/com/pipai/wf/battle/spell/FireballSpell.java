@@ -1,7 +1,7 @@
 package com.pipai.wf.battle.spell;
 
-import com.pipai.wf.battle.action.TargetedSpellWeaponAction;
 import com.pipai.wf.battle.action.TargetedAction;
+import com.pipai.wf.battle.action.TargetedSpellWeaponAction;
 import com.pipai.wf.battle.agent.Agent;
 
 public class FireballSpell extends Spell {

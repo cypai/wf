@@ -19,20 +19,20 @@ public class TopModularAI extends AI {
 
 	public TopModularAI(BattleController battleController) {
 		super(battleController);
-		this.enemyAgents = new ArrayList<Agent>();
-		this.playerAgents = new ArrayList<Agent>();
+		enemyAgents = new ArrayList<Agent>();
+		playerAgents = new ArrayList<Agent>();
 		for (Agent a : getBattleMap().getAgents()) {
 			if (a.getTeam() == Team.ENEMY) {
-				this.enemyAgents.add(a);
+				enemyAgents.add(a);
 			} else if (a.getTeam() == Team.PLAYER) {
-				this.playerAgents.add(a);
+				playerAgents.add(a);
 			}
 		}
 	}
 
 	private void resetAIModules() {
-		this.ais = new ArrayList<ModularAI>();
-		for (Agent a : this.enemyAgents) {
+		ais = new ArrayList<ModularAI>();
+		for (Agent a : enemyAgents) {
 			if (!a.isKO() && a.getAP() > 0) {
 				ais.add(new GeneralModularAI(getBattleMap(), a));
 			}
@@ -42,7 +42,7 @@ public class TopModularAI extends AI {
 	@Override
 	public void performMove() {
 		resetAIModules();
-		if (this.ais.size() == 0) {
+		if (ais.size() == 0) {
 			endTurn();
 			return;
 		}

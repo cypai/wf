@@ -119,85 +119,85 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 
 	public BattleGui(WFGame game, Battle battle) {
 		super(game);
-		camera = new AnchoredCamera(this.getScreenWidth(), this.getScreenHeight());
+		camera = new AnchoredCamera(getScreenWidth(), getScreenHeight());
 		overlayCamera = new OrthographicCamera();
 		orthoCamera = new OrthographicCamera();
-		overlayCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
-		orthoCamera.setToOrtho(false, this.getScreenWidth(), this.getScreenHeight());
+		overlayCamera.setToOrtho(false, getScreenWidth(), getScreenHeight());
+		orthoCamera.setToOrtho(false, getScreenWidth(), getScreenHeight());
 		rayMapper = new RayMapper(camera.getCamera());
-		this.battleController = battle.getBattleController();
-		this.battleController.registerObserver(this);
-		this.ai = new TopModularAI(battleController);
-		this.aiTurn = false;
-		this.mode = Mode.MOVE;
-		this.renderables = new ArrayList<GuiRenderable>();
-		this.foregroundRenderables = new ArrayList<GuiRenderable>();
-		this.leftClickables = new ArrayList<LeftClickable3D>();
-		this.rightClickables = new ArrayList<RightClickable3D>();
-		this.overlayRenderables = new ArrayList<GuiRenderable>();
-		this.overlayLeftClickables = new ArrayList<LeftClickable>();
-		this.renderablesCreateBuffer = new ArrayList<GuiRenderable>();
-		this.leftClickablesCreateBuffer = new ArrayList<LeftClickable3D>();
-		this.rightClickablesCreateBuffer = new ArrayList<RightClickable3D>();
-		this.renderablesDelBuffer = new ArrayList<GuiRenderable>();
-		this.leftClickablesDelBuffer = new ArrayList<LeftClickable3D>();
-		this.rightClickablesDelBuffer = new ArrayList<RightClickable3D>();
-		this.agentMap = new HashMap<Agent, AgentGuiObject>();
-		this.agentList = new ArrayList<AgentGuiObject>();
-		this.selectableAgentOrderedList = new LinkedList<AgentGuiObject>();
-		for (Agent agent : this.battleController.getBattleMap().getAgents()) {
+		battleController = battle.getBattleController();
+		battleController.registerObserver(this);
+		ai = new TopModularAI(battleController);
+		aiTurn = false;
+		mode = Mode.MOVE;
+		renderables = new ArrayList<GuiRenderable>();
+		foregroundRenderables = new ArrayList<GuiRenderable>();
+		leftClickables = new ArrayList<LeftClickable3D>();
+		rightClickables = new ArrayList<RightClickable3D>();
+		overlayRenderables = new ArrayList<GuiRenderable>();
+		overlayLeftClickables = new ArrayList<LeftClickable>();
+		renderablesCreateBuffer = new ArrayList<GuiRenderable>();
+		leftClickablesCreateBuffer = new ArrayList<LeftClickable3D>();
+		rightClickablesCreateBuffer = new ArrayList<RightClickable3D>();
+		renderablesDelBuffer = new ArrayList<GuiRenderable>();
+		leftClickablesDelBuffer = new ArrayList<LeftClickable3D>();
+		rightClickablesDelBuffer = new ArrayList<RightClickable3D>();
+		agentMap = new HashMap<Agent, AgentGuiObject>();
+		agentList = new ArrayList<AgentGuiObject>();
+		selectableAgentOrderedList = new LinkedList<AgentGuiObject>();
+		for (Agent agent : battleController.getBattleMap().getAgents()) {
 			AgentGuiObject a = new AgentGuiObject(this, agent);
-			this.agentMap.put(agent, a);
-			this.agentList.add(a);
+			agentMap.put(agent, a);
+			agentList.add(a);
 			if (agent.getTeam() == Team.PLAYER) {
-				this.selectableAgentOrderedList.add(a);
+				selectableAgentOrderedList.add(a);
 			}
-			this.createInstance(a);
+			createInstance(a);
 		}
-		this.batch.set3DCamera(this.camera.getCamera());
-		this.fogOfWar = new FogOfWar(battle.getBattleMap(), this.selectableAgentOrderedList);
+		batch.set3DCamera(camera.getCamera());
+		fogOfWar = new FogOfWar(battle.getBattleMap(), selectableAgentOrderedList);
 		// this.fogOfWar.fullScan();
-		this.terrainRenderer = new BattleTerrainRenderer(this, battle.getBattleMap(), fogOfWar);
-		this.createInstance(this.terrainRenderer);
-		this.generateOverlays();
-		this.animationController = new AnimationController(this);
-		this.setSelected(this.selectableAgentOrderedList.getFirst());
+		terrainRenderer = new BattleTerrainRenderer(this, battle.getBattleMap(), fogOfWar);
+		createInstance(terrainRenderer);
+		generateOverlays();
+		animationController = new AnimationController(this);
+		setSelected(selectableAgentOrderedList.getFirst());
 	}
 
 	private void generateOverlays() {
-		this.tooltip = new ActionToolTip(this, 0, 120, 320, 120);
-		this.weaponIndicator = new WeaponIndicator(this, this.getScreenWidth() - 120, 80, 120, 80);
-		this.agentStatusWindow = new AgentStatusWindow(this);
-		this.overlayRenderables.add(this.tooltip);
-		this.overlayRenderables.add(this.weaponIndicator);
-		this.overlayRenderables.add(this.agentStatusWindow);
+		tooltip = new ActionToolTip(this, 0, 120, 320, 120);
+		weaponIndicator = new WeaponIndicator(this, getScreenWidth() - 120, 80, 120, 80);
+		agentStatusWindow = new AgentStatusWindow(this);
+		overlayRenderables.add(tooltip);
+		overlayRenderables.add(weaponIndicator);
+		overlayRenderables.add(agentStatusWindow);
 	}
 
 	private void beginAnimation() {
-		this.mode = Mode.ANIMATION;
+		mode = Mode.ANIMATION;
 	}
 
 	public void endAnimation() {
 		performVictoryCheck();
 		if (aiTurn) {
-			this.mode = Mode.AI;
-			this.aiMoveWait = 0;
+			mode = Mode.AI;
+			aiMoveWait = 0;
 		} else {
-			this.fogOfWar.fullScan();
-			this.populateSelectableAgentList();
-			this.mode = Mode.MOVE;
+			fogOfWar.fullScan();
+			populateSelectableAgentList();
+			mode = Mode.MOVE;
 			// Check if we need to change selected Agent
-			if (this.selectedAgent.getAgent().getAP() == 0 || this.selectedAgent.getAgent().isKO()) {
-				this.selectableAgentOrderedList.remove(this.selectedAgent);
-				if (this.selectableAgentOrderedList.size() > 0) {
-					this.setSelected(this.selectableAgentOrderedList.getFirst());
+			if (selectedAgent.getAgent().getAP() == 0 || selectedAgent.getAgent().isKO()) {
+				selectableAgentOrderedList.remove(selectedAgent);
+				if (selectableAgentOrderedList.size() > 0) {
+					setSelected(selectableAgentOrderedList.getFirst());
 				}
 			}
-			for (AgentGuiObject a : this.agentList) {
+			for (AgentGuiObject a : agentList) {
 				if (a.getAgent().getTeam() == Team.PLAYER && (a.getAgent().getAP() > 0 && !a.getAgent().isKO())) {
 					// Found a movable Agent, so we return and do not start AI turn
-					this.updatePaths();
-					this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
+					updatePaths();
+					terrainRenderer.setMovingTiles(selectedMapGraph);
 					return;
 				}
 			}
@@ -207,24 +207,24 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	}
 
 	public Mode getMode() {
-		return this.mode;
+		return mode;
 	}
 
 	public RayMapper getRayMapper() {
-		return this.rayMapper;
+		return rayMapper;
 	}
 
 	public AnchoredCamera getCamera() {
-		return this.camera;
+		return camera;
 	}
 
 	public void setSelected(AgentGuiObject agent) {
 		if (agent.getAgent().getAP() > 0) {
-			this.selectedAgent = agent;
-			this.weaponIndicator.updateToAgent(agent);
-			this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
-			this.updatePaths();
-			this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
+			selectedAgent = agent;
+			weaponIndicator.updateToAgent(agent);
+			moveCameraToPos(selectedAgent.x, selectedAgent.y);
+			updatePaths();
+			terrainRenderer.setMovingTiles(selectedMapGraph);
 		}
 	}
 
@@ -295,52 +295,52 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	public void updatePaths() {
 		if (selectedAgent != null) {
 			Agent a = selectedAgent.getAgent();
-			MapGraph graph = new MapGraph(this.battleController.getBattleMap(), a.getPosition(), a.getEffectiveMobility(), a.getAP(), a.getMaxAP());
-			this.selectedMapGraph = graph;
+			MapGraph graph = new MapGraph(battleController.getBattleMap(), a.getPosition(), a.getEffectiveMobility(), a.getAP(), a.getMaxAP());
+			selectedMapGraph = graph;
 		}
 	}
 
 	private Vector2 screenPosToGraphicPos(int screenX, int screenY) {
-		float x = camera.position().x - this.getScreenWidth() / 2 + screenX;
-		float y = camera.position().y - this.getScreenHeight() / 2 + screenY;
+		float x = camera.position().x - getScreenWidth() / 2 + screenX;
+		float y = camera.position().y - getScreenHeight() / 2 + screenY;
 		return new Vector2(x, y);
 	}
 
 	@Override
 	public void notifyBattleEvent(BattleEvent ev) {
-		this.animateEvent(ev);
+		animateEvent(ev);
 	}
 
 	private void performVictoryCheck() {
-		if (this.battleController.battleResult() != BattleController.Result.NONE) {
-			this.game.setScreen(new BattleResultsGui(this.game));
-			this.dispose();
+		if (battleController.battleResult() != BattleController.Result.NONE) {
+			game.setScreen(new BattleResultsGui(game));
+			dispose();
 			return;
 		}
 	}
 
 	private void startAiTurn() {
-		this.terrainRenderer.clearShadedTiles();
-		this.mode = Mode.AI;
-		this.aiTurn = true;
-		this.aiMoveWait = 0;
-		this.battleController.endTurn();
-		this.ai.startTurn();
+		terrainRenderer.clearShadedTiles();
+		mode = Mode.AI;
+		aiTurn = true;
+		aiMoveWait = 0;
+		battleController.endTurn();
+		ai.startTurn();
 	}
 
 	private void runAiTurn() {
-		this.aiMoveWait += 1;
-		if (this.aiMoveWait == BattleGui.AI_MOVE_WAIT_TIME) {
-			AIMoveRunnable t = new AIMoveRunnable(this.ai);
+		aiMoveWait += 1;
+		if (aiMoveWait == BattleGui.AI_MOVE_WAIT_TIME) {
+			AIMoveRunnable t = new AIMoveRunnable(ai);
 			t.run();
 		}
 	}
 
 	private void populateSelectableAgentList() {
-		this.selectableAgentOrderedList.clear();
-		for (Agent agent : this.battleController.getBattleMap().getAgents()) {
+		selectableAgentOrderedList.clear();
+		for (Agent agent : battleController.getBattleMap().getAgents()) {
 			if (agent.getTeam() == Team.PLAYER && agent.getAP() > 0 && !agent.isKO()) {
-				this.selectableAgentOrderedList.add(this.agentMap.get(agent));
+				selectableAgentOrderedList.add(agentMap.get(agent));
 			}
 		}
 	}
@@ -354,17 +354,17 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				atk = sw.getSpell().getAction(selectedAgent.getAgent(), target.getAgent());
 			} else {
 				if (weapon.currentAmmo() > 0) {
-					if (this.targetedAction == null) {
+					if (targetedAction == null) {
 						atk = ((TargetedActionable) weapon).getAction(selectedAgent.getAgent(), target.getAgent());
 					} else {
-						atk = this.targetedAction;
+						atk = targetedAction;
 					}
 				} else {
 					return;
 				}
 			}
 			try {
-				this.battleController.performAction(atk);
+				battleController.performAction(atk);
 			} catch (IllegalActionException e) {
 				logger.error("Illegal move: " + e.getMessage());
 			}
@@ -372,14 +372,14 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	}
 
 	public void performMoveWithSelectedAgent(GridPosition destination) {
-		if (this.selectedAgent != null) {
-			if (this.selectedMapGraph.canMoveTo(destination)) {
-				LinkedList<GridPosition> path = this.selectedMapGraph.getPath(destination);
-				int useAP = this.selectedMapGraph.apRequiredToMoveTo(destination);
+		if (selectedAgent != null) {
+			if (selectedMapGraph.canMoveTo(destination)) {
+				LinkedList<GridPosition> path = selectedMapGraph.getPath(destination);
+				int useAP = selectedMapGraph.apRequiredToMoveTo(destination);
 				MoveAction move = new MoveAction(selectedAgent.getAgent(), path, useAP);
-				this.terrainRenderer.clearShadedTiles();
+				terrainRenderer.clearShadedTiles();
 				try {
-					this.battleController.performAction(move);
+					battleController.performAction(move);
 				} catch (IllegalActionException e) {
 					logger.error("IllegalMoveException detected: " + e.getMessage());
 				}
@@ -389,14 +389,14 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-		if (!this.mode.allowsInput()) {
+		if (!mode.allowsInput()) {
 			return;
 		}
-		Ray ray = this.rayMapper.screenToRay(screenX, screenY);
+		Ray ray = rayMapper.screenToRay(screenX, screenY);
 		Vector2 gamePos = screenPosToGraphicPos(screenX, screenY);
 		int gameX = (int) gamePos.x;
 		int gameY = (int) gamePos.y;
-		if (this.mode != Mode.ANIMATION) {
+		if (mode != Mode.ANIMATION) {
 			for (LeftClickable o : overlayLeftClickables) {
 				o.onLeftClick(screenX, screenY, gameX, gameY);
 			}
@@ -408,11 +408,11 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 
 	@Override
 	public void onRightClick(int screenX, int screenY) {
-		if (!this.mode.allowsInput()) {
+		if (!mode.allowsInput()) {
 			return;
 		}
-		Ray ray = this.rayMapper.screenToRay(screenX, screenY);
-		if (this.mode != Mode.ANIMATION) {
+		Ray ray = rayMapper.screenToRay(screenX, screenY);
+		if (mode != Mode.ANIMATION) {
 			for (RightClickable3D o : rightClickables) {
 				o.onRightClick(ray);
 			}
@@ -423,10 +423,10 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	public void mouseScrolled(int amount) {
 		switch (amount) {
 		case 1:
-			this.camera.decreaseHeight();
+			camera.decreaseHeight();
 			break;
 		case -1:
-			this.camera.increaseHeight();
+			camera.increaseHeight();
 			break;
 		}
 	}
@@ -462,10 +462,10 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			break;
 		case START_TURN:
 			if (event.getTeam() == Team.PLAYER) {
-				this.mode = Mode.MOVE;
-				this.aiTurn = false;
-				this.populateSelectableAgentList();
-				this.setSelected(this.selectableAgentOrderedList.getFirst());
+				mode = Mode.MOVE;
+				aiTurn = false;
+				populateSelectableAgentList();
+				setSelected(selectableAgentOrderedList.getFirst());
 			}
 			animating = false;
 			break;
@@ -487,9 +487,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	}
 
 	public void switchToMoveMode() {
-		this.mode = Mode.MOVE;
-		this.terrainRenderer.setMovingTiles(this.selectedMapGraph);
-		this.moveCameraToPos(this.selectedAgent.x, this.selectedAgent.y);
+		mode = Mode.MOVE;
+		terrainRenderer.setMovingTiles(selectedMapGraph);
+		moveCameraToPos(selectedAgent.x, selectedAgent.y);
 	}
 
 	public void switchToTargetMode() {
@@ -497,22 +497,22 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	}
 
 	public void switchToTargetMode(ActiveSkillTargetedAbility ability) {
-		this.terrainRenderer.clearShadedTiles();
-		this.targetAgentList = new LinkedList<AgentGuiObject>();
-		for (Agent a : this.selectedAgent.getAgent().enemiesInRange()) {
-			this.targetAgentList.add(this.agentMap.get(a));
+		terrainRenderer.clearShadedTiles();
+		targetAgentList = new LinkedList<AgentGuiObject>();
+		for (Agent a : selectedAgent.getAgent().enemiesInRange()) {
+			targetAgentList.add(agentMap.get(a));
 		}
-		this.mode = Mode.TARGET_SELECT;
-		if (this.targetAgentList.size() == 0) {
-			this.targetedAction = null;
+		mode = Mode.TARGET_SELECT;
+		if (targetAgentList.size() == 0) {
+			targetedAction = null;
 			if (ability == null) {
-				this.tooltip.setToGeneralDescription(WeaponActionFactory.defaultWeaponActionName(this.selectedAgent.getAgent()), "No enemies in range");
+				tooltip.setToGeneralDescription(WeaponActionFactory.defaultWeaponActionName(selectedAgent.getAgent()), "No enemies in range");
 			} else {
-				this.tooltip.setToGeneralDescription(ability.name(), "No enemies in range");
+				tooltip.setToGeneralDescription(ability.name(), "No enemies in range");
 			}
 			return;
 		}
-		this.switchTarget(this.targetAgentList.getFirst(), ability);
+		this.switchTarget(targetAgentList.getFirst(), ability);
 	}
 
 	public void switchTarget(AgentGuiObject target) {
@@ -520,34 +520,34 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	}
 
 	public void switchTarget(AgentGuiObject target, ActiveSkillTargetedAbility ability) {
-		if (this.mode == Mode.TARGET_SELECT) {
-			if (this.targetAgentList.contains(target)) {
+		if (mode == Mode.TARGET_SELECT) {
+			if (targetAgentList.contains(target)) {
 				ArrayList<GridPosition> targetTiles = new ArrayList<>();
 				ArrayList<GridPosition> targetableTiles = new ArrayList<>();
 				targetTiles.add(target.getAgent().getPosition());
-				for (AgentGuiObject a : this.targetAgentList) {
+				for (AgentGuiObject a : targetAgentList) {
 					targetableTiles.add(a.getAgent().getPosition());
 				}
-				this.terrainRenderer.setTargetableTiles(targetableTiles);
-				this.terrainRenderer.setTargetTiles(targetTiles);
-				this.targetAgent = target;
+				terrainRenderer.setTargetableTiles(targetableTiles);
+				terrainRenderer.setTargetTiles(targetTiles);
+				targetAgent = target;
 				if (ability == null) {
-					this.targetedAction = WeaponActionFactory.defaultWeaponAction(this.selectedAgent.getAgent(), target.getAgent());
+					targetedAction = WeaponActionFactory.defaultWeaponAction(selectedAgent.getAgent(), target.getAgent());
 				} else {
-					this.targetedAction = ability.getAction(this.selectedAgent.getAgent(), target.getAgent());
+					targetedAction = ability.getAction(selectedAgent.getAgent(), target.getAgent());
 				}
-				this.tooltip.setToActionDescription(this.targetedAction);
-				this.moveCameraToPos((this.selectedAgent.x + target.x) / 2, (this.selectedAgent.y + target.y) / 2);
+				tooltip.setToActionDescription(targetedAction);
+				moveCameraToPos((selectedAgent.x + target.x) / 2, (selectedAgent.y + target.y) / 2);
 			}
 		}
 	}
 
 	public AgentGuiObject getTarget() {
-		return this.targetAgent;
+		return targetAgent;
 	}
 
 	public AgentGuiObject getAgentGUIObject(Agent a) {
-		return this.agentMap.get(a);
+		return agentMap.get(a);
 	}
 
 	private void globalUpdate() {
@@ -555,59 +555,59 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	}
 
 	private void moveCameraToPos(float x, float y) {
-		this.camera.moveTo(x, y);
+		camera.moveTo(x, y);
 	}
 
 	private void updateCamera() {
-		if (this.mode.allowsInput()) {
-			if (this.checkKey(Keys.A)) {
-				this.camera.moveLeft();
+		if (mode.allowsInput()) {
+			if (checkKey(Keys.A)) {
+				camera.moveLeft();
 			}
-			if (this.checkKey(Keys.D)) {
-				this.camera.moveRight();
+			if (checkKey(Keys.D)) {
+				camera.moveRight();
 			}
-			if (this.checkKey(Keys.W)) {
-				this.camera.moveUp();
+			if (checkKey(Keys.W)) {
+				camera.moveUp();
 			}
-			if (this.checkKey(Keys.S)) {
-				this.camera.moveDown();
+			if (checkKey(Keys.S)) {
+				camera.moveDown();
 			}
 		}
-		this.camera.update();
-		this.orthoCamera.update();
+		camera.update();
+		orthoCamera.update();
 	}
 
 	@Override
 	public void onKeyDown(int keycode) {
 		if (keycode == Keys.ESCAPE) {
-			if (this.agentStatusWindow.getVisible()) {
-				this.agentStatusWindow.setVisible(false);
+			if (agentStatusWindow.getVisible()) {
+				agentStatusWindow.setVisible(false);
 				return;
 			}
-			if (this.mode == Mode.TARGET_SELECT) {
-				this.switchToMoveMode();
+			if (mode == Mode.TARGET_SELECT) {
+				switchToMoveMode();
 				return;
 			} else {
 				Gdx.app.exit();
 			}
 		}
-		if (selectedAgent == null || !this.mode.allowsInput()) {
+		if (selectedAgent == null || !mode.allowsInput()) {
 			return;
 		}
 		Action action = null;
 		switch (keycode) {
 		case Keys.NUM_1:
-			if (this.mode == Mode.MOVE) {
+			if (mode == Mode.MOVE) {
 				switchToTargetMode();
 			}
 			break;
 		case Keys.ENTER:
-			if (this.mode == Mode.TARGET_SELECT) {
-				this.performAttackAction(this.targetAgent);
+			if (mode == Mode.TARGET_SELECT) {
+				performAttackAction(targetAgent);
 			}
 			break;
 		case Keys.X:
-			if (this.mode == Mode.MOVE) {
+			if (mode == Mode.MOVE) {
 				action = new SwitchWeaponAction(selectedAgent.getAgent());
 			}
 			break;
@@ -628,7 +628,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			break;
 		case Keys.K:
 			// Skill
-			if (this.mode == Mode.MOVE) {
+			if (mode == Mode.MOVE) {
 				for (Ability a : selectedAgent.getAgent().getAbilities()) {
 					if (a instanceof PrecisionShotAbility && !a.isOnCooldown()) {
 						this.switchToTargetMode((PrecisionShotAbility) a);
@@ -645,33 +645,33 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			break;
 		case Keys.SHIFT_LEFT:
 			// Select next unit
-			if (this.mode == Mode.MOVE) {
-				this.selectableAgentOrderedList.remove(this.selectedAgent);
-				this.selectableAgentOrderedList.addLast(this.selectedAgent);
-				this.setSelected(this.selectableAgentOrderedList.peek());
-			} else if (this.mode == Mode.TARGET_SELECT) {
-				this.targetAgentList.remove(this.targetAgent);
-				this.targetAgentList.addLast(this.targetAgent);
-				this.switchTarget(this.targetAgentList.peek());
+			if (mode == Mode.MOVE) {
+				selectableAgentOrderedList.remove(selectedAgent);
+				selectableAgentOrderedList.addLast(selectedAgent);
+				setSelected(selectableAgentOrderedList.peek());
+			} else if (mode == Mode.TARGET_SELECT) {
+				targetAgentList.remove(targetAgent);
+				targetAgentList.addLast(targetAgent);
+				this.switchTarget(targetAgentList.peek());
 			}
 			break;
 		case Keys.Q:
-			this.camera.arcballRotationCW();
+			camera.arcballRotationCW();
 			break;
 		case Keys.E:
-			this.camera.arcballRotationCCW();
+			camera.arcballRotationCCW();
 			break;
 		case Keys.F1:
-			if (this.mode == Mode.MOVE || this.targetedAction == null) {
-				this.agentStatusWindow.setAgentStatus(this.selectedAgent.getAgent());
-			} else if (this.mode == Mode.TARGET_SELECT) {
-				if (this.targetedAction instanceof TargetedWithAccuracyAction) {
-					this.agentStatusWindow.setTargetedWithAccuracyAction((TargetedWithAccuracyAction) this.targetedAction);
+			if (mode == Mode.MOVE || targetedAction == null) {
+				agentStatusWindow.setAgentStatus(selectedAgent.getAgent());
+			} else if (mode == Mode.TARGET_SELECT) {
+				if (targetedAction instanceof TargetedWithAccuracyAction) {
+					agentStatusWindow.setTargetedWithAccuracyAction((TargetedWithAccuracyAction) targetedAction);
 				} else {
-					this.agentStatusWindow.setAgentStatus(this.targetedAction.getTarget());
+					agentStatusWindow.setAgentStatus(targetedAction.getTarget());
 				}
 			}
-			this.agentStatusWindow.setVisible(true);
+			agentStatusWindow.setVisible(true);
 			break;
 		case Keys.BACKSLASH:
 			terrainRenderer.setIsRenderingTextures(!terrainRenderer.getIsRenderingTextures());
@@ -681,11 +681,11 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		}
 		if (action != null) {
 			try {
-				this.mode = Mode.PRE_ANIMATION;
-				this.battleController.performAction(action);
+				mode = Mode.PRE_ANIMATION;
+				battleController.performAction(action);
 			} catch (IllegalActionException e) {
 				logger.error("Illegal move: " + e.getMessage());
-				this.mode = Mode.MOVE;
+				mode = Mode.MOVE;
 			}
 		}
 	}
@@ -699,9 +699,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		// this.camera.setToOrtho(false, width, height);
-		this.camera.setViewport(width, height);
-		this.orthoCamera.setToOrtho(false, width, height);
-		this.overlayCamera.setToOrtho(false, width, height);
+		camera.setViewport(width, height);
+		orthoCamera.setToOrtho(false, width, height);
+		overlayCamera.setToOrtho(false, width, height);
 	}
 
 	@Override
@@ -713,20 +713,20 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		globalUpdate();
 		batch.getSpriteBatch().setProjectionMatrix(camera.getProjectionMatrix());
 		batch.getShapeRenderer().setProjectionMatrix(camera.getProjectionMatrix());
-		this.terrainRenderer.render(batch);
+		terrainRenderer.render(batch);
 		// renderShape(batch.getShapeRenderer());
-		for (GuiRenderable r : this.renderables) {
+		for (GuiRenderable r : renderables) {
 			r.render(batch);
 		}
 		batch.getDecalBatch().flush();
 		batch.getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
 		batch.getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
-		for (GuiRenderable r : this.foregroundRenderables) {
+		for (GuiRenderable r : foregroundRenderables) {
 			r.render(batch);
 		}
 		batch.getSpriteBatch().setProjectionMatrix(overlayCamera.combined);
 		batch.getShapeRenderer().setProjectionMatrix(overlayCamera.combined);
-		for (GuiRenderable r : this.overlayRenderables) {
+		for (GuiRenderable r : overlayRenderables) {
 			r.render(batch);
 		}
 		batch.getSpriteBatch().begin();
@@ -744,7 +744,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		BitmapFont font = batch.getFont();
 		batch.getSpriteBatch().begin();
 		font.setColor(Color.WHITE);
-		font.draw(batch.getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), this.getScreenWidth() - 24, this.getScreenHeight() - font.getLineHeight() / 2);
+		font.draw(batch.getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), getScreenWidth() - 24, getScreenHeight() - font.getLineHeight() / 2);
 		batch.getSpriteBatch().end();
 	}
 

@@ -128,7 +128,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 
 	@Override
 	public void dispose() {
-		this.boxModel.dispose();
+		boxModel.dispose();
 	}
 
 	@Override
@@ -167,23 +167,23 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 			terrainMesh.render(fogOfWarShader, GL20.GL_TRIANGLES);
 			fogOfWarShader.end();
 		}
-		this.drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
-		this.drawMovableTiles(batch.getShapeRenderer());
-		this.drawMidDashTiles(batch.getShapeRenderer());
-		this.drawDashTiles(batch.getShapeRenderer());
-		this.drawTargetableTiles(batch.getShapeRenderer());
-		this.drawTargetTiles(batch.getShapeRenderer());
+		drawGrid(batch.getShapeRenderer(), 0, 0, SQUARE_SIZE * map.getCols(), SQUARE_SIZE * map.getRows(), map.getCols(), map.getRows());
+		drawMovableTiles(batch.getShapeRenderer());
+		drawMidDashTiles(batch.getShapeRenderer());
+		drawDashTiles(batch.getShapeRenderer());
+		drawTargetableTiles(batch.getShapeRenderer());
+		drawTargetTiles(batch.getShapeRenderer());
 		modelBatch.begin(gui.getCamera().getCamera());
 		modelBatch.render(wallModels, environment);
 		modelBatch.end();
 	}
 
 	public void clearShadedTiles() {
-		this.moveTiles = null;
-		this.midDashTiles = null;
-		this.dashTiles = null;
-		this.targetTiles = null;
-		this.targetableTiles = null;
+		moveTiles = null;
+		midDashTiles = null;
+		dashTiles = null;
+		targetTiles = null;
+		targetableTiles = null;
 	}
 
 	public void setMovingTiles(MapGraph mapgraph) {
@@ -257,41 +257,41 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	}
 
 	private void drawMovableTiles(ShapeRenderer batch) {
-		if (this.moveTiles != null) {
-			for (GridPosition pos : this.moveTiles) {
-				this.shadeSquare(batch, pos, MOVE_COLOR);
+		if (moveTiles != null) {
+			for (GridPosition pos : moveTiles) {
+				shadeSquare(batch, pos, MOVE_COLOR);
 			}
 		}
 	}
 
 	private void drawMidDashTiles(ShapeRenderer batch) {
-		if (this.midDashTiles != null) {
-			for (GridPosition pos : this.midDashTiles) {
-				this.shadeSquare(batch, pos, MID_DASH_COLOR);
+		if (midDashTiles != null) {
+			for (GridPosition pos : midDashTiles) {
+				shadeSquare(batch, pos, MID_DASH_COLOR);
 			}
 		}
 	}
 
 	private void drawDashTiles(ShapeRenderer batch) {
-		if (this.dashTiles != null) {
-			for (GridPosition pos : this.dashTiles) {
-				this.shadeSquare(batch, pos, DASH_COLOR);
+		if (dashTiles != null) {
+			for (GridPosition pos : dashTiles) {
+				shadeSquare(batch, pos, DASH_COLOR);
 			}
 		}
 	}
 
 	private void drawTargetTiles(ShapeRenderer batch) {
-		if (this.targetTiles != null) {
-			for (GridPosition pos : this.targetTiles) {
-				this.shadeSquare(batch, pos, TARGET_COLOR);
+		if (targetTiles != null) {
+			for (GridPosition pos : targetTiles) {
+				shadeSquare(batch, pos, TARGET_COLOR);
 			}
 		}
 	}
 
 	private void drawTargetableTiles(ShapeRenderer batch) {
-		if (this.targetableTiles != null) {
-			for (GridPosition pos : this.targetableTiles) {
-				this.shadeSquare(batch, pos, TARGETABLE_COLOR);
+		if (targetableTiles != null) {
+			for (GridPosition pos : targetableTiles) {
+				shadeSquare(batch, pos, TARGETABLE_COLOR);
 			}
 		}
 	}

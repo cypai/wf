@@ -53,8 +53,8 @@ public abstract class Gui implements Screen, InputProcessor {
 	}
 
 	public boolean checkKey(int keycode) {
-		if (this.heldKeys.containsKey(keycode)) {
-			return this.heldKeys.get(keycode);
+		if (heldKeys.containsKey(keycode)) {
+			return heldKeys.get(keycode);
 		} else {
 			return false;
 		}
@@ -67,7 +67,7 @@ public abstract class Gui implements Screen, InputProcessor {
 
 	@Override
 	public void render(float delta) {
-		for (GuiObject o : this.instanceIndex.values()) {
+		for (GuiObject o : instanceIndex.values()) {
 			o.update();
 		}
 	}
@@ -95,22 +95,22 @@ public abstract class Gui implements Screen, InputProcessor {
 
 	@Override
 	public void dispose() {
-		for (GuiObject o : this.instanceIndex.values()) {
+		for (GuiObject o : instanceIndex.values()) {
 			o.dispose();
 		}
 	}
 
 	@Override
 	public final boolean keyDown(int keycode) {
-		this.heldKeys.put(keycode, true);
-		this.onKeyDown(keycode);
+		heldKeys.put(keycode, true);
+		onKeyDown(keycode);
 		return true;
 	}
 
 	@Override
 	public final boolean keyUp(int keycode) {
-		this.heldKeys.put(keycode, false);
-		this.onKeyUp(keycode);
+		heldKeys.put(keycode, false);
+		onKeyUp(keycode);
 		return true;
 	}
 

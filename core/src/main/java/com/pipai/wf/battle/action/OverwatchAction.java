@@ -12,7 +12,7 @@ public class OverwatchAction extends AlterStateAction {
 
 	public OverwatchAction(Agent performerAgent) {
 		super(performerAgent);
-		this.owAction = WeaponActionFactory.defaultWeaponActionClass(performerAgent);
+		owAction = WeaponActionFactory.defaultWeaponActionClass(performerAgent);
 	}
 
 	@Override

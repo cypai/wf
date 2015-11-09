@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.Matchers;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
@@ -36,9 +36,9 @@ public class RangedWeaponAttackActionTest {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		DamageCalculator mockDamageCalculator = mock(DamageCalculator.class);
 		when(mockDamageCalculator.rollDamageGeneral(
-				Mockito.any(AccuracyPercentages.class),
-				Mockito.any(DamageFunction.class),
-				Mockito.anyInt())).thenReturn(new DamageResult(true, false, 1, 0));
+				Matchers.any(AccuracyPercentages.class),
+				Matchers.any(DamageFunction.class),
+				Matchers.anyInt())).thenReturn(new DamageResult(true, false, 1, 0));
 		when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);

@@ -19,7 +19,7 @@ public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 
 	public AnchoredAgentInfoDisplay(BattleGui gui, AgentGuiObject agent) {
 		super(gui, gui.getRayMapper(), new Vector3(agent.x, agent.y, 0));
-		this.a = agent;
+		a = agent;
 	}
 
 	@Override

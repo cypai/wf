@@ -15,27 +15,27 @@ public class BattleMapCell {
 	private GridPosition position;
 
 	public BattleMapCell(GridPosition pos) {
-		this.tileObject = null;
-		this.walls = new EnumMap<Direction, EnvironmentObject>(Direction.class);
-		this.neighbors = new EnumMap<Direction, BattleMapCell>(Direction.class);
-		this.position = pos;
-		this.inactiveAgents = new ArrayList<Agent>();
+		tileObject = null;
+		walls = new EnumMap<Direction, EnvironmentObject>(Direction.class);
+		neighbors = new EnumMap<Direction, BattleMapCell>(Direction.class);
+		position = pos;
+		inactiveAgents = new ArrayList<Agent>();
 	}
 
 	public GridPosition getPosition() {
-		return this.position;
+		return position;
 	}
 
 	public void setNeighbor(BattleMapCell cell, Direction dir) {
-		this.neighbors.put(dir, cell);
+		neighbors.put(dir, cell);
 	}
 
 	public void setWallEnvironmentObject(EnvironmentObject wall, Direction dir) {
-		this.walls.put(dir, wall);
+		walls.put(dir, wall);
 	}
 
 	public void setTileEnvironmentObject(EnvironmentObject obj) {
-		this.tileObject = obj;
+		tileObject = obj;
 	}
 
 	public void setAgent(Agent agent) {
@@ -43,32 +43,32 @@ public class BattleMapCell {
 	}
 
 	public void removeAgent() {
-		this.agent = null;
+		agent = null;
 	}
 
 	public Agent getAgent() {
-		return this.agent;
+		return agent;
 	}
 
 	public void makeAgentInactive() {
-		this.inactiveAgents.add(this.agent);
-		this.agent = null;
+		inactiveAgents.add(agent);
+		agent = null;
 	}
 
 	public boolean hasAgent() {
-		return this.agent != null;
+		return agent != null;
 	}
 
 	public boolean isEmpty() {
-		if (this.tileObject != null || this.agent != null) {
+		if (tileObject != null || agent != null) {
 			return false;
 		}
 		return true;
 	}
 
 	public boolean hasTileSightBlocker() {
-		if (this.tileObject != null) {
-			return this.tileObject.getCoverType() == CoverType.FULL;
+		if (tileObject != null) {
+			return tileObject.getCoverType() == CoverType.FULL;
 		} else {
 			return false;
 		}
@@ -79,25 +79,25 @@ public class BattleMapCell {
 	}
 
 	public boolean hasWall(Direction dir) {
-		return this.walls.get(dir) != null;
+		return walls.get(dir) != null;
 	}
 
 	public EnvironmentObject getWallEnvironmentObject(Direction dir) {
-		return this.walls.get(dir);
+		return walls.get(dir);
 	}
 
 	/*
 	 * Returns whether or not a unit can move in the indicated direction assuming a unit is in this cell
 	 */
 	public boolean isTraversable(Direction dir) {
-		BattleMapCell neighbor = this.neighbors.get(dir);
+		BattleMapCell neighbor = neighbors.get(dir);
 		if (neighbor == null) {
 			return false;
 		}
 		if (!neighbor.isEmpty()) {
 			return false;
 		}
-		if (this.hasWall(dir)) {
+		if (hasWall(dir)) {
 			return false;
 		}
 		return true;

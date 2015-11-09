@@ -15,7 +15,7 @@ public abstract class GuiObject {
 
 	public GuiObject(Gui gui) {
 		this.gui = gui;
-		this.id = GuiObject.nextID;
+		id = GuiObject.nextID;
 		GuiObject.nextID += 1;
 	}
 

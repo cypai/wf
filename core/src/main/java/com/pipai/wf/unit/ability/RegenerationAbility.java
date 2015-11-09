@@ -1,6 +1,5 @@
 package com.pipai.wf.unit.ability;
 
-
 public class RegenerationAbility extends PassiveAbility {
 
 	public RegenerationAbility(int level) {

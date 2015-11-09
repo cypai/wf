@@ -16,11 +16,11 @@ public class WFGame extends Game {
 
 	@Override
 	public void create() {
-		this.sprBatch = new SpriteBatch();
-		this.shapeBatch = new ShapeRenderer();
-		this.modelBatch = new ModelBatch();
-		this.font = new BitmapFont();
-		this.setScreen(new PartyInfoGui(this));
+		sprBatch = new SpriteBatch();
+		shapeBatch = new ShapeRenderer();
+		modelBatch = new ModelBatch();
+		font = new BitmapFont();
+		setScreen(new PartyInfoGui(this));
 	}
 
 	@Override
