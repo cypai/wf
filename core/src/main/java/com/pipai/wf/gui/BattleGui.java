@@ -52,6 +52,7 @@ import com.pipai.wf.gui.animation.ReadySpellAnimationHandler;
 import com.pipai.wf.gui.animation.ReloadAnimationHandler;
 import com.pipai.wf.gui.animation.SuppressionAnimationHandler;
 import com.pipai.wf.gui.camera.AnchoredCamera;
+import com.pipai.wf.gui.util.GuiObjectBuffers;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.LeftClickable;
@@ -102,9 +103,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	private AgentGuiObject selectedAgent, targetAgent;
 	private MapGraph selectedMapGraph;
 	private ArrayList<GuiRenderable> renderables, foregroundRenderables, renderablesCreateBuffer, renderablesDelBuffer, overlayRenderables;
-	private ArrayList<LeftClickable3D> leftClickables, leftClickablesCreateBuffer, leftClickablesDelBuffer;
+	private GuiObjectBuffers<LeftClickable3D> leftClickables;
+	private GuiObjectBuffers<RightClickable3D> rightClickables;
 	private ArrayList<LeftClickable> overlayLeftClickables;
-	private ArrayList<RightClickable3D> rightClickables, rightClickablesCreateBuffer, rightClickablesDelBuffer;
 	private Mode mode;
 	private boolean aiTurn;
 	private int aiMoveWait = 0;
@@ -132,16 +133,12 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		mode = Mode.MOVE;
 		renderables = new ArrayList<GuiRenderable>();
 		foregroundRenderables = new ArrayList<GuiRenderable>();
-		leftClickables = new ArrayList<LeftClickable3D>();
-		rightClickables = new ArrayList<RightClickable3D>();
+		renderablesCreateBuffer = new ArrayList<GuiRenderable>();
+		renderablesDelBuffer = new ArrayList<GuiRenderable>();
+		leftClickables = new GuiObjectBuffers<LeftClickable3D>();
+		rightClickables = new GuiObjectBuffers<RightClickable3D>();
 		overlayRenderables = new ArrayList<GuiRenderable>();
 		overlayLeftClickables = new ArrayList<LeftClickable>();
-		renderablesCreateBuffer = new ArrayList<GuiRenderable>();
-		leftClickablesCreateBuffer = new ArrayList<LeftClickable3D>();
-		rightClickablesCreateBuffer = new ArrayList<RightClickable3D>();
-		renderablesDelBuffer = new ArrayList<GuiRenderable>();
-		leftClickablesDelBuffer = new ArrayList<LeftClickable3D>();
-		rightClickablesDelBuffer = new ArrayList<RightClickable3D>();
 		agentMap = new HashMap<Agent, AgentGuiObject>();
 		agentList = new ArrayList<AgentGuiObject>();
 		selectableAgentOrderedList = new LinkedList<AgentGuiObject>();
@@ -235,10 +232,10 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			renderablesCreateBuffer.add((GuiRenderable) o);
 		}
 		if (o instanceof LeftClickable3D) {
-			leftClickablesCreateBuffer.add((LeftClickable3D) o);
+			leftClickables.addToCreateBuffer((LeftClickable3D) o);
 		}
 		if (o instanceof RightClickable3D) {
-			rightClickablesCreateBuffer.add((RightClickable3D) o);
+			rightClickables.addToCreateBuffer((RightClickable3D) o);
 		}
 	}
 
@@ -249,10 +246,10 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			renderablesDelBuffer.add((GuiRenderable) o);
 		}
 		if (o instanceof LeftClickable3D) {
-			leftClickablesDelBuffer.add((LeftClickable3D) o);
+			leftClickables.addToDeleteBuffer((LeftClickable3D) o);
 		}
 		if (o instanceof RightClickable3D) {
-			rightClickablesDelBuffer.add((RightClickable3D) o);
+			rightClickables.addToDeleteBuffer((RightClickable3D) o);
 		}
 	}
 
@@ -264,15 +261,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				renderables.add(o);
 			}
 		}
-		for (LeftClickable3D o : leftClickablesCreateBuffer) {
-			leftClickables.add(o);
-		}
-		for (RightClickable3D o : rightClickablesCreateBuffer) {
-			rightClickables.add(o);
-		}
 		renderablesCreateBuffer.clear();
-		leftClickablesCreateBuffer.clear();
-		rightClickablesCreateBuffer.clear();
+		leftClickables.flushCreateBuffer();
+		rightClickables.flushCreateBuffer();
 	}
 
 	private void cleanDelBuffers() {
@@ -281,15 +272,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				foregroundRenderables.remove(o);
 			}
 		}
-		for (LeftClickable3D o : leftClickablesDelBuffer) {
-			leftClickables.remove(o);
-		}
-		for (RightClickable3D o : rightClickablesDelBuffer) {
-			rightClickables.remove(o);
-		}
 		renderablesDelBuffer.clear();
-		leftClickablesDelBuffer.clear();
-		rightClickablesDelBuffer.clear();
+		leftClickables.flushDeleteBuffer();
+		rightClickables.flushDeleteBuffer();
 	}
 
 	public void updatePaths() {
@@ -400,7 +385,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			for (LeftClickable o : overlayLeftClickables) {
 				o.onLeftClick(screenX, screenY, gameX, gameY);
 			}
-			for (LeftClickable3D o : leftClickables) {
+			for (LeftClickable3D o : leftClickables.getAll()) {
 				o.onLeftClick(ray);
 			}
 		}
@@ -413,7 +398,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		}
 		Ray ray = rayMapper.screenToRay(screenX, screenY);
 		if (mode != Mode.ANIMATION) {
-			for (RightClickable3D o : rightClickables) {
+			for (RightClickable3D o : rightClickables.getAll()) {
 				o.onRightClick(ray);
 			}
 		}
