@@ -11,7 +11,7 @@ public class Pistol extends Weapon implements TargetedActionable {
 	public static final int BASE_AMMO = 2;
 
 	public Pistol(BattleConfiguration config) {
-		super(BASE_AMMO, config);
+		super(BASE_AMMO);
 	}
 
 	@Override
@@ -20,7 +20,7 @@ public class Pistol extends Weapon implements TargetedActionable {
 	}
 
 	@Override
-	public int rangeAimModifier(float distance) {
+	public int rangeAimModifier(float distance, BattleConfiguration config) {
 		if (distance <= 5) {
 			return 10;
 		}
@@ -33,7 +33,7 @@ public class Pistol extends Weapon implements TargetedActionable {
 	}
 
 	@Override
-	public int rangeCritModifier(float distance) {
+	public int rangeCritModifier(float distance, BattleConfiguration config) {
 		return 0;
 	}
 

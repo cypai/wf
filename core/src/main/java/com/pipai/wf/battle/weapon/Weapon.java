@@ -9,12 +9,10 @@ public abstract class Weapon implements HasName {
 
 	private int currentAmmo;
 	private AbilityList grantedAbilities;
-	private BattleConfiguration config;
 
-	public Weapon(int initialAmmo, BattleConfiguration config) {
+	public Weapon(int initialAmmo) {
 		currentAmmo = initialAmmo;
 		grantedAbilities = new AbilityList();
-		this.config = config;
 	}
 
 	protected final void addGrantedAbility(Ability a) {
@@ -23,11 +21,11 @@ public abstract class Weapon implements HasName {
 
 	public abstract int flatAimModifier();
 
-	public abstract int rangeAimModifier(float distance);
+	public abstract int rangeAimModifier(float distance, BattleConfiguration config);
 
 	public abstract int flatCritProbabilityModifier();
 
-	public abstract int rangeCritModifier(float distance);
+	public abstract int rangeCritModifier(float distance, BattleConfiguration config);
 
 	public abstract int minBaseDamage();
 
@@ -51,10 +49,6 @@ public abstract class Weapon implements HasName {
 
 	public final AbilityList getGrantedAbilities() {
 		return grantedAbilities;
-	}
-
-	public final BattleConfiguration getConfig() {
-		return config;
 	}
 
 }

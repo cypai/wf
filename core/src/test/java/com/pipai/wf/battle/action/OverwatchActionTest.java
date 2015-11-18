@@ -29,7 +29,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 	@Test
 	public void testNoWeaponOverwatch() {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		BattleMap map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
@@ -51,7 +51,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 	@Test
 	public void testNoAmmoOverwatch() {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		BattleMap map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
@@ -75,7 +75,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 	@Test
 	public void testOverwatchLog() {
 		BattleConfiguration config = new BattleConfiguration();
-		BattleMap map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(config);
@@ -131,7 +131,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 	@Test
 	public void testDualOverwatchLog() {
 		BattleConfiguration config = new BattleConfiguration();
-		BattleMap map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
 		GridPosition player1Pos = new GridPosition(1, 1);
 		GridPosition player2Pos = new GridPosition(0, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);

@@ -20,7 +20,7 @@ public class AgentFlankingTest {
 	private static BattleMap generateMap(String mapString, GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		when(mockConfig.sightRange()).thenReturn(17);
-		BattleMap map = new BattleMap(new MapString(mapString));
+		BattleMap map = new BattleMap(new MapString(mapString), mock(BattleConfiguration.class));
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));

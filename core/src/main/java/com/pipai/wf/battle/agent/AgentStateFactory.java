@@ -16,7 +16,7 @@ public class AgentStateFactory {
 	}
 
 	public AgentState statsOnlyState(int hp, int mp, int ap, int mobility, int aim, int defense) {
-		AgentState a = new AgentState(config);
+		AgentState a = new AgentState();
 		a.maxHP = hp;
 		a.hp = hp;
 		a.maxMP = mp;

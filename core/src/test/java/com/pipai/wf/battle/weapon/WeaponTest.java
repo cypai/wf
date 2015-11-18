@@ -27,7 +27,7 @@ public class WeaponTest {
 		GridPosition mockPos = mock(GridPosition.class);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
-		Agent player = new Agent(playerState, mockMap);
+		Agent player = new Agent(playerState, mockMap, mockConfig);
 		assertTrue(player.getCurrentWeapon() == null);
 	}
 
@@ -40,7 +40,7 @@ public class WeaponTest {
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
 		playerState.weapons.add(new Bow(mockConfig));
 		playerState.weapons.add(new InnateCasting(mockConfig));
-		Agent player = new Agent(playerState, mockMap);
+		Agent player = new Agent(playerState, mockMap, mockConfig);
 		assertTrue(player.getAbilities().hasAbility(QuickReloadAbility.class));
 		try {
 			new SwitchWeaponAction(player).perform(mockConfig);

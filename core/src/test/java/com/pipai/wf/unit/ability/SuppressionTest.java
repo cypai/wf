@@ -28,7 +28,7 @@ public class SuppressionTest {
 	private static BattleMap generateMap(GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		// when(mockConfig.sightRange()).thenReturn(17);
-		BattleMap map = new BattleMap(2, 2);
+		BattleMap map = new BattleMap(2, 2, mock(BattleConfiguration.class));
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState player = factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0));
 		player.abilities.add(new SuppressionAbility());

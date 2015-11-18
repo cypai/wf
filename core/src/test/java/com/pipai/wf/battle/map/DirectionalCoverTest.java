@@ -5,7 +5,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class DirectionalCoverTest {
@@ -40,7 +42,7 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString));
+			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
@@ -70,7 +72,7 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString));
+			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
@@ -101,7 +103,7 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString));
+			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
@@ -132,7 +134,7 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString));
+			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
@@ -162,7 +164,7 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString));
+			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}

@@ -16,11 +16,6 @@ public class SaveWriter {
 		this.save = save;
 	}
 
-	public void write(SaveHeader header, String data) {
-		saveBuilder.append(header.toString() + "\n");
-		saveBuilder.append(data + "\n");
-	}
-
 	public void save(FileHandle file) throws IOException {
 		saveBuilder = new StringBuilder();
 		buildHeader(saveBuilder);
@@ -36,9 +31,10 @@ public class SaveWriter {
 	}
 
 	private void buildPartySave(StringBuilder builder) {
+		AgentStateSaveConverter converter = new AgentStateSaveConverter();
 		saveBuilder.append(SaveHeader.PARTY.toString() + "\n");
 		for (AgentState as : save.getParty()) {
-			saveBuilder.append(new AgentSaveRepresentation(save.getConfig(), as).getStringRepresentation());
+			saveBuilder.append(converter.transformAgentStateToString(as));
 			saveBuilder.append('\n');
 		}
 	}

@@ -20,7 +20,7 @@ public class NewGameSaveGenerator {
 	}
 
 	public Save generateNewSave() {
-		Save save = new Save(config);
+		Save save = new Save();
 		save.setParty(generateParty());
 		return save;
 	}

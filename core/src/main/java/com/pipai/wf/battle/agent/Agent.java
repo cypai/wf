@@ -54,7 +54,7 @@ public class Agent implements HasName {
 	private StatusEffectList seList;
 	private BattleConfiguration config;
 
-	public Agent(AgentState state, BattleMap map) {
+	public Agent(AgentState state, BattleMap map, BattleConfiguration config) {
 		this.map = map;
 		team = state.team;
 		position = state.position;
@@ -75,7 +75,7 @@ public class Agent implements HasName {
 		name = state.name;
 		owContainer = new OverwatchContainer();
 		seList = new StatusEffectList();
-		config = state.getBattleConfiguration();
+		this.config = config;
 	}
 
 	public BattleMap getBattleMap() {

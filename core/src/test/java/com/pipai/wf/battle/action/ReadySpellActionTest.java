@@ -33,7 +33,7 @@ public class ReadySpellActionTest {
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
 		as.abilities.add(new FireballAbility());
 		as.weapons.add(new InnateCasting(mockConfig));
-		Agent player = new Agent(as, mock(BattleMap.class));
+		Agent player = new Agent(as, mock(BattleMap.class), mockConfig);
 		ReadySpellAction ready = new ReadySpellAction(player, new FireballSpell());
 		try {
 			ready.perform(mockConfig);
@@ -50,7 +50,7 @@ public class ReadySpellActionTest {
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
 		as.abilities.add(new FireActualizationAbility(1));
 		as.weapons.add(new InnateCasting(mockConfig));
-		Agent player = new Agent(as, mock(BattleMap.class));
+		Agent player = new Agent(as, mock(BattleMap.class), mockConfig);
 		ReadySpellAction ready = new ReadySpellAction(player, new FireballSpell());
 		try {
 			ready.perform(mockConfig);
@@ -67,7 +67,7 @@ public class ReadySpellActionTest {
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
 		as.abilities.add(new FireballAbility());
 		as.abilities.add(new FireActualizationAbility(1));
-		Agent player = new Agent(as, mock(BattleMap.class));
+		Agent player = new Agent(as, mock(BattleMap.class), mockConfig);
 		ReadySpellAction ready = new ReadySpellAction(player, new FireballSpell());
 		try {
 			ready.perform(mockConfig);
@@ -79,7 +79,7 @@ public class ReadySpellActionTest {
 	@Test
 	public void testReadyFireballLog() {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		BattleMap map = new BattleMap(3, 4);
+		BattleMap map = new BattleMap(3, 4, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(1, 0);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
@@ -108,7 +108,7 @@ public class ReadySpellActionTest {
 	@Test
 	public void testQuickenedFireballLog() {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		BattleMap map = new BattleMap(3, 4);
+		BattleMap map = new BattleMap(3, 4, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(1, 0);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);

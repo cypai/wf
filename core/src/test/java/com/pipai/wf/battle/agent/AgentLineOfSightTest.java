@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.pipai.libgdx.test.GdxMockedTest;
 import com.pipai.wf.battle.BattleConfiguration;
@@ -16,7 +17,7 @@ import com.pipai.wf.exception.BadStateStringException;
 public class AgentLineOfSightTest extends GdxMockedTest {
 
 	private static BattleMap generateMap(String mapString, GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
-		BattleMap map = new BattleMap(new MapString(mapString));
+		BattleMap map = new BattleMap(new MapString(mapString), Mockito.mock(BattleConfiguration.class));
 		AgentStateFactory factory = new AgentStateFactory(new BattleConfiguration());
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
 		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
@@ -156,7 +157,7 @@ public class AgentLineOfSightTest extends GdxMockedTest {
 	@Test
 	public void testOpenLOS() {
 		BattleConfiguration config = new BattleConfiguration();
-		BattleMap map = new BattleMap(1, config.sightRange() + 1);
+		BattleMap map = new BattleMap(1, config.sightRange() + 1, Mockito.mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(config.sightRange() - 1, 0);
 		AgentStateFactory factory = new AgentStateFactory(config);
@@ -171,7 +172,7 @@ public class AgentLineOfSightTest extends GdxMockedTest {
 	@Test
 	public void testTooFarLOS() {
 		BattleConfiguration config = new BattleConfiguration();
-		BattleMap map = new BattleMap(1, config.sightRange() + 1);
+		BattleMap map = new BattleMap(1, config.sightRange() + 1, Mockito.mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(config.sightRange(), 0);
 		AgentStateFactory factory = new AgentStateFactory(config);

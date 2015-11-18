@@ -20,10 +20,11 @@ public class SaveLoader {
 	}
 
 	private ArrayList<AgentState> readPartySave(String rawSaveData) {
+		AgentStateSaveConverter converter = new AgentStateSaveConverter();
 		ArrayList<String> rawPartyInfo = getLinesUnderHeader(SaveHeader.PARTY, rawSaveData);
 		ArrayList<AgentState> party = new ArrayList<>();
 		for (String line : rawPartyInfo) {
-			party.add(new AgentSaveRepresentation(save.getConfig(), line).getAgentState());
+			party.add(converter.parseStringRepresentation(line));
 		}
 		return party;
 	}
@@ -34,7 +35,7 @@ public class SaveLoader {
 		boolean isUnderHeader = false;
 		for (String line : lines) {
 			if (isHeader(line)) {
-				if (SaveHeader.getHeader(line) == header) {
+				if (SaveHeader.getHeader(line).equals(header)) {
 					isUnderHeader = true;
 				} else {
 					isUnderHeader = false;

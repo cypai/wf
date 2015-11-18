@@ -11,13 +11,12 @@ public enum SaveHeader {
 
 	@Override
 	public String toString() {
-		return headerText;
+		return "[" + headerText + "]";
 	}
 
 	public static SaveHeader getHeader(String line) {
-		String raw = line.substring(1, line.length() - 1);
 		for (SaveHeader header : SaveHeader.values()) {
-			if (header.headerText.equals(raw)) {
+			if (header.toString().equals(line)) {
 				return header;
 			}
 		}

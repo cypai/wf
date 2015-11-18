@@ -24,7 +24,7 @@ public class RegenerationAbilityTest {
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
 		as.abilities.add(new RegenerationAbility(1));
-		Agent agent = new Agent(as, mockMap);
+		Agent agent = new Agent(as, mockMap, mockConfig);
 		agent.setHP(agent.getMaxHP() - 1);
 		assertFalse(agent == null);
 		assertTrue(agent.getHP() == agent.getMaxHP() - 1);

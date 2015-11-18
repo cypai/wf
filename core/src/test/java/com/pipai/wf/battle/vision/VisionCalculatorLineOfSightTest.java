@@ -7,7 +7,9 @@ import static org.junit.Assert.fail;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapString;
@@ -124,7 +126,7 @@ public class VisionCalculatorLineOfSightTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString));
+			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
@@ -138,7 +140,7 @@ public class VisionCalculatorLineOfSightTest {
 		 * 0 0 0 0
 		 * A 0 0 0
 		 */
-		BattleMap map = new BattleMap(2, 4);
+		BattleMap map = new BattleMap(2, 4, Mockito.mock(BattleConfiguration.class));
 		assertTrue(VisionCalculator.lineOfSight(map, new GridPosition(0, 0), new GridPosition(3, 0)));
 	}
 

@@ -13,7 +13,7 @@ public class Bow extends Weapon implements TargetedActionable {
 	public static final int BASE_AMMO = 3;
 
 	public Bow(BattleConfiguration config) {
-		super(BASE_AMMO, config);
+		super(BASE_AMMO);
 		init();
 	}
 
@@ -27,8 +27,8 @@ public class Bow extends Weapon implements TargetedActionable {
 	}
 
 	@Override
-	public int rangeAimModifier(float distance) {
-		float range = getConfig().sightRange();
+	public int rangeAimModifier(float distance, BattleConfiguration config) {
+		float range = config.sightRange();
 		int slightBonusMax = 5;
 		float slightBonusRange = range * 0.7f;
 		int betterBonusMax = 15;
@@ -51,7 +51,7 @@ public class Bow extends Weapon implements TargetedActionable {
 	}
 
 	@Override
-	public int rangeCritModifier(float distance) {
+	public int rangeCritModifier(float distance, BattleConfiguration config) {
 		return 0;
 	}
 

@@ -29,7 +29,7 @@ public class BattleMoveActionTest {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		when(mockConfig.sightRange()).thenReturn(17);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		BattleMap map = new BattleMap(new MapString(mapString));
+		BattleMap map = new BattleMap(new MapString(mapString), mock(BattleConfiguration.class));
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 2, 1, 1, 0)));
 		return map;
 	}
@@ -140,7 +140,7 @@ public class BattleMoveActionTest {
 	@Test
 	public void testMoveLog() {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		BattleMap map = new BattleMap(3, 4);
+		BattleMap map = new BattleMap(3, 4, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(1, 0);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		map.addAgent(factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));

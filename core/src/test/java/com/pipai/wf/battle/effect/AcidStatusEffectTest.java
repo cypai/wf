@@ -25,7 +25,7 @@ public class AcidStatusEffectTest {
 	@Test
 	public void testAcid() {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		BattleMap map = new BattleMap(2, 2);
+		BattleMap map = new BattleMap(2, 2, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(0, 0);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);

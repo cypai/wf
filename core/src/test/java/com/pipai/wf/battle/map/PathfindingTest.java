@@ -19,7 +19,7 @@ public class PathfindingTest {
 
 	@Test
 	public void testOneMobilityMovableList() {
-		BattleMap map = new BattleMap(3, 4);
+		BattleMap map = new BattleMap(3, 4, mock(BattleConfiguration.class));
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 1, 1, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
 		ArrayList<GridPosition> req = new ArrayList<>();
@@ -35,7 +35,7 @@ public class PathfindingTest {
 
 	@Test
 	public void testTwoMobilityMovableList() {
-		BattleMap map = new BattleMap(4, 4);
+		BattleMap map = new BattleMap(4, 4, mock(BattleConfiguration.class));
 		MapGraph graph = new MapGraph(map, new GridPosition(0, 1), 2, 1, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
 		ArrayList<GridPosition> req = new ArrayList<>();
@@ -67,7 +67,7 @@ public class PathfindingTest {
 				+ "s 2 2";
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString));
+			map = new BattleMap(new MapString(rawMapString), mock(BattleConfiguration.class));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
@@ -92,7 +92,7 @@ public class PathfindingTest {
 
 	@Test
 	public void testThreeMobilityMovableList() {
-		BattleMap map = new BattleMap(8, 8);
+		BattleMap map = new BattleMap(8, 8, mock(BattleConfiguration.class));
 		MapGraph graph = new MapGraph(map, new GridPosition(3, 3), 3, 1, 1);
 		ArrayList<GridPosition> movableList = graph.getMovableCellPositions(1);
 		ArrayList<GridPosition> req = new ArrayList<>();
@@ -139,7 +139,7 @@ public class PathfindingTest {
 
 	@Test
 	public void testCorrectPathing() {
-		BattleMap map = new BattleMap(4, 4);
+		BattleMap map = new BattleMap(4, 4, mock(BattleConfiguration.class));
 		GridPosition start = new GridPosition(0, 0);
 		GridPosition end = new GridPosition(3, 2);
 		MapGraph graph = new MapGraph(map, start, 10, 1, 1);
@@ -150,7 +150,7 @@ public class PathfindingTest {
 
 	@Test
 	public void testTooFarPathing() {
-		BattleMap map = new BattleMap(4, 4);
+		BattleMap map = new BattleMap(4, 4, mock(BattleConfiguration.class));
 		GridPosition start = new GridPosition(0, 0);
 		GridPosition end = new GridPosition(3, 2);
 		MapGraph graph = new MapGraph(map, start, 3, 1, 1);
@@ -165,7 +165,7 @@ public class PathfindingTest {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString));
+			map = new BattleMap(new MapString(rawMapString), mock(BattleConfiguration.class));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}
@@ -179,7 +179,7 @@ public class PathfindingTest {
 
 	@Test
 	public void testIllegalSquares() {
-		BattleMap map = new BattleMap(4, 4);
+		BattleMap map = new BattleMap(4, 4, mock(BattleConfiguration.class));
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1, 1);
 		GridPosition illegal = new GridPosition(4, 1);
 		assertFalse("Failed to return false on moving to tile outside map", graph.canMoveTo(illegal));
@@ -188,7 +188,7 @@ public class PathfindingTest {
 
 	@Test
 	public void testNoAP() {
-		BattleMap map = new BattleMap(3, 3);
+		BattleMap map = new BattleMap(3, 3, mock(BattleConfiguration.class));
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 0, 1);
 		GridPosition any = new GridPosition(0, 0);
 		assertFalse("Failed to return false on moving to a tile", graph.canMoveTo(any));
@@ -197,7 +197,7 @@ public class PathfindingTest {
 
 	@Test
 	public void testTwoAP() {
-		BattleMap map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
 		MapGraph graph = new MapGraph(map, new GridPosition(2, 2), 2, 2, 2);
 		ArrayList<GridPosition> movableList1 = graph.getMovableCellPositions(1);
 		ArrayList<GridPosition> req1 = new ArrayList<>();

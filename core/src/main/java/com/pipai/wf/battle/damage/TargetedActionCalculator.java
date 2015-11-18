@@ -10,7 +10,7 @@ public class TargetedActionCalculator {
 		PercentageModifierList p = new PercentageModifierList();
 		p.add(new PercentageModifier("Aim", performer.getBaseAim()));
 		p.add(new PercentageModifier("Weapon Aim", weapon.flatAimModifier()));
-		p.add(new PercentageModifier("Range", weapon.rangeAimModifier(performer.getDistanceFrom(target))));
+		p.add(new PercentageModifier("Range", weapon.rangeAimModifier(performer.getDistanceFrom(target), null)));
 		p.concat(performer.getStatusEffects().aimModifierList());
 		p.add(new PercentageModifier("Defense", -target.getDefense(performer)));
 		return p;
@@ -20,7 +20,7 @@ public class TargetedActionCalculator {
 		Weapon weapon = performer.getCurrentWeapon();
 		PercentageModifierList p = new PercentageModifierList();
 		p.add(new PercentageModifier("Weapon Base", weapon.flatCritProbabilityModifier()));
-		p.add(new PercentageModifier("Range", weapon.rangeCritModifier(performer.getDistanceFrom(target))));
+		p.add(new PercentageModifier("Range", weapon.rangeCritModifier(performer.getDistanceFrom(target), null)));
 		if (target.isFlankedBy(performer)) {
 			p.add(new PercentageModifier("No Cover", 30));
 		}

@@ -4,6 +4,8 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.mockito.invocation.InvocationOnMock;
@@ -30,6 +32,14 @@ public class GdxMockedTest {
 			public FileHandle answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();
 				return new FileHandle((String) args[0]);
+			}
+		});
+		when(Gdx.files.external(anyString())).thenAnswer(new Answer<FileHandle>() {
+			@Override
+			public FileHandle answer(InvocationOnMock invocation) throws Throwable {
+				Object[] args = invocation.getArguments();
+				File file = new File("" + (String) args[0]);
+				return new FileHandle(file);
 			}
 		});
 	}

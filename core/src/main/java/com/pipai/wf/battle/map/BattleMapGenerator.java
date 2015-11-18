@@ -36,7 +36,7 @@ public class BattleMapGenerator {
 	public BattleMap generateMap(BattleSchema schema) {
 		int width = rng.randInt(30, 40);
 		int height = rng.randInt(30, 40);
-		BattleMap map = new BattleMap(width, height);
+		BattleMap map = new BattleMap(width, height, config);
 		generateRandomEnvironment(map);
 		generatePartyPod(map, schema.getPartySchemas());
 		for (int i = 0; i < 2; i++) {

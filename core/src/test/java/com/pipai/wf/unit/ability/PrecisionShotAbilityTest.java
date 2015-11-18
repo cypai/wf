@@ -29,7 +29,7 @@ public class PrecisionShotAbilityTest {
 
 	@Test
 	public void testPrecisionShotCooldown() {
-		BattleMap map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(0, 0);
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		DamageCalculator mockDamageCalculator = mock(DamageCalculator.class);

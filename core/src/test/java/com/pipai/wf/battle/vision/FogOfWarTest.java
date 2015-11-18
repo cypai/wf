@@ -35,7 +35,7 @@ public class FogOfWarTest {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		when(mockConfig.sightRange()).thenReturn(VISUAL_RANGE);
 		when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
-		BattleMap map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
@@ -58,7 +58,7 @@ public class FogOfWarTest {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		when(mockConfig.sightRange()).thenReturn(VISUAL_RANGE);
 		when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
-		BattleMap map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));

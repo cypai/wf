@@ -32,7 +32,7 @@ public class SwitchWeaponActionTest {
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
 		playerState.weapons.add(new Pistol(mockConfig));
 		playerState.weapons.add(new InnateCasting(mockConfig));
-		Agent player = new Agent(playerState, mockMap);
+		Agent player = new Agent(playerState, mockMap, mockConfig);
 		BattleController battle = new BattleController(mockMap, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
 		battle.registerObserver(observer);

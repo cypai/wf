@@ -5,7 +5,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class MapGenerationTest {
@@ -22,7 +24,7 @@ public class MapGenerationTest {
 				+ "s 2 1";
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString));
+			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
 		} catch (BadStateStringException e) {
 			fail(e.getMessage());
 		}

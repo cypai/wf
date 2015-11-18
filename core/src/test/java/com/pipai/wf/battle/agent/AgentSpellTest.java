@@ -22,7 +22,7 @@ public class AgentSpellTest {
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
 		as.abilities.add(new FireballAbility());
-		Agent agent = new Agent(as, mockMap);
+		Agent agent = new Agent(as, mockMap, mockConfig);
 		assertTrue(agent.getAbilities().hasSpell(FireballSpell.class));
 	}
 

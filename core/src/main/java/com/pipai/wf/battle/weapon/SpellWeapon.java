@@ -8,7 +8,7 @@ public abstract class SpellWeapon extends Weapon {
 	private Spell spell;
 
 	public SpellWeapon(BattleConfiguration config) {
-		super(0, config);
+		super(0);
 	}
 
 	public void ready(Spell spell) {
@@ -29,7 +29,7 @@ public abstract class SpellWeapon extends Weapon {
 	}
 
 	@Override
-	public int rangeAimModifier(float distance) {
+	public int rangeAimModifier(float distance, BattleConfiguration config) {
 		return 0;
 	}
 
@@ -39,7 +39,7 @@ public abstract class SpellWeapon extends Weapon {
 	}
 
 	@Override
-	public int rangeCritModifier(float distance) {
+	public int rangeCritModifier(float distance, BattleConfiguration config) {
 		return 0;
 	}
 

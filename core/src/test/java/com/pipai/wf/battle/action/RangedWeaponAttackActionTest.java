@@ -40,7 +40,7 @@ public class RangedWeaponAttackActionTest {
 				Matchers.any(DamageFunction.class),
 				Matchers.anyInt())).thenReturn(new DamageResult(true, false, 1, 0));
 		when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
-		BattleMap map = new BattleMap(5, 5);
+		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 1);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
