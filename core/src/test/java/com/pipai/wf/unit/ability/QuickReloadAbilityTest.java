@@ -27,7 +27,7 @@ public class QuickReloadAbilityTest {
 		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
-		as.weapons.add(new Pistol(mockConfig));
+		as.weapons.add(new Pistol());
 		Agent agent = new Agent(as, mockMap, mockConfig);
 		BattleController battle = new BattleController(mockMap, mockConfig);
 		try {
@@ -46,7 +46,7 @@ public class QuickReloadAbilityTest {
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
 		as.abilities.add(new QuickReloadAbility());
-		as.weapons.add(new Pistol(mockConfig));
+		as.weapons.add(new Pistol());
 		Agent agent = new Agent(as, mockMap, mockConfig);
 		BattleController battle = new BattleController(mockMap, mockConfig);
 		try {

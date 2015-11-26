@@ -10,7 +10,7 @@ public class Pistol extends Weapon implements TargetedActionable {
 
 	public static final int BASE_AMMO = 2;
 
-	public Pistol(BattleConfiguration config) {
+	public Pistol() {
 		super(BASE_AMMO);
 	}
 

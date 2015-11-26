@@ -1,84 +1,40 @@
 package com.pipai.wf.save;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.pipai.wf.battle.BattleConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.unit.ability.Ability;
 
 public class AgentStateSaveConverter {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(AgentStateSaveConverter.class);
+
 	public String transformAgentStateToString(AgentState as) {
-		Gson gson = new GsonBuilder()
-				.addSerializationExclusionStrategy(new ConfigExclusionStrategy())
-				.registerTypeHierarchyAdapter(Ability.class, new AbilityAdapter())
-				.create();
-		String json = gson.toJson(as);
-		return json;
+		ObjectMapper mapper = new ObjectMapper();
+		String saveString;
+		try {
+			saveString = mapper.writeValueAsString(as);
+		} catch (JsonProcessingException e) {
+			LOGGER.error("Could not serialize to save data: " + e.getMessage(), e);
+			saveString = "";
+		}
+		return saveString;
 	}
 
 	public AgentState parseStringRepresentation(String rawSaveData) {
-		Gson gson = new GsonBuilder()
-				.addDeserializationExclusionStrategy(new ConfigExclusionStrategy())
-				.create();
-		return gson.fromJson(rawSaveData, AgentState.class);
-	}
-
-	private static class ConfigExclusionStrategy implements ExclusionStrategy {
-		@Override
-		public boolean shouldSkipClass(Class<?> clazz) {
-			return clazz.equals(BattleConfiguration.class);
+		ObjectMapper mapper = new ObjectMapper();
+		AgentState as;
+		try {
+			as = mapper.readValue(rawSaveData, AgentState.class);
+		} catch (IOException e) {
+			LOGGER.error("Could not parse save data: " + e.getMessage(), e);
+			as = new AgentState();
 		}
-
-		@Override
-		public boolean shouldSkipField(FieldAttributes f) {
-			return false;
-		}
-	}
-
-	public class AbilityAdapter implements JsonSerializer<Ability>, JsonDeserializer<Ability> {
-
-		private static final String CLASSNAME = "CLASSNAME";
-		private static final String INSTANCE = "INSTANCE";
-
-		@Override
-		public JsonElement serialize(Ability src, Type typeOfSrc, JsonSerializationContext context) {
-			JsonObject retValue = new JsonObject();
-			String className = src.getClass().getName();
-			retValue.addProperty(CLASSNAME, className);
-			Gson gson = new Gson();
-			JsonElement elem = gson.toJsonTree(src);
-			retValue.add(INSTANCE, elem);
-			return retValue;
-		}
-
-		@Override
-		public Ability deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-			JsonObject jsonObject = json.getAsJsonObject();
-			JsonPrimitive prim = (JsonPrimitive) jsonObject.get(CLASSNAME);
-			String className = prim.getAsString();
-
-			Class<?> klass = null;
-			try {
-				klass = Class.forName(className);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-				throw new JsonParseException(e.getMessage());
-			}
-			return context.deserialize(jsonObject.get(INSTANCE), klass);
-		}
+		return as;
 	}
 
 }

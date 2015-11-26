@@ -12,7 +12,7 @@ public class Bow extends Weapon implements TargetedActionable {
 
 	public static final int BASE_AMMO = 3;
 
-	public Bow(BattleConfiguration config) {
+	public Bow() {
 		super(BASE_AMMO);
 		init();
 	}

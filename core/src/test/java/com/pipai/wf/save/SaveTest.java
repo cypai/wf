@@ -20,7 +20,32 @@ public class SaveTest extends GdxMockedTest {
 
 	@After
 	public void tearDown() {
-		// MANAGER.delete(SAVE_SLOT);
+		MANAGER.delete(SAVE_SLOT);
+	}
+
+	@Test
+	public void smallPartyTest() throws IOException {
+		AgentStateFactory factory = new AgentStateFactory(Mockito.mock(BattleConfiguration.class));
+		AgentState as = factory.statsOnlyState(5, 4, 2, 10, 60, 0);
+		Save save = new Save();
+		ArrayList<AgentState> party = new ArrayList<>();
+		party.add(as);
+		save.setParty(party);
+		MANAGER.save(save, SAVE_SLOT);
+		Save load = MANAGER.load(SAVE_SLOT);
+		ArrayList<AgentState> loadParty = load.getParty();
+		Assert.assertEquals(1, loadParty.size());
+		AgentState loadState = loadParty.get(0);
+		Assert.assertEquals(5, loadState.hp);
+		Assert.assertEquals(5, loadState.maxHP);
+		Assert.assertEquals(4, loadState.mp);
+		Assert.assertEquals(4, loadState.maxMP);
+		Assert.assertEquals(2, loadState.ap);
+		Assert.assertEquals(2, loadState.maxAP);
+		Assert.assertEquals(10, loadState.mobility);
+		Assert.assertEquals(60, loadState.aim);
+		Assert.assertEquals(0, loadState.defense);
+		Assert.assertEquals(0, loadState.abilities.size());
 	}
 
 	@Test
@@ -32,16 +57,7 @@ public class SaveTest extends GdxMockedTest {
 		Save load = MANAGER.load(SAVE_SLOT);
 		ArrayList<AgentState> party = load.getParty();
 		Assert.assertEquals(6, party.size());
+		AgentState tidus = party.get(0);
+		Assert.assertEquals(3, tidus.abilities.size());
 	}
-
-	@Test
-	public void test() {
-		AgentStateFactory factory = new AgentStateFactory(Mockito.mock(BattleConfiguration.class));
-		AgentState as = factory.statsOnlyState(5, 4, 2, 10, 60, 0);
-		Save save = new Save();
-		ArrayList<AgentState> party = new ArrayList<>();
-		party.add(as);
-		save.setParty(party);
-	}
-
 }

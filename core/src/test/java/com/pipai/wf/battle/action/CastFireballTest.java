@@ -50,7 +50,7 @@ public class CastFireballTest extends GdxMockedTest {
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
-		playerState.weapons.add(new InnateCasting(mockConfig));
+		playerState.weapons.add(new InnateCasting());
 		playerState.abilities.add(new FireActualizationAbility(1));
 		playerState.abilities.add(new FireballAbility());
 		map.addAgent(playerState);
@@ -96,7 +96,7 @@ public class CastFireballTest extends GdxMockedTest {
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		playerState.weapons.add(new InnateCasting(mockConfig));
+		playerState.weapons.add(new InnateCasting());
 		playerState.abilities.add(new FireActualizationAbility(1));
 		playerState.abilities.add(new FireballAbility());
 		map.addAgent(playerState);

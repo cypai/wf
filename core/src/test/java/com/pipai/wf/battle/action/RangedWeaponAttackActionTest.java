@@ -45,7 +45,7 @@ public class RangedWeaponAttackActionTest {
 		GridPosition enemyPos = new GridPosition(2, 1);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
-		playerState.weapons.add(new Pistol(mockConfig));
+		playerState.weapons.add(new Pistol());
 		map.addAgent(playerState);
 		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map, mockConfig);

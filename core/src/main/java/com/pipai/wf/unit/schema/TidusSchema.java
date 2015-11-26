@@ -43,8 +43,8 @@ public class TidusSchema extends RaceTemplateSchema {
 	@Override
 	public ArrayList<Weapon> weapons(BattleConfiguration config) {
 		ArrayList<Weapon> l = new ArrayList<>();
-		l.add(new Bow(config));
-		l.add(new InnateCasting(config));
+		l.add(new Bow());
+		l.add(new InnateCasting());
 		return l;
 	}
 

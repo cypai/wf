@@ -1,18 +1,23 @@
 package com.pipai.wf.unit.ability;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.exception.NoRegisteredAgentException;
 import com.pipai.wf.misc.HasDescription;
 import com.pipai.wf.misc.HasName;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public abstract class Ability implements HasName, HasDescription {
 
 	private int cooldown;
 	private int level;
 	private Agent agent;
 
-	public Ability(int level) {
+	@JsonCreator
+	public Ability(@JsonProperty("level") int level) {
 		this.level = level;
 	}
 
@@ -30,7 +35,7 @@ public abstract class Ability implements HasName, HasDescription {
 	public void startCooldown() {
 	}
 
-	public boolean isOnCooldown() {
+	public boolean onCooldown() {
 		return cooldown > 0;
 	}
 
@@ -69,7 +74,7 @@ public abstract class Ability implements HasName, HasDescription {
 		return false;
 	}
 
-	public Spell getGrantedSpell() {
+	public Spell grantedSpell() {
 		return null;
 	}
 

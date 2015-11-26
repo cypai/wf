@@ -14,7 +14,7 @@ public abstract class PassiveAbility extends Ability {
 	}
 
 	@Override
-	public final Spell getGrantedSpell() {
+	public final Spell grantedSpell() {
 		return null;
 	}
 

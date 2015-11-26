@@ -68,7 +68,7 @@ public class SlimeSchema implements UnitSchema {
 	@Override
 	public ArrayList<Weapon> weapons(BattleConfiguration config) {
 		ArrayList<Weapon> l = new ArrayList<>();
-		l.add(new InnateCasting(config));
+		l.add(new InnateCasting());
 		return l;
 	}
 

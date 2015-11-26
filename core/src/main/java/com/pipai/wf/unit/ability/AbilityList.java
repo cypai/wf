@@ -3,7 +3,9 @@ package com.pipai.wf.unit.ability;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.spell.SpellElement;
@@ -12,19 +14,23 @@ import com.pipai.wf.exception.NoRegisteredAgentException;
 public class AbilityList implements Iterable<Ability> {
 
 	private Agent registeredAgent;
-	private LinkedList<Ability> list;
+	private LinkedList<Ability> abilityList;
 	private HashMap<Class<? extends Spell>, Integer> spellMap;
 
 	public AbilityList() {
-		list = new LinkedList<Ability>();
+		abilityList = new LinkedList<Ability>();
 		spellMap = new HashMap<Class<? extends Spell>, Integer>();
 	}
 
 	public void registerToAgent(Agent agent) {
-		for (Ability a : list) {
+		for (Ability a : abilityList) {
 			a.registerToAgent(agent);
 		}
 		registeredAgent = agent;
+	}
+
+	public List<Ability> getAbilityList() {
+		return abilityList;
 	}
 
 	public boolean hasSpell(Spell spell) {
@@ -40,11 +46,11 @@ public class AbilityList implements Iterable<Ability> {
 	 * This one also checks for ability level. If just looking for a class, use the other function
 	 */
 	public boolean hasAbility(Ability ability) {
-		return list.contains(ability);
+		return abilityList.contains(ability);
 	}
 
 	public boolean hasAbility(Class<? extends Ability> abilityClass) {
-		for (Ability a : list) {
+		for (Ability a : abilityList) {
 			if (abilityClass.isInstance(a)) {
 				return true;
 			}
@@ -53,7 +59,7 @@ public class AbilityList implements Iterable<Ability> {
 	}
 
 	public Ability getAbility(Class<? extends Ability> abilityClass) {
-		for (Ability a : list) {
+		for (Ability a : abilityList) {
 			if (abilityClass.isInstance(a)) {
 				return a;
 			}
@@ -62,7 +68,7 @@ public class AbilityList implements Iterable<Ability> {
 	}
 
 	public int getActualizationLevel(SpellElement e) {
-		for (Ability a : list) {
+		for (Ability a : abilityList) {
 			switch (e) {
 			case FIRE:
 				if (a instanceof FireActualizationAbility) {
@@ -102,15 +108,15 @@ public class AbilityList implements Iterable<Ability> {
 	}
 
 	public void onRoundEnd() throws NoRegisteredAgentException {
-		for (Ability a : list) {
+		for (Ability a : abilityList) {
 			a.onRoundEnd();
 		}
 	}
 
 	public boolean add(Ability arg0) {
-		list.add(arg0);
+		abilityList.add(arg0);
 		if (arg0 instanceof SpellAbility) {
-			spellMap.put(arg0.getGrantedSpell().getClass(), 1);
+			spellMap.put(arg0.grantedSpell().getClass(), 1);
 		}
 		arg0.registerToAgent(registeredAgent);
 		return true;
@@ -123,35 +129,36 @@ public class AbilityList implements Iterable<Ability> {
 	}
 
 	public void clear() {
-		list = new LinkedList<Ability>();
+		abilityList = new LinkedList<Ability>();
 		spellMap = new HashMap<Class<? extends Spell>, Integer>();
 	}
 
 	@Override
 	public AbilityList clone() {
 		AbilityList alist = new AbilityList();
-		for (Ability a : list) {
+		for (Ability a : abilityList) {
 			alist.add(a.clone());
 		}
 		return alist;
 	}
 
 	public boolean contains(Ability arg0) {
-		return list.contains(arg0);
+		return abilityList.contains(arg0);
 	}
 
+	@JsonIgnore
 	public boolean isEmpty() {
-		return list.isEmpty();
+		return abilityList.isEmpty();
 	}
 
 	public boolean remove(Ability arg0) {
-		list.remove(arg0);
-		spellMap.remove(arg0.getGrantedSpell().getClass());
+		abilityList.remove(arg0);
+		spellMap.remove(arg0.grantedSpell().getClass());
 		return true;
 	}
 
 	public int size() {
-		return list.size();
+		return abilityList.size();
 	}
 
 	public static class AbilityListIterator implements Iterator<Ability> {
@@ -181,7 +188,7 @@ public class AbilityList implements Iterable<Ability> {
 
 	@Override
 	public Iterator<Ability> iterator() {
-		return new AbilityListIterator(list);
+		return new AbilityListIterator(abilityList);
 	}
 
 }

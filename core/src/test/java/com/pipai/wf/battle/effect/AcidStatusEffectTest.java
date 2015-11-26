@@ -29,7 +29,7 @@ public class AcidStatusEffectTest {
 		GridPosition playerPos = new GridPosition(0, 0);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		as.weapons.add(new Bow(mockConfig));
+		as.weapons.add(new Bow());
 		map.addAgent(as);
 		Agent agent = map.getAgentAtPos(playerPos);
 		assertTrue(agent.getEffectiveMobility() == agent.getBaseMobility());

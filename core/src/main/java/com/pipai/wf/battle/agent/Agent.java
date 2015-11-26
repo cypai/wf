@@ -232,7 +232,7 @@ public class Agent implements HasName {
 		ArrayList<Spell> l = new ArrayList<>();
 		for (Ability a : abilities) {
 			if (a.grantsSpell()) {
-				l.add(a.getGrantedSpell());
+				l.add(a.grantedSpell());
 			}
 		}
 		return l;
@@ -389,13 +389,13 @@ public class Agent implements HasName {
 
 	public void decrementCooldowns() {
 		for (Ability a : getInnateAbilities()) {
-			if (a.isOnCooldown()) {
+			if (a.onCooldown()) {
 				a.decrementCooldown();
 			}
 		}
 
 		for (Ability a : getWeaponGrantedAbilities()) {
-			if (a.isOnCooldown()) {
+			if (a.onCooldown()) {
 				a.decrementCooldown();
 			}
 		}

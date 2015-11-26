@@ -60,7 +60,7 @@ public class AgentStateFactory {
 		a.team = team;
 		a.state = State.NEUTRAL;
 		a.position = position;
-		a.weapons.add(new Pistol(config));
+		a.weapons.add(new Pistol());
 		return a;
 	}
 }

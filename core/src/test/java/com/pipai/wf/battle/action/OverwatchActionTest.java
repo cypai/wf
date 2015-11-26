@@ -56,8 +56,8 @@ public class OverwatchActionTest extends GdxMockedTest {
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		playerState.weapons.add(new Pistol(mockConfig));
-		playerState.weapons.get(0).expendAmmo(new Pistol(mockConfig).baseAmmoCapacity());
+		playerState.weapons.add(new Pistol());
+		playerState.weapons.get(0).expendAmmo(new Pistol().baseAmmoCapacity());
 		map.addAgent(playerState);
 		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map, mockConfig);
@@ -80,7 +80,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(config);
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		playerState.weapons.add(new Pistol(config));
+		playerState.weapons.add(new Pistol());
 		map.addAgent(playerState);
 		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		BattleController battle = new BattleController(map, config);
@@ -137,11 +137,11 @@ public class OverwatchActionTest extends GdxMockedTest {
 		GridPosition enemyPos = new GridPosition(2, 2);
 		AgentStateFactory factory = new AgentStateFactory(config);
 		AgentState player1State = factory.newBattleAgentState(Team.PLAYER, player1Pos, 3, 5, 2, 5, 65, 0);
-		player1State.weapons.add(new Pistol(config));
+		player1State.weapons.add(new Pistol());
 		map.addAgent(player1State);
 		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
 		AgentState player2State = factory.newBattleAgentState(Team.PLAYER, player2Pos, 3, 5, 2, 5, 65, 0);
-		player2State.weapons.add(new Pistol(config));
+		player2State.weapons.add(new Pistol());
 		map.addAgent(player2State);
 		// Enemy needs more HP to more accurately test damage
 		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 10, 5, 2, 5, 65, 0));

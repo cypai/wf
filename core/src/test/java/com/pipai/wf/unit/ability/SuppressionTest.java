@@ -32,10 +32,10 @@ public class SuppressionTest {
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState player = factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0));
 		player.abilities.add(new SuppressionAbility());
-		player.weapons.add(new Bow(mockConfig));
+		player.weapons.add(new Bow());
 		map.addAgent(player);
 		AgentState enemy = factory.battleAgentFromStats(Team.ENEMY, enemyPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0));
-		enemy.weapons.add(new Bow(mockConfig));
+		enemy.weapons.add(new Bow());
 		map.addAgent(enemy);
 		return map;
 	}

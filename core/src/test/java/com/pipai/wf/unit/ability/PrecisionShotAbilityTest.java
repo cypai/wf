@@ -42,19 +42,19 @@ public class PrecisionShotAbilityTest {
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
 		playerState.abilities.add(new PrecisionShotAbility());
-		playerState.weapons.add(new Pistol(mockConfig));
+		playerState.weapons.add(new Pistol());
 		map.addAgent(playerState);
 		Agent agent = map.getAgentAtPos(playerPos);
 		BattleController battle = new BattleController(map, mockConfig);
 		try {
 			battle.performAction(new PrecisionShotAction(agent, mockTarget));
-			assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).isOnCooldown());
+			assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
 		} catch (IllegalActionException e) {
 			fail(e.getMessage());
 		}
 
 		battle.endTurn();
-		assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).isOnCooldown());
+		assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
 		try {
 			battle.performAction(new PrecisionShotAction(agent, mockTarget));
 			fail("Expected IllegalActionException not thrown");
@@ -62,7 +62,7 @@ public class PrecisionShotAbilityTest {
 		}
 
 		battle.endTurn();
-		assertFalse(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).isOnCooldown());
+		assertFalse(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
 		try {
 			battle.performAction(new PrecisionShotAction(agent, mockTarget));
 		} catch (IllegalActionException e) {

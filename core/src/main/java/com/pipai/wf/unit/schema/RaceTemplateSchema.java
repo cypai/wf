@@ -66,12 +66,12 @@ public class RaceTemplateSchema implements UnitSchema {
 	public ArrayList<Weapon> weapons(BattleConfiguration config) {
 		ArrayList<Weapon> l = new ArrayList<>();
 		if (race == Race.FAIRY) {
-			l.add(new Bow(config));
+			l.add(new Bow());
 		} else {
-			l.add(new Pistol(config));
+			l.add(new Pistol());
 		}
 		if (abilities().hasAbility(FireActualizationAbility.class)) {
-			l.add(new InnateCasting(config));
+			l.add(new InnateCasting());
 		}
 		return l;
 	}

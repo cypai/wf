@@ -1,8 +1,12 @@
 package com.pipai.wf.unit.ability;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FireActualizationAbility extends PassiveAbility {
 
-	public FireActualizationAbility(int level) {
+	@JsonCreator
+	public FireActualizationAbility(@JsonProperty("level") int level) {
 		super(level);
 	}
 

@@ -28,7 +28,7 @@ public class ReloadActionTest {
 		GridPosition mockPos = mock(GridPosition.class);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
-		Pistol pistol = new Pistol(mockConfig);
+		Pistol pistol = new Pistol();
 		pistol.expendAmmo(1);
 		playerState.weapons.add(pistol);
 		Agent player = new Agent(playerState, mockMap, mockConfig);
@@ -50,7 +50,7 @@ public class ReloadActionTest {
 		GridPosition mockPos = mock(GridPosition.class);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
-		playerState.weapons.add(new Pistol(mockConfig));
+		playerState.weapons.add(new Pistol());
 		Agent player = new Agent(playerState, mockMap, mockConfig);
 		BattleController battle = new BattleController(mockMap, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();

@@ -45,7 +45,7 @@ public class AbilityListTest {
 		alist.add(new RegenerationAbility(1));
 		for (Ability a : alist) {
 			if (a.grantsSpell()) {
-				spellList.add(a.getGrantedSpell());
+				spellList.add(a.grantedSpell());
 			}
 		}
 		assertTrue(spellList.size() == 1);

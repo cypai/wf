@@ -7,7 +7,7 @@ public abstract class SpellWeapon extends Weapon {
 
 	private Spell spell;
 
-	public SpellWeapon(BattleConfiguration config) {
+	public SpellWeapon() {
 		super(0);
 	}
 

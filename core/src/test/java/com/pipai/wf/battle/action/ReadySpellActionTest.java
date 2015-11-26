@@ -32,7 +32,7 @@ public class ReadySpellActionTest {
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
 		as.abilities.add(new FireballAbility());
-		as.weapons.add(new InnateCasting(mockConfig));
+		as.weapons.add(new InnateCasting());
 		Agent player = new Agent(as, mock(BattleMap.class), mockConfig);
 		ReadySpellAction ready = new ReadySpellAction(player, new FireballSpell());
 		try {
@@ -49,7 +49,7 @@ public class ReadySpellActionTest {
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
 		as.abilities.add(new FireActualizationAbility(1));
-		as.weapons.add(new InnateCasting(mockConfig));
+		as.weapons.add(new InnateCasting());
 		Agent player = new Agent(as, mock(BattleMap.class), mockConfig);
 		ReadySpellAction ready = new ReadySpellAction(player, new FireballSpell());
 		try {
@@ -83,7 +83,7 @@ public class ReadySpellActionTest {
 		GridPosition playerPos = new GridPosition(1, 0);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		as.weapons.add(new InnateCasting(mockConfig));
+		as.weapons.add(new InnateCasting());
 		as.abilities.add(new FireActualizationAbility(1));
 		as.abilities.add(new FireballAbility());
 		map.addAgent(as);
@@ -112,7 +112,7 @@ public class ReadySpellActionTest {
 		GridPosition playerPos = new GridPosition(1, 0);
 		AgentStateFactory factory = new AgentStateFactory(mockConfig);
 		AgentState as = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		as.weapons.add(new InnateCasting(mockConfig));
+		as.weapons.add(new InnateCasting());
 		as.abilities.add(new FireActualizationAbility(2));
 		as.abilities.add(new FireballAbility());
 		map.addAgent(as);

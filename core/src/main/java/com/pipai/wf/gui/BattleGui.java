@@ -615,7 +615,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			// Skill
 			if (mode == Mode.MOVE) {
 				for (Ability a : selectedAgent.getAgent().getAbilities()) {
-					if (a instanceof PrecisionShotAbility && !a.isOnCooldown()) {
+					if (a instanceof PrecisionShotAbility && !a.onCooldown()) {
 						this.switchToTargetMode((PrecisionShotAbility) a);
 						break;
 					} else if (a instanceof SuppressionAbility) {

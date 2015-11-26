@@ -6,7 +6,7 @@ import com.pipai.wf.battle.spell.Spell;
 public class Wand extends SpellWeapon {
 
 	public Wand(BattleConfiguration config) {
-		super(config);
+		super();
 	}
 
 	@Override
