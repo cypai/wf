@@ -1,21 +1,20 @@
 package com.pipai.wf.util;
 
-import static org.junit.Assert.assertTrue;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class RomanNumeralTest {
 
 	@Test
 	public void testRomanNumerals() {
-		assertTrue(RomanNumerals.romanNumeralify(1).equals("I"));
-		assertTrue(RomanNumerals.romanNumeralify(2).equals("II"));
-		assertTrue(RomanNumerals.romanNumeralify(3).equals("III"));
-		assertTrue(RomanNumerals.romanNumeralify(4).equals("IV"));
-		assertTrue(RomanNumerals.romanNumeralify(5).equals("V"));
-		assertTrue(RomanNumerals.romanNumeralify(6).equals("VI"));
-		assertTrue(RomanNumerals.romanNumeralify(9).equals("IX"));
-		assertTrue(RomanNumerals.romanNumeralify(10).equals("X"));
+		Assert.assertTrue(RomanNumerals.romanNumeralify(1).equals("I"));
+		Assert.assertTrue(RomanNumerals.romanNumeralify(2).equals("II"));
+		Assert.assertTrue(RomanNumerals.romanNumeralify(3).equals("III"));
+		Assert.assertTrue(RomanNumerals.romanNumeralify(4).equals("IV"));
+		Assert.assertTrue(RomanNumerals.romanNumeralify(5).equals("V"));
+		Assert.assertTrue(RomanNumerals.romanNumeralify(6).equals("VI"));
+		Assert.assertTrue(RomanNumerals.romanNumeralify(9).equals("IX"));
+		Assert.assertTrue(RomanNumerals.romanNumeralify(10).equals("X"));
 	}
 
 }

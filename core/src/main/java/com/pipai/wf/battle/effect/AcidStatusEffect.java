@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.damage.DamageDealer;
+import com.pipai.wf.battle.damage.DamageResult;
 
 public class AcidStatusEffect extends StatusEffect {
 
@@ -14,8 +16,11 @@ public class AcidStatusEffect extends StatusEffect {
 		actionWhitelist.add(SwitchWeaponAction.class);
 	}
 
-	public AcidStatusEffect(Agent agent, int cooldown) {
+	private DamageDealer damageDealer;
+
+	public AcidStatusEffect(Agent agent, int cooldown, DamageDealer damageDealer) {
 		super(agent, cooldown);
+		this.damageDealer = damageDealer;
 	}
 
 	@Override
@@ -25,7 +30,7 @@ public class AcidStatusEffect extends StatusEffect {
 
 	@Override
 	public int flatMobilityModifier() {
-		return -getAgent().getBaseMobility() / 2;
+		return -getAgent().getMobility() / 2;
 	}
 
 	@Override
@@ -47,7 +52,7 @@ public class AcidStatusEffect extends StatusEffect {
 			}
 		}
 		// Did not pass, take damage
-		getAgent().takeDamage(1);
+		damageDealer.doDamage(new DamageResult(true, false, 1, 0), getAgent());
 	}
 
 }

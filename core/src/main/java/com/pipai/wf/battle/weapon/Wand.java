@@ -32,7 +32,7 @@ public class Wand extends SpellWeapon {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Wand";
 	}
 

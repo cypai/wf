@@ -12,7 +12,6 @@ import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleFactory;
 import com.pipai.wf.battle.BattleSchema;
 import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
@@ -43,11 +42,6 @@ public final class PartyInfoGui extends Gui {
 		partySchema.add(new RaceTemplateSchema(Race.CAT));	// Mira
 		partySchema.add(new FlameFairySchema());	// Sunny
 		partySchema.add(new RaceTemplateSchema(Race.FOX));	// Nolan
-		party = new ArrayList<AgentState>();
-		AgentStateFactory factory = new AgentStateFactory(new BattleConfiguration());
-		for (UnitSchema us : partySchema) {
-			party.add(factory.createFromSchema(us));
-		}
 		createInstance(new PartyInfoList(this, party, 4, getScreenHeight() - 4, getScreenWidth() / 2, getScreenHeight() / 2, Color.CYAN));
 	}
 

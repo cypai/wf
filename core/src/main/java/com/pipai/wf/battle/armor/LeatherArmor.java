@@ -14,12 +14,12 @@ public class LeatherArmor extends Armor {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Leather Armor";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Simple leather armor.";
 	}
 

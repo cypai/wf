@@ -83,14 +83,14 @@
     <module name="NestedSwitchCheck"/>
     <module name="AvoidConditionInversionCheck"/>
     <module name="ChildBlockLength">
-      <property name="severity" value="ignore"/>
       <property name="blockTypes" value="LITERAL_IF,LITERAL_ELSE,LITERAL_WHILE,LITERAL_DO,LITERAL_FOR,LITERAL_SWITCH,LITERAL_TRY,LITERAL_CATCH"/>
-      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="NoMainMethodInAbstractClass"/>
     <module name="ForbidWildcardAsReturnType"/>
     <module name="PublicReferenceToPrivateTypeCheck"/>
     <module name="EitherLogOrThrowCheck"/>
+    <module name="CauseParameterInException"/>
+    <module name="EqualsAvoidNull"/>
   </module>
   <module name="RegexpSingleline">
     <property name="format" value="^.*System.out.print.*$"/>

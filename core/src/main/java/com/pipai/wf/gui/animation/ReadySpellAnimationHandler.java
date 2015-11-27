@@ -36,7 +36,7 @@ public class ReadySpellAnimationHandler extends AnimationHandler implements Came
 	}
 
 	private void performAnimation() {
-		String text = (ev.getQuickened() ? "Quickened " : "Ready ") + ev.getSpell().name();
+		String text = (ev.getQuickened() ? "Quickened " : "Ready ") + ev.getSpell().getName();
 		TemporaryText ttext = new TemporaryText(getGui(), new Vector3(performer.x, performer.y, 0), text);
 		getGui().createInstance(ttext);
 		finish();

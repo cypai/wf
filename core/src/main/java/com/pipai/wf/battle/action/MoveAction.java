@@ -2,11 +2,13 @@ package com.pipai.wf.battle.action;
 
 import java.util.LinkedList;
 
-import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.overwatch.OverwatchActivatedActionSchema;
+import com.pipai.wf.battle.vision.AgentVisionCalculator;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class MoveAction extends AlterStateAction {
@@ -14,8 +16,8 @@ public class MoveAction extends AlterStateAction {
 	protected LinkedList<GridPosition> path;
 	protected int useAP;
 
-	public MoveAction(Agent performerAgent, LinkedList<GridPosition> path, int useAP) {
-		super(performerAgent);
+	public MoveAction(BattleController controller, Agent performerAgent, LinkedList<GridPosition> path, int useAP) {
+		super(controller, performerAgent);
 		this.path = path;
 		this.useAP = useAP;
 	}
@@ -26,12 +28,40 @@ public class MoveAction extends AlterStateAction {
 	}
 
 	@Override
-	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
-		if (useAP > getPerformer().getAP()) {
+	protected void performImpl() throws IllegalActionException {
+		Agent movingAgent = getPerformer();
+		if (useAP > movingAgent.getAP()) {
 			throw new IllegalActionException("AP required for movement greater than current AP");
 		}
+		BattleEvent event = BattleEvent.moveEvent(movingAgent, path);
+		if (pathIsValid()) {
+			log(event);
+		} else {
+			throw new IllegalActionException("Move path sequence is not valid");
+		}
+		AgentVisionCalculator visionCalc = new AgentVisionCalculator(getBattleMap(), getBattleConfiguration());
+		for (GridPosition pos : path) {
+			setAgentPosition(movingAgent, pos);
+			for (Agent a : visionCalc.enemiesInRangeOf(movingAgent)) {
+				if (a.isOverwatching()) {
+					OverwatchActivatedActionSchema owAction = a.getOverwatchAction();
+					setAgentPosition(movingAgent, pos);
+					TargetedWithAccuracyActionOWCapable action = owAction.build(getBattleController(), a, movingAgent);
+					action.performOnOverwatch(event);
+					a.clearOverwatch();
+					if (movingAgent.isKO()) {
+						return;
+					}
+				}
+			}
+		}
+		GridPosition dest = path.peekLast();
+		setAgentPosition(movingAgent, dest);
+		movingAgent.useAP(useAP);
+	}
+
+	private boolean pathIsValid() {
 		boolean isValid = true;
-		BattleEvent event = BattleEvent.moveEvent(getPerformer(), path);
 		for (GridPosition pos : path) {
 			if (pos.equals(getPerformer().getPosition())) {
 				continue;
@@ -42,34 +72,24 @@ public class MoveAction extends AlterStateAction {
 				break;
 			}
 		}
-		if (isValid) {
-			log(event);
-		} else {
-			throw new IllegalActionException("Move path sequence is not valid");
-		}
-		for (GridPosition pos : path) {
-			getPerformer().setPosition(pos);
-			for (Agent a : getPerformer().enemiesInRange()) {
-				if (a.isOverwatching()) {
-					a.activateOverwatch(getPerformer(), event, pos);
-					if (getPerformer().isKO()) {
-						return;
-					}
-				}
-			}
-		}
-		GridPosition dest = path.peekLast();
-		getPerformer().setPosition(dest);
-		getPerformer().useAP(useAP);
+		return isValid;
+	}
+
+	private void setAgentPosition(Agent a, GridPosition pos) {
+		BattleMapCell startCell = getBattleMap().getCell(a.getPosition());
+		startCell.removeAgent();
+		BattleMapCell destinationCell = getBattleMap().getCell(pos);
+		destinationCell.setAgent(a);
+		a.setPosition(pos);
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Move";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Move to a different location";
 	}
 

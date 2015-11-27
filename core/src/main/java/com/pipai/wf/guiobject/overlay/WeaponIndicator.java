@@ -65,15 +65,15 @@ public class WeaponIndicator extends GuiObject implements GuiRenderable {
 		for (Weapon weapon : weapons) {
 			String weaponInfo;
 			if (weapon instanceof SpellWeapon) {
-				weaponInfo = weapon.name() + "   ";
+				weaponInfo = weapon.getName() + "   ";
 				Spell spell = ((SpellWeapon) weapon).getSpell();
 				if (spell == null) {
 					weaponInfo += "-";
 				} else {
-					weaponInfo += spell.name();
+					weaponInfo += spell.getName();
 				}
 			} else {
-				weaponInfo = weapon.name() + "   " + String.valueOf(weapon.currentAmmo()) + "/" + String.valueOf(weapon.baseAmmoCapacity());
+				weaponInfo = weapon.getName() + "   " + String.valueOf(weapon.currentAmmo()) + "/" + String.valueOf(weapon.baseAmmoCapacity());
 			}
 			if (weapon == agent.getAgent().getCurrentWeapon()) {
 				f.setColor(Color.ORANGE);

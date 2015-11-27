@@ -14,7 +14,7 @@ public class FlameFairySchema extends RaceTemplateSchema {
 	}
 
 	@Override
-	public AbilityList abilities() {
+	public AbilityList getAbilities() {
 		AbilityList l = new AbilityList();
 		l.add(new FireActualizationAbility(2));
 		l.add(new FireballAbility());
@@ -22,12 +22,12 @@ public class FlameFairySchema extends RaceTemplateSchema {
 	}
 
 	@Override
-	public Armor armor() {
+	public Armor getArmor() {
 		return new LeatherArmor();
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Flame Fairy";
 	}
 

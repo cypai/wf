@@ -25,18 +25,16 @@ public class BattleMapGenerator {
 		partyRelativeStartingPositions.add(new GridPosition(1, -1));
 	}
 
-	private BattleConfiguration config;
 	private Rng rng;
 
 	public BattleMapGenerator(BattleConfiguration config) {
-		this.config = config;
 		rng = config.getRng();
 	}
 
 	public BattleMap generateMap(BattleSchema schema) {
 		int width = rng.randInt(30, 40);
 		int height = rng.randInt(30, 40);
-		BattleMap map = new BattleMap(width, height, config);
+		BattleMap map = new BattleMap(width, height);
 		generateRandomEnvironment(map);
 		generatePartyPod(map, schema.getPartySchemas());
 		for (int i = 0; i < 2; i++) {
@@ -64,7 +62,7 @@ public class BattleMapGenerator {
 	}
 
 	private void generatePartyPod(BattleMap map, List<UnitSchema> party) {
-		AgentStateFactory factory = new AgentStateFactory(config);
+		AgentStateFactory factory = new AgentStateFactory();
 		GridPosition center = randPos(new GridPosition(1, 1), new GridPosition(map.getCols() - 1, 4));
 		for (int i = 0; i < partyRelativeStartingPositions.size() && i < party.size(); i++) {
 			GridPosition relativePos = partyRelativeStartingPositions.get(i);
@@ -74,7 +72,7 @@ public class BattleMapGenerator {
 	}
 
 	private void generateEnemyIfEmpty(BattleMap map, GridPosition pos) {
-		AgentStateFactory factory = new AgentStateFactory(config);
+		AgentStateFactory factory = new AgentStateFactory();
 		if (map.getCell(pos).isEmpty()) {
 			map.addAgent(factory.battleAgentFromSchema(Team.ENEMY, pos, new SlimeSchema(1)));
 		}

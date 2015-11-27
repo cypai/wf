@@ -1,13 +1,8 @@
 package com.pipai.wf.battle.map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
+import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class DirectionalCoverTest {
@@ -15,17 +10,17 @@ public class DirectionalCoverTest {
 	@Test
 	public void neededCoverDirectionsTest() {
 		GridPosition pos = new GridPosition(1, 1);
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.S));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.W));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 1)).contains(Direction.W));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.W));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.N));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(1, 2)).contains(Direction.N));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.N));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.E));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 1)).contains(Direction.E));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.E));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.S));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.S));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.W));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 1)).contains(Direction.W));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.W));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.N));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(1, 2)).contains(Direction.N));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.N));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.E));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 1)).contains(Direction.E));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.E));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.S));
 	}
 
 	@Test
@@ -42,19 +37,19 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
+			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(1, 0);
 		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		assertFalse(coverSystem.isOpen(playerPos));
-		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.E));
-		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 1);
-		assertTrue(coverSystem.isFlankedBy(playerPos, enemyPos));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 1);
+		Assert.assertFalse(coverSystem.isOpen(playerPos));
+		Assert.assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.E));
+		Assert.assertEquals(1, coverSystem.getCoverDirections(playerPos).size());
+		Assert.assertTrue(coverSystem.isFlankedBy(playerPos, enemyPos));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
+		Assert.assertEquals(1, DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size());
 	}
 
 	@Test
@@ -72,20 +67,20 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
+			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(1, 0);
 		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		assertFalse(coverSystem.isOpen(playerPos));
-		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.E));
-		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.S));
-		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 2);
-		assertFalse(coverSystem.isFlankedBy(playerPos, enemyPos));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 1);
+		Assert.assertFalse(coverSystem.isOpen(playerPos));
+		Assert.assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.E));
+		Assert.assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.S));
+		Assert.assertEquals(2, coverSystem.getCoverDirections(playerPos).size());
+		Assert.assertFalse(coverSystem.isFlankedBy(playerPos, enemyPos));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
+		Assert.assertEquals(1, DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size());
 	}
 
 	@Test
@@ -103,21 +98,21 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
+			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(2, 0);
 		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		assertFalse(coverSystem.isOpen(playerPos));
-		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.W));
-		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.N));
-		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 2);
-		assertTrue(coverSystem.isFlankedBy(playerPos, enemyPos));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.E));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 2);
+		Assert.assertFalse(coverSystem.isOpen(playerPos));
+		Assert.assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.W));
+		Assert.assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.N));
+		Assert.assertEquals(2, coverSystem.getCoverDirections(playerPos).size());
+		Assert.assertTrue(coverSystem.isFlankedBy(playerPos, enemyPos));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.E));
+		Assert.assertEquals(2, DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size());
 	}
 
 	@Test
@@ -134,20 +129,20 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
+			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 3);
 		GridPosition enemyPos = new GridPosition(3, 1);
 		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		assertFalse(coverSystem.isOpen(playerPos));
-		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.S));
-		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 1);
-		assertFalse(coverSystem.isFlankedBy(playerPos, enemyPos));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.E));
-		assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size() == 2);
+		Assert.assertFalse(coverSystem.isOpen(playerPos));
+		Assert.assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.S));
+		Assert.assertEquals(1, coverSystem.getCoverDirections(playerPos).size());
+		Assert.assertFalse(coverSystem.isFlankedBy(playerPos, enemyPos));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.S));
+		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).contains(Direction.E));
+		Assert.assertEquals(2, DirectionalCoverSystem.getNeededCoverDirections(playerPos, enemyPos).size());
 	}
 
 	@Test
@@ -164,17 +159,17 @@ public class DirectionalCoverTest {
 
 		BattleMap map = null;
 		try {
-			map = new BattleMap(new MapString(rawMapString), Mockito.mock(BattleConfiguration.class));
+			map = new BattleMap(new MapString(rawMapString));
 		} catch (BadStateStringException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		GridPosition playerPos = new GridPosition(1, 3);
 		GridPosition enemyPos = new GridPosition(0, 0);
 		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		assertFalse(coverSystem.isOpen(playerPos));
-		assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.E));
-		assertTrue(coverSystem.getCoverDirections(playerPos).size() == 1);
-		assertTrue(coverSystem.isFlankedBy(playerPos, enemyPos));
+		Assert.assertFalse(coverSystem.isOpen(playerPos));
+		Assert.assertTrue(coverSystem.getCoverDirections(playerPos).contains(Direction.E));
+		Assert.assertEquals(1, coverSystem.getCoverDirections(playerPos).size());
+		Assert.assertTrue(coverSystem.isFlankedBy(playerPos, enemyPos));
 	}
 
 }

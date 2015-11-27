@@ -1,11 +1,8 @@
 package com.pipai.wf.battle.action;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
@@ -27,111 +24,114 @@ public class ReadySpellActionTest {
 
 	@Test
 	public void testReadyWithoutActualizationAbility() {
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		GridPosition mockPos = mock(GridPosition.class);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
-		as.abilities.add(new FireballAbility());
-		as.weapons.add(new InnateCasting());
-		Agent player = new Agent(as, mock(BattleMap.class), mockConfig);
-		ReadySpellAction ready = new ReadySpellAction(player, new FireballSpell());
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		GridPosition mockPos = Mockito.mock(GridPosition.class);
+		BattleController controller = new BattleController(Mockito.mock(BattleMap.class), mockConfig);
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState as = factory.battleAgentFromStats(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
+		as.getAbilities().add(new FireballAbility());
+		as.getWeapons().add(new InnateCasting());
+		Agent player = new Agent(as);
+		ReadySpellAction ready = new ReadySpellAction(controller, player, new FireballSpell());
 		try {
-			ready.perform(mockConfig);
-			fail("Did not throw expected IllegalActionException");
+			ready.perform();
+			Assert.fail("Did not throw expected IllegalActionException");
 		} catch (IllegalActionException e) {
 		}
 	}
 
 	@Test
 	public void testReadyWithoutFireballAbility() {
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		GridPosition mockPos = mock(GridPosition.class);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
-		as.abilities.add(new FireActualizationAbility(1));
-		as.weapons.add(new InnateCasting());
-		Agent player = new Agent(as, mock(BattleMap.class), mockConfig);
-		ReadySpellAction ready = new ReadySpellAction(player, new FireballSpell());
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		GridPosition mockPos = Mockito.mock(GridPosition.class);
+		BattleController controller = new BattleController(Mockito.mock(BattleMap.class), mockConfig);
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState as = factory.battleAgentFromStats(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
+		as.getAbilities().add(new FireActualizationAbility(1));
+		as.getWeapons().add(new InnateCasting());
+		Agent player = new Agent(as);
+		ReadySpellAction ready = new ReadySpellAction(controller, player, new FireballSpell());
 		try {
-			ready.perform(mockConfig);
-			fail("Did not throw expected IllegalActionException");
+			ready.perform();
+			Assert.fail("Did not throw expected IllegalActionException");
 		} catch (IllegalActionException e) {
 		}
 	}
 
 	@Test
 	public void testReadyWithoutSpellWeapon() {
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		GridPosition mockPos = mock(GridPosition.class);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
-		as.abilities.add(new FireballAbility());
-		as.abilities.add(new FireActualizationAbility(1));
-		Agent player = new Agent(as, mock(BattleMap.class), mockConfig);
-		ReadySpellAction ready = new ReadySpellAction(player, new FireballSpell());
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		GridPosition mockPos = Mockito.mock(GridPosition.class);
+		BattleController controller = new BattleController(Mockito.mock(BattleMap.class), mockConfig);
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState as = factory.battleAgentFromStats(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
+		as.getAbilities().add(new FireballAbility());
+		as.getAbilities().add(new FireActualizationAbility(1));
+		Agent player = new Agent(as);
+		ReadySpellAction ready = new ReadySpellAction(controller, player, new FireballSpell());
 		try {
-			ready.perform(mockConfig);
-			fail("Did not throw expected IllegalActionException");
+			ready.perform();
+			Assert.fail("Did not throw expected IllegalActionException");
 		} catch (IllegalActionException e) {
 		}
 	}
 
 	@Test
 	public void testReadyFireballLog() {
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		BattleMap map = new BattleMap(3, 4, mock(BattleConfiguration.class));
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState as = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		as.weapons.add(new InnateCasting());
-		as.abilities.add(new FireActualizationAbility(1));
-		as.abilities.add(new FireballAbility());
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState as = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		as.getWeapons().add(new InnateCasting());
+		as.getAbilities().add(new FireActualizationAbility(1));
+		as.getAbilities().add(new FireballAbility());
 		map.addAgent(as);
-		BattleController battle = new BattleController(map, mockConfig);
+		BattleController controller = new BattleController(map, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
-		battle.registerObserver(observer);
+		controller.registerObserver(observer);
 		Agent agent = map.getAgentAtPos(playerPos);
 		try {
-			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
+			new ReadySpellAction(controller, agent, new FireballSpell()).perform();
 		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		BattleEvent ev = observer.ev;
-		assertTrue(ev.getType() == BattleEvent.Type.READY);
-		assertTrue(ev.getPerformer() == agent);
-		assertTrue(ev.getSpell() instanceof FireballSpell);
-		assertFalse(ev.getQuickened());
-		assertTrue(agent.getAP() == 1);
-		assertTrue(ev.getChainEvents().size() == 0);
+		Assert.assertEquals(BattleEvent.Type.READY, ev.getType());
+		Assert.assertEquals(agent, ev.getPerformer());
+		Assert.assertTrue(ev.getSpell() instanceof FireballSpell);
+		Assert.assertFalse(ev.getQuickened());
+		Assert.assertEquals(1, agent.getAP());
+		Assert.assertEquals(0, ev.getChainEvents().size());
 	}
 
 	@Test
 	public void testQuickenedFireballLog() {
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		BattleMap map = new BattleMap(3, 4, mock(BattleConfiguration.class));
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState as = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		as.weapons.add(new InnateCasting());
-		as.abilities.add(new FireActualizationAbility(2));
-		as.abilities.add(new FireballAbility());
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState as = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		as.getWeapons().add(new InnateCasting());
+		as.getAbilities().add(new FireActualizationAbility(2));
+		as.getAbilities().add(new FireballAbility());
 		map.addAgent(as);
-		BattleController battle = new BattleController(map, mockConfig);
+		BattleController controller = new BattleController(map, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
-		battle.registerObserver(observer);
+		controller.registerObserver(observer);
 		Agent agent = map.getAgentAtPos(playerPos);
 		try {
-			battle.performAction(new ReadySpellAction(agent, new FireballSpell()));
+			new ReadySpellAction(controller, agent, new FireballSpell()).perform();
 		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		BattleEvent ev = observer.ev;
-		assertTrue(ev.getType() == BattleEvent.Type.READY);
-		assertTrue(ev.getPerformer() == agent);
-		assertTrue(ev.getSpell() instanceof FireballSpell);
-		assertTrue(ev.getQuickened());
-		assertTrue(agent.getAP() == 2);
-		assertTrue(ev.getChainEvents().size() == 0);
+		Assert.assertEquals(BattleEvent.Type.READY, ev.getType());
+		Assert.assertEquals(agent, ev.getPerformer());
+		Assert.assertTrue(ev.getSpell() instanceof FireballSpell);
+		Assert.assertTrue(ev.getQuickened());
+		Assert.assertEquals(2, agent.getAP());
+		Assert.assertEquals(0, ev.getChainEvents().size());
 	}
 
 }

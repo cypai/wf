@@ -2,7 +2,6 @@ package com.pipai.wf.unit.schema;
 
 import java.util.ArrayList;
 
-import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.LeatherArmor;
 import com.pipai.wf.battle.weapon.Bow;
@@ -13,71 +12,42 @@ import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.FireActualizationAbility;
 import com.pipai.wf.unit.race.Race;
 
-public class RaceTemplateSchema implements UnitSchema {
+public class RaceTemplateSchema extends NewUnitSchema {
 
 	private Race race;
 
 	public RaceTemplateSchema(Race race) {
+		super(race.name, race.hp, race.mp, race.ap, race.aim, race.mobility, race.defense);
 		this.race = race;
 	}
 
 	@Override
-	public int hp() {
-		return race.hp;
-	}
-
-	@Override
-	public int mp() {
-		return race.mp;
-	}
-
-	@Override
-	public int ap() {
-		return race.ap;
-	}
-
-	@Override
-	public int aim() {
-		return race.aim;
-	}
-
-	@Override
-	public int mobility() {
-		return race.mobility;
-	}
-
-	@Override
-	public int defense() {
-		return race.defense;
-	}
-
-	@Override
-	public AbilityList abilities() {
+	public AbilityList getAbilities() {
 		AbilityList l = new AbilityList();
 		return l;
 	}
 
 	@Override
-	public Armor armor() {
+	public Armor getArmor() {
 		return new LeatherArmor();
 	}
 
 	@Override
-	public ArrayList<Weapon> weapons(BattleConfiguration config) {
+	public ArrayList<Weapon> getWeapons() {
 		ArrayList<Weapon> l = new ArrayList<>();
 		if (race == Race.FAIRY) {
 			l.add(new Bow());
 		} else {
 			l.add(new Pistol());
 		}
-		if (abilities().hasAbility(FireActualizationAbility.class)) {
+		if (getAbilities().hasAbility(FireActualizationAbility.class)) {
 			l.add(new InnateCasting());
 		}
 		return l;
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return race.name;
 	}
 

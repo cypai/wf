@@ -1,13 +1,9 @@
 package com.pipai.wf.battle.action;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
+import org.mockito.Mockito;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
@@ -33,44 +29,43 @@ public class RangedWeaponAttackActionTest {
 
 	@Test
 	public void testAttackLog() {
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		DamageCalculator mockDamageCalculator = mock(DamageCalculator.class);
-		when(mockDamageCalculator.rollDamageGeneral(
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		DamageCalculator mockDamageCalculator = Mockito.mock(DamageCalculator.class);
+		Mockito.when(mockDamageCalculator.rollDamageGeneral(
 				Matchers.any(AccuracyPercentages.class),
 				Matchers.any(DamageFunction.class),
 				Matchers.anyInt())).thenReturn(new DamageResult(true, false, 1, 0));
-		when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
-		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
+		Mockito.when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
+		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 1);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
-		playerState.weapons.add(new Pistol());
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
+		playerState.getWeapons().add(new Pistol());
 		map.addAgent(playerState);
-		map.addAgent(factory.newBattleAgentState(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
-		BattleController battle = new BattleController(map, mockConfig);
+		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		BattleController controller = new BattleController(map, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
-		battle.registerObserver(observer);
+		controller.registerObserver(observer);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertFalse(player == null || enemy == null);
-		TargetedWithAccuracyActionOWCapable atk = (TargetedWithAccuracyActionOWCapable) ((Pistol) player.getCurrentWeapon()).getAction(player, enemy);
-		assertTrue(atk.toHit() == 100);
+		Assert.assertFalse(player == null || enemy == null);
+		TargetedWithAccuracyActionOWCapable atk = (TargetedWithAccuracyActionOWCapable) ((Pistol) player.getCurrentWeapon()).getAction(controller, player, enemy);
 		try {
-			battle.performAction(atk);
+			atk.perform();
 		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		BattleEvent ev = observer.ev;
-		assertTrue(ev.getType() == BattleEvent.Type.RANGED_WEAPON_ATTACK);
-		assertTrue(ev.getPerformer() == player);
-		assertTrue(ev.getTarget() == enemy);
-		assertTrue(ev.getChainEvents().size() == 0);
+		Assert.assertEquals(BattleEvent.Type.RANGED_WEAPON_ATTACK, ev.getType());
+		Assert.assertEquals(player, ev.getPerformer());
+		Assert.assertEquals(enemy, ev.getTarget());
+		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Player has 1000 aim, cannot miss
-		assertTrue(ev.getDamageResult().hit);
+		Assert.assertTrue(ev.getDamageResult().hit);
 		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.getDamage());
-		assertTrue(enemy.getHP() == expectedHP);
-		assertTrue(player.getHP() == player.getMaxHP());
+		Assert.assertEquals(expectedHP, enemy.getHP());
+		Assert.assertEquals(player.getMaxHP(), player.getHP());
 	}
 
 }

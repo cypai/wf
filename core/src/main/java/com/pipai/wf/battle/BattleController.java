@@ -2,12 +2,10 @@ package com.pipai.wf.battle;
 
 import java.util.LinkedList;
 
-import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.log.BattleLog;
 import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.exception.IllegalActionException;
 
 /*
  * Controls the flow of battle as an interface between the Player/AIs
@@ -93,10 +91,7 @@ public class BattleController {
 		}
 	}
 
-	public void performAction(Action a) throws IllegalActionException {
-		log.clear();
-		a.register(log);
-		a.perform(config);
+	public void performPostActionNotifications() {
 		notifyObservers(log.getLastEvent());
 	}
 

@@ -52,14 +52,14 @@ public class ActionToolTip extends GuiObject implements GuiRenderable {
 		if (a instanceof TargetedWithAccuracyAction) {
 			setToTargetedAccuracyActionDescription((TargetedWithAccuracyAction) a);
 		} else {
-			setToGeneralDescription(a.name(), a.description());
+			setToGeneralDescription(a.getName(), a.getDescription());
 		}
 	}
 
 	public void setToTargetedAccuracyActionDescription(TargetedWithAccuracyAction a) {
 		mode = Mode.ACCURACY_ACTION;
-		title = a.name();
-		description = a.description();
+		title = a.getName();
+		description = a.getDescription();
 		accuracy = a.toHit();
 		critProb = a.toCrit();
 	}

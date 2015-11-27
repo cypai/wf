@@ -1,13 +1,11 @@
 package com.pipai.wf.battle.vision;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
@@ -23,8 +21,8 @@ import com.pipai.wf.guiobject.battle.AgentGuiObject;
 public class FogOfWarTest {
 
 	private AgentGuiObject generateMockAgent(Agent a) {
-		AgentGuiObject mockAgent = mock(AgentGuiObject.class);
-		when(mockAgent.getDisplayPosition()).thenReturn(a.getPosition());
+		AgentGuiObject mockAgent = Mockito.mock(AgentGuiObject.class);
+		Mockito.when(mockAgent.getDisplayPosition()).thenReturn(a.getPosition());
 		return mockAgent;
 	}
 
@@ -32,13 +30,13 @@ public class FogOfWarTest {
 	@Test
 	public void testTinyVisionRadius() {
 		final int VISUAL_RANGE = 1;
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		when(mockConfig.sightRange()).thenReturn(VISUAL_RANGE);
-		when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
-		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		Mockito.when(mockConfig.sightRange()).thenReturn(VISUAL_RANGE);
+		Mockito.when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
+		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(2, 2);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		AgentStateFactory factory = new AgentStateFactory();
+		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0));
 		AgentGuiObject playerGuiObj = generateMockAgent(map.getAgentAtPos(playerPos));
 		ArrayList<AgentGuiObject> playerList = new ArrayList<>();
 		playerList.add(playerGuiObj);
@@ -46,22 +44,22 @@ public class FogOfWarTest {
 		fog.fullScan();
 		for (GridPosition p : fog.visibleTiles()) {
 			// Assert all viewable tiles have some part within viewing range
-			assertTrue(playerPos.distance(p) < mockConfig.sightRangeAdjusted());
+			Assert.assertTrue(playerPos.distance(p) < mockConfig.sightRangeAdjusted());
 		}
-		assertTrue(fog.visibleTiles().size() == 4);
+		Assert.assertEquals(4, fog.visibleTiles().size());
 	}
 
 	@Ignore
 	@Test
 	public void testSmallVisionRadius() {
 		final int VISUAL_RANGE = 2;
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		when(mockConfig.sightRange()).thenReturn(VISUAL_RANGE);
-		when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
-		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		Mockito.when(mockConfig.sightRange()).thenReturn(VISUAL_RANGE);
+		Mockito.when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
+		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(2, 2);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		AgentStateFactory factory = new AgentStateFactory();
+		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0));
 		AgentGuiObject playerGuiObj = generateMockAgent(map.getAgentAtPos(playerPos));
 		ArrayList<AgentGuiObject> playerList = new ArrayList<>();
 		playerList.add(playerGuiObj);
@@ -69,9 +67,9 @@ public class FogOfWarTest {
 		fog.fullScan();
 		for (GridPosition p : fog.visibleTiles()) {
 			// Assert all viewable tiles have some part within viewing range
-			assertTrue(playerPos.distance(p) < mockConfig.sightRangeAdjusted());
+			Assert.assertTrue(playerPos.distance(p) < mockConfig.sightRangeAdjusted());
 		}
-		assertTrue(fog.visibleTiles().size() == 20);
+		Assert.assertEquals(20, fog.visibleTiles().size());
 	}
 
 }

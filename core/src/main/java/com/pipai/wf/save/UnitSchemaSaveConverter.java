@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.unit.schema.UnitSchema;
 
-public class AgentStateSaveConverter {
+public class UnitSchemaSaveConverter {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(AgentStateSaveConverter.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UnitSchemaSaveConverter.class);
 
-	public String transformAgentStateToString(AgentState as) {
+	public String transformUnitSchemaToString(UnitSchema as) {
 		ObjectMapper mapper = new ObjectMapper();
 		String saveString;
 		try {
@@ -25,14 +25,13 @@ public class AgentStateSaveConverter {
 		return saveString;
 	}
 
-	public AgentState parseStringRepresentation(String rawSaveData) {
+	public UnitSchema parseStringRepresentation(String rawSaveData) throws CorruptedSaveException {
 		ObjectMapper mapper = new ObjectMapper();
-		AgentState as;
+		UnitSchema as;
 		try {
-			as = mapper.readValue(rawSaveData, AgentState.class);
+			as = mapper.readValue(rawSaveData, UnitSchema.class);
 		} catch (IOException e) {
-			LOGGER.error("Could not parse save data: " + e.getMessage(), e);
-			as = new AgentState();
+			throw new CorruptedSaveException("Could not parse save data: " + e.getMessage(), e);
 		}
 		return as;
 	}

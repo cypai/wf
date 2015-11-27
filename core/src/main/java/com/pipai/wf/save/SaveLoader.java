@@ -3,7 +3,7 @@ package com.pipai.wf.save;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.unit.schema.UnitSchema;
 
 public class SaveLoader {
 
@@ -13,16 +13,16 @@ public class SaveLoader {
 		this.save = save;
 	}
 
-	public void load(FileHandle file) {
+	public void load(FileHandle file) throws CorruptedSaveException {
 		String rawSaveData = file.readString();
-		ArrayList<AgentState> party = readPartySave(rawSaveData);
+		ArrayList<UnitSchema> party = readPartySave(rawSaveData);
 		save.setParty(party);
 	}
 
-	private ArrayList<AgentState> readPartySave(String rawSaveData) {
-		AgentStateSaveConverter converter = new AgentStateSaveConverter();
+	private ArrayList<UnitSchema> readPartySave(String rawSaveData) throws CorruptedSaveException {
+		UnitSchemaSaveConverter converter = new UnitSchemaSaveConverter();
 		ArrayList<String> rawPartyInfo = getLinesUnderHeader(SaveHeader.PARTY, rawSaveData);
-		ArrayList<AgentState> party = new ArrayList<>();
+		ArrayList<UnitSchema> party = new ArrayList<>();
 		for (String line : rawPartyInfo) {
 			party.add(converter.parseStringRepresentation(line));
 		}

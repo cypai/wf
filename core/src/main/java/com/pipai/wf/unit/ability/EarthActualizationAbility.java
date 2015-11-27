@@ -7,12 +7,12 @@ public class EarthActualizationAbility extends PassiveAbility {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Earth Actualization";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Allows casting of earth spells";
 	}
 

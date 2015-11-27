@@ -1,18 +1,19 @@
 package com.pipai.wf.battle.action;
 
-import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.misc.OverwatchHelper;
+import com.pipai.wf.battle.overwatch.OverwatchActivatedActionSchema;
+import com.pipai.wf.battle.overwatch.OverwatchHelper;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class OverwatchAction extends AlterStateAction {
 
-	private Class<? extends TargetedWithAccuracyActionOWCapable> owAction;
+	private OverwatchActivatedActionSchema owAction;
 
-	public OverwatchAction(Agent performerAgent) {
-		super(performerAgent);
-		owAction = WeaponActionFactory.defaultWeaponActionClass(performerAgent);
+	public OverwatchAction(BattleController controller, Agent performerAgent) {
+		super(controller, performerAgent);
+		owAction = new WeaponActionFactory(controller).defaultWeaponActionSchema(performerAgent);
 	}
 
 	@Override
@@ -21,7 +22,7 @@ public class OverwatchAction extends AlterStateAction {
 	}
 
 	@Override
-	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
+	protected void performImpl() throws IllegalActionException {
 		Agent performer = getPerformer();
 		if (performer.getCurrentWeapon() == null) {
 			throw new IllegalActionException("Not currently wielding a weapon");
@@ -31,21 +32,21 @@ public class OverwatchAction extends AlterStateAction {
 				throw new IllegalActionException("Not enough ammo to overwatch");
 			}
 		}
-		performer.overwatch(owAction);
+		performer.setOverwatch(owAction);
 		log(BattleEvent.overwatchEvent(getPerformer(), OverwatchHelper.getName(this)));
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Overwatch";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Attack the first enemy that moves in range";
 	}
 
-	public Class<? extends TargetedWithAccuracyActionOWCapable> getOWClass() {
+	public OverwatchActivatedActionSchema getOverwatchActionSchema() {
 		return owAction;
 	}
 

@@ -9,13 +9,13 @@ public abstract class SpellAbility extends Ability {
 	}
 
 	@Override
-	public final String name() {
-		return grantedSpell().name();
+	public final String getName() {
+		return grantedSpell().getName();
 	}
 
 	@Override
-	public final String description() {
-		return grantedSpell().description();
+	public final String getDescription() {
+		return grantedSpell().getDescription();
 	}
 
 	@Override

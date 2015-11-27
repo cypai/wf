@@ -1,6 +1,7 @@
 package com.pipai.wf.battle.weapon;
 
 import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.action.TargetedActionable;
@@ -58,13 +59,13 @@ public class Pistol extends Weapon implements TargetedActionable {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Pistol";
 	}
 
 	@Override
-	public TargetedAction getAction(Agent performer, Agent target) {
-		return new RangedWeaponAttackAction(performer, target);
+	public TargetedAction getAction(BattleController controller, Agent performer, Agent target) {
+		return new RangedWeaponAttackAction(controller, performer, target);
 	}
 
 }

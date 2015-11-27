@@ -13,7 +13,7 @@ public class InnateCasting extends SpellWeapon {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Casting";
 	}
 

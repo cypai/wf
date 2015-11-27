@@ -7,12 +7,12 @@ public class ElectricActualizationAbility extends PassiveAbility {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Electric Actualization";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Allows casting of electric spells";
 	}
 

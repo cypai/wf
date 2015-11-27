@@ -1,11 +1,10 @@
 package com.pipai.wf.battle.action;
 
-import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifier;
 import com.pipai.wf.battle.damage.PercentageModifierList;
-import com.pipai.wf.battle.damage.TargetedActionCalculator;
 import com.pipai.wf.battle.damage.WeaponDamageFunction;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.weapon.Weapon;
@@ -16,8 +15,8 @@ import com.pipai.wf.util.UtilFunctions;
 
 public class PrecisionShotAction extends TargetedWithAccuracyAction {
 
-	public PrecisionShotAction(Agent performerAgent, Agent targetAgent) {
-		super(performerAgent, targetAgent);
+	public PrecisionShotAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
+		super(controller, performerAgent, targetAgent);
 	}
 
 	@Override
@@ -36,36 +35,36 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 	public PercentageModifierList getHitCalculation() {
 		Agent a = getPerformer();
 		Agent target = getTarget();
-		return TargetedActionCalculator.baseHitCalculation(a, target);
+		return getTargetedActionCalculator().baseHitCalculation(getBattleMap(), a, target);
 	}
 
 	@Override
 	public PercentageModifierList getCritCalculation() {
 		Agent a = getPerformer();
 		Agent target = getTarget();
-		PercentageModifierList calc = TargetedActionCalculator.baseCritCalculation(a, target);
+		PercentageModifierList calc = getTargetedActionCalculator().baseCritCalculation(getBattleMap(), a, target);
 		calc.add(new PercentageModifier("Precision Shot", 30));
 		return calc;
 	}
 
 	@Override
-	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
-		Agent a = getPerformer();
-		Ability ability = a.getAbility(PrecisionShotAbility.class);
+	protected void performImpl() throws IllegalActionException {
+		Agent attacker = getPerformer();
+		Ability ability = attacker.getAbility(PrecisionShotAbility.class);
 		if (ability == null) {
-			throw new IllegalActionException(a.name() + "does not have Precision Shot ability");
+			throw new IllegalActionException(attacker.getName() + "does not have Precision Shot ability");
 		}
 		Agent target = getTarget();
-		Weapon w = a.getCurrentWeapon();
+		Weapon w = attacker.getCurrentWeapon();
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
-			throw new IllegalActionException("Not enough ammo to fire " + w.name());
+			throw new IllegalActionException("Not enough ammo to fire " + w.getName());
 		}
-		DamageResult result = config.getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
+		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
 		DamageResult adjustedResult = new DamageResult(result.hit, result.crit, result.damage + (result.hit ? 1 : 0), result.damageReduction);
-		target.takeDamage(result.damage);
-		a.setAP(0);
+		getDamageDealer().doDamage(adjustedResult, target);
+		attacker.setAP(0);
 		ability.setCooldown(2);
-		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, adjustedResult));
+		log(BattleEvent.rangedWeaponAttackEvent(attacker, target, w, adjustedResult));
 	}
 
 	@Override
@@ -74,12 +73,12 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Precision Shot";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Fires a shot that has +1 extra damage and +30% critical chance.";
 	}
 

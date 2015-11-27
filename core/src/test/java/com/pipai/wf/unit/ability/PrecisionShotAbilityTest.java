@@ -1,13 +1,9 @@
 package com.pipai.wf.unit.ability;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Matchers;
+import org.mockito.Mockito;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
@@ -29,44 +25,43 @@ public class PrecisionShotAbilityTest {
 
 	@Test
 	public void testPrecisionShotCooldown() {
-		BattleMap map = new BattleMap(5, 5, mock(BattleConfiguration.class));
+		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(0, 0);
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		DamageCalculator mockDamageCalculator = mock(DamageCalculator.class);
-		when(mockDamageCalculator.rollDamageGeneral(
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		DamageCalculator mockDamageCalculator = Mockito.mock(DamageCalculator.class);
+		Mockito.when(mockDamageCalculator.rollDamageGeneral(
 				Matchers.any(AccuracyPercentages.class),
 				Matchers.any(DamageFunction.class),
 				Matchers.anyInt())).thenReturn(new DamageResult(false, false, 0, 0));
-		when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
-		Agent mockTarget = mock(Agent.class);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		playerState.abilities.add(new PrecisionShotAbility());
-		playerState.weapons.add(new Pistol());
+		Mockito.when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
+		Agent mockTarget = Mockito.mock(Agent.class);
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
+		playerState.getAbilities().add(new PrecisionShotAbility());
+		playerState.getWeapons().add(new Pistol());
 		map.addAgent(playerState);
 		Agent agent = map.getAgentAtPos(playerPos);
-		BattleController battle = new BattleController(map, mockConfig);
+		BattleController controller = new BattleController(map, mockConfig);
 		try {
-			battle.performAction(new PrecisionShotAction(agent, mockTarget));
-			assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
+			new PrecisionShotAction(controller, agent, mockTarget).perform();
+			Assert.assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
 		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
+		}
+		controller.endTurn();
+		Assert.assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
+		try {
+			new PrecisionShotAction(controller, agent, mockTarget).perform();
+			Assert.fail("Expected IllegalActionException not thrown");
+		} catch (IllegalActionException e) {
 		}
 
-		battle.endTurn();
-		assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
+		controller.endTurn();
+		Assert.assertFalse(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
 		try {
-			battle.performAction(new PrecisionShotAction(agent, mockTarget));
-			fail("Expected IllegalActionException not thrown");
+			new PrecisionShotAction(controller, agent, mockTarget).perform();
 		} catch (IllegalActionException e) {
-		}
-
-		battle.endTurn();
-		assertFalse(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
-		try {
-			battle.performAction(new PrecisionShotAction(agent, mockTarget));
-		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 	}
 

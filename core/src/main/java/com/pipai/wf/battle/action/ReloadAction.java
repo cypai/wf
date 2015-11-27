@@ -1,6 +1,6 @@
 package com.pipai.wf.battle.action;
 
-import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
@@ -8,8 +8,8 @@ import com.pipai.wf.unit.ability.QuickReloadAbility;
 
 public class ReloadAction extends AlterStateAction {
 
-	public ReloadAction(Agent performerAgent) {
-		super(performerAgent);
+	public ReloadAction(BattleController controller, Agent performerAgent) {
+		super(controller, performerAgent);
 	}
 
 	@Override
@@ -18,7 +18,7 @@ public class ReloadAction extends AlterStateAction {
 	}
 
 	@Override
-	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
+	protected void performImpl() throws IllegalActionException {
 		Agent agent = getPerformer();
 		agent.getCurrentWeapon().reload();
 		if (agent.getAbilities().hasAbility(QuickReloadAbility.class)) {
@@ -30,12 +30,12 @@ public class ReloadAction extends AlterStateAction {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Reload";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Reload your current weapon";
 	}
 

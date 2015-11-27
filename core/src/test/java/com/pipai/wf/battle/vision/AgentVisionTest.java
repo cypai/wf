@@ -1,27 +1,56 @@
-package com.pipai.wf.battle.agent;
+package com.pipai.wf.battle.vision;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.pipai.libgdx.test.GdxMockedTest;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.exception.BadStateStringException;
 
-public class AgentLineOfSightTest extends GdxMockedTest {
+public class AgentVisionTest extends GdxMockedTest {
+
+	private static BattleConfiguration getMockConfig() {
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		Mockito.when(mockConfig.sightRange()).thenReturn(17);
+		return mockConfig;
+	}
+
+	private static AgentState getDummyAgentState(Team team, GridPosition position) {
+		AgentStateFactory factory = new AgentStateFactory();
+		return factory.battleAgentFromStats(team, position, 1, 1, 1, 1, 1, 0);
+	}
 
 	private static BattleMap generateMap(String mapString, GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
-		BattleMap map = new BattleMap(new MapString(mapString), Mockito.mock(BattleConfiguration.class));
-		AgentStateFactory factory = new AgentStateFactory(new BattleConfiguration());
-		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
-		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		BattleMap map = new BattleMap(new MapString(mapString));
+		map.addAgent(getDummyAgentState(Team.PLAYER, playerPos));
+		map.addAgent(getDummyAgentState(Team.ENEMY, enemyPos));
 		return map;
+	}
+
+	private void performMutuallyVisibleTest(String rawMapString, GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
+		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
+		AgentVisionCalculator agentVisionCalc = new AgentVisionCalculator(map, getMockConfig());
+		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
+		Assert.assertTrue(agentVisionCalc.canSee(player, enemy));
+		Assert.assertTrue(agentVisionCalc.canSee(enemy, player));
+	}
+
+	private void performMutuallyNotVisibleTest(String rawMapString, GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
+		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
+		AgentVisionCalculator agentVisionCalc = new AgentVisionCalculator(map, getMockConfig());
+		Agent player = map.getAgentAtPos(playerPos);
+		Agent enemy = map.getAgentAtPos(enemyPos);
+		Assert.assertFalse(agentVisionCalc.canSee(player, enemy));
+		Assert.assertFalse(agentVisionCalc.canSee(enemy, player));
 	}
 
 	@Test
@@ -39,11 +68,7 @@ public class AgentLineOfSightTest extends GdxMockedTest {
 
 		GridPosition playerPos = new GridPosition(0, 3);
 		GridPosition enemyPos = new GridPosition(1, 0);
-		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
-		Agent player = map.getAgentAtPos(playerPos);
-		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.canSee(enemy));
-		assertTrue(enemy.canSee(player));
+		performMutuallyVisibleTest(rawMapString, playerPos, enemyPos);
 	}
 
 	@Test
@@ -60,11 +85,7 @@ public class AgentLineOfSightTest extends GdxMockedTest {
 
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(3, 3);
-		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
-		Agent player = map.getAgentAtPos(playerPos);
-		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.canSee(enemy));
-		assertTrue(enemy.canSee(player));
+		performMutuallyVisibleTest(rawMapString, playerPos, enemyPos);
 	}
 
 	@Test
@@ -81,11 +102,7 @@ public class AgentLineOfSightTest extends GdxMockedTest {
 
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(3, 3);
-		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
-		Agent player = map.getAgentAtPos(playerPos);
-		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.canSee(enemy));
-		assertTrue(enemy.canSee(player));
+		performMutuallyVisibleTest(rawMapString, playerPos, enemyPos);
 	}
 
 	@Test
@@ -103,11 +120,7 @@ public class AgentLineOfSightTest extends GdxMockedTest {
 
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(3, 3);
-		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
-		Agent player = map.getAgentAtPos(playerPos);
-		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertFalse(player.canSee(enemy));
-		assertFalse(enemy.canSee(player));
+		performMutuallyNotVisibleTest(rawMapString, playerPos, enemyPos);
 	}
 
 	@Test
@@ -125,11 +138,7 @@ public class AgentLineOfSightTest extends GdxMockedTest {
 
 		GridPosition playerPos = new GridPosition(1, 0);
 		GridPosition enemyPos = new GridPosition(2, 3);
-		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
-		Agent player = map.getAgentAtPos(playerPos);
-		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertFalse(player.canSee(enemy));
-		assertFalse(enemy.canSee(player));
+		performMutuallyNotVisibleTest(rawMapString, playerPos, enemyPos);
 	}
 
 	@Test
@@ -147,41 +156,37 @@ public class AgentLineOfSightTest extends GdxMockedTest {
 
 		GridPosition playerPos = new GridPosition(0, 1);
 		GridPosition enemyPos = new GridPosition(3, 2);
-		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
-		Agent player = map.getAgentAtPos(playerPos);
-		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertFalse(player.canSee(enemy));
-		assertFalse(enemy.canSee(player));
+		performMutuallyNotVisibleTest(rawMapString, playerPos, enemyPos);
 	}
 
 	@Test
 	public void testOpenLOS() {
 		BattleConfiguration config = new BattleConfiguration();
-		BattleMap map = new BattleMap(1, config.sightRange() + 1, Mockito.mock(BattleConfiguration.class));
+		BattleMap map = new BattleMap(1, config.sightRange() + 1);
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(config.sightRange() - 1, 0);
-		AgentStateFactory factory = new AgentStateFactory(config);
-		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, factory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(getDummyAgentState(Team.PLAYER, playerPos));
+		map.addAgent(getDummyAgentState(Team.ENEMY, enemyPos));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.canSee(enemy));
-		assertTrue(enemy.canSee(player));
+		AgentVisionCalculator agentVisionCalc = new AgentVisionCalculator(map, config);
+		Assert.assertTrue(agentVisionCalc.canSee(player, enemy));
+		Assert.assertTrue(agentVisionCalc.canSee(enemy, player));
 	}
 
 	@Test
 	public void testTooFarLOS() {
 		BattleConfiguration config = new BattleConfiguration();
-		BattleMap map = new BattleMap(1, config.sightRange() + 1, Mockito.mock(BattleConfiguration.class));
+		BattleMap map = new BattleMap(1, config.sightRange() + 1);
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(config.sightRange(), 0);
-		AgentStateFactory factory = new AgentStateFactory(config);
-		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 1)));
-		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, factory.statsOnlyState(1, 1, 1, 1, 1, 1)));
+		map.addAgent(getDummyAgentState(Team.PLAYER, playerPos));
+		map.addAgent(getDummyAgentState(Team.ENEMY, enemyPos));
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertFalse(player.canSee(enemy));
-		assertFalse(enemy.canSee(player));
+		AgentVisionCalculator agentVisionCalc = new AgentVisionCalculator(map, config);
+		Assert.assertFalse(agentVisionCalc.canSee(player, enemy));
+		Assert.assertFalse(agentVisionCalc.canSee(enemy, player));
 	}
 
 }

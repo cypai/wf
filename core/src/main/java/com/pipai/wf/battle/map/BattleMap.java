@@ -3,7 +3,6 @@ package com.pipai.wf.battle.map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 
@@ -13,15 +12,12 @@ public class BattleMap {
 	private HashMap<String, BattleMapCell> cellMap;
 	private ArrayList<Agent> agents;
 
-	private BattleConfiguration config;
-
-	public BattleMap(int m, int n, BattleConfiguration config) {
+	public BattleMap(int m, int n) {
 		agents = new ArrayList<Agent>();
-		this.config = config;
 		initializeMap(m, n);
 	}
 
-	public BattleMap(MapString mapString, BattleConfiguration config) {
+	public BattleMap(MapString mapString) {
 		agents = new ArrayList<Agent>();
 		m = mapString.getRows();
 		n = mapString.getCols();
@@ -105,7 +101,7 @@ public class BattleMap {
 	}
 
 	public void addAgent(AgentState state) {
-		Agent agent = new Agent(state, this, config);
+		Agent agent = new Agent(state);
 		BattleMapCell cell = getCell(agent.getPosition());
 		if (cell == null) {
 			throw new IllegalArgumentException("Cell " + agent.getPosition().toString() + " does not exist");

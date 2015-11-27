@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.pipai.wf.battle.damage.DamageCalculator;
+import com.pipai.wf.battle.damage.TargetedActionCalculator;
 import com.pipai.wf.util.Rng;
 
 public class BattleConfiguration {
@@ -18,11 +19,13 @@ public class BattleConfiguration {
 	private final Properties battleProps;
 	private final Rng rng;
 	private final DamageCalculator damageCalculator;
+	private final TargetedActionCalculator targetedActionCalculator;
 
 	public BattleConfiguration() {
 		battleProps = new Properties();
 		rng = new Rng();
 		damageCalculator = new DamageCalculator(this);
+		targetedActionCalculator = new TargetedActionCalculator(this);
 		try {
 			FileHandle configFile = Gdx.files.local("config/battle.properties");
 			battleProps.load(configFile.reader());
@@ -58,6 +61,10 @@ public class BattleConfiguration {
 
 	public DamageCalculator getDamageCalculator() {
 		return damageCalculator;
+	}
+
+	public TargetedActionCalculator getTargetedActionCalculator() {
+		return targetedActionCalculator;
 	}
 
 }

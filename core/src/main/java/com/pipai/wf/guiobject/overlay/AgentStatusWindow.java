@@ -91,7 +91,7 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
-		f.draw(spr, agent.name(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
+		f.draw(spr, agent.getName(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
 		spr.end();
 		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 2, agent);
 	}
@@ -101,7 +101,7 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
-		f.draw(spr, targetAccAction.getTarget().name(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
+		f.draw(spr, targetAccAction.getTarget().getName(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
 		spr.end();
 		renderCalc(batch, padding * 2, height - f.getLineHeight() * 2, targetAccAction.getHitCalculation(), "Hit Calculation");
 		renderCalc(batch, width - padding - 120, height - f.getLineHeight() * 2, targetAccAction.getCritCalculation(), "Crit Calculation");
@@ -140,9 +140,9 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		f.draw(spr, "Abilities", abilityX, abilityY, 0, Align.left, true);
 		float currY = abilityY - f.getLineHeight() * 2;
 		for (Ability a : the_agent.getAbilities()) {
-			String abilityName = a.name() + (a.getLevel() > 0 ? " " + RomanNumerals.romanNumeralify(a.getLevel()) : "");
+			String abilityName = a.getName() + (a.getLevel() > 0 ? " " + RomanNumerals.romanNumeralify(a.getLevel()) : "");
 			f.draw(spr, abilityName, abilityX, currY, width / 3, Align.left, true);
-			f.draw(spr, a.description(), abilityX, currY - f.getLineHeight(), width / 3, Align.left, true);
+			f.draw(spr, a.getDescription(), abilityX, currY - f.getLineHeight(), width / 3, Align.left, true);
 			currY -= f.getLineHeight() * 3;
 		}
 		spr.end();

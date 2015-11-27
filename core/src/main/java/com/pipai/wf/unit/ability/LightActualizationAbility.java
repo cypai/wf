@@ -7,12 +7,12 @@ public class LightActualizationAbility extends PassiveAbility {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Light Actualization";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Allows casting of light spells";
 	}
 

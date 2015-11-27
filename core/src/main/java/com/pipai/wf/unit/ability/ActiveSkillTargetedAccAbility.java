@@ -1,5 +1,6 @@
 package com.pipai.wf.unit.ability;
 
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.agent.Agent;
 
@@ -10,6 +11,6 @@ public abstract class ActiveSkillTargetedAccAbility extends ActiveSkillTargetedA
 	}
 
 	@Override
-	public abstract TargetedWithAccuracyAction getAction(Agent performer, Agent target);
+	public abstract TargetedWithAccuracyAction getAction(BattleController controller, Agent performer, Agent target);
 
 }

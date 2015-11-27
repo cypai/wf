@@ -2,7 +2,6 @@ package com.pipai.wf.unit.schema;
 
 import java.util.ArrayList;
 
-import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.LeatherArmor;
 import com.pipai.wf.battle.weapon.Bow;
@@ -21,13 +20,13 @@ public class TidusSchema extends RaceTemplateSchema {
 	}
 
 	@Override
-	public int aim() {
+	public int getAim() {
 		// For testing purposes
 		return 100;
 	}
 
 	@Override
-	public AbilityList abilities() {
+	public AbilityList getAbilities() {
 		AbilityList l = new AbilityList();
 		l.add(new FireActualizationAbility(1));
 		l.add(new FireballAbility());
@@ -36,12 +35,12 @@ public class TidusSchema extends RaceTemplateSchema {
 	}
 
 	@Override
-	public Armor armor() {
+	public Armor getArmor() {
 		return new LeatherArmor();
 	}
 
 	@Override
-	public ArrayList<Weapon> weapons(BattleConfiguration config) {
+	public ArrayList<Weapon> getWeapons() {
 		ArrayList<Weapon> l = new ArrayList<>();
 		l.add(new Bow());
 		l.add(new InnateCasting());
@@ -49,7 +48,7 @@ public class TidusSchema extends RaceTemplateSchema {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Tidus";
 	}
 

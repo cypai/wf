@@ -6,42 +6,41 @@ import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 
-public class VisionCalculator {
+public class LineOfSightCalculator {
 
-	public static class Supercover {
-
-		public class CornerPair {
-			public GridPosition a, b;
-
-			public CornerPair(GridPosition a, GridPosition b) {
-				this.a = a;
-				this.b = b;
+	public static boolean checkTileSightBlockersInList(BattleMap map, ArrayList<GridPosition> list) {
+		for (GridPosition pos : list) {
+			if (map.getCell(pos).hasTileSightBlocker()) {
+				return false;
 			}
 		}
-
-		public ArrayList<GridPosition> supercover;
-		public ArrayList<CornerPair> corners;
-
-		public Supercover() {
-			supercover = new ArrayList<GridPosition>();
-			corners = new ArrayList<CornerPair>();
-		}
-
-		public void remove(GridPosition pos) {
-			supercover.remove(pos);
-		}
-
-		public void add(GridPosition pos) {
-			supercover.add(pos);
-		}
-
-		public void addCornerPair(GridPosition a, GridPosition b) {
-			corners.add(new CornerPair(a, b));
-		}
-
+		return true;
 	}
 
-	public static Supercover supercover(GridPosition a, GridPosition b) {
+	public static boolean checkCornerPairsForSightBlockers(BattleMap map, ArrayList<Supercover.CornerPair> list) {
+		for (Supercover.CornerPair pair : list) {
+			if (map.getCell(pair.a).hasTileSightBlocker() && map.getCell(pair.b).hasTileSightBlocker()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/*
+	 * Using the centers/corners to determine line of sight between two
+	 * GridPositions
+	 */
+	public static boolean lineOfSight(BattleMap map, GridPosition a, GridPosition b) {
+		Supercover sc = supercover(gridCenter(a), gridCenter(b));
+		if (checkTileSightBlockersInList(map, sc.supercover)) {
+			if (checkCornerPairsForSightBlockers(map, sc.corners)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	protected static Supercover supercover(GridPosition a, GridPosition b) {
 		return supercover(gridCenter(a), gridCenter(b));
 	}
 
@@ -117,40 +116,41 @@ public class VisionCalculator {
 		return points;
 	}
 
-	public static boolean checkTileSightBlockersInList(BattleMap map, ArrayList<GridPosition> list) {
-		for (GridPosition pos : list) {
-			if (map.getCell(pos).hasTileSightBlocker()) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public static boolean checkCornerPairsForSightBlockers(BattleMap map, ArrayList<Supercover.CornerPair> list) {
-		for (Supercover.CornerPair pair : list) {
-			if (map.getCell(pair.a).hasTileSightBlocker() && map.getCell(pair.b).hasTileSightBlocker()) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/*
-	 * Using the centers/corners to determine line of sight between two
-	 * GridPositions
-	 */
-	public static boolean lineOfSight(BattleMap map, GridPosition a, GridPosition b) {
-		Supercover sc = supercover(gridCenter(a), gridCenter(b));
-		if (checkTileSightBlockersInList(map, sc.supercover)) {
-			if (checkCornerPairsForSightBlockers(map, sc.corners)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	private static Vector2 gridCenter(GridPosition pos) {
 		return new Vector2(pos.x + 0.5f, pos.y + 0.5f);
+	}
+
+	protected static class Supercover {
+
+		public class CornerPair {
+			public GridPosition a, b;
+
+			public CornerPair(GridPosition a, GridPosition b) {
+				this.a = a;
+				this.b = b;
+			}
+		}
+
+		public ArrayList<GridPosition> supercover;
+		public ArrayList<CornerPair> corners;
+
+		public Supercover() {
+			supercover = new ArrayList<GridPosition>();
+			corners = new ArrayList<CornerPair>();
+		}
+
+		public void remove(GridPosition pos) {
+			supercover.remove(pos);
+		}
+
+		public void add(GridPosition pos) {
+			supercover.add(pos);
+		}
+
+		public void addCornerPair(GridPosition a, GridPosition b) {
+			corners.add(new CornerPair(a, b));
+		}
+
 	}
 
 }

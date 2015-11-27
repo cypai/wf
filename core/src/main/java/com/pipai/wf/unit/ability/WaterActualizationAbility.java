@@ -7,12 +7,12 @@ public class WaterActualizationAbility extends PassiveAbility {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Water Actualization";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Allows casting of water spells";
 	}
 

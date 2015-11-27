@@ -1,10 +1,8 @@
 package com.pipai.wf.battle.action;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
@@ -25,28 +23,28 @@ public class SwitchWeaponActionTest {
 
 	@Test
 	public void testSwitchWeaponLog() {
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		BattleMap mockMap = mock(BattleMap.class);
-		GridPosition mockPos = mock(GridPosition.class);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState playerState = factory.newBattleAgentState(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
-		playerState.weapons.add(new Pistol());
-		playerState.weapons.add(new InnateCasting());
-		Agent player = new Agent(playerState, mockMap, mockConfig);
-		BattleController battle = new BattleController(mockMap, mockConfig);
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		BattleMap mockMap = Mockito.mock(BattleMap.class);
+		GridPosition mockPos = Mockito.mock(GridPosition.class);
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
+		playerState.getWeapons().add(new Pistol());
+		playerState.getWeapons().add(new InnateCasting());
+		BattleController controller = new BattleController(mockMap, mockConfig);
+		Agent player = new Agent(playerState);
 		MockGUIObserver observer = new MockGUIObserver();
-		battle.registerObserver(observer);
-		assertTrue(player.getCurrentWeapon() instanceof Pistol);
+		controller.registerObserver(observer);
+		Assert.assertTrue(player.getCurrentWeapon() instanceof Pistol);
 		try {
-			battle.performAction(new SwitchWeaponAction(player));
+			new SwitchWeaponAction(controller, player).perform();
 		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		BattleEvent ev = observer.ev;
-		assertTrue(ev.getType() == BattleEvent.Type.SWITCH_WEAPON);
-		assertTrue(ev.getPerformer() == player);
-		assertTrue(ev.getChainEvents().size() == 0);
-		assertTrue(player.getCurrentWeapon() instanceof SpellWeapon);
+		Assert.assertEquals(BattleEvent.Type.SWITCH_WEAPON, ev.getType());
+		Assert.assertEquals(player, ev.getPerformer());
+		Assert.assertEquals(0, ev.getChainEvents().size());
+		Assert.assertTrue(player.getCurrentWeapon() instanceof SpellWeapon);
 	}
 
 }

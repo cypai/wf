@@ -11,12 +11,12 @@ public class FireActualizationAbility extends PassiveAbility {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Fire Actualization";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Allows casting of fire spells";
 	}
 

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.unit.schema.UnitSchema;
 
 public class SaveWriter {
 
@@ -31,10 +31,10 @@ public class SaveWriter {
 	}
 
 	private void buildPartySave(StringBuilder builder) {
-		AgentStateSaveConverter converter = new AgentStateSaveConverter();
+		UnitSchemaSaveConverter converter = new UnitSchemaSaveConverter();
 		saveBuilder.append(SaveHeader.PARTY.toString() + "\n");
-		for (AgentState as : save.getParty()) {
-			saveBuilder.append(converter.transformAgentStateToString(as));
+		for (UnitSchema schema : save.getParty()) {
+			saveBuilder.append(converter.transformUnitSchemaToString(schema));
 			saveBuilder.append('\n');
 		}
 	}

@@ -7,12 +7,12 @@ public class RegenerationAbility extends PassiveAbility {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Regeneration";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Regenerates a set amount of HP per turn";
 	}
 

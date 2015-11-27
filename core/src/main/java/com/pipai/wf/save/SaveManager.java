@@ -18,7 +18,7 @@ public class SaveManager {
 		writer.save(generateSlotHandle(slot));
 	}
 
-	public Save load(int slot) {
+	public Save load(int slot) throws CorruptedSaveException {
 		Save save = new Save();
 		SaveLoader reader = new SaveLoader(save);
 		reader.load(generateSlotHandle(slot));

@@ -12,6 +12,7 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.battle.vision.AgentVisionCalculator;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
@@ -159,7 +160,8 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 			return false;
 		}
 		if (agent.getTeam() != Team.PLAYER) {
-			if (agent.enemiesInRange().size() == 0) {
+			AgentVisionCalculator agentVisionCalculator = new AgentVisionCalculator(gui.getBattleController().getBattleMap(), gui.getBattleController().getBattleConfiguration());
+			if (agentVisionCalculator.enemiesInRangeOf(agent).size() == 0) {
 				return false;
 			}
 		}

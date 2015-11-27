@@ -55,7 +55,7 @@ public class RandomAI extends AI {
 		if (a.getAP() > 0) {
 			Action act = generateRandomAction(a);
 			try {
-				getBattleController().performAction(act);
+				act.perform();
 			} catch (IllegalActionException e) {
 				logger.error("AI tried to perform illegal move: " + e.getMessage());
 			}
@@ -76,7 +76,7 @@ public class RandomAI extends AI {
 
 	protected Action generateRandomAction(Agent a) {
 		Rng rng = getBattleConfiguration().getRng();
-		ArrayList<Action> list = ActionListGenerator.generateWeaponActionList(a);
+		ArrayList<Action> list = new ActionListGenerator(getBattleController()).generateWeaponActionList(a);
 		int r = rng.nextInt(list.size() * 2 + 1);
 		if (r < list.size()) {
 			return list.get(r);
@@ -85,7 +85,7 @@ public class RandomAI extends AI {
 			ArrayList<GridPosition> potentialTiles = graph.getMovableCellPositions(1);
 			GridPosition destination = potentialTiles.get(rng.nextInt(potentialTiles.size()));
 			LinkedList<GridPosition> path = graph.getPath(destination);
-			return new MoveAction(a, path, 1);
+			return new MoveAction(getBattleController(), a, path, 1);
 		}
 	}
 

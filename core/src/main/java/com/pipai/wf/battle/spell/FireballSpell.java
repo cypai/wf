@@ -1,5 +1,6 @@
 package com.pipai.wf.battle.spell;
 
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.action.TargetedSpellWeaponAction;
 import com.pipai.wf.battle.agent.Agent;
@@ -22,12 +23,12 @@ public class FireballSpell extends Spell {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Fireball";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "A simple fire spell that does good damage";
 	}
 
@@ -42,8 +43,8 @@ public class FireballSpell extends Spell {
 	}
 
 	@Override
-	public TargetedAction getAction(Agent performer, Agent target) {
-		return new TargetedSpellWeaponAction(performer, target);
+	public TargetedAction getAction(BattleController controller, Agent performer, Agent target) {
+		return new TargetedSpellWeaponAction(controller, performer, target);
 	}
 
 	@Override

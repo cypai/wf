@@ -1,10 +1,9 @@
 package com.pipai.wf.battle.action;
 
-import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifierList;
-import com.pipai.wf.battle.damage.TargetedActionCalculator;
 import com.pipai.wf.battle.damage.WeaponDamageFunction;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.weapon.Weapon;
@@ -13,8 +12,8 @@ import com.pipai.wf.util.UtilFunctions;
 
 public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapable {
 
-	public RangedWeaponAttackAction(Agent performerAgent, Agent targetAgent) {
-		super(performerAgent, targetAgent);
+	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
+		super(controller, performerAgent, targetAgent);
 	}
 
 	@Override
@@ -33,27 +32,27 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapabl
 	public PercentageModifierList getHitCalculation() {
 		Agent a = getPerformer();
 		Agent target = getTarget();
-		return TargetedActionCalculator.baseHitCalculation(a, target);
+		return getTargetedActionCalculator().baseHitCalculation(getBattleMap(), a, target);
 	}
 
 	@Override
 	public PercentageModifierList getCritCalculation() {
 		Agent a = getPerformer();
 		Agent target = getTarget();
-		return TargetedActionCalculator.baseCritCalculation(a, target);
+		return getTargetedActionCalculator().baseCritCalculation(getBattleMap(), a, target);
 	}
 
 	@Override
-	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
+	protected void performImpl() throws IllegalActionException {
 		Agent a = getPerformer();
 		Agent target = getTarget();
 		Weapon w = a.getCurrentWeapon();
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
-			throw new IllegalActionException("Not enough ammo to fire " + w.name());
+			throw new IllegalActionException("Not enough ammo to fire " + w.getName());
 		}
-		DamageResult result = config.getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
+		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
 		a.setAP(0);
-		target.takeDamage(result.damage);
+		getDamageDealer().doDamage(result, target);
 		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, result));
 	}
 
@@ -63,26 +62,26 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapabl
 	}
 
 	@Override
-	public void performOnOverwatch(BattleEvent parent, BattleConfiguration config) throws IllegalActionException {
+	public void performOnOverwatch(BattleEvent parent) throws IllegalActionException {
 		Agent a = getPerformer();
 		Agent target = getTarget();
 		Weapon w = a.getCurrentWeapon();
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
-			throw new IllegalActionException("Not enough ammo to fire " + w.name());
+			throw new IllegalActionException("Not enough ammo to fire " + w.getName());
 		}
-		DamageResult result = config.getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 1);
+		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 1);
 		a.setAP(0);
-		target.takeDamage(result.damage);
+		getDamageDealer().doDamage(result, target);
 		parent.addChainEvent(BattleEvent.overwatchActivationEvent(a, target, this, target.getPosition(), result));
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Attack";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		Weapon weapon = getPerformer().getCurrentWeapon();
 		if (weapon.needsAmmunition() && weapon.currentAmmo() <= 0) {
 			return "Not enough ammunition";

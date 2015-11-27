@@ -1,10 +1,8 @@
 package com.pipai.wf.unit.ability;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
@@ -14,6 +12,7 @@ import com.pipai.wf.battle.action.SuppressionAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.damage.TargetedActionCalculator;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
@@ -26,16 +25,14 @@ import com.pipai.wf.test.MockGUIObserver;
 public class SuppressionTest {
 
 	private static BattleMap generateMap(GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		// when(mockConfig.sightRange()).thenReturn(17);
-		BattleMap map = new BattleMap(2, 2, mock(BattleConfiguration.class));
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState player = factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0));
-		player.abilities.add(new SuppressionAbility());
-		player.weapons.add(new Bow());
+		BattleMap map = new BattleMap(2, 2);
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState player = factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0);
+		player.getAbilities().add(new SuppressionAbility());
+		player.getWeapons().add(new Bow());
 		map.addAgent(player);
-		AgentState enemy = factory.battleAgentFromStats(Team.ENEMY, enemyPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0));
-		enemy.weapons.add(new Bow());
+		AgentState enemy = factory.battleAgentFromStats(Team.ENEMY, enemyPos, 1, 1, 1, 1, 1, 0);
+		enemy.getWeapons().add(new Bow());
 		map.addAgent(enemy);
 		return map;
 	}
@@ -47,19 +44,21 @@ public class SuppressionTest {
 		BattleMap map = generateMap(playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		int toHit = new RangedWeaponAttackAction(enemy, player).getHitCalculation().total();
-		BattleController battle = new BattleController(map, mock(BattleConfiguration.class));
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		Mockito.when(mockConfig.getTargetedActionCalculator()).thenReturn(new TargetedActionCalculator(mockConfig));
+		BattleController controller = new BattleController(map, mockConfig);
+		int toHit = new RangedWeaponAttackAction(controller, enemy, player).getHitCalculation().total();
 		try {
-			battle.performAction(new SuppressionAction(player, enemy));
+			new SuppressionAction(controller, player, enemy).perform();
 		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
-		assertTrue(enemy.getStatusEffects().aimModifierList().total() == -30);
-		int suppressedToHit = new RangedWeaponAttackAction(enemy, player).getHitCalculation().total();
-		assertTrue(suppressedToHit == toHit - 30);
-		assertTrue(player.getAP() == 0);
+		Assert.assertEquals(-30, enemy.getStatusEffects().aimModifierList().total());
+		int suppressedToHit = new RangedWeaponAttackAction(controller, enemy, player).getHitCalculation().total();
+		Assert.assertEquals(toHit - 30, suppressedToHit);
+		Assert.assertEquals(0, player.getAP());
 		Weapon weapon = player.getCurrentWeapon();
-		assertTrue(weapon.currentAmmo() == weapon.baseAmmoCapacity() - 2);
+		Assert.assertEquals(weapon.baseAmmoCapacity() - 2, weapon.currentAmmo());
 	}
 
 	@Test
@@ -69,12 +68,12 @@ public class SuppressionTest {
 		BattleMap map = generateMap(playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.getCurrentWeapon() != null);
+		Assert.assertTrue(player.getCurrentWeapon() != null);
 		player.getCurrentWeapon().expendAmmo(player.getCurrentWeapon().baseAmmoCapacity() + 1);
-		BattleController battle = new BattleController(map, mock(BattleConfiguration.class));
+		BattleController controller = new BattleController(map, Mockito.mock(BattleConfiguration.class));
 		try {
-			battle.performAction(new SuppressionAction(player, enemy));
-			fail("Expected not enough ammo exception not thrown");
+			new SuppressionAction(controller, player, enemy).perform();
+			Assert.fail("Expected not enough ammo exception not thrown");
 		} catch (IllegalActionException e) {
 		}
 	}
@@ -86,20 +85,20 @@ public class SuppressionTest {
 		BattleMap map = generateMap(playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		BattleController battle = new BattleController(map, mock(BattleConfiguration.class));
+		BattleController controller = new BattleController(map, Mockito.mock(BattleConfiguration.class));
 		MockGUIObserver observer = new MockGUIObserver();
-		battle.registerObserver(observer);
+		controller.registerObserver(observer);
 		try {
-			battle.performAction(new SuppressionAction(player, enemy));
+			new SuppressionAction(controller, player, enemy).perform();
 		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
 		BattleEvent ev = observer.ev;
-		assertTrue(ev.getType() == BattleEvent.Type.TARGETED_ACTION);
-		assertTrue(ev.getTargetedAction().getClass() == SuppressionAction.class);
-		assertTrue(ev.getPerformer() == player);
-		assertTrue(ev.getTarget() == enemy);
-		assertTrue(ev.getChainEvents().size() == 0);
+		Assert.assertEquals(BattleEvent.Type.TARGETED_ACTION, ev.getType());
+		Assert.assertEquals(SuppressionAction.class, ev.getTargetedAction().getClass());
+		Assert.assertEquals(player, ev.getPerformer());
+		Assert.assertEquals(enemy, ev.getTarget());
+		Assert.assertEquals(0, ev.getChainEvents().size());
 	}
 
 }

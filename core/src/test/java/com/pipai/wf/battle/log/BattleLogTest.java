@@ -1,9 +1,8 @@
 package com.pipai.wf.battle.log;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.LinkedList;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.pipai.wf.battle.Team;
@@ -18,12 +17,12 @@ public class BattleLogTest {
 		primary.addChainEvent(chain);
 		log.logEvent(primary);
 		BattleEvent popped = log.getLastEvent();
-		assertTrue(popped.getNumChainEvents() == 1);
+		Assert.assertEquals(1, popped.getNumChainEvents());
 		LinkedList<BattleEvent> l = popped.getChainEvents();
 		l.pop();
-		assertTrue(l.size() == 0);
-		assertTrue(popped.getNumChainEvents() == 1);	// Make sure getChainEvent() returns a copy
-		assertTrue(log.getLastEvent().getNumChainEvents() == 1);	// Make sure log does not change
+		Assert.assertEquals(0, l.size());
+		Assert.assertEquals(1, popped.getNumChainEvents());	// Make sure getChainEvent() returns a copy
+		Assert.assertEquals(1, log.getLastEvent().getNumChainEvents());	// Make sure log does not change
 	}
 
 }

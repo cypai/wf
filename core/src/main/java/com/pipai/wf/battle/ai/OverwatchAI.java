@@ -45,9 +45,9 @@ public class OverwatchAI extends AI {
 		}
 		Agent a = toAct.poll();
 		if (a.getAP() > 0) {
-			OverwatchAction ow = new OverwatchAction(a);
+			OverwatchAction ow = new OverwatchAction(getBattleController(), a);
 			try {
-				getBattleController().performAction(ow);
+				ow.perform();
 			} catch (IllegalActionException e) {
 				logger.error("AI tried to perform illegal move: " + e.getMessage());
 			}

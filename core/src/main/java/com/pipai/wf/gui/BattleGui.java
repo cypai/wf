@@ -38,6 +38,7 @@ import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.battle.spell.FireballSpell;
+import com.pipai.wf.battle.vision.AgentVisionCalculator;
 import com.pipai.wf.battle.vision.FogOfWar;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
@@ -336,11 +337,11 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			Weapon weapon = selectedAgent.getAgent().getCurrentWeapon();
 			if (weapon instanceof SpellWeapon) {
 				SpellWeapon sw = (SpellWeapon) weapon;
-				atk = sw.getSpell().getAction(selectedAgent.getAgent(), target.getAgent());
+				atk = sw.getSpell().getAction(battleController, selectedAgent.getAgent(), target.getAgent());
 			} else {
 				if (weapon.currentAmmo() > 0) {
 					if (targetedAction == null) {
-						atk = ((TargetedActionable) weapon).getAction(selectedAgent.getAgent(), target.getAgent());
+						atk = ((TargetedActionable) weapon).getAction(battleController, selectedAgent.getAgent(), target.getAgent());
 					} else {
 						atk = targetedAction;
 					}
@@ -349,7 +350,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				}
 			}
 			try {
-				battleController.performAction(atk);
+				atk.perform();
 			} catch (IllegalActionException e) {
 				logger.error("Illegal move: " + e.getMessage());
 			}
@@ -361,10 +362,10 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			if (selectedMapGraph.canMoveTo(destination)) {
 				LinkedList<GridPosition> path = selectedMapGraph.getPath(destination);
 				int useAP = selectedMapGraph.apRequiredToMoveTo(destination);
-				MoveAction move = new MoveAction(selectedAgent.getAgent(), path, useAP);
+				MoveAction move = new MoveAction(battleController, selectedAgent.getAgent(), path, useAP);
 				terrainRenderer.clearShadedTiles();
 				try {
-					battleController.performAction(move);
+					move.perform();
 				} catch (IllegalActionException e) {
 					logger.error("IllegalMoveException detected: " + e.getMessage());
 				}
@@ -484,16 +485,17 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	public void switchToTargetMode(ActiveSkillTargetedAbility ability) {
 		terrainRenderer.clearShadedTiles();
 		targetAgentList = new LinkedList<AgentGuiObject>();
-		for (Agent a : selectedAgent.getAgent().enemiesInRange()) {
+		AgentVisionCalculator agentVisionCalculator = new AgentVisionCalculator(battleController.getBattleMap(), battleController.getBattleConfiguration());
+		for (Agent a : agentVisionCalculator.enemiesInRangeOf(selectedAgent.getAgent())) {
 			targetAgentList.add(agentMap.get(a));
 		}
 		mode = Mode.TARGET_SELECT;
 		if (targetAgentList.size() == 0) {
 			targetedAction = null;
 			if (ability == null) {
-				tooltip.setToGeneralDescription(WeaponActionFactory.defaultWeaponActionName(selectedAgent.getAgent()), "No enemies in range");
+				tooltip.setToGeneralDescription(new WeaponActionFactory(battleController).defaultWeaponActionName(selectedAgent.getAgent()), "No enemies in range");
 			} else {
-				tooltip.setToGeneralDescription(ability.name(), "No enemies in range");
+				tooltip.setToGeneralDescription(ability.getName(), "No enemies in range");
 			}
 			return;
 		}
@@ -517,9 +519,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				terrainRenderer.setTargetTiles(targetTiles);
 				targetAgent = target;
 				if (ability == null) {
-					targetedAction = WeaponActionFactory.defaultWeaponAction(selectedAgent.getAgent(), target.getAgent());
+					targetedAction = new WeaponActionFactory(battleController).defaultWeaponAction(selectedAgent.getAgent(), target.getAgent());
 				} else {
-					targetedAction = ability.getAction(selectedAgent.getAgent(), target.getAgent());
+					targetedAction = ability.getAction(battleController, selectedAgent.getAgent(), target.getAgent());
 				}
 				tooltip.setToActionDescription(targetedAction);
 				moveCameraToPos((selectedAgent.x + target.x) / 2, (selectedAgent.y + target.y) / 2);
@@ -533,6 +535,10 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 
 	public AgentGuiObject getAgentGUIObject(Agent a) {
 		return agentMap.get(a);
+	}
+
+	public BattleController getBattleController() {
+		return battleController;
 	}
 
 	private void globalUpdate() {
@@ -593,20 +599,20 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			break;
 		case Keys.X:
 			if (mode == Mode.MOVE) {
-				action = new SwitchWeaponAction(selectedAgent.getAgent());
+				action = new SwitchWeaponAction(battleController, selectedAgent.getAgent());
 			}
 			break;
 		case Keys.R:
 			// Reload
 			if (selectedAgent.getAgent().getCurrentWeapon() instanceof SpellWeapon) {
-				action = new ReadySpellAction(selectedAgent.getAgent(), new FireballSpell());
+				action = new ReadySpellAction(battleController, selectedAgent.getAgent(), new FireballSpell());
 			} else {
-				action = new ReloadAction(selectedAgent.getAgent());
+				action = new ReloadAction(battleController, selectedAgent.getAgent());
 			}
 			break;
 		case Keys.Y:
 			// Overwatch
-			action = new OverwatchAction(selectedAgent.getAgent());
+			action = new OverwatchAction(battleController, selectedAgent.getAgent());
 			break;
 		case Keys.H:
 			// Hunker
@@ -667,7 +673,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		if (action != null) {
 			try {
 				mode = Mode.PRE_ANIMATION;
-				battleController.performAction(action);
+				action.perform();
 			} catch (IllegalActionException e) {
 				logger.error("Illegal move: " + e.getMessage());
 				mode = Mode.MOVE;

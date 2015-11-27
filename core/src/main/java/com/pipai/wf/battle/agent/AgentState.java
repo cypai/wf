@@ -8,24 +8,26 @@ import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.NoArmor;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.misc.BasicStats;
+import com.pipai.wf.misc.HasBasicStats;
+import com.pipai.wf.misc.HasName;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
 
-public class AgentState {
+public class AgentState implements HasBasicStats, HasName {
 
-	public Team team;
-	public int hp, maxHP;
-	public int mp, maxMP;
-	public int ap, maxAP;
-	public int mobility, aim, defense;
-	public GridPosition position;
-	public State state;
-	public AbilityList abilities;
-	public ArrayList<Weapon> weapons;
-	public Armor armor;
-	public String name;
+	private Team team;
+	private BasicStats stats;
+	private GridPosition position;
+	private State state;
+	private AbilityList abilities;
+	private ArrayList<Weapon> weapons;
+	private Armor armor;
+	private String name;
 
-	public AgentState() {
+	public AgentState(String name, BasicStats stats) {
+		this.name = name;
+		this.stats = stats;
 		abilities = new AbilityList();
 		weapons = new ArrayList<Weapon>();
 		armor = new NoArmor();
@@ -33,7 +35,7 @@ public class AgentState {
 
 	public void addAbilities(AbilityList abilityList) {
 		for (Ability a : abilityList) {
-			abilities.add(a.clone());
+			getAbilities().add(a.clone());
 		}
 	}
 
@@ -42,11 +44,11 @@ public class AgentState {
 	 */
 	public String generateString() {
 		String s = "a ";
-		s += String.valueOf(position.x) + " " + String.valueOf(position.y) + " ";
-		s += team + " ";
-		s += String.valueOf(hp) + " " + String.valueOf(maxHP) + " ";
-		s += String.valueOf(ap) + " " + String.valueOf(maxAP) + " ";
-		s += String.valueOf(mobility) + " ";
+		s += String.valueOf(getPosition().x) + " " + String.valueOf(getPosition().y) + " ";
+		s += getTeam() + " ";
+		s += String.valueOf(getHP()) + " " + String.valueOf(getMaxHP()) + " ";
+		s += String.valueOf(getAP()) + " " + String.valueOf(getMaxAP()) + " ";
+		s += String.valueOf(getMobility()) + " ";
 		s += state;
 		return s;
 	}
@@ -57,13 +59,71 @@ public class AgentState {
 	@Override
 	public String toString() {
 		String s = "";
-		s += "Position: " + position + "\n";
-		s += "Team: " + team + "\n";
-		s += "HP: " + String.valueOf(hp) + "/" + String.valueOf(maxHP) + "\n";
-		s += "AP: " + String.valueOf(ap) + "/" + String.valueOf(maxAP) + "\n";
-		s += "Mobility: " + String.valueOf(mobility) + "\n";
+		s += "Position: " + getPosition() + "\n";
+		s += "Team: " + getTeam() + "\n";
+		s += "HP: " + String.valueOf(getHP()) + "/" + String.valueOf(getMaxHP()) + "\n";
+		s += "AP: " + String.valueOf(getAP()) + "/" + String.valueOf(getMaxAP()) + "\n";
+		s += "Mobility: " + String.valueOf(getMobility()) + "\n";
 		s += "State: " + state + "\n";
 		return s;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public BasicStats getBasicStats() {
+		return stats;
+	}
+
+	public ArrayList<Weapon> getWeapons() {
+		return weapons;
+	}
+
+	public void setWeapons(ArrayList<Weapon> weapons) {
+		this.weapons = weapons;
+	}
+
+	public Armor getArmor() {
+		return armor;
+	}
+
+	public void setArmor(Armor armor) {
+		this.armor = armor;
+	}
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
+
+	public GridPosition getPosition() {
+		return position;
+	}
+
+	public void setPosition(GridPosition position) {
+		this.position = position;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
+	}
+
+	public AbilityList getAbilities() {
+		return abilities;
+	}
+
+	public void setAbilities(AbilityList abilities) {
+		this.abilities = abilities;
 	}
 
 }

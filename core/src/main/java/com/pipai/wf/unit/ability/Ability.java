@@ -1,6 +1,7 @@
 package com.pipai.wf.unit.ability;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.pipai.wf.battle.agent.Agent;
@@ -28,6 +29,7 @@ public abstract class Ability implements HasName, HasDescription {
 		this.agent = agent;
 	}
 
+	@JsonIgnore
 	public Agent getAgent() {
 		return agent;
 	}
@@ -97,5 +99,13 @@ public abstract class Ability implements HasName, HasDescription {
 	public boolean equalsIgnoreLevel(Ability other) {
 		return this.getClass().isInstance(other);
 	}
+
+	@Override
+	@JsonIgnore
+	public abstract String getName();
+
+	@Override
+	@JsonIgnore
+	public abstract String getDescription();
 
 }

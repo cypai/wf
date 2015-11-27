@@ -1,5 +1,6 @@
 package com.pipai.wf.unit.ability;
 
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.PrecisionShotAction;
 import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.agent.Agent;
@@ -11,12 +12,12 @@ public class PrecisionShotAbility extends ActiveSkillTargetedAccAbility {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Precision Shot";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Fires a shot that has +1 extra damage and +30% critical chance.";
 	}
 
@@ -26,8 +27,8 @@ public class PrecisionShotAbility extends ActiveSkillTargetedAccAbility {
 	}
 
 	@Override
-	public TargetedWithAccuracyAction getAction(Agent performer, Agent target) {
-		return new PrecisionShotAction(performer, target);
+	public TargetedWithAccuracyAction getAction(BattleController controller, Agent performer, Agent target) {
+		return new PrecisionShotAction(controller, performer, target);
 	}
 
 }

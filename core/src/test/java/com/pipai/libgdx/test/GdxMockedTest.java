@@ -1,13 +1,11 @@
 package com.pipai.libgdx.test;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.io.File;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -19,22 +17,22 @@ public class GdxMockedTest {
 
 	@BeforeClass
 	public static void mockGdxFiles() {
-		Gdx.files = mock(Files.class);
-		when(Gdx.files.internal(anyString())).thenAnswer(new Answer<FileHandle>() {
+		Gdx.files = Mockito.mock(Files.class);
+		Mockito.when(Gdx.files.internal(Matchers.anyString())).thenAnswer(new Answer<FileHandle>() {
 			@Override
 			public FileHandle answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();
 				return new FileHandle("assets/" + (String) args[0]);
 			}
 		});
-		when(Gdx.files.local(anyString())).thenAnswer(new Answer<FileHandle>() {
+		Mockito.when(Gdx.files.local(Matchers.anyString())).thenAnswer(new Answer<FileHandle>() {
 			@Override
 			public FileHandle answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();
 				return new FileHandle((String) args[0]);
 			}
 		});
-		when(Gdx.files.external(anyString())).thenAnswer(new Answer<FileHandle>() {
+		Mockito.when(Gdx.files.external(Matchers.anyString())).thenAnswer(new Answer<FileHandle>() {
 			@Override
 			public FileHandle answer(InvocationOnMock invocation) throws Throwable {
 				Object[] args = invocation.getArguments();

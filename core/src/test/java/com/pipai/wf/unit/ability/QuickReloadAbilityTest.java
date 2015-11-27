@@ -1,10 +1,8 @@
 package com.pipai.wf.unit.ability;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Mockito.mock;
-
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
@@ -22,39 +20,39 @@ public class QuickReloadAbilityTest {
 
 	@Test
 	public void testNoQuickReload() {
-		BattleMap mockMap = mock(BattleMap.class);
-		GridPosition mockPosition = mock(GridPosition.class);
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
-		as.weapons.add(new Pistol());
-		Agent agent = new Agent(as, mockMap, mockConfig);
-		BattleController battle = new BattleController(mockMap, mockConfig);
+		BattleMap mockMap = Mockito.mock(BattleMap.class);
+		GridPosition mockPosition = Mockito.mock(GridPosition.class);
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState as = factory.battleAgentFromStats(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
+		as.getWeapons().add(new Pistol());
+		BattleController controller = new BattleController(mockMap, mockConfig);
+		Agent agent = new Agent(as);
 		try {
-			battle.performAction(new ReloadAction(agent));
+			new ReloadAction(controller, agent).perform();
 		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
-		assertTrue(agent.getAP() == 0);
+		Assert.assertEquals(0, agent.getAP());
 	}
 
 	@Test
 	public void testQuickReload() {
-		BattleMap mockMap = mock(BattleMap.class);
-		GridPosition mockPosition = mock(GridPosition.class);
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		AgentState as = factory.newBattleAgentState(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
-		as.abilities.add(new QuickReloadAbility());
-		as.weapons.add(new Pistol());
-		Agent agent = new Agent(as, mockMap, mockConfig);
-		BattleController battle = new BattleController(mockMap, mockConfig);
+		BattleMap mockMap = Mockito.mock(BattleMap.class);
+		GridPosition mockPosition = Mockito.mock(GridPosition.class);
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		AgentStateFactory factory = new AgentStateFactory();
+		AgentState as = factory.battleAgentFromStats(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
+		as.getAbilities().add(new QuickReloadAbility());
+		as.getWeapons().add(new Pistol());
+		BattleController controller = new BattleController(mockMap, mockConfig);
+		Agent agent = new Agent(as);
 		try {
-			battle.performAction(new ReloadAction(agent));
+			new ReloadAction(controller, agent).perform();
 		} catch (IllegalActionException e) {
-			fail(e.getMessage());
+			Assert.fail(e.getMessage());
 		}
-		assertTrue(agent.getAP() == 1);
+		Assert.assertEquals(1, agent.getAP());
 	}
 
 }

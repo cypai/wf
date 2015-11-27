@@ -1,14 +1,14 @@
 package com.pipai.wf.battle.action;
 
-import com.pipai.wf.battle.BattleConfiguration;
+import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class SwitchWeaponAction extends AlterStateAction {
 
-	public SwitchWeaponAction(Agent performerAgent) {
-		super(performerAgent);
+	public SwitchWeaponAction(BattleController controller, Agent performerAgent) {
+		super(controller, performerAgent);
 	}
 
 	@Override
@@ -17,18 +17,18 @@ public class SwitchWeaponAction extends AlterStateAction {
 	}
 
 	@Override
-	protected void performImpl(BattleConfiguration config) throws IllegalActionException {
+	protected void performImpl() throws IllegalActionException {
 		getPerformer().switchWeapon();
 		log(BattleEvent.switchWeaponEvent(getPerformer()));
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return "Switch Weapon";
 	}
 
 	@Override
-	public String description() {
+	public String getDescription() {
 		return "Switch to a different weapon";
 	}
 

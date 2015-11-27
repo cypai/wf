@@ -62,7 +62,7 @@ public class MapString {
 		for (String line : lines) {
 			String params[] = line.split(" ");
 			String type = params[0];
-			if (type.equals("s")) {
+			if ("s".equals(type)) {
 				solidPosList.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
 			} else {
 				throw new BadStateStringException("Unknown line type");

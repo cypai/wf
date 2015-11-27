@@ -2,84 +2,58 @@ package com.pipai.wf.battle.agent;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
-import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.effect.StatusEffect;
 import com.pipai.wf.battle.effect.StatusEffectList;
 import com.pipai.wf.battle.effect.SuppressedStatusEffect;
-import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.BattleMapCell;
-import com.pipai.wf.battle.map.CoverType;
-import com.pipai.wf.battle.map.Direction;
-import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.misc.OverwatchContainer;
+import com.pipai.wf.battle.overwatch.OverwatchActivatedActionSchema;
 import com.pipai.wf.battle.spell.Spell;
-import com.pipai.wf.battle.vision.VisionCalculator;
 import com.pipai.wf.battle.weapon.Weapon;
-import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.exception.NoRegisteredAgentException;
+import com.pipai.wf.misc.BasicStats;
+import com.pipai.wf.misc.HasBasicStats;
 import com.pipai.wf.misc.HasName;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
-import com.pipai.wf.util.UtilFunctions;
 
-public class Agent implements HasName {
-
-	private static final Logger logger = LoggerFactory.getLogger(Agent.class);
+// TODO: Make this a stupid data structure class
+public class Agent implements HasName, HasBasicStats {
 
 	public enum State {
 		NEUTRAL, KO, OVERWATCH, SUPPRESSING
 	};
 
 	private Team team;
-	private int maxHP, maxAP, maxMP, hp, ap, mp;
-	private int mobility, aim, defense;
+	private BasicStats stats;
 	private String name;
 	private State state;
 	private ArrayList<Weapon> weapons;
 	private int weaponIndex;
 	private Armor armor;
-	private BattleMap map;
 	private GridPosition position;
-	private OverwatchContainer owContainer;
+	private OverwatchActivatedActionSchema owAction;
 	private AbilityList abilities;
 	private StatusEffectList seList;
-	private BattleConfiguration config;
 
-	public Agent(AgentState state, BattleMap map, BattleConfiguration config) {
-		this.map = map;
-		team = state.team;
-		position = state.position;
-		maxHP = state.maxHP;
-		hp = state.hp;
-		maxAP = state.maxAP;
-		mp = state.mp;
-		maxMP = state.maxMP;
-		ap = state.ap;
-		mobility = state.mobility;
-		aim = state.aim;
-		defense = state.defense;
-		weapons = state.weapons;
+	public Agent(AgentState state) {
+		team = state.getTeam();
+		position = state.getPosition();
+		stats = state.getBasicStats().clone();
+		weapons = state.getWeapons();
 		weaponIndex = 0;
-		armor = state.armor;
-		abilities = state.abilities.clone();
+		armor = state.getArmor();
+		abilities = state.getAbilities().clone();
 		abilities.registerToAgent(this);
-		name = state.name;
-		owContainer = new OverwatchContainer();
+		name = state.getName();
 		seList = new StatusEffectList();
-		this.config = config;
 	}
 
-	public BattleMap getBattleMap() {
-		return map;
+	@Override
+	public BasicStats getBasicStats() {
+		return stats;
 	}
 
 	public Team getTeam() {
@@ -90,37 +64,24 @@ public class Agent implements HasName {
 		this.team = team;
 	}
 
-	public int getAP() {
-		return ap;
-	}
-
 	public void setAP(int ap) {
-		this.ap = ap;
+		stats.setAP(ap);
 	}
 
 	public void useAP(int ap) {
-		this.ap -= ap;
-		if (this.ap < 0) {
-			this.ap = 0;
-		}
-	}
-
-	public int getMaxAP() {
-		return maxAP;
-	}
-
-	public int getHP() {
-		return hp;
+		int temp = getAP() - ap;
+		temp = temp < 0 ? 0 : temp;
+		stats.setAP(temp);
 	}
 
 	public void setHP(int hp) {
-		this.hp = hp;
-		if (this.hp <= 0) {
-			this.hp = 0;
+		if (hp <= 0) {
+			stats.setHP(0);
 			state = State.KO;
-			map.getCell(position).makeAgentInactive();
+		} else if (hp > stats.getMaxHP()) {
+			stats.setMaxHP(stats.getMaxHP());
 		} else {
-			state = State.NEUTRAL;
+			stats.setHP(hp);
 		}
 	}
 
@@ -130,42 +91,19 @@ public class Agent implements HasName {
 	}
 
 	public void heal(int amt) {
-		hp += amt;
-		if (hp > maxHP) {
-			hp = maxHP;
-		}
-	}
-
-	public int getMaxHP() {
-		return maxHP;
-	}
-
-	public int getMP() {
-		return mp;
+		setHP(getHP() + amt);
 	}
 
 	public void setMP(int mp) {
-		this.mp = mp;
+		stats.setMP(mp);
 	}
 
 	public void useMP(int mp) {
-		this.mp -= mp;
-	}
-
-	public int getMaxMP() {
-		return maxMP;
-	}
-
-	public int getBaseMobility() {
-		return mobility;
+		stats.setMP(stats.getMP() - mp);
 	}
 
 	public int getEffectiveMobility() {
-		return mobility + seList.totalMobilityModifier();
-	}
-
-	public int getBaseAim() {
-		return aim;
+		return getMobility() + seList.totalMobilityModifier();
 	}
 
 	public Weapon getCurrentWeapon() {
@@ -219,7 +157,7 @@ public class Agent implements HasName {
 	}
 
 	@Override
-	public String name() {
+	public String getName() {
 		return name;
 	}
 
@@ -251,8 +189,6 @@ public class Agent implements HasName {
 	}
 
 	public void setPosition(GridPosition pos) {
-		map.getCell(position).removeAgent();
-		map.getCell(pos).setAgent(this);
 		position = pos;
 	}
 
@@ -260,111 +196,8 @@ public class Agent implements HasName {
 		return (float) getPosition().distance(other.getPosition());
 	}
 
-	public ArrayList<GridPosition> getPeekingSquares() {
-		ArrayList<GridPosition> l = new ArrayList<>();
-		l.add(getPosition());
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		ArrayList<Direction> coverDirs = coverSystem.getCoverDirections(getPosition());
-		for (Direction coverDir : coverDirs) {
-			ArrayList<Direction> perpendicularDirs = Direction.getPerpendicular(coverDir);
-			for (Direction perpendicular : perpendicularDirs) {
-				BattleMapCell peekSquare = map.getCellInDirection(getPosition(), perpendicular);
-				if (peekSquare != null) {
-					GridPosition pos = peekSquare.getPosition();
-					BattleMapCell peekCoverSquare = map.getCellInDirection(pos, coverDir);
-
-					if (peekSquare.isEmpty() && !peekCoverSquare.hasTileSightBlocker() && !l.contains(pos)) {
-						l.add(peekSquare.getPosition());
-					}
-				}
-			}
-		}
-		return l;
-	}
-
-	public CoverType getCoverType() {
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		return coverSystem.getCover(getPosition());
-	}
-
-	public boolean isOpen() {
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		return coverSystem.isOpen(getPosition());
-	}
-
-	public boolean isFlanked() {
-		for (Agent a : enemiesInRange()) {
-			if (isFlankedBy(a)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isFlankedBy(Agent other) {
-		ArrayList<GridPosition> otherPosList = other.getPeekingSquares();
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		for (GridPosition otherPos : otherPosList) {
-			if (coverSystem.isFlankedBy(getPosition(), otherPos)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public int getDefense(Agent attacker) {
-		int lowest = Integer.MAX_VALUE;
-		for (GridPosition pos : attacker.getPeekingSquares()) {
-			int curr = getDefense(pos);
-			lowest = (curr < lowest) ? curr : lowest;
-		}
-		return lowest;
-	}
-
-	protected int getDefense(GridPosition attackerPos) {
-		DirectionalCoverSystem coverSystem = new DirectionalCoverSystem(map);
-		int situationalDef = defense + coverSystem.getBestCoverAgainstAttack(getPosition(), attackerPos).getDefense();
-		return situationalDef;
-	}
-
-	public boolean canSee(Agent other) {
-		for (GridPosition peekSquare : getPeekingSquares()) {
-			for (GridPosition otherPeekSquare : other.getPeekingSquares()) {
-				if (UtilFunctions.gridPositionDistance(peekSquare, otherPeekSquare) < config.sightRange()) {
-					if (VisionCalculator.lineOfSight(map, peekSquare, otherPeekSquare)) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	public boolean inRange(Agent other) {
-		return other.canSee(this);
-	}
-
-	public ArrayList<Agent> enemiesInRange() {
-		ArrayList<Agent> l = new ArrayList<>();
-		for (Agent a : map.getAgents()) {
-			if (a.team != team && !a.isKO() && canSee(a)) {
-				l.add(a);
-			}
-		}
-		return l;
-	}
-
-	public ArrayList<Agent> targetableEnemies() {
-		ArrayList<Agent> list = new ArrayList<>();
-		if (getCurrentWeapon().currentAmmo() == 0) {
-			return list;
-		} else {
-			return enemiesInRange();
-		}
-	}
-
 	public void onTurnBegin() {
-		ap = maxAP;
+		stats.setAP(stats.getMaxAP());
 		if (!isKO()) {
 			state = State.NEUTRAL;
 		}
@@ -408,25 +241,19 @@ public class Agent implements HasName {
 		}
 	}
 
-	public void overwatch(Class<? extends TargetedWithAccuracyActionOWCapable> attack) {
-		owContainer.prepareAction(attack);
+	public void setOverwatch(OverwatchActivatedActionSchema owAction) {
+		this.owAction = owAction;
 		state = State.OVERWATCH;
 		setAP(0);
 	}
 
-	public void activateOverwatch(Agent other, BattleEvent activationLogEvent, GridPosition activatedTile) {
-		TargetedWithAccuracyActionOWCapable action = owContainer.generateAction(this, other);
-		try {
-			other.setPosition(activatedTile);
-			action.performOnOverwatch(activationLogEvent, config);
-			owContainer.clear();
-			state = State.NEUTRAL;
-			if (getCurrentWeapon().needsAmmunition()) {
-				getCurrentWeapon().expendAmmo(1);
-			}
-		} catch (IllegalActionException e) {
-			logger.error(e.getMessage());
-		}
+	public OverwatchActivatedActionSchema getOverwatchAction() {
+		return owAction;
+	}
+
+	public void clearOverwatch() {
+		owAction = null;
+		state = State.NEUTRAL;
 	}
 
 	public void suppressOther(Agent other) {

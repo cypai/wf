@@ -6,12 +6,10 @@ import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import com.pipai.libgdx.test.GdxMockedTest;
-import com.pipai.wf.battle.BattleConfiguration;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.misc.BasicStats;
+import com.pipai.wf.unit.schema.UnitSchema;
 
 public class SaveTest extends GdxMockedTest {
 
@@ -24,40 +22,46 @@ public class SaveTest extends GdxMockedTest {
 	}
 
 	@Test
-	public void smallPartyTest() throws IOException {
-		AgentStateFactory factory = new AgentStateFactory(Mockito.mock(BattleConfiguration.class));
-		AgentState as = factory.statsOnlyState(5, 4, 2, 10, 60, 0);
+	public void smallPartyTest() throws IOException, CorruptedSaveException {
+		String name = "test name";
+		int hp = 4;
+		int maxHP = 5;
+		int mp = 6;
+		int maxMP = 7;
+		int ap = 1;
+		int maxAP = 2;
+		int aim = 60;
+		int mobility = 10;
+		int defense = 0;
 		Save save = new Save();
-		ArrayList<AgentState> party = new ArrayList<>();
-		party.add(as);
+		ArrayList<UnitSchema> party = new ArrayList<>();
+		party.add(new UnitSchema(name, new BasicStats(hp, maxHP, mp, maxMP, ap, maxAP, aim, mobility, defense)));
 		save.setParty(party);
 		MANAGER.save(save, SAVE_SLOT);
-		Save load = MANAGER.load(SAVE_SLOT);
-		ArrayList<AgentState> loadParty = load.getParty();
-		Assert.assertEquals(1, loadParty.size());
-		AgentState loadState = loadParty.get(0);
-		Assert.assertEquals(5, loadState.hp);
-		Assert.assertEquals(5, loadState.maxHP);
-		Assert.assertEquals(4, loadState.mp);
-		Assert.assertEquals(4, loadState.maxMP);
-		Assert.assertEquals(2, loadState.ap);
-		Assert.assertEquals(2, loadState.maxAP);
-		Assert.assertEquals(10, loadState.mobility);
-		Assert.assertEquals(60, loadState.aim);
-		Assert.assertEquals(0, loadState.defense);
-		Assert.assertEquals(0, loadState.abilities.size());
+		Save load;
+		load = MANAGER.load(SAVE_SLOT);
+		UnitSchema schema = load.getParty().get(0);
+		Assert.assertEquals(name, schema.getName());
+		Assert.assertEquals(hp, schema.getHP());
+		Assert.assertEquals(maxHP, schema.getMaxHP());
+		Assert.assertEquals(mp, schema.getMP());
+		Assert.assertEquals(maxMP, schema.getMaxMP());
+		Assert.assertEquals(ap, schema.getAP());
+		Assert.assertEquals(maxAP, schema.getMaxAP());
+		Assert.assertEquals(aim, schema.getAim());
+		Assert.assertEquals(mobility, schema.getMobility());
+		Assert.assertEquals(defense, schema.getDefense());
 	}
 
 	@Test
-	public void newGameTest() throws IOException {
-		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
-		NewGameSaveGenerator generator = new NewGameSaveGenerator(mockConfig);
+	public void newGameTest() throws IOException, CorruptedSaveException {
+		NewGameSaveGenerator generator = new NewGameSaveGenerator();
 		Save save = generator.generateNewSave();
 		MANAGER.save(save, SAVE_SLOT);
 		Save load = MANAGER.load(SAVE_SLOT);
-		ArrayList<AgentState> party = load.getParty();
+		ArrayList<UnitSchema> party = load.getParty();
 		Assert.assertEquals(6, party.size());
-		AgentState tidus = party.get(0);
-		Assert.assertEquals(3, tidus.abilities.size());
+		UnitSchema tidus = party.get(0);
+		Assert.assertEquals(3, tidus.getAbilities().size());
 	}
 }

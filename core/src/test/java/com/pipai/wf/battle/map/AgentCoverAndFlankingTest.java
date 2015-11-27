@@ -1,29 +1,33 @@
-package com.pipai.wf.battle.agent;
+package com.pipai.wf.battle.map;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.map.BattleMap;
-import com.pipai.wf.battle.map.CoverType;
-import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.map.MapString;
+import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.exception.BadStateStringException;
 
-public class AgentFlankingTest {
+public class AgentCoverAndFlankingTest {
+
+	private static BattleConfiguration getMockConfig() {
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		Mockito.when(mockConfig.sightRange()).thenReturn(17);
+		return mockConfig;
+	}
+
+	private static AgentState getDummyAgentState(Team team, GridPosition position) {
+		AgentStateFactory factory = new AgentStateFactory();
+		return factory.battleAgentFromStats(team, position, 1, 1, 1, 1, 1, 0);
+	}
 
 	private static BattleMap generateMap(String mapString, GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
-		BattleConfiguration mockConfig = mock(BattleConfiguration.class);
-		when(mockConfig.sightRange()).thenReturn(17);
-		BattleMap map = new BattleMap(new MapString(mapString), mock(BattleConfiguration.class));
-		AgentStateFactory factory = new AgentStateFactory(mockConfig);
-		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
-		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, factory.statsOnlyState(1, 1, 1, 1, 1, 0)));
+		BattleMap map = new BattleMap(new MapString(mapString));
+		map.addAgent(getDummyAgentState(Team.PLAYER, playerPos));
+		map.addAgent(getDummyAgentState(Team.ENEMY, enemyPos));
 		return map;
 	}
 
@@ -44,9 +48,10 @@ public class AgentFlankingTest {
 		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.getCoverType() == CoverType.FULL);
-		assertTrue(player.isFlanked());
-		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
+		AgentCoverCalculator coverCalc = new AgentCoverCalculator(map, getMockConfig());
+		Assert.assertEquals(CoverType.FULL, coverCalc.getCoverType(player));
+		Assert.assertTrue(coverCalc.isFlanked(player));
+		Assert.assertTrue(coverCalc.isFlankedBy(player, enemy));
 	}
 
 	@Test
@@ -66,9 +71,10 @@ public class AgentFlankingTest {
 		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.getCoverType() == CoverType.FULL);
-		assertFalse(player.isFlanked());
-		assertTrue(player.getDefense(enemy) == CoverType.FULL.getDefense());
+		AgentCoverCalculator coverCalc = new AgentCoverCalculator(map, getMockConfig());
+		Assert.assertEquals(CoverType.FULL, coverCalc.getCoverType(player));
+		Assert.assertFalse(coverCalc.isFlanked(player));
+		Assert.assertFalse(coverCalc.isFlankedBy(player, enemy));
 	}
 
 	@Test
@@ -89,9 +95,10 @@ public class AgentFlankingTest {
 		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.getCoverType() == CoverType.FULL);
-		assertTrue(player.isFlanked());
-		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
+		AgentCoverCalculator coverCalc = new AgentCoverCalculator(map, getMockConfig());
+		Assert.assertEquals(CoverType.FULL, coverCalc.getCoverType(player));
+		Assert.assertTrue(coverCalc.isFlanked(player));
+		Assert.assertTrue(coverCalc.isFlankedBy(player, enemy));
 	}
 
 	@Test
@@ -115,9 +122,10 @@ public class AgentFlankingTest {
 		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.getCoverType() == CoverType.FULL);
-		assertTrue(player.isFlanked());
-		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
+		AgentCoverCalculator coverCalc = new AgentCoverCalculator(map, getMockConfig());
+		Assert.assertEquals(CoverType.FULL, coverCalc.getCoverType(player));
+		Assert.assertTrue(coverCalc.isFlanked(player));
+		Assert.assertTrue(coverCalc.isFlankedBy(player, enemy));
 	}
 
 	@Test
@@ -137,9 +145,10 @@ public class AgentFlankingTest {
 		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.getCoverType() == CoverType.FULL);
-		assertTrue(player.isFlanked());
-		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
+		AgentCoverCalculator coverCalc = new AgentCoverCalculator(map, getMockConfig());
+		Assert.assertEquals(CoverType.FULL, coverCalc.getCoverType(player));
+		Assert.assertTrue(coverCalc.isFlanked(player));
+		Assert.assertTrue(coverCalc.isFlankedBy(player, enemy));
 	}
 
 	@Test
@@ -159,10 +168,10 @@ public class AgentFlankingTest {
 		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		assertTrue(player.getCoverType() == CoverType.FULL);
-		assertTrue(player.isFlanked());
-		assertTrue(player.isFlankedBy(map.getAgentAtPos(enemyPos)));
-		assertTrue(player.getDefense(enemy) == CoverType.NONE.getDefense());
+		AgentCoverCalculator coverCalc = new AgentCoverCalculator(map, getMockConfig());
+		Assert.assertEquals(CoverType.FULL, coverCalc.getCoverType(player));
+		Assert.assertTrue(coverCalc.isFlanked(player));
+		Assert.assertTrue(coverCalc.isFlankedBy(player, enemy));
 	}
 
 }
