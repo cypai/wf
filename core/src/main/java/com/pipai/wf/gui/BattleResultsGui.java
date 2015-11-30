@@ -35,8 +35,9 @@ public class BattleResultsGui extends Gui {
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-		game.setScreen(new PartyInfoGui(game));
-		dispose();
+		// TODO: Generate new party
+		// game.setScreen(new PartyInfoGui(game));
+		// dispose();
 	}
 
 	@Override

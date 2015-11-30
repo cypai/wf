@@ -1,6 +1,7 @@
 package com.pipai.wf.gui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -11,7 +12,6 @@ import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleFactory;
 import com.pipai.wf.battle.BattleSchema;
-import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
@@ -26,9 +26,8 @@ public final class PartyInfoGui extends Gui {
 	private OrthographicCamera camera;
 	private ArrayList<GuiRenderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;
 	private ArrayList<UnitSchema> partySchema = new ArrayList<>();
-	private ArrayList<AgentState> party = new ArrayList<>();
 
-	public PartyInfoGui(WFGame game) {
+	public PartyInfoGui(WFGame game, List<UnitSchema> party) {
 		super(game);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, getScreenWidth(), getScreenHeight());

@@ -1,5 +1,7 @@
 package com.pipai.wf.gui;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.pipai.wf.WFGame;
@@ -7,9 +9,10 @@ import com.pipai.wf.gui.util.GuiObjectBuffers;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.LeftClickable;
-import com.pipai.wf.guiobject.ui.MainMenuTestbedButton;
+import com.pipai.wf.guiobject.ui.NewGameButton;
+import com.pipai.wf.unit.schema.UnitSchema;
 
-public class MainMenuGui extends Gui {
+public final class MainMenuGui extends Gui {
 
 	private GuiObjectBuffers<GuiRenderable> renderables;
 	private GuiObjectBuffers<LeftClickable> leftClickables;
@@ -18,7 +21,7 @@ public class MainMenuGui extends Gui {
 		super(game);
 		renderables = new GuiObjectBuffers<>();
 		leftClickables = new GuiObjectBuffers<>();
-		createInstance(new MainMenuTestbedButton(this));
+		createInstance(new NewGameButton(this));
 	}
 
 	@Override
@@ -92,8 +95,8 @@ public class MainMenuGui extends Gui {
 		leftClickables.flushDeleteBuffer();
 	}
 
-	public void goToTestbed() {
-		game.setScreen(new PartyInfoGui(game));
+	public void goToTestbed(List<UnitSchema> party) {
+		game.setScreen(new PartyInfoGui(game, party));
 		dispose();
 	}
 
