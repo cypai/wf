@@ -120,6 +120,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	private AnimationController animationController;
 	private FogOfWar fogOfWar;
 
+	private boolean switchGuiFlag;
+	private BattleResult switchBattleResultGuiData;
+
 	public BattleGui(WFGame game, Battle battle) {
 		super(game);
 		camera = new AnchoredCamera(getScreenWidth(), getScreenHeight());
@@ -301,9 +304,14 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	private void performVictoryCheck() {
 		BattleResult result = battleController.battleResult();
 		if (result.getResult() != BattleResult.Result.NONE) {
-			game.setScreen(new BattleResultsGui(game, result));
-			dispose();
-			return;
+			switchGuiFlag = true;
+			switchBattleResultGuiData = result;
+		}
+	}
+
+	private void performGuiSwitchIfFlagSet() {
+		if (switchGuiFlag) {
+			switchGui(new BattleResultsGui(game, switchBattleResultGuiData));
 		}
 	}
 
@@ -703,7 +711,6 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		animationController.update();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		globalUpdate();
 		batch.getSpriteBatch().setProjectionMatrix(camera.getProjectionMatrix());
 		batch.getShapeRenderer().setProjectionMatrix(camera.getProjectionMatrix());
 		terrainRenderer.render(batch);
@@ -731,6 +738,8 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		}
 		cleanDelBuffers();
 		cleanCreateBuffers();
+		globalUpdate();
+		performGuiSwitchIfFlagSet();
 	}
 
 	private void drawFPS() {

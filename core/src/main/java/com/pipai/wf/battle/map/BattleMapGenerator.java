@@ -79,7 +79,7 @@ public class BattleMapGenerator {
 	}
 
 	private void generateEnemyPod(BattleMap map) {
-		int amt = rng.randInt(2, 3);
+		int amt = 1;	// rng.randInt(2, 3);
 		GridPosition center = randPos(new GridPosition(8, 8), new GridPosition(map.getCols() - 8, map.getRows() - 8));
 		List<GridPosition> enemyPos = new ArrayList<>();
 		for (int i = 0; i < amt; i++) {

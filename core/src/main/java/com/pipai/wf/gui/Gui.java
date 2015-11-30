@@ -3,6 +3,9 @@ package com.pipai.wf.gui;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
@@ -11,6 +14,8 @@ import com.pipai.wf.WFGame;
 import com.pipai.wf.guiobject.GuiObject;
 
 public abstract class Gui implements Screen, InputProcessor {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Gui.class);
 
 	protected WFGame game;
 	protected BatchHelper batch;
@@ -53,6 +58,7 @@ public abstract class Gui implements Screen, InputProcessor {
 	}
 
 	public void switchGui(Gui gui) {
+		LOGGER.debug("Switching Gui to " + gui.getClass());
 		dispose();
 		game.setScreen(gui);
 	}
