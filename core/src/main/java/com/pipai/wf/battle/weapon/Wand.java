@@ -1,13 +1,8 @@
 package com.pipai.wf.battle.weapon;
 
-import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.spell.Spell;
 
 public class Wand extends SpellWeapon {
-
-	public Wand(BattleConfiguration config) {
-		super();
-	}
 
 	@Override
 	public boolean needsAmmunition() {
