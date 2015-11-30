@@ -8,15 +8,19 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pipai.wf.WFGame;
+import com.pipai.wf.battle.BattleResult;
 
 public class BattleResultsGui extends Gui {
 
 	private OrthographicCamera camera;
 
-	public BattleResultsGui(WFGame game) {
+	private BattleResult result;
+
+	public BattleResultsGui(WFGame game, BattleResult result) {
 		super(game);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, getScreenWidth(), getScreenHeight());
+		this.result = result;
 	}
 
 	@Override
@@ -29,15 +33,14 @@ public class BattleResultsGui extends Gui {
 		BitmapFont font = batch.getFont();
 		spr.begin();
 		font.setColor(Color.WHITE);
-		font.draw(spr, "Battle Results", 24, getScreenHeight() - 24);
+		font.draw(spr, "Battle Results\n" + result.getResult(), 24, getScreenHeight() - 24);
 		spr.end();
 	}
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-		// TODO: Generate new party
-		// game.setScreen(new PartyInfoGui(game));
-		// dispose();
+		game.setScreen(new PartyInfoGui(game, result.getPartyState()));
+		dispose();
 	}
 
 	@Override

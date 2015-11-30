@@ -19,6 +19,7 @@ import com.pipai.wf.WFGame;
 import com.pipai.wf.battle.Battle;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
+import com.pipai.wf.battle.BattleResult;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
@@ -298,8 +299,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	}
 
 	private void performVictoryCheck() {
-		if (battleController.battleResult() != BattleController.Result.NONE) {
-			game.setScreen(new BattleResultsGui(game));
+		BattleResult result = battleController.battleResult();
+		if (result.getResult() != BattleResult.Result.NONE) {
+			game.setScreen(new BattleResultsGui(game, result));
 			dispose();
 			return;
 		}

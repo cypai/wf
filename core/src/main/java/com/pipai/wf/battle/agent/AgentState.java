@@ -33,6 +33,17 @@ public class AgentState implements HasBasicStats, HasName {
 		armor = new NoArmor();
 	}
 
+	public AgentState(Agent agent) {
+		team = agent.getTeam();
+		stats = agent.getBasicStats();
+		position = agent.getPosition();
+		state = agent.getState();
+		abilities = agent.getAbilities();
+		weapons = agent.getWeapons();
+		armor = agent.getArmor();
+		name = agent.getName();
+	}
+
 	public void addAbilities(AbilityList abilityList) {
 		for (Ability a : abilityList) {
 			getAbilities().add(a.clone());

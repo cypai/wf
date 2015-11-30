@@ -13,10 +13,6 @@ import com.pipai.wf.battle.map.BattleMap;
 
 public class BattleController {
 
-	public enum Result {
-		NONE, VICTORY, DEFEAT;
-	}
-
 	private BattleMap map;
 	private BattleLog log;
 	private Team currentTeam;
@@ -95,7 +91,7 @@ public class BattleController {
 		notifyObservers(log.getLastEvent());
 	}
 
-	public Result battleResult() {
+	public BattleResult battleResult() {
 		int ko_amount = 0;
 		for (Agent a : enemyList) {
 			if (a.isKO()) {
@@ -103,7 +99,7 @@ public class BattleController {
 			}
 		}
 		if (ko_amount == enemyList.size()) {
-			return Result.VICTORY;
+			return new BattleResult(BattleResult.Result.VICTORY, playerList);
 		}
 		ko_amount = 0;
 		for (Agent a : playerList) {
@@ -112,9 +108,9 @@ public class BattleController {
 			}
 		}
 		if (ko_amount == playerList.size()) {
-			return Result.DEFEAT;
+			return new BattleResult(BattleResult.Result.DEFEAT, playerList);
 		}
-		return Result.NONE;
+		return new BattleResult(BattleResult.Result.NONE, playerList);
 	}
 
 	public BattleLog getLog() {

@@ -196,6 +196,10 @@ public class Agent implements HasName, HasBasicStats {
 		return (float) getPosition().distance(other.getPosition());
 	}
 
+	public State getState() {
+		return state;
+	}
+
 	public void onTurnBegin() {
 		stats.setAP(stats.getMaxAP());
 		if (!isKO()) {
