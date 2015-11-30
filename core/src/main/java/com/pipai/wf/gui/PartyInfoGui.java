@@ -76,8 +76,7 @@ public final class PartyInfoGui extends Gui {
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
 		BattleFactory factory = new BattleFactory(new BattleConfiguration());
-		game.setScreen(new BattleGui(game, factory.build(new BattleSchema(partySchema))));
-		dispose();
+		switchGui(new BattleGui(game, factory.build(new BattleSchema(partySchema))));
 	}
 
 	@Override

@@ -96,8 +96,7 @@ public final class MainMenuGui extends Gui {
 	}
 
 	public void goToTestbed(List<UnitSchema> party) {
-		game.setScreen(new PartyInfoGui(game, party));
-		dispose();
+		switchGui(new PartyInfoGui(game, party));
 	}
 
 }
