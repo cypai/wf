@@ -2,6 +2,9 @@ package com.pipai.wf.battle.action;
 
 import java.util.LinkedList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
@@ -12,6 +15,8 @@ import com.pipai.wf.battle.vision.AgentVisionCalculator;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class MoveAction extends AlterStateAction {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MoveAction.class);
 
 	protected LinkedList<GridPosition> path;
 	protected int useAP;
@@ -29,6 +34,7 @@ public class MoveAction extends AlterStateAction {
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
+		LOGGER.debug("Performed by '" + getPerformer().getName() + "' with path " + path + " and useAP " + useAP);
 		Agent movingAgent = getPerformer();
 		if (useAP > movingAgent.getAP()) {
 			throw new IllegalActionException("AP required for movement greater than current AP");
