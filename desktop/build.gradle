@@ -6,11 +6,35 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 project.ext.mainClassName = "com.pipai.wf.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
 
-task run(dependsOn: classes, type: JavaExec) {
+project.ext.runDir = new File(projectDir, 'run/')
+
+task cleanRunDir(type: Delete) {
+    delete runDir
+}
+
+task copyAll(dependsOn: ['copyAssets', 'copyConfig'], type: Copy)
+
+task copyAssets(type: Copy) {
+    File assetsDir = runDir;
+    assetsDir.mkdirs()
+    from '../core/assets/'
+    into assetsDir
+}
+
+task copyConfig(type: Copy) {
+    File configDir = new File(runDir, 'config/');
+    configDir.mkdirs()
+    from '../core/config/'
+    into configDir
+}
+
+task run(dependsOn: ['classes', 'cleanRunDir', 'copyAll'], type: JavaExec) {
+    copyAll.mustRunAfter cleanRunDir
+    
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
-    workingDir = project.assetsDir
+    workingDir = runDir
     ignoreExitValue = true
 }
 
