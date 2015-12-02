@@ -7,7 +7,13 @@ import com.badlogic.gdx.files.FileHandle;
 
 public class SaveManager {
 
+	public static final String DEFAULT_DIRECTORY = "save/";
+
 	private String path;
+
+	public SaveManager() {
+		this(DEFAULT_DIRECTORY);
+	}
 
 	public SaveManager(String path) {
 		this.path = path;

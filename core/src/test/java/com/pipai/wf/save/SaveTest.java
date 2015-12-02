@@ -1,9 +1,11 @@
 package com.pipai.wf.save;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,11 +16,17 @@ import com.pipai.wf.unit.schema.UnitSchema;
 public class SaveTest extends GdxMockedTest {
 
 	private static int SAVE_SLOT = 0;
-	private static SaveManager MANAGER = new SaveManager("");
+	private static SaveManager MANAGER = new SaveManager();
 
 	@After
 	public void tearDown() {
 		MANAGER.delete(SAVE_SLOT);
+	}
+
+	@AfterClass
+	public static void clean() {
+		File saveDir = new File(SaveManager.DEFAULT_DIRECTORY);
+		saveDir.delete();
 	}
 
 	@Test

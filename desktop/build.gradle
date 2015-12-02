@@ -7,29 +7,35 @@ project.ext.mainClassName = "com.pipai.wf.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
 
 project.ext.runDir = new File(projectDir, 'run/')
+project.ext.assetsDir = new File(runDir, './')
+project.ext.configDir = new File(runDir, 'config/')
+project.ext.saveDir = new File(runDir, 'save/')
 
 task cleanRunDir(type: Delete) {
-    delete runDir
+    delete fileTree(dir: runDir, exclude: 'save/')
 }
 
-task copyAll(dependsOn: ['copyAssets', 'copyConfig'], type: Copy)
+task makeRunDirs() {
+    assetsDir.mkdirs()
+    configDir.mkdirs()
+    saveDir.mkdirs()
+}
+
+task copyAll(dependsOn: ['copyAssets', 'copyConfig'])
 
 task copyAssets(type: Copy) {
-    File assetsDir = runDir;
-    assetsDir.mkdirs()
     from '../core/assets/'
     into assetsDir
 }
 
 task copyConfig(type: Copy) {
-    File configDir = new File(runDir, 'config/');
-    configDir.mkdirs()
     from '../core/config/'
     into configDir
 }
 
-task run(dependsOn: ['classes', 'cleanRunDir', 'copyAll'], type: JavaExec) {
-    copyAll.mustRunAfter cleanRunDir
+task run(dependsOn: ['classes', 'cleanRunDir', 'makeRunDirs', 'copyAll'], type: JavaExec) {
+    makeRunDirs.mustRunAfter cleanRunDir
+    copyAll.mustRunAfter makeRunDirs
     
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
