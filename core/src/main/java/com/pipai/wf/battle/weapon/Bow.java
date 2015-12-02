@@ -82,6 +82,11 @@ public class Bow extends Weapon implements TargetedActionable {
 	}
 
 	@Override
+	public String getDescription() {
+		return "A typical bow";
+	}
+
+	@Override
 	public TargetedAction getAction(BattleController controller, Agent performer, Agent target) {
 		return new RangedWeaponAttackAction(controller, performer, target);
 	}

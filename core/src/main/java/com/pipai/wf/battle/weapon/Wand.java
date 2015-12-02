@@ -31,4 +31,9 @@ public class Wand extends SpellWeapon {
 		return "Wand";
 	}
 
+	@Override
+	public String getDescription() {
+		return "A typical wand";
+	}
+
 }

@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.graphics.Color;
-import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.gui.MainMenuGui;
 import com.pipai.wf.guiobject.ui.CenteredButton;
 import com.pipai.wf.save.CorruptedSaveException;
@@ -13,7 +12,7 @@ import com.pipai.wf.save.SaveManager;
 
 public class LoadGameButton extends CenteredButton {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MoveAction.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LoadGameButton.class);
 
 	private MainMenuGui mainMenuGui;
 

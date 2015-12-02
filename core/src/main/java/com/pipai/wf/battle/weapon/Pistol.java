@@ -64,6 +64,11 @@ public class Pistol extends Weapon implements TargetedActionable {
 	}
 
 	@Override
+	public String getDescription() {
+		return "A typical pistol";
+	}
+
+	@Override
 	public TargetedAction getAction(BattleController controller, Agent performer, Agent target) {
 		return new RangedWeaponAttackAction(controller, performer, target);
 	}

@@ -1,7 +1,11 @@
 package com.pipai.wf.gui;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -15,6 +19,8 @@ import com.pipai.wf.battle.BattleSchema;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
+import com.pipai.wf.save.Save;
+import com.pipai.wf.save.SaveManager;
 import com.pipai.wf.unit.race.Race;
 import com.pipai.wf.unit.schema.FlameFairySchema;
 import com.pipai.wf.unit.schema.RaceTemplateSchema;
@@ -22,6 +28,8 @@ import com.pipai.wf.unit.schema.TidusSchema;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public final class PartyInfoGui extends Gui {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PartyInfoGui.class);
 
 	private OrthographicCamera camera;
 	private ArrayList<GuiRenderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;
@@ -87,6 +95,16 @@ public final class PartyInfoGui extends Gui {
 	@Override
 	public void onKeyDown(int keycode) {
 		if (keycode == Keys.ESCAPE) {
+			Save save = new Save();
+			save.setParty(partySchema);
+			SaveManager manager = new SaveManager();
+			try {
+				LOGGER.debug("Saving game...");
+				manager.save(save, 1);
+				LOGGER.debug("Done. Exiting...");
+			} catch (IOException e) {
+				LOGGER.error("Could not save game", e);
+			}
 			Gdx.app.exit();
 		}
 	}

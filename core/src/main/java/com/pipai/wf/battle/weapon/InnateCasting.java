@@ -17,4 +17,9 @@ public class InnateCasting extends SpellWeapon {
 		return "Casting";
 	}
 
+	@Override
+	public String getDescription() {
+		return "Enables casting without a physical spell weapon";
+	}
+
 }

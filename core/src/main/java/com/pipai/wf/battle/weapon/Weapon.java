@@ -2,12 +2,12 @@ package com.pipai.wf.battle.weapon;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.pipai.wf.battle.BattleConfiguration;
-import com.pipai.wf.misc.HasName;
+import com.pipai.wf.battle.item.Item;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-public abstract class Weapon implements HasName {
+public abstract class Weapon extends Item {
 
 	private int currentAmmo;
 	private AbilityList grantedAbilities;

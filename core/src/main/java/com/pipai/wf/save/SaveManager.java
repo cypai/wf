@@ -2,10 +2,15 @@ package com.pipai.wf.save;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 public class SaveManager {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(SaveManager.class);
 
 	public static final String DEFAULT_DIRECTORY = "save/";
 
@@ -21,7 +26,9 @@ public class SaveManager {
 
 	public void save(Save save, int slot) throws IOException {
 		SaveWriter writer = new SaveWriter(save);
-		writer.save(generateSlotHandle(slot));
+		FileHandle handle = generateSlotHandle(slot);
+		LOGGER.debug("Saving to " + handle.file().getAbsolutePath());
+		writer.save(handle);
 	}
 
 	public Save load(int slot) throws CorruptedSaveException {
@@ -37,7 +44,7 @@ public class SaveManager {
 	}
 
 	private FileHandle generateSlotHandle(int slot) {
-		return Gdx.files.external(path + String.valueOf(slot) + ".txt");
+		return Gdx.files.local(path + String.valueOf(slot) + ".txt");
 	}
 
 }
