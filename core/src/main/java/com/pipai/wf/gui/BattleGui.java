@@ -729,9 +729,10 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		for (GuiRenderable r : overlayRenderables) {
 			r.render(batch);
 		}
-		batch.getSpriteBatch().begin();
-		batch.getSpriteBatch().draw(fogOfWar.getFogOfWarTexture(), 0, 0);
-		batch.getSpriteBatch().end();
+		// Uncomment to get fog of war texture in bottom left corner
+		// batch.getSpriteBatch().begin();
+		// batch.getSpriteBatch().draw(fogOfWar.getFogOfWarTexture(), 0, 0);
+		// batch.getSpriteBatch().end();
 		drawFPS();
 		if (aiTurn) {
 			runAiTurn();
