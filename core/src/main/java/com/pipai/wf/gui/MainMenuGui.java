@@ -9,7 +9,9 @@ import com.pipai.wf.gui.util.GuiObjectBuffers;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.LeftClickable;
-import com.pipai.wf.guiobject.ui.NewGameButton;
+import com.pipai.wf.guiobject.mainmenu.LoadGameButton;
+import com.pipai.wf.guiobject.mainmenu.NewGameButton;
+import com.pipai.wf.guiobject.mainmenu.QuitGameButton;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public final class MainMenuGui extends Gui {
@@ -22,6 +24,8 @@ public final class MainMenuGui extends Gui {
 		renderables = new GuiObjectBuffers<>();
 		leftClickables = new GuiObjectBuffers<>();
 		createInstance(new NewGameButton(this));
+		createInstance(new LoadGameButton(this));
+		createInstance(new QuitGameButton(this));
 	}
 
 	@Override
