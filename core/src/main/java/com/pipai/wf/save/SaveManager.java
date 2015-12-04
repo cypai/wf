@@ -34,7 +34,9 @@ public class SaveManager {
 	public Save load(int slot) throws CorruptedSaveException {
 		Save save = new Save();
 		SaveLoader reader = new SaveLoader(save);
-		reader.load(generateSlotHandle(slot));
+		FileHandle handle = generateSlotHandle(slot);
+		LOGGER.debug("Loading from " + handle.file().getAbsolutePath());
+		reader.load(handle);
 		return save;
 	}
 
