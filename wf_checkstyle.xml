@@ -63,8 +63,12 @@
     <module name="UpperEll"/>
     <module name="UncommentedMain"/>
     <module name="TodoComment"/>
-    <module name="NPathComplexity"/>
-    <module name="CyclomaticComplexity"/>
+    <module name="NPathComplexity">
+      <property name="severity" value="info"/>
+    </module>
+    <module name="CyclomaticComplexity">
+      <property name="severity" value="info"/>
+    </module>
     <module name="FinalClass"/>
     <module name="DiamondOperatorForVariableDefinitionCheck"/>
     <module name="AvoidHidingCauseException"/>
@@ -91,9 +95,60 @@
     <module name="EitherLogOrThrowCheck"/>
     <module name="CauseParameterInException"/>
     <module name="EqualsAvoidNull"/>
+    <module name="EmptyPublicCtorInClassCheck"/>
+    <module name="ReturnBooleanFromTernary"/>
+    <module name="UnnecessaryParenthesesExtended">
+      <property name="ignoreCalculationOfBooleanVariables" value="true"/>
+      <property name="ignoreCalculationOfBooleanVariablesWithReturn" value="true"/>
+      <property name="ignoreCalculationOfBooleanVariablesWithAssert" value="true"/>
+    </module>
+    <module name="RedundantReturn"/>
+    <module name="SimpleAccessorNameNotation"/>
+    <module name="StaticMethodCandidate">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="SingleSpaceSeparatorCheck"/>
+    <module name="BooleanExpressionComplexity"/>
+    <module name="ClassDataAbstractionCoupling">
+      <property name="severity" value="info"/>
+      <property name="max" value="10"/>
+    </module>
+    <module name="ClassFanOutComplexity">
+      <property name="severity" value="info"/>
+    </module>
+    <module name="InnerTypeLast"/>
+    <module name="HideUtilityClassConstructor"/>
+    <module name="InterfaceIsType"/>
+    <module name="MutableException"/>
+    <module name="EqualsHashCode"/>
+    <module name="ExplicitInitialization"/>
+    <module name="HiddenField">
+      <property name="severity" value="ignore"/>
+      <property name="ignoreConstructorParameter" value="true"/>
+      <property name="ignoreSetter" value="true"/>
+      <property name="setterCanReturnItsClass" value="true"/>
+      <property name="ignoreAbstractMethods" value="true"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="MissingSwitchDefault"/>
+    <module name="MultipleStringLiterals">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="MultipleVariableDeclarations">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="OverloadMethodsDeclarationOrder"/>
+    <module name="VisibilityModifier"/>
+    <module name="OneTopLevelClass"/>
+    <module name="EmptyCatchBlock"/>
+    <module name="RedundantModifier"/>
   </module>
   <module name="RegexpSingleline">
     <property name="format" value="^.*System.out.print.*$"/>
     <property name="message" value="Cannot use System.out.print"/>
   </module>
+  <module name="NewlineAtEndOfFile"/>
 </module>
