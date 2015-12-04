@@ -57,10 +57,6 @@ public class BattleMap {
 		}
 	}
 
-	public String coordinatesToKey(GridPosition pos) {
-		return pos.toString();
-	}
-
 	public BattleMapCell getCell(GridPosition pos) {
 		return cellMap.get(coordinatesToKey(pos));
 	}
@@ -96,6 +92,10 @@ public class BattleMap {
 			throw new IllegalArgumentException("Received unexpected parameter for Direction d: " + d);
 		}
 		return cellMap.get(coordinatesToKey(cellPos));
+	}
+
+	private String coordinatesToKey(GridPosition pos) {
+		return pos.toString();
 	}
 
 	public Agent getAgentAtPos(GridPosition pos) {
