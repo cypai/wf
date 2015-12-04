@@ -10,7 +10,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.pipai.libgdx.test.GdxMockedTest;
+import com.pipai.wf.battle.armor.LeatherArmor;
+import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.misc.BasicStats;
+import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public class SaveTest extends GdxMockedTest {
@@ -41,9 +44,11 @@ public class SaveTest extends GdxMockedTest {
 		int aim = 60;
 		int mobility = 10;
 		int defense = 0;
+		int exp = 10;
 		Save save = new Save();
 		ArrayList<UnitSchema> party = new ArrayList<>();
-		party.add(new UnitSchema(name, new BasicStats(hp, maxHP, mp, maxMP, ap, maxAP, aim, mobility, defense)));
+		party.add(new UnitSchema(name, new BasicStats(hp, maxHP, mp, maxMP, ap, maxAP, aim, mobility, defense),
+				new AbilityList(), new LeatherArmor(), new ArrayList<Weapon>(), exp, 0));
 		save.setParty(party);
 		MANAGER.save(save, SAVE_SLOT);
 		Save load;
@@ -59,6 +64,10 @@ public class SaveTest extends GdxMockedTest {
 		Assert.assertEquals(aim, schema.getAim());
 		Assert.assertEquals(mobility, schema.getMobility());
 		Assert.assertEquals(defense, schema.getDefense());
+		Assert.assertEquals(0, schema.getAbilities().size());
+		Assert.assertTrue(schema.getArmor() instanceof LeatherArmor);
+		Assert.assertEquals(0, schema.getWeapons().size());
+		Assert.assertEquals(exp, schema.getExp());
 	}
 
 	@Test
@@ -71,5 +80,8 @@ public class SaveTest extends GdxMockedTest {
 		Assert.assertEquals(6, party.size());
 		UnitSchema tidus = party.get(0);
 		Assert.assertEquals(3, tidus.getAbilities().size());
+		for (UnitSchema schema : party) {
+			Assert.assertEquals(0, schema.getExp());
+		}
 	}
 }

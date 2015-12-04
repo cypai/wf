@@ -42,4 +42,9 @@ public class SlimeSchema extends NewUnitSchema {
 		return l;
 	}
 
+	@Override
+	public int getExpGiven() {
+		return 10 + 2 * level;
+	}
+
 }

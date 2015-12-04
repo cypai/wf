@@ -38,6 +38,9 @@ public class Agent implements HasName, HasBasicStats {
 	private AbilityList innateAbilities;
 	private StatusEffectList statusEffects;
 
+	private int expGiven;
+	private int exp;
+
 	public Agent(AgentState state) {
 		team = state.getTeam();
 		position = state.getPosition();
@@ -263,6 +266,22 @@ public class Agent implements HasName, HasBasicStats {
 	public void suppressOther(Agent other) {
 		state = State.SUPPRESSING;
 		other.inflictStatus(new SuppressedStatusEffect(other));
+	}
+
+	public int getExp() {
+		return exp;
+	}
+
+	public void setExp(int exp) {
+		this.exp = exp;
+	}
+
+	public void giveExp(int exp) {
+		this.exp += exp;
+	}
+
+	public int getExpGiven() {
+		return expGiven;
 	}
 
 }

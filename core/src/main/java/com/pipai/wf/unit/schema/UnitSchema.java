@@ -24,6 +24,9 @@ public class UnitSchema implements HasName, HasBasicStats {
 	private Armor armor;
 	private ArrayList<Weapon> weapons;
 
+	private int expGiven;
+	private int exp;
+
 	/**
 	 * Creates a schema using the AgentState's stats
 	 */
@@ -45,7 +48,7 @@ public class UnitSchema implements HasName, HasBasicStats {
 
 	public UnitSchema(String name, BasicStats stats) {
 		this.name = name;
-		this.basicStats = stats;
+		basicStats = stats;
 		abilities = new AbilityList();
 		armor = new NoArmor();
 		weapons = new ArrayList<>();
@@ -57,12 +60,16 @@ public class UnitSchema implements HasName, HasBasicStats {
 			@JsonProperty("basicStats") BasicStats stats,
 			@JsonProperty("abilities") AbilityList abilities,
 			@JsonProperty("armor") Armor armor,
-			@JsonProperty("weapons") List<Weapon> weapons) {
+			@JsonProperty("weapons") List<Weapon> weapons,
+			@JsonProperty("exp") int exp,
+			@JsonProperty("expGiven") int expGiven) {
 		this.name = name;
-		this.basicStats = stats;
+		basicStats = stats;
 		this.abilities = abilities;
 		this.armor = armor;
 		this.weapons = new ArrayList<Weapon>(weapons);
+		this.exp = exp;
+		this.expGiven = expGiven;
 	}
 
 	@Override
@@ -80,6 +87,14 @@ public class UnitSchema implements HasName, HasBasicStats {
 
 	public ArrayList<Weapon> getWeapons() {
 		return weapons;
+	}
+
+	public int getExpGiven() {
+		return expGiven;
+	}
+
+	public int getExp() {
+		return exp;
 	}
 
 	@Override
