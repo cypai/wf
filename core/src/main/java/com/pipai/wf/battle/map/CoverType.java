@@ -6,7 +6,7 @@ public enum CoverType {
 
 	private final int defense;
 
-	private CoverType(int defense) {
+	CoverType(int defense) {
 		this.defense = defense;
 	}
 

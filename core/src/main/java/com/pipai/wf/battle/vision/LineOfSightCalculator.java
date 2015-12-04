@@ -125,7 +125,7 @@ public class LineOfSightCalculator {
 		public class CornerPair {
 			public GridPosition a, b;
 
-			public CornerPair(GridPosition a, GridPosition b) {
+			CornerPair(GridPosition a, GridPosition b) {
 				this.a = a;
 				this.b = b;
 			}

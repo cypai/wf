@@ -28,7 +28,7 @@ public class MapGraph {
 		private Node destination;
 		private float cost;
 
-		public Edge(Node destination, float cost) {
+		Edge(Node destination, float cost) {
 			this.destination = destination;
 			this.cost = cost;
 		}
@@ -50,7 +50,7 @@ public class MapGraph {
 		private Node path;
 		private int apNeeded;
 
-		public Node(GridPosition pos) {
+		Node(GridPosition pos) {
 			this.pos = pos;
 			edges = new ArrayList<Edge>();
 			apNeeded = Integer.MAX_VALUE;

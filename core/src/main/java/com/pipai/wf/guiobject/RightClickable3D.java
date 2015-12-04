@@ -4,6 +4,6 @@ import com.badlogic.gdx.math.collision.Ray;
 
 public interface RightClickable3D {
 
-	public boolean onRightClick(Ray ray);
+	boolean onRightClick(Ray ray);
 
 }

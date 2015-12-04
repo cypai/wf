@@ -5,6 +5,6 @@ import com.pipai.wf.battle.agent.Agent;
 
 public interface TargetedActionable {
 
-	public TargetedAction getAction(BattleController controller, Agent performer, Agent target);
+	TargetedAction getAction(BattleController controller, Agent performer, Agent target);
 
 }

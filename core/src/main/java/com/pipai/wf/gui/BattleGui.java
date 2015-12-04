@@ -79,12 +79,12 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 
 	private static final Logger logger = LoggerFactory.getLogger(BattleGui.class);
 
-	public static enum Mode {
+	public enum Mode {
 		MOVE(true), TARGET_SELECT(true), PRE_ANIMATION(false), ANIMATION(false), AI(false);
 
 		private boolean allowInput;
 
-		private Mode(boolean allowInput) {
+		Mode(boolean allowInput) {
 			this.allowInput = allowInput;
 		}
 

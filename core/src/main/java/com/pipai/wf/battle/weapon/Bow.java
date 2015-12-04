@@ -18,7 +18,7 @@ public class Bow extends Weapon implements TargetedActionable {
 		init();
 	}
 
-	private final void init() {
+	private void init() {
 		addGrantedAbility(new QuickReloadAbility());
 	}
 

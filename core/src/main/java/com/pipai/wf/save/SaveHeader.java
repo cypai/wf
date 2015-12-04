@@ -5,7 +5,7 @@ public enum SaveHeader {
 
 	private String headerText;
 
-	private SaveHeader(String headerText) {
+	SaveHeader(String headerText) {
 		this.headerText = headerText;
 	}
 

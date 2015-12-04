@@ -2,8 +2,8 @@ package com.pipai.wf.gui.camera;
 
 public interface CameraMovementObserver {
 
-	public void notifyCameraMoveEnd();
+	void notifyCameraMoveEnd();
 
-	public void notifyCameraMoveInterrupt();
+	void notifyCameraMoveInterrupt();
 
 }

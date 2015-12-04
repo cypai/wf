@@ -7,7 +7,7 @@ public enum Direction {
 
 	public final boolean isCardinal;
 
-	private Direction(boolean isCardinal) {
+	Direction(boolean isCardinal) {
 		this.isCardinal = isCardinal;
 	}
 

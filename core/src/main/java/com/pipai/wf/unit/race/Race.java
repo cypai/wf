@@ -7,7 +7,7 @@ public enum Race {
 	public final int hp, mp, ap, mobility, aim, defense;
 	public final String name;
 
-	private Race(int hp, int mp, int ap, int mobility, int aim, int defense, String name) {
+	Race(int hp, int mp, int ap, int mobility, int aim, int defense, String name) {
 		this.hp = hp;
 		this.mp = mp;
 		this.ap = ap;

@@ -16,7 +16,7 @@ import com.pipai.wf.battle.weapon.Weapon;
  */
 public final class BattleEvent {
 
-	public static enum Type {
+	public enum Type {
 		MOVE, RANGED_WEAPON_ATTACK, ATTACK, READY, CAST_TARGET, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, SWITCH_WEAPON, TARGETED_ACTION, START_TURN;
 	}
 

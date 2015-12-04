@@ -2,12 +2,12 @@ package com.pipai.wf.guiobject;
 
 public interface XYPositioned {
 
-	public float getX();
+	float getX();
 
-	public float getY();
+	float getY();
 
-	public void setX(float x);
+	void setX(float x);
 
-	public void setY(float y);
+	void setY(float y);
 
 }

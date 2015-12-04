@@ -4,8 +4,8 @@ import com.pipai.wf.gui.BatchHelper;
 
 public interface GuiRenderable {
 
-	public int renderPriority();
+	int renderPriority();
 
-	public void render(BatchHelper batch);
+	void render(BatchHelper batch);
 
 }

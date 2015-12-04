@@ -4,10 +4,10 @@ import com.badlogic.gdx.math.Vector3;
 
 public interface XYZPositioned extends XYPositioned {
 
-	public float getZ();
+	float getZ();
 
-	public void setZ(float z);
+	void setZ(float z);
 
-	public Vector3 getPosition();
+	Vector3 getPosition();
 
 }

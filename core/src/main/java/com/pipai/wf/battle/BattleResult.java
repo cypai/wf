@@ -28,7 +28,7 @@ public final class BattleResult {
 		return party;
 	}
 
-	public static enum Result {
+	public enum Result {
 		NONE, VICTORY, DEFEAT;
 	}
 
