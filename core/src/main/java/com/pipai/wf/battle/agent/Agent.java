@@ -185,7 +185,7 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public GridPosition getPosition() {
-		return position;
+		return new GridPosition(position);
 	}
 
 	public void setPosition(GridPosition pos) {
@@ -246,7 +246,7 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public void setOverwatch(OverwatchActivatedActionSchema owAction) {
-		this.overwatchAction = owAction;
+		overwatchAction = owAction;
 		state = State.OVERWATCH;
 		setAP(0);
 	}
