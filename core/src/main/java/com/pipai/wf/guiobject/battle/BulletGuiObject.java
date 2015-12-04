@@ -103,4 +103,5 @@ public class BulletGuiObject extends GuiObject implements GuiRenderable, XYZPosi
 	public Vector3 getPosition() {
 		return new Vector3(x, y, 0);
 	}
+
 }
