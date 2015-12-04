@@ -37,6 +37,7 @@ public class ReadySpellActionTest {
 			ready.perform();
 			Assert.fail("Did not throw expected IllegalActionException");
 		} catch (IllegalActionException e) {
+			// Expected, don't do anything
 		}
 	}
 
@@ -55,6 +56,7 @@ public class ReadySpellActionTest {
 			ready.perform();
 			Assert.fail("Did not throw expected IllegalActionException");
 		} catch (IllegalActionException e) {
+			// Expected, don't do anything
 		}
 	}
 
@@ -73,6 +75,7 @@ public class ReadySpellActionTest {
 			ready.perform();
 			Assert.fail("Did not throw expected IllegalActionException");
 		} catch (IllegalActionException e) {
+			// Expected, don't do anything
 		}
 	}
 

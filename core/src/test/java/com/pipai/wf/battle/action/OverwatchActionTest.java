@@ -42,6 +42,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 			ow.perform();
 			Assert.fail("Expected exception not thrown");
 		} catch (IllegalActionException e) {
+			// Expected, don't do anything
 		}
 	}
 
@@ -66,6 +67,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 			ow.perform();
 			Assert.fail("Expected exception not thrown");
 		} catch (IllegalActionException e) {
+			// Expected, don't do anything
 		}
 	}
 

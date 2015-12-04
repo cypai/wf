@@ -75,6 +75,7 @@ public class SuppressionTest {
 			new SuppressionAction(controller, player, enemy).perform();
 			Assert.fail("Expected not enough ammo exception not thrown");
 		} catch (IllegalActionException e) {
+			// Expected, don't do anything
 		}
 	}
 

@@ -54,6 +54,7 @@ public class PrecisionShotAbilityTest {
 			new PrecisionShotAction(controller, agent, mockTarget).perform();
 			Assert.fail("Expected IllegalActionException not thrown");
 		} catch (IllegalActionException e) {
+			// Expected, don't do anything
 		}
 
 		controller.endTurn();
