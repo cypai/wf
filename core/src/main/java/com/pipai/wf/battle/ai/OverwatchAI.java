@@ -15,7 +15,7 @@ public class OverwatchAI extends AI {
 
 	private static final Logger logger = LoggerFactory.getLogger(OverwatchAI.class);
 
-	protected LinkedList<Agent> enemyAgents, toAct;
+	private LinkedList<Agent> enemyAgents, toAct;
 
 	public OverwatchAI(BattleController battleController) {
 		super(battleController);

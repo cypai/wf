@@ -22,7 +22,7 @@ public class OverwatchAnimationHandler extends AnimationHandler implements Camer
 	@Override
 	protected void initAnimation() {
 		if (!skipCamera) {
-			getCamera().moveTo(performer.x, performer.y, this);
+			getCamera().moveTo(performer.getX(), performer.getY(), this);
 		}
 	}
 

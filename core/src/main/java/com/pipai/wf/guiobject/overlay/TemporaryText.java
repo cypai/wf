@@ -13,8 +13,6 @@ import com.pipai.wf.guiobject.AnchoredGuiObject;
 
 public class TemporaryText extends AnchoredGuiObject {
 
-	public final boolean foreground = true;
-
 	private int destroyAlarm;
 	private String text;
 	private GlyphLayout glayout;
@@ -36,7 +34,7 @@ public class TemporaryText extends AnchoredGuiObject {
 		super.update();
 		destroyAlarm--;
 		if (destroyAlarm <= 0) {
-			gui.deleteInstance(this);
+			getGui().deleteInstance(this);
 		}
 	}
 
@@ -48,11 +46,11 @@ public class TemporaryText extends AnchoredGuiObject {
 		glayout.setText(font, text);
 		r.begin(ShapeType.Filled);
 		r.setColor(new Color(0, 0.2f, 0.5f, 1));
-		r.rect(screenPosition.x, screenPosition.y, glayout.width + 12, glayout.height + 12);
+		r.rect(getScreenX(), getScreenY(), glayout.width + 12, glayout.height + 12);
 		r.end();
 		spr.begin();
 		font.setColor(Color.WHITE);
-		font.draw(spr, text, screenPosition.x + 6, screenPosition.y + font.getLineHeight());
+		font.draw(spr, text, getScreenX() + 6, getScreenY() + font.getLineHeight());
 		spr.end();
 	}
 

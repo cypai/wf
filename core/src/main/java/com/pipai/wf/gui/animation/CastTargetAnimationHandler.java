@@ -26,12 +26,12 @@ public class CastTargetAnimationHandler extends AnimationHandler implements Came
 
 	@Override
 	protected void initAnimation() {
-		getCamera().moveTo((performer.x + target.x) / 2, (performer.y + target.y) / 2, this);
+		getCamera().moveTo((performer.getX() + target.getX()) / 2, (performer.getY() + target.getY()) / 2, this);
 	}
 
 	@Override
 	public void notifyCameraMoveEnd() {
-		FireballGuiObject bullet = new FireballGuiObject(getGui(), performer.x, performer.y, target.x, target.y, target);
+		FireballGuiObject bullet = new FireballGuiObject(getGui(), performer.getX(), performer.getY(), target.getX(), target.getY(), target);
 		bullet.registerDestroyEventObserver(this);
 		getGui().createInstance(bullet);
 	}

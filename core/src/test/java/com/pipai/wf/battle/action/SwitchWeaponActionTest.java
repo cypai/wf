@@ -40,7 +40,7 @@ public class SwitchWeaponActionTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.SWITCH_WEAPON, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());
 		Assert.assertEquals(0, ev.getChainEvents().size());

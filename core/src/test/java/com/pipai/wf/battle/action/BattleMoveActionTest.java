@@ -158,7 +158,7 @@ public class BattleMoveActionTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.MOVE, ev.getType());
 		Assert.assertEquals(agent, ev.getPerformer());
 		Assert.assertTrue(ev.getPath().peekLast().equals(dest));
@@ -186,7 +186,7 @@ public class BattleMoveActionTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.MOVE, ev.getType());
 		Assert.assertEquals(agent, ev.getPerformer());
 		Assert.assertTrue(ev.getPath().peekLast().equals(dest));
@@ -199,7 +199,7 @@ public class BattleMoveActionTest {
 			badmove.perform();
 			Assert.fail("Expected IllegalMoveException was not thrown");
 		} catch (IllegalActionException e) {
-			BattleEvent ev2 = observer.ev;
+			BattleEvent ev2 = observer.getEvent();
 			Assert.assertEquals(ev, ev2);	// Check that notifyBattleEvent was not called
 		}
 	}

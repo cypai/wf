@@ -21,7 +21,7 @@ public class ReloadAnimationHandler extends AnimationHandler implements CameraMo
 	@Override
 	protected void initAnimation() {
 		if (!skipCamera) {
-			getCamera().moveTo(performer.x, performer.y, this);
+			getCamera().moveTo(performer.getX(), performer.getY(), this);
 		}
 	}
 
@@ -34,7 +34,7 @@ public class ReloadAnimationHandler extends AnimationHandler implements CameraMo
 	}
 
 	private void performAnimation() {
-		TemporaryText ttext = new TemporaryText(getGui(), new Vector3(performer.x, performer.y, 0), "Reload");
+		TemporaryText ttext = new TemporaryText(getGui(), new Vector3(performer.getX(), performer.getY(), 0), "Reload");
 		getGui().createInstance(ttext);
 		finish();
 	}

@@ -5,10 +5,14 @@ import java.util.ArrayList;
 public enum Direction {
 	N(true), S(true), E(true), W(true), NW(false), NE(false), SW(false), SE(false);
 
-	public final boolean isCardinal;
+	private final boolean cardinal;
 
 	Direction(boolean isCardinal) {
-		this.isCardinal = isCardinal;
+		this.cardinal = isCardinal;
+	}
+
+	public boolean isCardinal() {
+		return cardinal;
 	}
 
 	public static ArrayList<Direction> getCardinalDirections() {

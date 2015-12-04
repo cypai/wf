@@ -21,7 +21,7 @@ public class SuppressionAnimationHandler extends AnimationHandler implements Cam
 
 	@Override
 	protected void initAnimation() {
-		getCamera().moveTo((performer.x + target.x) / 2, (performer.y + target.y) / 2, this);
+		getCamera().moveTo((performer.getX() + target.getX()) / 2, (performer.getY() + target.getY()) / 2, this);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class SuppressionAnimationHandler extends AnimationHandler implements Cam
 	}
 
 	private void fireBullet() {
-		BulletGuiObject bullet = new BulletGuiObject(getGui(), performer.x, performer.y, target.x, target.y, target);
+		BulletGuiObject bullet = new BulletGuiObject(getGui(), performer.getX(), performer.getY(), target.getX(), target.getY(), target);
 		getGui().createInstance(bullet);
 	}
 

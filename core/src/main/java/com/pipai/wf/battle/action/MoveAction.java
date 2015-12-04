@@ -18,8 +18,8 @@ public class MoveAction extends AlterStateAction {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MoveAction.class);
 
-	protected LinkedList<GridPosition> path;
-	protected int useAP;
+	private LinkedList<GridPosition> path;
+	private int useAP;
 
 	public MoveAction(BattleController controller, Agent performerAgent, LinkedList<GridPosition> path, int useAP) {
 		super(controller, performerAgent);

@@ -17,7 +17,7 @@ public class RaceTemplateSchema extends NewUnitSchema {
 	private Race race;
 
 	public RaceTemplateSchema(Race race) {
-		super(race.name, race.hp, race.mp, race.ap, race.aim, race.mobility, race.defense);
+		super(race.getName(), race.getHP(), race.getMP(), race.getAP(), race.getAim(), race.getMobility(), race.getDefense());
 		this.race = race;
 	}
 
@@ -48,7 +48,7 @@ public class RaceTemplateSchema extends NewUnitSchema {
 
 	@Override
 	public String getName() {
-		return race.name;
+		return race.getName();
 	}
 
 }

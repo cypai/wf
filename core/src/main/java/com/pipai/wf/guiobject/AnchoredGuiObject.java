@@ -7,9 +7,9 @@ import com.pipai.wf.util.RayMapper;
 
 public abstract class AnchoredGuiObject extends GuiObject implements GuiRenderable {
 
-	protected Vector3 anchorPoint;
-	protected Vector2 screenPosition;
-	protected final RayMapper mapper;
+	private Vector3 anchorPoint;
+	private Vector2 screenPosition;
+	private final RayMapper mapper;
 
 	public AnchoredGuiObject(Gui gui, RayMapper mapper, Vector3 anchorPoint) {
 		super(gui);
@@ -20,6 +20,30 @@ public abstract class AnchoredGuiObject extends GuiObject implements GuiRenderab
 	@Override
 	public void update() {
 		screenPosition = mapper.pointToScreen(anchorPoint.cpy());
+	}
+
+	public Vector3 getAnchorPoint() {
+		return anchorPoint;
+	}
+
+	public void setAnchorPoint(float x, float y, float z) {
+		anchorPoint.set(x, y, z);
+	}
+
+	public Vector2 getScreenPosition() {
+		return screenPosition.cpy();
+	}
+
+	public float getScreenX() {
+		return screenPosition.x;
+	}
+
+	public float getScreenY() {
+		return screenPosition.y;
+	}
+
+	public RayMapper getMapper() {
+		return mapper;
 	}
 
 }

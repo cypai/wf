@@ -21,7 +21,7 @@ import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
 public class WeaponIndicator extends GuiObject implements GuiRenderable {
 
-	protected BattleGui gui;
+	private BattleGui gui;
 	private float x, y, width, height;
 	private ArrayList<Weapon> weapons;
 	private AgentGuiObject agent;

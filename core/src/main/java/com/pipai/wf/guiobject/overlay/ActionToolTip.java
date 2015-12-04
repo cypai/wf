@@ -21,7 +21,7 @@ public class ActionToolTip extends GuiObject implements GuiRenderable {
 		GENERAL, ACCURACY_ACTION;
 	}
 
-	protected BattleGui gui;
+	private BattleGui gui;
 	private Mode mode;
 	private final int PADDING = 6;
 	private float x, y, width, height;

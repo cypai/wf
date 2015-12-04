@@ -33,7 +33,7 @@ public class DamageCalculator {
 			}
 			return new DamageResult(true, crit, dmg, 0);
 		} else {
-			return DamageResult.missedResult();
+			return DamageResult.buildMissedResult();
 		}
 	}
 
@@ -47,7 +47,7 @@ public class DamageCalculator {
 			}
 			return new DamageResult(true, crit, dmg, 0);
 		} else {
-			return DamageResult.missedResult();
+			return DamageResult.buildMissedResult();
 		}
 	}
 

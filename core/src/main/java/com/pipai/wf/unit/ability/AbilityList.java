@@ -168,7 +168,7 @@ public class AbilityList implements Iterable<Ability> {
 
 	public static class AbilityListIterator implements Iterator<Ability> {
 
-		Iterator<Ability> it;
+		private Iterator<Ability> it;
 
 		public AbilityListIterator(LinkedList<Ability> list) {
 			it = list.listIterator();

@@ -14,7 +14,7 @@ import com.pipai.wf.util.UtilFunctions;
 
 public class TargetedSpellWeaponAction extends TargetedWithAccuracyActionOWCapable {
 
-	public final Spell spell;
+	private final Spell spell;
 
 	public TargetedSpellWeaponAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller, performerAgent, targetAgent);

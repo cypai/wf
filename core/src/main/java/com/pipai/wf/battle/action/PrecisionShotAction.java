@@ -60,7 +60,8 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 			throw new IllegalActionException("Not enough ammo to fire " + w.getName());
 		}
 		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
-		DamageResult adjustedResult = new DamageResult(result.hit, result.crit, result.damage + (result.hit ? 1 : 0), result.damageReduction);
+		DamageResult adjustedResult = new DamageResult(result.isHit(), result.isCrit(),
+				result.getDamage() + (result.isHit() ? 1 : 0), result.getDamageReduction());
 		getDamageDealer().doDamage(adjustedResult, target);
 		attacker.setAP(0);
 		ability.setCooldown(2);

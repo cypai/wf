@@ -56,13 +56,13 @@ public class RangedWeaponAttackActionTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.RANGED_WEAPON_ATTACK, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());
 		Assert.assertEquals(enemy, ev.getTarget());
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Player has 1000 aim, cannot miss
-		Assert.assertTrue(ev.getDamageResult().hit);
+		Assert.assertTrue(ev.getDamageResult().isHit());
 		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.getDamage());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());

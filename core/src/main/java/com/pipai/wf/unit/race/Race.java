@@ -1,20 +1,27 @@
 package com.pipai.wf.unit.race;
 
-public enum Race {
+import com.pipai.wf.misc.BasicStats;
+import com.pipai.wf.misc.HasBasicStats;
 
-	HUMAN(7, 5, 2, 12, 65, 0, "Human"), FAIRY(4, 10, 2, 13, 65, 0, "Fairy"), CAT(4, 3, 3, 14, 65, 5, "Cat"), FOX(5, 10, 2, 13, 65, 0, "Fox");
+public enum Race implements HasBasicStats {
 
-	public final int hp, mp, ap, mobility, aim, defense;
-	public final String name;
+	HUMAN(7, 5, 2, 65, 12, 0, "Human"), FAIRY(4, 10, 2, 65, 13, 0, "Fairy"), CAT(4, 3, 3, 65, 14, 5, "Cat"), FOX(5, 10, 2, 65, 13, 0, "Fox");
 
-	Race(int hp, int mp, int ap, int mobility, int aim, int defense, String name) {
-		this.hp = hp;
-		this.mp = mp;
-		this.ap = ap;
-		this.mobility = mobility;
-		this.aim = aim;
-		this.defense = defense;
+	private final BasicStats basicStats;
+	private final String name;
+
+	Race(int hp, int mp, int ap, int aim, int mobility, int defense, String name) {
+		basicStats = new BasicStats(hp, hp, mp, mp, ap, ap, aim, mobility, defense);
 		this.name = name;
+	}
+
+	@Override
+	public BasicStats getBasicStats() {
+		return basicStats;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 }

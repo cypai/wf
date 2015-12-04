@@ -13,17 +13,14 @@ import com.pipai.wf.guiobject.XYZPositioned;
 
 public class BulletGuiObject extends GuiObject implements GuiRenderable, XYZPositioned {
 
-	protected BattleGui gui;
-	protected float x, y, dest_x, dest_y;
-	protected int t, final_t;
-	protected Vector2 dir;
-	protected AgentGuiObject target;
+	private float x, y, dest_x, dest_y;
+	private int t, final_t;
+	private Vector2 dir;
 
 	private static final int SPEED = 16;
 
 	public BulletGuiObject(BattleGui gui, float x, float y, float dest_x, float dest_y, AgentGuiObject target) {
 		super(gui);
-		this.gui = gui;
 		this.x = x;
 		this.y = y;
 		this.dest_x = dest_x;
@@ -34,7 +31,6 @@ public class BulletGuiObject extends GuiObject implements GuiRenderable, XYZPosi
 		if (final_t == 0) {
 			final_t = (int) Math.ceil((dest_y - y) / (SPEED * dir.y));
 		}
-		this.target = target;
 	}
 
 	@Override

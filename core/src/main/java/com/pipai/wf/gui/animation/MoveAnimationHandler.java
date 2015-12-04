@@ -40,10 +40,10 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	@Override
 	public void initAnimation() {
 		if (noCameraFollow) {
-			getCamera().moveTo(agent.x, agent.y);
+			getCamera().moveTo(agent.getX(), agent.getY());
 			notifyCameraMoveEnd();
 		} else {
-			getCamera().moveTo(agent.x, agent.y, this);
+			getCamera().moveTo(agent.getX(), agent.getY(), this);
 		}
 	}
 
@@ -95,8 +95,8 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 			int time = 6;
 			if (t <= time) {
 				float alpha = (float) t / (float) time;
-				agent.x = start.x * (1 - alpha) + dest.x * alpha;
-				agent.y = start.y * (1 - alpha) + dest.y * alpha;
+				agent.setX(start.x * (1 - alpha) + dest.x * alpha);
+				agent.setY(start.y * (1 - alpha) + dest.y * alpha);
 			}
 			if (t > time) {
 				currentOWChain = getOWActivationEvents();

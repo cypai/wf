@@ -5,11 +5,15 @@ import com.pipai.wf.battle.log.BattleEvent;
 
 public class MockGUIObserver implements BattleObserver {
 
-	public BattleEvent ev;
+	private BattleEvent event;
 
 	@Override
 	public void notifyBattleEvent(BattleEvent ev) {
-		this.ev = ev;
+		event = ev;
+	}
+
+	public BattleEvent getEvent() {
+		return event;
 	}
 
 }

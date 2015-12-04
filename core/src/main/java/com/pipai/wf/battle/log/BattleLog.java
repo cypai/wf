@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class BattleLog {
 
-	public LinkedList<BattleEvent> log;
+	private LinkedList<BattleEvent> log;
 
 	public BattleLog() {
 		log = new LinkedList<BattleEvent>();

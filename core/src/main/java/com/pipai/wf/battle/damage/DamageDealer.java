@@ -12,7 +12,7 @@ public class DamageDealer {
 	}
 
 	public void doDamage(DamageResult damage, Agent target) {
-		target.takeDamage(damage.damage);
+		target.takeDamage(damage.getDamage());
 		if (target.isKO()) {
 			map.getCell(target.getPosition()).makeAgentInactive();
 		}

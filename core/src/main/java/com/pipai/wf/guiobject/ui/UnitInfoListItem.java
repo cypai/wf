@@ -54,8 +54,8 @@ public class UnitInfoListItem extends UIListItem {
 		BitmapFont font = batch.getFont();
 		spr.begin();
 		font.setColor(Color.WHITE);
-		float leftX = x + padding;
-		float line1y = y - padding;
+		float leftX = getX() + padding;
+		float line1y = getY() - padding;
 		float line2y = line1y - font.getLineHeight();
 		font.draw(spr, name, leftX, line1y);
 		float textX = leftX;

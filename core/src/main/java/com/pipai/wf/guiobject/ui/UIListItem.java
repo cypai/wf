@@ -8,11 +8,12 @@ import com.pipai.wf.gui.Gui;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.LeftClickable;
+import com.pipai.wf.guiobject.XYPositioned;
 
-public class UIListItem extends GuiObject implements GuiRenderable, LeftClickable {
+public class UIListItem extends GuiObject implements XYPositioned, GuiRenderable, LeftClickable {
 
-	protected float x, y, width, height;
-	protected Color color;
+	private float x, y, width, height;
+	private Color color;
 
 	public UIListItem(Gui gui, float x, float y, float width, float height, Color color) {
 		super(gui);
@@ -40,6 +41,26 @@ public class UIListItem extends GuiObject implements GuiRenderable, LeftClickabl
 		r.setColor(color);
 		r.rect(x, y, width, -height);
 		r.end();
+	}
+
+	@Override
+	public float getX() {
+		return x;
+	}
+
+	@Override
+	public float getY() {
+		return y;
+	}
+
+	@Override
+	public void setX(float x) {
+		this.x = x;
+	}
+
+	@Override
+	public void setY(float y) {
+		this.y = y;
 	}
 
 }

@@ -58,7 +58,7 @@ public class ReloadActionTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.RELOAD, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());
 		Assert.assertEquals(0, ev.getChainEvents().size());

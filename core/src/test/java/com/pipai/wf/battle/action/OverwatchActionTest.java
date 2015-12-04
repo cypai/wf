@@ -94,7 +94,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.OVERWATCH, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());
 		Assert.assertTrue(ev.getPreparedOWName().equals("Attack"));
@@ -110,7 +110,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent moveEv = observer.ev;
+		BattleEvent moveEv = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.MOVE, moveEv.getType());
 		Assert.assertEquals(enemy, moveEv.getPerformer());
 		LinkedList<BattleEvent> chain = moveEv.getChainEvents();
@@ -167,7 +167,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent moveEv = observer.ev;
+		BattleEvent moveEv = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.MOVE, moveEv.getType());
 		Assert.assertEquals(enemy, moveEv.getPerformer());
 		LinkedList<BattleEvent> chain = moveEv.getChainEvents();

@@ -224,7 +224,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		if (agent.getAgent().getAP() > 0) {
 			selectedAgent = agent;
 			weaponIndicator.updateToAgent(agent);
-			moveCameraToPos(selectedAgent.x, selectedAgent.y);
+			moveCameraToPos(selectedAgent.getX(), selectedAgent.getY());
 			updatePaths();
 			terrainRenderer.setMovingTiles(selectedMapGraph);
 		}
@@ -487,7 +487,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	public void switchToMoveMode() {
 		mode = Mode.MOVE;
 		terrainRenderer.setMovingTiles(selectedMapGraph);
-		moveCameraToPos(selectedAgent.x, selectedAgent.y);
+		moveCameraToPos(selectedAgent.getX(), selectedAgent.getY());
 	}
 
 	public void switchToTargetMode() {
@@ -536,7 +536,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 					targetedAction = ability.getAction(battleController, selectedAgent.getAgent(), target.getAgent());
 				}
 				tooltip.setToActionDescription(targetedAction);
-				moveCameraToPos((selectedAgent.x + target.x) / 2, (selectedAgent.y + target.y) / 2);
+				moveCameraToPos((selectedAgent.getX() + target.getX()) / 2, (selectedAgent.getY() + target.getY()) / 2);
 			}
 		}
 	}

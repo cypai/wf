@@ -2,8 +2,8 @@ package com.pipai.wf.battle.damage;
 
 public class DamageResult {
 
-	public final int damage, damageReduction;
-	public final boolean hit, crit;
+	private final int damage, damageReduction;
+	private final boolean hit, crit;
 
 	public DamageResult(boolean hit, boolean crit, int damage, int damageReduction) {
 		this.hit = hit;
@@ -12,7 +12,23 @@ public class DamageResult {
 		this.damageReduction = damageReduction;
 	}
 
-	public static DamageResult missedResult() {
+	public int getDamage() {
+		return damage;
+	}
+
+	public int getDamageReduction() {
+		return damageReduction;
+	}
+
+	public boolean isHit() {
+		return hit;
+	}
+
+	public boolean isCrit() {
+		return crit;
+	}
+
+	public static DamageResult buildMissedResult() {
 		return new DamageResult(false, false, 0, 0);
 	}
 

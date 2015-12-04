@@ -9,8 +9,8 @@ import com.pipai.wf.unit.schema.UnitSchema;
 
 public class PartyInfoList extends UIList {
 
-	protected ArrayList<UnitInfoListItem> list;
-	protected float padding;
+	private ArrayList<UnitInfoListItem> list;
+	private float padding;
 
 	public PartyInfoList(Gui gui, List<UnitSchema> party, float x, float y, float width, float height, Color color) {
 		super(gui, x, y, width, height, color);

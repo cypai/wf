@@ -52,7 +52,7 @@ public class TopModularAI extends AI {
 			best = as.compareAndReturnBetter(best);
 		}
 		try {
-			best.action.perform();
+			best.getAction().perform();
 		} catch (IllegalActionException e) {
 			logger.error("AI tried to perform illegal move: " + e.getMessage());
 		}

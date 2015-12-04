@@ -119,8 +119,8 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		float modifierX = calcX + 120;
 		float currY = calcY - f.getLineHeight() * 1.5f;
 		for (PercentageModifier pm : pmList) {
-			f.draw(spr, pm.modifierName, bonusNameX, currY, 0, Align.left, true);
-			f.draw(spr, String.valueOf(pm.modifier), modifierX, currY, 0, Align.right, true);
+			f.draw(spr, pm.getModifierName(), bonusNameX, currY, 0, Align.left, true);
+			f.draw(spr, String.valueOf(pm.getModifier()), modifierX, currY, 0, Align.right, true);
 			currY -= f.getLineHeight();
 		}
 		f.draw(spr, "Total", bonusNameX, currY - 2, 0, Align.left, true);

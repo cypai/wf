@@ -1,7 +1,5 @@
 package com.pipai.wf.guiobject.ui;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -12,9 +10,8 @@ import com.pipai.wf.guiobject.GuiRenderable;
 
 public class UIList extends GuiObject implements GuiRenderable {
 
-	protected ArrayList<UIListItem> list;
-	protected float x, y, width, height;
-	protected Color color;
+	private float x, y, width, height;
+	private Color color;
 
 	public UIList(Gui gui, float x, float y, float width, float height, Color color) {
 		super(gui);

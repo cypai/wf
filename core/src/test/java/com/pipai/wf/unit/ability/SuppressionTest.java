@@ -94,7 +94,7 @@ public class SuppressionTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.TARGETED_ACTION, ev.getType());
 		Assert.assertEquals(SuppressionAction.class, ev.getTargetedAction().getClass());
 		Assert.assertEquals(player, ev.getPerformer());

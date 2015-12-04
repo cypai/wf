@@ -12,8 +12,8 @@ import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.AgentCoverCalculator;
+import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
@@ -46,7 +46,7 @@ public class GeneralModularAI extends ModularAI {
 		} else {
 			best = getBestAttackAction();
 		}
-		if (best.action == null) {
+		if (best.getAction() == null) {
 			return new ActionScore(reloadWeaponAction(), 20);
 		}
 		return best;

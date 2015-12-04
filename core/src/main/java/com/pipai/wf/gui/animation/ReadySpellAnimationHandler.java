@@ -23,7 +23,7 @@ public class ReadySpellAnimationHandler extends AnimationHandler implements Came
 	@Override
 	protected void initAnimation() {
 		if (!skipCamera) {
-			getCamera().moveTo(performer.x, performer.y, this);
+			getCamera().moveTo(performer.getX(), performer.getY(), this);
 		}
 	}
 
@@ -37,7 +37,7 @@ public class ReadySpellAnimationHandler extends AnimationHandler implements Came
 
 	private void performAnimation() {
 		String text = (ev.getQuickened() ? "Quickened " : "Ready ") + ev.getSpell().getName();
-		TemporaryText ttext = new TemporaryText(getGui(), new Vector3(performer.x, performer.y, 0), text);
+		TemporaryText ttext = new TemporaryText(getGui(), new Vector3(performer.getX(), performer.getY(), 0), text);
 		getGui().createInstance(ttext);
 		finish();
 	}

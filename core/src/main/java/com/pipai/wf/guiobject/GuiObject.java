@@ -8,8 +8,8 @@ public abstract class GuiObject {
 
 	private static int nextID;
 
-	protected Gui gui;
-	protected int id;
+	private Gui gui;
+	private int id;
 
 	private LinkedList<GuiObjectDestroyEventObserver> destroyEvObservers;
 
@@ -17,6 +17,10 @@ public abstract class GuiObject {
 		this.gui = gui;
 		id = GuiObject.nextID;
 		GuiObject.nextID += 1;
+	}
+
+	public Gui getGui() {
+		return gui;
 	}
 
 	public int getID() {

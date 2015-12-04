@@ -99,7 +99,7 @@ public class ReadySpellActionTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.READY, ev.getType());
 		Assert.assertEquals(agent, ev.getPerformer());
 		Assert.assertTrue(ev.getSpell() instanceof FireballSpell);
@@ -128,7 +128,7 @@ public class ReadySpellActionTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.READY, ev.getType());
 		Assert.assertEquals(agent, ev.getPerformer());
 		Assert.assertTrue(ev.getSpell() instanceof FireballSpell);

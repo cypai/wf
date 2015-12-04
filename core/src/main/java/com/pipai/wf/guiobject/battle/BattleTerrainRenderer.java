@@ -72,7 +72,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private ModelBuilder modelBuilder;
 	private Texture grassTexture;
 	private ShaderProgram fogOfWarShader;
-	public Renderable renderable;
+	private Renderable renderable;
 
 	private int u_projViewTrans, u_worldTrans, u_lightColor;
 	private int u_texture, u_fogOfWarTexture;

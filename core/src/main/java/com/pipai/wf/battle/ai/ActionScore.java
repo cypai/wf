@@ -4,8 +4,8 @@ import com.pipai.wf.battle.action.Action;
 
 public class ActionScore {
 
-	public final Action action;
-	public final float score;
+	private final Action action;
+	private final float score;
 
 	public ActionScore(Action action, float score) {
 		this.action = action;
@@ -18,6 +18,14 @@ public class ActionScore {
 		} else {
 			return other;
 		}
+	}
+
+	public Action getAction() {
+		return action;
+	}
+
+	public float getScore() {
+		return score;
 	}
 
 }

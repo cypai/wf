@@ -28,10 +28,10 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 	private BattleGui gui;
 	private Agent agent;
 	private boolean selected, showingKO;
-	public float x, y;
-	public int radius;
+	private float x, y;
+	private int radius;
 
-	public int displayHP, displayArmorHP;
+	private int displayHP, displayArmorHP;
 
 	private Texture circleTex;
 	private Decal decal;

@@ -64,14 +64,14 @@ public class CastFireballTest extends GdxMockedTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.CAST_TARGET, ev.getType());
 		Assert.assertEquals(agent, ev.getPerformer());
 		Assert.assertEquals(target, ev.getTarget());
 		Assert.assertTrue(ev.getSpell() instanceof FireballSpell);
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Player has 1000 aim, cannot miss
-		Assert.assertTrue(ev.getDamageResult().hit);
+		Assert.assertTrue(ev.getDamageResult().isHit());
 		int expectedHP = UtilFunctions.clamp(0, target.getMaxHP(), target.getMaxHP() - ev.getDamage());
 		Assert.assertEquals(expectedHP, target.getHP());
 		Assert.assertEquals(agent.getMaxHP(), agent.getHP());
@@ -111,7 +111,7 @@ public class CastFireballTest extends GdxMockedTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent ev = observer.ev;
+		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.OVERWATCH, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());
 		Assert.assertTrue(ev.getPreparedOWName().equals("Fireball"));
@@ -127,7 +127,7 @@ public class CastFireballTest extends GdxMockedTest {
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		BattleEvent moveEv = observer.ev;
+		BattleEvent moveEv = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.MOVE, moveEv.getType());
 		Assert.assertEquals(enemy, moveEv.getPerformer());
 		LinkedList<BattleEvent> chain = moveEv.getChainEvents();

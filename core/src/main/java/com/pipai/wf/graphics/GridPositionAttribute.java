@@ -7,7 +7,7 @@ import com.pipai.wf.battle.map.GridPosition;
 public class GridPositionAttribute extends Attribute {
 	public final static String GridPositionAlias = "gridPosition";
 	public final static long Type = register(GridPositionAlias);
-	protected static long Mask = Type;
+	private static long Mask = Type;
 
 	/**
 	 * Method to check whether the specified type is a valid
@@ -17,7 +17,7 @@ public class GridPositionAttribute extends Attribute {
 		return (type & Mask) != 0;
 	}
 
-	public GridPosition value;
+	private GridPosition value;
 
 	public GridPositionAttribute() {
 		super(Type);

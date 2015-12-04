@@ -76,7 +76,7 @@ public class DirectionalCoverSystem {
 	public static ArrayList<Direction> getNeededCoverDirections(GridPosition pos, GridPosition attackPos) {
 		ArrayList<Direction> l = new ArrayList<>();
 		Direction d = pos.directionTo(attackPos);
-		if (d.isCardinal) {
+		if (d.isCardinal()) {
 			l.add(d);
 			return l;
 		} else {

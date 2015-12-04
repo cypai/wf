@@ -38,7 +38,7 @@ public class AttackButtonOverlay extends GuiObject implements GuiRenderable, Lef
 
 	@Override
 	public void render(BatchHelper batch) {
-		update(gui.getScreenWidth(), gui.getScreenHeight());
+		update(getGui().getScreenWidth(), getGui().getScreenHeight());
 		ShapeRenderer r = batch.getShapeRenderer();
 		r.begin(ShapeType.Filled);
 		r.setColor(new Color(0, 0.5f, 0.8f, 1));

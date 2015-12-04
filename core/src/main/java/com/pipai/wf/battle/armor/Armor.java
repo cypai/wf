@@ -6,7 +6,7 @@ import com.pipai.wf.battle.item.Item;
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public abstract class Armor extends Item {
 
-	protected int hp;
+	private int hp;
 
 	public Armor(int hp) {
 		this.hp = hp;

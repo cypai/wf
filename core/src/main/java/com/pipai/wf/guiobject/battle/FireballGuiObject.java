@@ -18,11 +18,11 @@ public class FireballGuiObject extends BulletGuiObject {
 		ShapeRenderer r = batch.getShapeRenderer();
 		r.begin(ShapeType.Filled);
 		r.setColor(Color.RED);
-		r.circle(x, y, 5);
+		r.circle(getX(), getY(), 5);
 		r.end();
 		r.begin(ShapeType.Line);
 		r.setColor(Color.ORANGE);
-		r.circle(x, y, 5);
+		r.circle(getX(), getY(), 5);
 		r.end();
 	}
 

@@ -12,7 +12,7 @@ public class PercentageModifierList implements Iterable<PercentageModifier> {
 	}
 
 	public void add(PercentageModifier modifier) {
-		if (modifier.modifier != 0) {
+		if (modifier.getModifier() != 0) {
 			modifierList.add(modifier);
 		}
 	}
@@ -24,7 +24,7 @@ public class PercentageModifierList implements Iterable<PercentageModifier> {
 	public int total() {
 		int total = 0;
 		for (PercentageModifier p : modifierList) {
-			total += p.modifier;
+			total += p.getModifier();
 		}
 		return total;
 	}

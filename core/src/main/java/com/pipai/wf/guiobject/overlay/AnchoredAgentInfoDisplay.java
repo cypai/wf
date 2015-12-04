@@ -15,10 +15,10 @@ import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
 public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 
-	protected AgentGuiObject a;
+	private AgentGuiObject a;
 
 	public AnchoredAgentInfoDisplay(BattleGui gui, AgentGuiObject agent) {
-		super(gui, gui.getRayMapper(), new Vector3(agent.x, agent.y, 0));
+		super(gui, gui.getRayMapper(), new Vector3(agent.getX(), agent.getY(), 0));
 		a = agent;
 	}
 
@@ -37,13 +37,13 @@ public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		shapeBatch.begin(ShapeType.Filled);
 		int bar_width = 40;
-		Vector2 agentPoint = screenPosition;
-		Vector2 barLeftTop = new Vector2(screenPosition.x + 24, screenPosition.y + 24);
-		Vector2 barRightFullTop = new Vector2(screenPosition.x + 24 + bar_width, screenPosition.y + 24);
-		Vector2 barRightTop = new Vector2(screenPosition.x + 24 + bar_width * ((float) a.getDisplayArmorHP() / (float) a.getAgent().getArmor().maxHP()), screenPosition.y + 24);
-		Vector2 barLeftBot = new Vector2(screenPosition.x + 24, screenPosition.y + 18);
-		Vector2 barRightFullBot = new Vector2(screenPosition.x + 24 + bar_width, screenPosition.y + 18);
-		Vector2 barRightBot = new Vector2(screenPosition.x + 24 + bar_width * ((float) a.getDisplayHP() / (float) a.getAgent().getMaxHP()), screenPosition.y + 18);
+		Vector2 agentPoint = getScreenPosition();
+		Vector2 barLeftTop = new Vector2(getScreenX() + 24, getScreenY() + 24);
+		Vector2 barRightFullTop = new Vector2(getScreenX() + 24 + bar_width, getScreenY() + 24);
+		Vector2 barRightTop = new Vector2(getScreenX() + 24 + bar_width * ((float) a.getDisplayArmorHP() / (float) a.getAgent().getArmor().maxHP()), getScreenY() + 24);
+		Vector2 barLeftBot = new Vector2(getScreenX() + 24, getScreenY() + 18);
+		Vector2 barRightFullBot = new Vector2(getScreenX() + 24 + bar_width, getScreenY() + 18);
+		Vector2 barRightBot = new Vector2(getScreenX() + 24 + bar_width * ((float) a.getDisplayHP() / (float) a.getAgent().getMaxHP()), getScreenY() + 18);
 		float alpha = (a.getAgent().getTeam() == Team.PLAYER && a.getAgent().getAP() == 0) ? -0.5f : 0;
 		shapeBatch.setColor(Color.BLUE.cpy().add(0, 0, 0, alpha));
 		shapeBatch.rectLine(agentPoint, barLeftTop, 3);
@@ -75,8 +75,7 @@ public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 	@Override
 	public void update() {
 		super.update();
-		anchorPoint.x = a.x;
-		anchorPoint.y = a.y;
+		setAnchorPoint(a.getX(), a.getY(), getAnchorPoint().z);
 	}
 
 }

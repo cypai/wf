@@ -153,19 +153,19 @@ public final class BattleEvent {
 	}
 
 	public boolean isHit() {
-		return damageResult.hit;
+		return damageResult.isHit();
 	}
 
 	public boolean isCrit() {
-		return damageResult.crit;
+		return damageResult.isCrit();
 	}
 
 	public int getDamage() {
-		return damageResult.damage;
+		return damageResult.getDamage();
 	}
 
 	public int getDamageReduction() {
-		return damageResult.damageReduction;
+		return damageResult.getDamageReduction();
 	}
 
 	public GridPosition getTargetTile() {
