@@ -87,7 +87,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 
 	@Override
 	public void setZ(float z) {
-		return;
+		// Do nothing for now
 	}
 
 	@Override

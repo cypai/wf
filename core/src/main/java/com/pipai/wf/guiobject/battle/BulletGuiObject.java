@@ -96,7 +96,7 @@ public class BulletGuiObject extends GuiObject implements GuiRenderable, XYZPosi
 
 	@Override
 	public void setZ(float z) {
-		return;
+		// Do nothing for now
 	}
 
 	@Override
