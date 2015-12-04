@@ -8,4 +8,8 @@ public class IllegalActionException extends Exception {
 		super(message);
 	}
 
+	public IllegalActionException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 }

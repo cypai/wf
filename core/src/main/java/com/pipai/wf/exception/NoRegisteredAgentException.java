@@ -8,4 +8,12 @@ public class NoRegisteredAgentException extends Exception {
 		super("Ability needs an Agent registered to call this function");
 	}
 
+	public NoRegisteredAgentException(String message) {
+		super(message);
+	}
+
+	public NoRegisteredAgentException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 }

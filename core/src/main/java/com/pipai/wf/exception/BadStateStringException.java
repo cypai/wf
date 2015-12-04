@@ -7,4 +7,9 @@ public class BadStateStringException extends Exception {
 	public BadStateStringException(String message) {
 		super(message);
 	}
+
+	public BadStateStringException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 }
