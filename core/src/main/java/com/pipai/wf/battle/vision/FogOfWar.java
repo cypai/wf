@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.BattleMapCell;
+import com.pipai.wf.battle.map.Direction;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
 
@@ -117,7 +118,8 @@ public final class FogOfWar {
 	}
 
 	private void passLight(LinkedList<GridPosition> queue, GridPosition center, GridPosition tile) {
-		switch (center.directionTo(tile)) {
+		Direction dirToTile = center.directionTo(tile);
+		switch (dirToTile) {
 		case E:
 			queue.add(new GridPosition(tile.x, tile.y - 1));
 			queue.add(new GridPosition(tile.x + 1, tile.y));
@@ -154,6 +156,8 @@ public final class FogOfWar {
 			queue.add(new GridPosition(tile.x, tile.y - 1));
 			queue.add(new GridPosition(tile.x + 1, tile.y));
 			break;
+		default:
+			throw new IllegalStateException("Received unexpected direction for the direction to tile: " + dirToTile);
 		}
 	}
 

@@ -92,6 +92,8 @@ public class BattleMap {
 		case SE:
 			cellPos = new GridPosition(pos.x + 1, pos.y - 1);
 			break;
+		default:
+			throw new IllegalArgumentException("Received unexpected parameter for Direction d: " + d);
 		}
 		return cellMap.get(coordinatesToKey(cellPos));
 	}

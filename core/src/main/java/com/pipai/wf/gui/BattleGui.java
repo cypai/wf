@@ -424,6 +424,8 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		case -1:
 			camera.increaseHeight();
 			break;
+		default:
+			throw new IllegalArgumentException("Parameter must 1 or -1, but received: " + amount);
 		}
 	}
 
