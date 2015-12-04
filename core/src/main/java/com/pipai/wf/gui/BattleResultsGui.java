@@ -27,6 +27,7 @@ public class BattleResultsGui extends Gui {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		BatchHelper batch = getBatch();
 		batch.getSpriteBatch().setProjectionMatrix(camera.combined);
 		batch.getShapeRenderer().setProjectionMatrix(camera.combined);
 		SpriteBatch spr = batch.getSpriteBatch();
@@ -39,8 +40,7 @@ public class BattleResultsGui extends Gui {
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-		game.setScreen(new PartyInfoGui(game, result.getPartyState()));
-		dispose();
+		switchGui(new PartyInfoGui(getGame(), result.getPartyState()));
 	}
 
 	@Override

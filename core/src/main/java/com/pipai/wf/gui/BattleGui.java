@@ -156,7 +156,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			}
 			createInstance(a);
 		}
-		batch.set3DCamera(camera.getCamera());
+		getBatch().set3DCamera(camera.getCamera());
 		fogOfWar = new FogOfWar(battle.getBattleMap(), selectableAgentOrderedList);
 		// this.fogOfWar.fullScan();
 		terrainRenderer = new BattleTerrainRenderer(this, battle.getBattleMap(), fogOfWar);
@@ -311,7 +311,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 
 	private void performGuiSwitchIfFlagSet() {
 		if (switchGuiFlag) {
-			switchGui(new BattleResultsGui(game, switchBattleResultGuiData));
+			switchGui(new BattleResultsGui(getGame(), switchBattleResultGuiData));
 		}
 	}
 
@@ -713,6 +713,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		animationController.update();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		BatchHelper batch = getBatch();
 		batch.getSpriteBatch().setProjectionMatrix(camera.getProjectionMatrix());
 		batch.getShapeRenderer().setProjectionMatrix(camera.getProjectionMatrix());
 		terrainRenderer.render(batch);
@@ -746,11 +747,11 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	}
 
 	private void drawFPS() {
-		BitmapFont font = batch.getFont();
-		batch.getSpriteBatch().begin();
+		BitmapFont font = getBatch().getFont();
+		getBatch().getSpriteBatch().begin();
 		font.setColor(Color.WHITE);
-		font.draw(batch.getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), getScreenWidth() - 24, getScreenHeight() - font.getLineHeight() / 2);
-		batch.getSpriteBatch().end();
+		font.draw(getBatch().getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), getScreenWidth() - 24, getScreenHeight() - font.getLineHeight() / 2);
+		getBatch().getSpriteBatch().end();
 	}
 
 }

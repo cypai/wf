@@ -83,7 +83,7 @@ public final class MainMenuGui extends Gui {
 	public void render(float delta) {
 		super.render(delta);
 		for (GuiRenderable obj : renderables.getGuiObjects()) {
-			obj.render(batch);
+			obj.render(getBatch());
 		}
 		flushCreateBuffers();
 		flushDeleteBuffers();
@@ -100,7 +100,7 @@ public final class MainMenuGui extends Gui {
 	}
 
 	public void goToTestbed(List<UnitSchema> party) {
-		switchGui(new PartyInfoGui(game, party));
+		switchGui(new PartyInfoGui(getGame(), party));
 	}
 
 }

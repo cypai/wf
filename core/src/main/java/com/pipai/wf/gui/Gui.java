@@ -17,11 +17,11 @@ public abstract class Gui implements Screen, InputProcessor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(Gui.class);
 
-	protected WFGame game;
-	protected BatchHelper batch;
+	private WFGame game;
+	private BatchHelper batch;
 	private int screenWidth;
 	private int screenHeight;
-	protected ConcurrentHashMap<Integer, GuiObject> instanceIndex;
+	private ConcurrentHashMap<Integer, GuiObject> instanceIndex;
 	// Maybe add BST for rendering order??
 
 	// Input Processing
@@ -30,11 +30,19 @@ public abstract class Gui implements Screen, InputProcessor {
 	public Gui(WFGame game) {
 		this.game = game;
 		Gdx.input.setInputProcessor(this);
-		batch = new BatchHelper(game.sprBatch, game.shapeBatch, game.modelBatch, game.font);
+		batch = new BatchHelper(game.getSpriteBatch(), game.getShapeRenderer(), game.getModelBatch(), game.getFont());
 		instanceIndex = new ConcurrentHashMap<Integer, GuiObject>();
 		heldKeys = new HashMap<Integer, Boolean>();
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
+	}
+
+	public WFGame getGame() {
+		return game;
+	}
+
+	public BatchHelper getBatch() {
+		return batch;
 	}
 
 	public int getScreenWidth() {

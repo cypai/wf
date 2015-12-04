@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.DirectionalLightsAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
@@ -72,7 +71,6 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private ModelBuilder modelBuilder;
 	private Texture grassTexture;
 	private ShaderProgram fogOfWarShader;
-	private Renderable renderable;
 
 	private int u_projViewTrans, u_worldTrans, u_lightColor;
 	private int u_texture, u_fogOfWarTexture;

@@ -72,6 +72,7 @@ public final class PartyInfoGui extends Gui {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		BatchHelper batch = getBatch();
 		batch.getSpriteBatch().setProjectionMatrix(camera.combined);
 		batch.getShapeRenderer().setProjectionMatrix(camera.combined);
 		for (GuiRenderable r : renderables) {
@@ -84,7 +85,7 @@ public final class PartyInfoGui extends Gui {
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
 		BattleFactory factory = new BattleFactory(new BattleConfiguration());
-		switchGui(new BattleGui(game, factory.build(new BattleSchema(partySchema))));
+		switchGui(new BattleGui(getGame(), factory.build(new BattleSchema(partySchema))));
 	}
 
 	@Override
