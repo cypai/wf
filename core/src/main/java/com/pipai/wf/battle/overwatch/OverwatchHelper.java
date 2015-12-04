@@ -9,7 +9,7 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.misc.BasicStats;
 
-public class OverwatchHelper {
+public final class OverwatchHelper {
 
 	public static String getName(OverwatchAction owAction) {
 		Agent owAgent = owAction.getPerformer();
@@ -26,6 +26,10 @@ public class OverwatchHelper {
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new IllegalArgumentException("Could not generate the overwatch activation action for class: " + schema.getActionClass(), e);
 		}
+	}
+
+	private OverwatchHelper() {
+		// Utility class should not have a public constructor
 	}
 
 }

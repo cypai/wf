@@ -2,7 +2,7 @@ package com.pipai.wf.util;
 
 import com.pipai.wf.battle.map.GridPosition;
 
-public class UtilFunctions {
+public final class UtilFunctions {
 
 	public static boolean isInCircle(float centerX, float centerY, float radius, float x, float y) {
 		return Math.pow(x - centerX, 2.0) + Math.pow(y - centerY, 2.0) <= radius * radius;
@@ -27,6 +27,10 @@ public class UtilFunctions {
 
 	public static float gridPositionDistance(GridPosition pos1, GridPosition pos2) {
 		return (float) Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
+	}
+
+	private UtilFunctions() {
+		// Utility class should not have a public constructor
 	}
 
 }

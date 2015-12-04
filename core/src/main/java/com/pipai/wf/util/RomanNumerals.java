@@ -3,7 +3,7 @@ package com.pipai.wf.util;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class RomanNumerals {
+public final class RomanNumerals {
 
 	private static LinkedHashMap<String, Integer> roman_numerals;
 
@@ -44,6 +44,10 @@ public class RomanNumerals {
 			sb.append(s);
 		}
 		return sb.toString();
+	}
+
+	private RomanNumerals() {
+		// Utility class should not have a public constructor
 	}
 
 }

@@ -13,7 +13,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
-public class GdxMockedTest {
+public abstract class GdxMockedTest {
 
 	@BeforeClass
 	public static void mockGdxFiles() {
