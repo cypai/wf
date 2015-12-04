@@ -10,30 +10,30 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class BatchHelper {
 
-	private SpriteBatch spr;
-	private ShapeRenderer shape;
+	private SpriteBatch spriteBatch;
+	private ShapeRenderer shapeRenderer;
 	private BitmapFont font;
-	private DecalBatch decal;
-	private ModelBatch model;
+	private DecalBatch decalBatch;
+	private ModelBatch modelBatch;
 
 	public BatchHelper(SpriteBatch spr, ShapeRenderer shape, ModelBatch model, BitmapFont font) {
-		this.spr = spr;
-		this.shape = shape;
-		this.model = model;
+		spriteBatch = spr;
+		shapeRenderer = shape;
+		modelBatch = model;
 		this.font = font;
-		decal = null;
+		decalBatch = null;
 	}
 
 	public SpriteBatch getSpriteBatch() {
-		return spr;
+		return spriteBatch;
 	}
 
 	public ShapeRenderer getShapeRenderer() {
-		return shape;
+		return shapeRenderer;
 	}
 
 	public ModelBatch getModelBatch() {
-		return model;
+		return modelBatch;
 	}
 
 	public BitmapFont getFont() {
@@ -41,11 +41,11 @@ public class BatchHelper {
 	}
 
 	public void set3DCamera(Camera cam) {
-		decal = new DecalBatch(new CameraGroupStrategy(cam));
+		decalBatch = new DecalBatch(new CameraGroupStrategy(cam));
 	}
 
 	public DecalBatch getDecalBatch() {
-		return decal;
+		return decalBatch;
 	}
 
 }

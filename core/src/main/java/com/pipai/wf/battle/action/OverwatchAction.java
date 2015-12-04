@@ -9,11 +9,11 @@ import com.pipai.wf.exception.IllegalActionException;
 
 public class OverwatchAction extends AlterStateAction {
 
-	private OverwatchActivatedActionSchema owAction;
+	private OverwatchActivatedActionSchema overwatchActionSchema;
 
 	public OverwatchAction(BattleController controller, Agent performerAgent) {
 		super(controller, performerAgent);
-		owAction = new WeaponActionFactory(controller).defaultWeaponActionSchema(performerAgent);
+		overwatchActionSchema = new WeaponActionFactory(controller).defaultWeaponActionSchema(performerAgent);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class OverwatchAction extends AlterStateAction {
 				throw new IllegalActionException("Not enough ammo to overwatch");
 			}
 		}
-		performer.setOverwatch(owAction);
+		performer.setOverwatch(overwatchActionSchema);
 		log(BattleEvent.overwatchEvent(getPerformer(), OverwatchHelper.getName(this)));
 	}
 
@@ -47,7 +47,7 @@ public class OverwatchAction extends AlterStateAction {
 	}
 
 	public OverwatchActivatedActionSchema getOverwatchActionSchema() {
-		return owAction;
+		return overwatchActionSchema;
 	}
 
 }

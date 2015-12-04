@@ -24,15 +24,15 @@ public final class BattleEvent {
 	private Type type;
 	private Agent performer, target;
 	private LinkedList<GridPosition> path;
-	private Weapon wpn;
+	private Weapon weapon;
 	private Spell spell;
-	private DamageResult dmgResult;
+	private DamageResult damageResult;
 	private LinkedList<BattleEvent> chainedEvents;
 	private GridPosition targetTile;
 	private String actionName;
 	private TargetedAction targetedAction;
-	private TargetedWithAccuracyActionOWCapable owActivatedAction;
-	private boolean quickenFlag;
+	private TargetedWithAccuracyActionOWCapable activatedOverwatchAction;
+	private boolean quickened;
 
 	public static BattleEvent moveEvent(Agent performer, LinkedList<GridPosition> path) {
 		BattleEvent event = new BattleEvent(Type.MOVE, performer, null);
@@ -42,22 +42,22 @@ public final class BattleEvent {
 
 	public static BattleEvent rangedWeaponAttackEvent(Agent performer, Agent target, Weapon weapon, DamageResult dmgResult) {
 		BattleEvent event = new BattleEvent(Type.RANGED_WEAPON_ATTACK, performer, target);
-		event.wpn = weapon;
-		event.dmgResult = dmgResult;
+		event.weapon = weapon;
+		event.damageResult = dmgResult;
 		return event;
 	}
 
 	public static BattleEvent readySpellEvent(Agent performer, Spell spell, boolean quickened) {
 		BattleEvent event = new BattleEvent(Type.READY, performer, null);
 		event.spell = spell;
-		event.quickenFlag = quickened;
+		event.quickened = quickened;
 		return event;
 	}
 
 	public static BattleEvent castTargetEvent(Agent performer, Agent target, Spell spell, DamageResult dmgResult) {
 		BattleEvent event = new BattleEvent(Type.CAST_TARGET, performer, target);
 		event.spell = spell;
-		event.dmgResult = dmgResult;
+		event.damageResult = dmgResult;
 		return event;
 	}
 
@@ -69,8 +69,8 @@ public final class BattleEvent {
 
 	public static BattleEvent overwatchActivationEvent(Agent performer, Agent target, TargetedWithAccuracyActionOWCapable action, GridPosition targetTile, DamageResult dmgResult) {
 		BattleEvent event = new BattleEvent(Type.OVERWATCH_ACTIVATION, performer, target);
-		event.owActivatedAction = action;
-		event.dmgResult = dmgResult;
+		event.activatedOverwatchAction = action;
+		event.damageResult = dmgResult;
 		event.targetTile = targetTile;
 		return event;
 	}
@@ -125,7 +125,7 @@ public final class BattleEvent {
 	}
 
 	public Weapon getWeapon() {
-		return wpn;
+		return weapon;
 	}
 
 	public String getActionName() {
@@ -136,8 +136,8 @@ public final class BattleEvent {
 		return actionName;
 	}
 
-	public TargetedWithAccuracyActionOWCapable getActivatedOWAction() {
-		return owActivatedAction;
+	public TargetedWithAccuracyActionOWCapable getActivatedOverwatchAction() {
+		return activatedOverwatchAction;
 	}
 
 	public TargetedAction getTargetedAction() {
@@ -149,23 +149,23 @@ public final class BattleEvent {
 	}
 
 	public DamageResult getDamageResult() {
-		return dmgResult;
+		return damageResult;
 	}
 
 	public boolean isHit() {
-		return dmgResult.hit;
+		return damageResult.hit;
 	}
 
 	public boolean isCrit() {
-		return dmgResult.crit;
+		return damageResult.crit;
 	}
 
 	public int getDamage() {
-		return dmgResult.damage;
+		return damageResult.damage;
 	}
 
 	public int getDamageReduction() {
-		return dmgResult.damageReduction;
+		return damageResult.damageReduction;
 	}
 
 	public GridPosition getTargetTile() {
@@ -173,7 +173,7 @@ public final class BattleEvent {
 	}
 
 	public boolean getQuickened() {
-		return quickenFlag;
+		return quickened;
 	}
 
 	public int getNumChainEvents() {

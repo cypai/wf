@@ -62,7 +62,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 
 	private BattleGui gui;
 	private BattleMap map;
-	private List<GridPosition> moveTiles, midDashTiles, dashTiles, targetTiles, targetableTiles;
+	private List<GridPosition> movableTiles, midDashTiles, dashTiles, targetTiles, targetableTiles;
 	private FogOfWar fogOfWar;
 
 	private Environment environment;
@@ -77,7 +77,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private int u_projViewTrans, u_worldTrans, u_lightColor;
 	private int u_texture, u_fogOfWarTexture;
 
-	private boolean renderTex = true;
+	private boolean renderingTextures = true;
 
 	public BattleTerrainRenderer(BattleGui gui, BattleMap map, FogOfWar fogOfWar) {
 		super(gui);
@@ -107,12 +107,12 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		generateSceneModels();
 	}
 
-	public void setIsRenderingTextures(boolean renderTex) {
-		this.renderTex = renderTex;
+	public void setRenderingTextures(boolean renderTex) {
+		renderingTextures = renderTex;
 	}
 
-	public boolean getIsRenderingTextures() {
-		return renderTex;
+	public boolean isRenderingTextures() {
+		return renderingTextures;
 	}
 
 	private void generateSceneModels() {
@@ -153,7 +153,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	@Override
 	public void render(BatchHelper batch) {
 		ModelBatch modelBatch = batch.getModelBatch();
-		if (renderTex) {
+		if (renderingTextures) {
 			// Gdx.gl20.glCullFace(GL20.GL_BACK);
 			fogOfWarShader.begin();
 			fogOfWarShader.setUniformMatrix(u_projViewTrans, gui.getCamera().getProjectionMatrix());
@@ -162,7 +162,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 			fogOfWarShader.setUniformf(u_lightColor, envlights.lights.first().color);
 			grassTexture.bind(0);
 			fogOfWarShader.setUniformi(u_texture, 0);
-			fogOfWar.getFogOfWarTexture().bind(1);
+			fogOfWar.getFogOfWarStateTexture().bind(1);
 			fogOfWarShader.setUniformi(u_fogOfWarTexture, 1);
 			terrainMesh.render(fogOfWarShader, GL20.GL_TRIANGLES);
 			fogOfWarShader.end();
@@ -179,7 +179,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	}
 
 	public void clearShadedTiles() {
-		moveTiles = null;
+		movableTiles = null;
 		midDashTiles = null;
 		dashTiles = null;
 		targetTiles = null;
@@ -210,7 +210,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	}
 
 	public void setMovableTiles(List<GridPosition> moveTiles) {
-		this.moveTiles = moveTiles;
+		this.movableTiles = moveTiles;
 	}
 
 	public void setMidDashTiles(List<GridPosition> midDashTiles) {
@@ -257,8 +257,8 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	}
 
 	private void drawMovableTiles(ShapeRenderer batch) {
-		if (moveTiles != null) {
-			for (GridPosition pos : moveTiles) {
+		if (movableTiles != null) {
+			for (GridPosition pos : movableTiles) {
 				shadeSquare(batch, pos, MOVE_COLOR);
 			}
 		}

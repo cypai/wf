@@ -33,13 +33,13 @@ public class GeneralModularAI extends ModularAI {
 		super(controller, a);
 		coverCalc = new AgentCoverCalculator(getBattleMap(), getBattleConfiguration());
 		agentVisionCalc = new AgentVisionCalculator(getBattleMap(), getBattleConfiguration());
-		mapgraph = new MapGraph(getBattleMap(), getAgent().getPosition(), getAgent().getEffectiveMobility(), 1, 2);
+		mapgraph = new MapGraph(getBattleMap(), getAiAgent().getPosition(), getAiAgent().getEffectiveMobility(), 1, 2);
 		playerAgents = getAgentsInTeam(Team.PLAYER);
 	}
 
 	@Override
 	public ActionScore getBestMove() {
-		Agent a = getAgent();
+		Agent a = getAiAgent();
 		ActionScore best;
 		if (coverCalc.isFlanked(a)) {
 			best = getBestMoveAction();
@@ -53,15 +53,15 @@ public class GeneralModularAI extends ModularAI {
 	}
 
 	private Action reloadWeaponAction() {
-		if (getAgent().getCurrentWeapon() instanceof SpellWeapon) {
-			return new ReadySpellAction(getBattleController(), getAgent(), new FireballSpell());
+		if (getAiAgent().getCurrentWeapon() instanceof SpellWeapon) {
+			return new ReadySpellAction(getBattleController(), getAiAgent(), new FireballSpell());
 		} else {
-			return new ReloadAction(getBattleController(), getAgent());
+			return new ReloadAction(getBattleController(), getAiAgent());
 		}
 	}
 
 	private ActionScore getBestAttackAction() {
-		Agent a = getAgent();
+		Agent a = getAiAgent();
 		Weapon w = a.getCurrentWeapon();
 		if (agentVisionCalc.enemiesInRangeOf(a).size() == 0) {
 			if (w instanceof SpellWeapon) {
@@ -107,7 +107,7 @@ public class GeneralModularAI extends ModularAI {
 		ActionScore best = new ActionScore(null, Float.MIN_NORMAL);
 		for (GridPosition pos : potentialTiles) {
 			float score = scorePosition(pos);
-			best = best.compareAndReturnBetter(new ActionScore(new MoveAction(getBattleController(), getAgent(), mapgraph.getPath(pos), 1), score));
+			best = best.compareAndReturnBetter(new ActionScore(new MoveAction(getBattleController(), getAiAgent(), mapgraph.getPath(pos), 1), score));
 		}
 		return best;
 	}

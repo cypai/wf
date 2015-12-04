@@ -26,7 +26,7 @@ public class SuppressionAnimationHandler extends AnimationHandler implements Cam
 
 	@Override
 	public void notifyCameraMoveEnd() {
-		alarm.set(1);
+		alarm.setTime(1);
 		releaseControl();
 	}
 
@@ -40,7 +40,7 @@ public class SuppressionAnimationHandler extends AnimationHandler implements Cam
 		alarm.update();
 		if (alarm.check()) {
 			fireBullet();
-			alarm.set(30);
+			alarm.setTime(30);
 		}
 	}
 

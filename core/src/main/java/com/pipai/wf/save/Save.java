@@ -6,18 +6,18 @@ import com.pipai.wf.unit.schema.UnitSchema;
 
 public class Save {
 
-	private ArrayList<UnitSchema> partyInfo;
+	private ArrayList<UnitSchema> party;
 
 	public Save() {
-		partyInfo = new ArrayList<>();
+		party = new ArrayList<>();
 	}
 
 	public ArrayList<UnitSchema> getParty() {
-		return partyInfo;
+		return party;
 	}
 
 	public void setParty(ArrayList<UnitSchema> party) {
-		partyInfo = party;
+		this.party = party;
 	}
 
 }

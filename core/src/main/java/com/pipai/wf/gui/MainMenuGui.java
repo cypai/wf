@@ -52,7 +52,7 @@ public final class MainMenuGui extends Gui {
 
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
-		for (LeftClickable obj : leftClickables.getAll()) {
+		for (LeftClickable obj : leftClickables.getGuiObjects()) {
 			obj.onLeftClick(screenX, getScreenHeight() - screenY);
 		}
 	}
@@ -82,7 +82,7 @@ public final class MainMenuGui extends Gui {
 	@Override
 	public void render(float delta) {
 		super.render(delta);
-		for (GuiRenderable obj : renderables.getAll()) {
+		for (GuiRenderable obj : renderables.getGuiObjects()) {
 			obj.render(batch);
 		}
 		flushCreateBuffers();

@@ -34,7 +34,7 @@ public class GuiObjectBuffers<T> {
 		}
 	}
 
-	public ArrayList<T> getAll() {
+	public ArrayList<T> getGuiObjects() {
 		return guiObjects;
 	}
 

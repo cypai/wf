@@ -8,20 +8,20 @@ import com.pipai.wf.battle.agent.AgentState;
 
 public class BattleMap {
 
-	private int m, n; // Size of the map
+	private int rows, cols; // Size of the map
 	private HashMap<String, BattleMapCell> cellMap;
 	private ArrayList<Agent> agents;
 
-	public BattleMap(int m, int n) {
+	public BattleMap(int rows, int cols) {
 		agents = new ArrayList<Agent>();
-		initializeMap(m, n);
+		initializeMap(rows, cols);
 	}
 
 	public BattleMap(MapString mapString) {
 		agents = new ArrayList<Agent>();
-		m = mapString.getRows();
-		n = mapString.getCols();
-		initializeMap(m, n);
+		rows = mapString.getRows();
+		cols = mapString.getCols();
+		initializeMap(rows, cols);
 		for (GridPosition pos : mapString.getSolidPositions()) {
 			getCell(pos).setTileEnvironmentObject(new FullCoverIndestructibleObject());
 		}
@@ -31,15 +31,15 @@ public class BattleMap {
 	}
 
 	/*
-	 * Creates an empty map of size m x n
+	 * Creates an empty map
 	 */
-	private void initializeMap(int m, int n) {
-		this.m = m;
-		this.n = n;
+	private void initializeMap(int rows, int cols) {
+		this.rows = rows;
+		this.cols = cols;
 
 		cellMap = new HashMap<String, BattleMapCell>();
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
+		for (int i = 0; i < cols; i++) {
+			for (int j = 0; j < rows; j++) {
 				GridPosition cellPos = new GridPosition(i, j);
 				BattleMapCell cell = new BattleMapCell(cellPos);
 				cellMap.put(coordinatesToKey(cellPos), cell);
@@ -115,11 +115,11 @@ public class BattleMap {
 	}
 
 	public int getRows() {
-		return m;
+		return rows;
 	}
 
 	public int getCols() {
-		return n;
+		return cols;
 	}
 
 	public MapString getMapString() {

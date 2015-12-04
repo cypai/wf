@@ -4,22 +4,22 @@ import com.pipai.wf.battle.map.BattleMap;
 
 public class Battle {
 
-	private BattleMap map;
-	private BattleConfiguration battleConfig;
+	private BattleMap battleMap;
+	private BattleConfiguration battleConfiguration;
 	private BattleController battleController;
 
 	public Battle(BattleMap map, BattleConfiguration config) {
-		this.map = map;
-		battleConfig = config;
-		battleController = new BattleController(map, battleConfig);
+		this.battleMap = map;
+		battleConfiguration = config;
+		battleController = new BattleController(map, battleConfiguration);
 	}
 
 	public BattleMap getBattleMap() {
-		return map;
+		return battleMap;
 	}
 
 	public BattleConfiguration getBattleConfiguration() {
-		return battleConfig;
+		return battleConfiguration;
 	}
 
 	public BattleController getBattleController() {

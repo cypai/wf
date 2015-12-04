@@ -19,7 +19,8 @@ public abstract class Gui implements Screen, InputProcessor {
 
 	protected WFGame game;
 	protected BatchHelper batch;
-	protected int width, height;
+	private int screenWidth;
+	private int screenHeight;
 	protected ConcurrentHashMap<Integer, GuiObject> instanceIndex;
 	// Maybe add BST for rendering order??
 
@@ -32,16 +33,16 @@ public abstract class Gui implements Screen, InputProcessor {
 		batch = new BatchHelper(game.sprBatch, game.shapeBatch, game.modelBatch, game.font);
 		instanceIndex = new ConcurrentHashMap<Integer, GuiObject>();
 		heldKeys = new HashMap<Integer, Boolean>();
-		width = Gdx.graphics.getWidth();
-		height = Gdx.graphics.getHeight();
+		screenWidth = Gdx.graphics.getWidth();
+		screenHeight = Gdx.graphics.getHeight();
 	}
 
 	public int getScreenWidth() {
-		return width;
+		return screenWidth;
 	}
 
 	public int getScreenHeight() {
-		return height;
+		return screenHeight;
 	}
 
 	public void createInstance(GuiObject o) {
@@ -85,8 +86,8 @@ public abstract class Gui implements Screen, InputProcessor {
 
 	@Override
 	public void resize(int width, int height) {
-		this.width = width;
-		this.height = height;
+		screenWidth = width;
+		screenHeight = height;
 	}
 
 	@Override

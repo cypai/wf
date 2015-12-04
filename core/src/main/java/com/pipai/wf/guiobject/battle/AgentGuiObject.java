@@ -27,7 +27,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 
 	private BattleGui gui;
 	private Agent agent;
-	private boolean selected, ko;
+	private boolean selected, showingKO;
 	public float x, y;
 	public int radius;
 
@@ -48,7 +48,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 		x = xy.x;
 		y = xy.y;
 		radius = SQUARE_SIZE / 2;
-		ko = false;
+		showingKO = false;
 		Pixmap pixmap = new Pixmap(SQUARE_SIZE, SQUARE_SIZE, Pixmap.Format.RGBA8888);
 		pixmap.fill();
 		pixmap.setColor(Color.RED);
@@ -125,7 +125,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 	 * @return If displaying as KOed, not necessarily the Agent
 	 */
 	public boolean isShowingKO() {
-		return ko;
+		return showingKO;
 	}
 
 	public int getDisplayHP() {
@@ -145,7 +145,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 		}
 		if (displayHP <= 0) {
 			displayHP = 0;
-			ko = true;
+			showingKO = true;
 		}
 	}
 
@@ -207,7 +207,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 		Vector3 endpoint = new Vector3();
 		ray.getEndPoint(endpoint, t);
 		if (UtilFunctions.isInCircle(x, y, radius, endpoint.x, endpoint.y)) {
-			if (gui.getMode() == BattleGui.Mode.TARGET_SELECT && this == gui.getTarget()) {
+			if (gui.getMode() == BattleGui.Mode.TARGET_SELECT && this == gui.getTargetAgent()) {
 				gui.performAttackAction(this);
 			}
 		}

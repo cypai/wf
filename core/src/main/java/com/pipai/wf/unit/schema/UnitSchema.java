@@ -18,7 +18,7 @@ import com.pipai.wf.unit.ability.AbilityList;
 public class UnitSchema implements HasName, HasBasicStats {
 
 	private String name;
-	private BasicStats stats;
+	private BasicStats basicStats;
 
 	private AbilityList abilities;
 	private Armor armor;
@@ -29,7 +29,7 @@ public class UnitSchema implements HasName, HasBasicStats {
 	 */
 	public UnitSchema(AgentState as) {
 		name = as.getName();
-		stats = as.getBasicStats();
+		basicStats = as.getBasicStats();
 		abilities = as.getAbilities().clone();
 		armor = as.getArmor();
 		weapons = as.getWeapons();
@@ -37,7 +37,7 @@ public class UnitSchema implements HasName, HasBasicStats {
 
 	public UnitSchema(UnitSchema schema) {
 		name = schema.getName();
-		stats = schema.getBasicStats();
+		basicStats = schema.getBasicStats();
 		abilities = schema.getAbilities();
 		armor = schema.getArmor();
 		weapons = schema.weapons;
@@ -45,7 +45,7 @@ public class UnitSchema implements HasName, HasBasicStats {
 
 	public UnitSchema(String name, BasicStats stats) {
 		this.name = name;
-		this.stats = stats;
+		this.basicStats = stats;
 		abilities = new AbilityList();
 		armor = new NoArmor();
 		weapons = new ArrayList<>();
@@ -59,7 +59,7 @@ public class UnitSchema implements HasName, HasBasicStats {
 			@JsonProperty("armor") Armor armor,
 			@JsonProperty("weapons") List<Weapon> weapons) {
 		this.name = name;
-		this.stats = stats;
+		this.basicStats = stats;
 		this.abilities = abilities;
 		this.armor = armor;
 		this.weapons = new ArrayList<Weapon>(weapons);
@@ -84,7 +84,7 @@ public class UnitSchema implements HasName, HasBasicStats {
 
 	@Override
 	public BasicStats getBasicStats() {
-		return stats;
+		return basicStats;
 	}
 
 	@Override

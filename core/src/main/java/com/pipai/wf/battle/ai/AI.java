@@ -9,15 +9,15 @@ import com.pipai.wf.battle.map.BattleMap;
 public abstract class AI implements BattleObserver {
 
 	private BattleController battleController;
-	private BattleConfiguration config;
-	private BattleMap map;
+	private BattleConfiguration battleConfiguration;
+	private BattleMap battleMap;
 	private boolean done;
 
 	public AI(BattleController battleController) {
 		this.battleController = battleController;
 		this.battleController.registerObserver(this);
-		config = battleController.getBattleConfiguration();
-		map = battleController.getBattleMap();
+		battleConfiguration = battleController.getBattleConfiguration();
+		battleMap = battleController.getBattleMap();
 		done = false;
 	}
 
@@ -26,11 +26,11 @@ public abstract class AI implements BattleObserver {
 	}
 
 	public final BattleConfiguration getBattleConfiguration() {
-		return config;
+		return battleConfiguration;
 	}
 
 	public final BattleMap getBattleMap() {
-		return map;
+		return battleMap;
 	}
 
 	/**

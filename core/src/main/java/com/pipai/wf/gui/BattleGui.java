@@ -396,7 +396,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			for (LeftClickable o : overlayLeftClickables) {
 				o.onLeftClick(gameX, gameY);
 			}
-			for (LeftClickable3D o : leftClickables.getAll()) {
+			for (LeftClickable3D o : leftClickables.getGuiObjects()) {
 				o.onLeftClick(ray);
 			}
 		}
@@ -409,7 +409,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		}
 		Ray ray = rayMapper.screenToRay(screenX, screenY);
 		if (mode != Mode.ANIMATION) {
-			for (RightClickable3D o : rightClickables.getAll()) {
+			for (RightClickable3D o : rightClickables.getGuiObjects()) {
 				o.onRightClick(ray);
 			}
 		}
@@ -539,7 +539,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		}
 	}
 
-	public AgentGuiObject getTarget() {
+	public AgentGuiObject getTargetAgent() {
 		return targetAgent;
 	}
 
@@ -675,7 +675,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			agentStatusWindow.setVisible(true);
 			break;
 		case Keys.BACKSLASH:
-			terrainRenderer.setIsRenderingTextures(!terrainRenderer.getIsRenderingTextures());
+			terrainRenderer.setRenderingTextures(!terrainRenderer.isRenderingTextures());
 			break;
 		default:
 			break;

@@ -10,37 +10,37 @@ import com.pipai.wf.battle.map.BattleMap;
 
 public abstract class ModularAI {
 
-	private BattleController controller;
-	private BattleMap map;
+	private BattleController battleController;
+	private BattleMap battleMap;
 	private Agent aiAgent;
 
 	public ModularAI(BattleController controller, Agent a) {
-		this.controller = controller;
-		map = controller.getBattleMap();
+		this.battleController = controller;
+		battleMap = controller.getBattleMap();
 		aiAgent = a;
 	}
 
 	public abstract ActionScore getBestMove();
 
-	public Agent getAgent() {
+	public Agent getAiAgent() {
 		return aiAgent;
 	}
 
 	public BattleMap getBattleMap() {
-		return map;
+		return battleMap;
 	}
 
 	public BattleController getBattleController() {
-		return controller;
+		return battleController;
 	}
 
 	public BattleConfiguration getBattleConfiguration() {
-		return controller.getBattleConfiguration();
+		return battleController.getBattleConfiguration();
 	}
 
 	public ArrayList<Agent> getAgentsInTeam(Team t) {
 		ArrayList<Agent> l = new ArrayList<>();
-		for (Agent a : map.getAgents()) {
+		for (Agent a : battleMap.getAgents()) {
 			if (a.getTeam() == t) {
 				l.add(a);
 			}

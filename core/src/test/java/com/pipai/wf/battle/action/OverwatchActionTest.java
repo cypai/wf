@@ -117,7 +117,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 		Assert.assertEquals(BattleEvent.Type.OVERWATCH_ACTIVATION, owEv.getType());
 		Assert.assertEquals(player, owEv.getPerformer());
 		Assert.assertEquals(enemy, owEv.getTarget());
-		Assert.assertTrue(owEv.getActivatedOWAction() instanceof RangedWeaponAttackAction);
+		Assert.assertTrue(owEv.getActivatedOverwatchAction() instanceof RangedWeaponAttackAction);
 		Assert.assertEquals(0, owEv.getChainEvents().size());
 		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
 		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv.getDamage());
@@ -173,12 +173,12 @@ public class OverwatchActionTest extends GdxMockedTest {
 		BattleEvent owEv1 = chain.pollFirst();
 		Assert.assertEquals(BattleEvent.Type.OVERWATCH_ACTIVATION, owEv1.getType());
 		Assert.assertEquals(enemy, owEv1.getTarget());
-		Assert.assertTrue(owEv1.getActivatedOWAction() instanceof RangedWeaponAttackAction);
+		Assert.assertTrue(owEv1.getActivatedOverwatchAction() instanceof RangedWeaponAttackAction);
 		Assert.assertEquals(0, owEv1.getChainEvents().size());
 		BattleEvent owEv2 = chain.pollFirst();
 		Assert.assertEquals(BattleEvent.Type.OVERWATCH_ACTIVATION, owEv2.getType());
 		Assert.assertEquals(enemy, owEv2.getTarget());
-		Assert.assertTrue(owEv2.getActivatedOWAction() instanceof RangedWeaponAttackAction);
+		Assert.assertTrue(owEv2.getActivatedOverwatchAction() instanceof RangedWeaponAttackAction);
 		Assert.assertEquals(0, owEv2.getChainEvents().size());
 		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
 		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv1.getDamage() - owEv2.getDamage());

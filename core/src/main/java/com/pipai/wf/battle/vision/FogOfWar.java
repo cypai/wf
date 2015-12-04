@@ -23,7 +23,7 @@ public final class FogOfWar {
 	public static final Color SEEN_COLOR = Color.GRAY;
 	public static final Color VISIBLE_COLOR = Color.WHITE;
 
-	private Texture visibilityTexture;
+	private Texture fogOfWarStateTexture;
 	private Pixmap visibilityPixmap;
 	private BattleMap map;
 	private HashSet<GridPosition> visibleTiles;
@@ -48,8 +48,8 @@ public final class FogOfWar {
 		fullScan();
 	}
 
-	public Texture getFogOfWarTexture() {
-		return visibilityTexture;
+	public Texture getFogOfWarStateTexture() {
+		return fogOfWarStateTexture;
 	}
 
 	public Set<GridPosition> visibleTiles() {
@@ -70,8 +70,8 @@ public final class FogOfWar {
 
 	public void fullScan() {
 		visibleTiles.clear();
-		if (visibilityTexture != null) {
-			visibilityTexture.dispose();
+		if (fogOfWarStateTexture != null) {
+			fogOfWarStateTexture.dispose();
 		}
 		visibilityPixmap.setColor(NEVER_SEEN_COLOR);
 		visibilityPixmap.fill();
@@ -82,7 +82,7 @@ public final class FogOfWar {
 			visibilityPixmap.fillCircle(pos.x, pos.y, config.sightRange());
 			// spiralPathScan(a);
 		}
-		visibilityTexture = new Texture(visibilityPixmap);
+		fogOfWarStateTexture = new Texture(visibilityPixmap);
 	}
 
 	public void update(AgentGuiObject changedAgent) {

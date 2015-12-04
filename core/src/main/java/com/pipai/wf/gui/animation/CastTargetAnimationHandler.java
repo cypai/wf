@@ -43,7 +43,7 @@ public class CastTargetAnimationHandler extends AnimationHandler implements Came
 
 	@Override
 	public void notifyOfDestroyEvent(GuiObject obj) {
-		alarm.set(60);
+		alarm.setTime(60);
 		TemporaryText dmgTxt;
 		if (outcome.isHit()) {
 			dmgTxt = new TemporaryText(getGui(), target.getPosition(), (outcome.isCrit() ? "/!\\ " : "Hit: ") + String.valueOf(outcome.getDamage()));

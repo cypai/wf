@@ -106,6 +106,10 @@ public class MapGraph {
 		return Integer.MAX_VALUE;
 	}
 
+	public int apRequiredToMoveTo(GridPosition destination) {
+		return getNode(destination).getAPNeeded();
+	}
+
 	private void runDijkstra(float maxMove, int ap, int apMax) {
 		PriorityQueue<Node> pqueue = new PriorityQueue<>((int) (maxMove * maxMove), new NodeComparator());
 		Node current = root;
@@ -176,10 +180,6 @@ public class MapGraph {
 		return root.getPosition();
 	}
 
-	public int apRequiredToMoveTo(GridPosition destination) {
-		return getNode(destination).getAPNeeded();
-	}
-
 	public int getAP() {
 		return ap;
 	}
@@ -207,7 +207,7 @@ public class MapGraph {
 	}
 
 	private class Node {
-		private GridPosition pos;
+		private GridPosition position;
 		private ArrayList<Edge> edges;
 		private boolean added, visited;
 		private float totalCost;
@@ -215,13 +215,13 @@ public class MapGraph {
 		private int apNeeded;
 
 		Node(GridPosition pos) {
-			this.pos = pos;
+			position = pos;
 			edges = new ArrayList<Edge>();
 			apNeeded = Integer.MAX_VALUE;
 		}
 
 		public void addEdge(Node node) {
-			edges.add(new Edge(node, (float) pos.distance(node.pos)));
+			edges.add(new Edge(node, (float) position.distance(node.position)));
 		}
 
 		public boolean isVisited() {
@@ -258,7 +258,7 @@ public class MapGraph {
 		}
 
 		public GridPosition getPosition() {
-			return pos;
+			return position;
 		}
 
 		public void setAPNeeded(int ap) {
@@ -275,7 +275,7 @@ public class MapGraph {
 
 		@Override
 		public String toString() {
-			String s = "Node: " + pos + " Edges [ ";
+			String s = "Node: " + position + " Edges [ ";
 			for (Edge edge : edges) {
 				Node node = edge.getDestination();
 				s += "{" + node.getPosition() + " " + String.valueOf(node.isVisited()) + " " + String.valueOf(node.isAdded()) + "} ";

@@ -136,7 +136,7 @@ public class CastFireballTest extends GdxMockedTest {
 		Assert.assertEquals(BattleEvent.Type.OVERWATCH_ACTIVATION, owEv.getType());
 		Assert.assertEquals(player, owEv.getPerformer());
 		Assert.assertEquals(enemy, owEv.getTarget());
-		Assert.assertTrue(owEv.getActivatedOWAction() instanceof TargetedSpellWeaponAction);
+		Assert.assertTrue(owEv.getActivatedOverwatchAction() instanceof TargetedSpellWeaponAction);
 		Assert.assertEquals(0, owEv.getChainEvents().size());
 		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
 		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv.getDamage());

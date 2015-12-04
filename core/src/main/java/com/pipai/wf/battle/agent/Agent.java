@@ -27,33 +27,33 @@ public class Agent implements HasName, HasBasicStats {
 	};
 
 	private Team team;
-	private BasicStats stats;
+	private BasicStats basicStats;
 	private String name;
 	private State state;
 	private ArrayList<Weapon> weapons;
 	private int weaponIndex;
 	private Armor armor;
 	private GridPosition position;
-	private OverwatchActivatedActionSchema owAction;
-	private AbilityList abilities;
-	private StatusEffectList seList;
+	private OverwatchActivatedActionSchema overwatchAction;
+	private AbilityList innateAbilities;
+	private StatusEffectList statusEffects;
 
 	public Agent(AgentState state) {
 		team = state.getTeam();
 		position = state.getPosition();
-		stats = state.getBasicStats().clone();
+		basicStats = state.getBasicStats().clone();
 		weapons = state.getWeapons();
 		weaponIndex = 0;
 		armor = state.getArmor();
-		abilities = state.getAbilities().clone();
-		abilities.registerToAgent(this);
+		innateAbilities = state.getAbilities().clone();
+		innateAbilities.registerToAgent(this);
 		name = state.getName();
-		seList = new StatusEffectList();
+		statusEffects = new StatusEffectList();
 	}
 
 	@Override
 	public BasicStats getBasicStats() {
-		return stats;
+		return basicStats;
 	}
 
 	public Team getTeam() {
@@ -65,23 +65,23 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public void setAP(int ap) {
-		stats.setAP(ap);
+		basicStats.setAP(ap);
 	}
 
 	public void useAP(int ap) {
 		int temp = getAP() - ap;
 		temp = temp < 0 ? 0 : temp;
-		stats.setAP(temp);
+		basicStats.setAP(temp);
 	}
 
 	public void setHP(int hp) {
 		if (hp <= 0) {
-			stats.setHP(0);
+			basicStats.setHP(0);
 			state = State.KO;
-		} else if (hp > stats.getMaxHP()) {
-			stats.setMaxHP(stats.getMaxHP());
+		} else if (hp > basicStats.getMaxHP()) {
+			basicStats.setMaxHP(basicStats.getMaxHP());
 		} else {
-			stats.setHP(hp);
+			basicStats.setHP(hp);
 		}
 	}
 
@@ -95,15 +95,15 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public void setMP(int mp) {
-		stats.setMP(mp);
+		basicStats.setMP(mp);
 	}
 
 	public void useMP(int mp) {
-		stats.setMP(stats.getMP() - mp);
+		basicStats.setMP(basicStats.getMP() - mp);
 	}
 
 	public int getEffectiveMobility() {
-		return getMobility() + seList.totalMobilityModifier();
+		return getMobility() + statusEffects.totalMobilityModifier();
 	}
 
 	public Weapon getCurrentWeapon() {
@@ -126,13 +126,13 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public AbilityList getAbilities() {
-		AbilityList allAbilities = abilities.clone();
+		AbilityList allAbilities = innateAbilities.clone();
 		allAbilities.add(getWeaponGrantedAbilities());
 		return allAbilities;
 	}
 
 	public AbilityList getInnateAbilities() {
-		return abilities;
+		return innateAbilities;
 	}
 
 	public AbilityList getWeaponGrantedAbilities() {
@@ -143,7 +143,7 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public Ability getAbility(Class<? extends Ability> abilityClass) {
-		for (Ability a : abilities) {
+		for (Ability a : innateAbilities) {
 			if (abilityClass.isInstance(a)) {
 				return a;
 			}
@@ -168,7 +168,7 @@ public class Agent implements HasName, HasBasicStats {
 
 	public ArrayList<Spell> getSpellList() {
 		ArrayList<Spell> l = new ArrayList<>();
-		for (Ability a : abilities) {
+		for (Ability a : innateAbilities) {
 			if (a.grantsSpell()) {
 				l.add(a.grantedSpell());
 			}
@@ -177,11 +177,11 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public void inflictStatus(StatusEffect se) {
-		seList.add(se);
+		statusEffects.add(se);
 	}
 
 	public StatusEffectList getStatusEffects() {
-		return seList;
+		return statusEffects;
 	}
 
 	public GridPosition getPosition() {
@@ -201,7 +201,7 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public void onTurnBegin() {
-		stats.setAP(stats.getMaxAP());
+		basicStats.setAP(basicStats.getMaxAP());
 		if (!isKO()) {
 			state = State.NEUTRAL;
 		}
@@ -213,15 +213,15 @@ public class Agent implements HasName, HasBasicStats {
 
 	public void onRoundEnd() {
 		try {
-			abilities.onRoundEnd();
+			innateAbilities.onRoundEnd();
 		} catch (NoRegisteredAgentException e) {
 			throw new IllegalStateException(e);
 		}
-		seList.onRoundEnd();
+		statusEffects.onRoundEnd();
 	}
 
 	public void onAction(Action action) {
-		seList.onAction(action);
+		statusEffects.onAction(action);
 	}
 
 	public void decrementCooldowns() {
@@ -246,17 +246,17 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public void setOverwatch(OverwatchActivatedActionSchema owAction) {
-		this.owAction = owAction;
+		this.overwatchAction = owAction;
 		state = State.OVERWATCH;
 		setAP(0);
 	}
 
 	public OverwatchActivatedActionSchema getOverwatchAction() {
-		return owAction;
+		return overwatchAction;
 	}
 
 	public void clearOverwatch() {
-		owAction = null;
+		overwatchAction = null;
 		state = State.NEUTRAL;
 	}
 

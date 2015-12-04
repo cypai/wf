@@ -2,23 +2,27 @@ package com.pipai.wf.util;
 
 public class Alarm {
 
-	protected int t;
+	private int time;
 
 	public Alarm() {
-		t = -1;
+		time = -1;
 	}
 
-	public void set(int t) {
-		this.t = t;
+	public void setTime(int t) {
+		time = t;
+	}
+
+	public int getTime() {
+		return time;
 	}
 
 	public boolean check() {
-		return t == 0;
+		return time == 0;
 	}
 
 	public void update() {
-		if (t >= 0) {
-			t -= 1;
+		if (time >= 0) {
+			time -= 1;
 		}
 	}
 

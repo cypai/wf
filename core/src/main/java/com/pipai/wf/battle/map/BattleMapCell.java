@@ -7,7 +7,7 @@ import com.pipai.wf.battle.agent.Agent;
 
 public class BattleMapCell {
 
-	private EnvironmentObject tileObject;
+	private EnvironmentObject tileEnvironmentObject;
 	private EnumMap<Direction, EnvironmentObject> walls;
 	private EnumMap<Direction, BattleMapCell> neighbors;
 	private ArrayList<Agent> inactiveAgents;
@@ -15,7 +15,7 @@ public class BattleMapCell {
 	private GridPosition position;
 
 	public BattleMapCell(GridPosition pos) {
-		tileObject = null;
+		tileEnvironmentObject = null;
 		walls = new EnumMap<Direction, EnvironmentObject>(Direction.class);
 		neighbors = new EnumMap<Direction, BattleMapCell>(Direction.class);
 		position = pos;
@@ -35,7 +35,7 @@ public class BattleMapCell {
 	}
 
 	public void setTileEnvironmentObject(EnvironmentObject obj) {
-		tileObject = obj;
+		tileEnvironmentObject = obj;
 	}
 
 	public void setAgent(Agent agent) {
@@ -60,22 +60,22 @@ public class BattleMapCell {
 	}
 
 	public boolean isEmpty() {
-		if (tileObject != null || agent != null) {
+		if (tileEnvironmentObject != null || agent != null) {
 			return false;
 		}
 		return true;
 	}
 
 	public boolean hasTileSightBlocker() {
-		if (tileObject != null) {
-			return tileObject.getCoverType() == CoverType.FULL;
+		if (tileEnvironmentObject != null) {
+			return tileEnvironmentObject.getCoverType() == CoverType.FULL;
 		} else {
 			return false;
 		}
 	}
 
 	public EnvironmentObject getTileEnvironmentObject() {
-		return tileObject;
+		return tileEnvironmentObject;
 	}
 
 	public boolean hasWall(Direction dir) {

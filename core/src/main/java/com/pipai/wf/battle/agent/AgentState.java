@@ -17,7 +17,7 @@ import com.pipai.wf.unit.ability.AbilityList;
 public class AgentState implements HasBasicStats, HasName {
 
 	private Team team;
-	private BasicStats stats;
+	private BasicStats basicStats;
 	private GridPosition position;
 	private State state;
 	private AbilityList abilities;
@@ -27,7 +27,7 @@ public class AgentState implements HasBasicStats, HasName {
 
 	public AgentState(String name, BasicStats stats) {
 		this.name = name;
-		this.stats = stats;
+		this.basicStats = stats;
 		abilities = new AbilityList();
 		weapons = new ArrayList<Weapon>();
 		armor = new NoArmor();
@@ -35,7 +35,7 @@ public class AgentState implements HasBasicStats, HasName {
 
 	public AgentState(Agent agent) {
 		team = agent.getTeam();
-		stats = agent.getBasicStats();
+		basicStats = agent.getBasicStats();
 		position = agent.getPosition();
 		state = agent.getState();
 		abilities = agent.getAbilities();
@@ -86,7 +86,7 @@ public class AgentState implements HasBasicStats, HasName {
 
 	@Override
 	public BasicStats getBasicStats() {
-		return stats;
+		return basicStats;
 	}
 
 	public ArrayList<Weapon> getWeapons() {

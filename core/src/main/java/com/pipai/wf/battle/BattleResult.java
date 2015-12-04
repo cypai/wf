@@ -10,13 +10,13 @@ import com.pipai.wf.unit.schema.UnitSchema;
 public final class BattleResult {
 
 	private Result result;
-	private ArrayList<UnitSchema> party;
+	private ArrayList<UnitSchema> partyState;
 
 	public BattleResult(Result result, List<Agent> partyAgents) {
 		this.result = result;
-		party = new ArrayList<>();
+		partyState = new ArrayList<>();
 		for (Agent a : partyAgents) {
-			party.add(new UnitSchema(new AgentState(a)));
+			partyState.add(new UnitSchema(new AgentState(a)));
 		}
 	}
 
@@ -25,7 +25,7 @@ public final class BattleResult {
 	}
 
 	public List<UnitSchema> getPartyState() {
-		return party;
+		return partyState;
 	}
 
 	public enum Result {

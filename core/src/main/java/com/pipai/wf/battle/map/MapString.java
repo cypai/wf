@@ -17,30 +17,30 @@ public class MapString {
 
 	private String header;
 	private String map;
-	private int m, n;
-	private ArrayList<GridPosition> solidPosList;
-	private ArrayList<AgentState> agentStateList;
+	private int rows, cols;
+	private ArrayList<GridPosition> solidPositions;
+	private ArrayList<AgentState> agentStates;
 
 	public MapString(String mapString) throws BadStateStringException {
 		header = mapString.substring(0, mapString.indexOf("\n"));
 		map = mapString.substring(mapString.indexOf("\n") + 1);
 		String dimensions[] = header.split(" ");
-		m = Integer.parseInt(dimensions[0]);
-		n = Integer.parseInt(dimensions[1]);
+		rows = Integer.parseInt(dimensions[0]);
+		cols = Integer.parseInt(dimensions[1]);
 		parse();
 	}
 
 	public MapString(int m, int n, String mapOnlyString) throws BadStateStringException {
 		header = Integer.toString(m) + " " + Integer.toString(n);
 		map = mapOnlyString;
-		this.m = m;
-		this.n = n;
+		this.rows = m;
+		this.cols = n;
 		parse();
 	}
 
 	public MapString(BattleMap map) {
-		m = map.getRows();
-		n = map.getCols();
+		rows = map.getRows();
+		cols = map.getCols();
 		header = Integer.toString(map.getRows()) + " " + Integer.toString(map.getCols());
 		this.map = "";
 		for (int x = 0; x < map.getCols(); x++) {
@@ -56,14 +56,14 @@ public class MapString {
 	}
 
 	private void parse() throws BadStateStringException {
-		solidPosList = new ArrayList<GridPosition>();
-		agentStateList = new ArrayList<AgentState>();
+		solidPositions = new ArrayList<GridPosition>();
+		agentStates = new ArrayList<AgentState>();
 		String lines[] = map.split("\n");
 		for (String line : lines) {
 			String params[] = line.split(" ");
 			String type = params[0];
 			if ("s".equals(type)) {
-				solidPosList.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
+				solidPositions.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));
 			} else {
 				throw new BadStateStringException("Unknown line type");
 			}
@@ -71,19 +71,19 @@ public class MapString {
 	}
 
 	public int getRows() {
-		return m;
+		return rows;
 	}
 
 	public int getCols() {
-		return n;
+		return cols;
 	}
 
 	public ArrayList<GridPosition> getSolidPositions() {
-		return solidPosList;
+		return solidPositions;
 	}
 
 	public ArrayList<AgentState> getAgentStates() {
-		return agentStateList;
+		return agentStates;
 	}
 
 	@Override

@@ -15,37 +15,37 @@ import com.pipai.wf.misc.HasName;
 
 public abstract class Action implements HasName, HasDescription {
 
-	private BattleController controller;
+	private BattleController battleController;
 	private BattleLog log;
-	private Agent performerAgent;
-	private BattleMap map;
+	private Agent performer;
+	private BattleMap battleMap;
 	private DamageDealer damageDealer;
 
 	public Action(BattleController controller, Agent performerAgent) {
-		this.performerAgent = performerAgent;
-		this.controller = controller;
+		performer = performerAgent;
+		this.battleController = controller;
 		if (controller != null) {
 			// TODO: Fix this hack for NullPointerException calling this constructor during OverwatchHelper.getName()
 			log = controller.getLog();
-			map = controller.getBattleMap();
-			damageDealer = new DamageDealer(map);
+			battleMap = controller.getBattleMap();
+			damageDealer = new DamageDealer(battleMap);
 		}
 	}
 
 	public final Agent getPerformer() {
-		return performerAgent;
+		return performer;
 	}
 
 	public final BattleController getBattleController() {
-		return controller;
+		return battleController;
 	}
 
 	public final BattleMap getBattleMap() {
-		return map;
+		return battleMap;
 	}
 
 	public final BattleConfiguration getBattleConfiguration() {
-		return controller.getBattleConfiguration();
+		return battleController.getBattleConfiguration();
 	}
 
 	public final TargetedActionCalculator getTargetedActionCalculator() {
@@ -61,15 +61,15 @@ public abstract class Action implements HasName, HasDescription {
 	}
 
 	public final void perform() throws IllegalActionException {
-		if (performerAgent.getAP() < getAPRequired()) {
+		if (performer.getAP() < getAPRequired()) {
 			throw new IllegalActionException("Not enough AP for action");
 		}
-		if (performerAgent.isKO()) {
+		if (performer.isKO()) {
 			throw new IllegalActionException("KOed unit cannot act");
 		}
 		performImpl();
-		controller.performPostActionNotifications();
-		performerAgent.onAction(this);
+		battleController.performPostActionNotifications();
+		performer.onAction(this);
 	}
 
 	protected abstract void performImpl() throws IllegalActionException;

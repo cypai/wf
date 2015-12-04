@@ -13,23 +13,23 @@ import com.pipai.wf.battle.map.BattleMap;
 
 public class BattleController {
 
-	private BattleMap map;
+	private BattleMap battleMap;
 	private BattleLog log;
 	private Team currentTeam;
 	private LinkedList<BattleObserver> observerList;
 	private LinkedList<Agent> playerList, enemyList;
-	private BattleConfiguration config;
+	private BattleConfiguration battleConfiguration;
 
 	public BattleController(BattleMap map, BattleConfiguration config) {
 		log = new BattleLog();
-		this.map = map;
+		this.battleMap = map;
 		currentTeam = Team.PLAYER;
 		observerList = new LinkedList<BattleObserver>();
 		playerList = new LinkedList<Agent>();
 		enemyList = new LinkedList<Agent>();
-		this.config = config;
+		this.battleConfiguration = config;
 
-		for (Agent a : this.map.getAgents()) {
+		for (Agent a : this.battleMap.getAgents()) {
 			if (a.getTeam() == Team.PLAYER) {
 				playerList.add(a);
 			} else {
@@ -39,11 +39,11 @@ public class BattleController {
 	}
 
 	public BattleConfiguration getBattleConfiguration() {
-		return config;
+		return battleConfiguration;
 	}
 
 	public BattleMap getBattleMap() {
-		return map;
+		return battleMap;
 	}
 
 	public Team getCurrentTeam() {
@@ -75,7 +75,7 @@ public class BattleController {
 			for (Agent a : enemyList) {
 				a.onTurnEnd();
 			}
-			for (Agent a : map.getAgents()) {
+			for (Agent a : battleMap.getAgents()) {
 				a.onRoundEnd();
 			}
 			// Start Player turn
