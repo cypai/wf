@@ -36,7 +36,7 @@ public class OverwatchAnimationHandler extends AnimationHandler implements Camer
 
 	private void performAnimation() {
 		String owText = "Overwatch";
-		owText += (ev.getPreparedOWName().equals("Attack") ? "" : ": " + ev.getPreparedOWName());
+		owText += ev.getPreparedOWName().equals("Attack") ? "" : ": " + ev.getPreparedOWName();
 		TemporaryText ttext = new TemporaryText(getGui(), performer.getPosition(), owText);
 		getGui().createInstance(ttext);
 		finish();

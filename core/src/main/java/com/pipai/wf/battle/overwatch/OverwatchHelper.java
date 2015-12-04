@@ -21,7 +21,7 @@ public class OverwatchHelper {
 	public static TargetedWithAccuracyActionOWCapable generateAction(OverwatchActivatedActionSchema schema, BattleController controller, Agent performer, Agent target) {
 		TargetedWithAccuracyActionOWCapable action;
 		try {
-			action = (schema.getActionClass().getDeclaredConstructor(BattleController.class, Agent.class, Agent.class).newInstance(controller, performer, target));
+			action = schema.getActionClass().getDeclaredConstructor(BattleController.class, Agent.class, Agent.class).newInstance(controller, performer, target);
 			return action;
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new IllegalArgumentException("Could not generate the overwatch activation action for class: " + schema.getActionClass(), e);

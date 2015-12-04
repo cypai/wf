@@ -95,8 +95,8 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 			int time = 6;
 			if (t <= time) {
 				float alpha = (float) t / (float) time;
-				agent.x = start.x * (1 - alpha) + dest.x * (alpha);
-				agent.y = start.y * (1 - alpha) + dest.y * (alpha);
+				agent.x = start.x * (1 - alpha) + dest.x * alpha;
+				agent.y = start.y * (1 - alpha) + dest.y * alpha;
 			}
 			if (t > time) {
 				currentOWChain = getOWActivationEvents();

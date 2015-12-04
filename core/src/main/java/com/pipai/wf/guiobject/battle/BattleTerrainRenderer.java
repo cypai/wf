@@ -158,7 +158,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 			fogOfWarShader.begin();
 			fogOfWarShader.setUniformMatrix(u_projViewTrans, gui.getCamera().getProjectionMatrix());
 			fogOfWarShader.setUniformMatrix(u_worldTrans, new Matrix4());
-			DirectionalLightsAttribute envlights = ((DirectionalLightsAttribute) environment.get(DirectionalLightsAttribute.Type));
+			DirectionalLightsAttribute envlights = (DirectionalLightsAttribute) environment.get(DirectionalLightsAttribute.Type);
 			fogOfWarShader.setUniformf(u_lightColor, envlights.lights.first().color);
 			grassTexture.bind(0);
 			fogOfWarShader.setUniformi(u_texture, 0);
@@ -210,7 +210,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	}
 
 	public void setMovableTiles(List<GridPosition> moveTiles) {
-		this.movableTiles = moveTiles;
+		movableTiles = moveTiles;
 	}
 
 	public void setMidDashTiles(List<GridPosition> midDashTiles) {
