@@ -122,15 +122,6 @@ public class LineOfSightCalculator {
 
 	protected static class Supercover {
 
-		public class CornerPair {
-			public GridPosition a, b;
-
-			CornerPair(GridPosition a, GridPosition b) {
-				this.a = a;
-				this.b = b;
-			}
-		}
-
 		public ArrayList<GridPosition> supercover;
 		public ArrayList<CornerPair> corners;
 
@@ -149,6 +140,15 @@ public class LineOfSightCalculator {
 
 		public void addCornerPair(GridPosition a, GridPosition b) {
 			corners.add(new CornerPair(a, b));
+		}
+
+		public class CornerPair {
+			public GridPosition a, b;
+
+			CornerPair(GridPosition a, GridPosition b) {
+				this.a = a;
+				this.b = b;
+			}
 		}
 
 	}

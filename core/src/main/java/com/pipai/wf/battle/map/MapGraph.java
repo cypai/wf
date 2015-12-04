@@ -24,115 +24,6 @@ public class MapGraph {
 	private boolean DEBUG;
 	private int ap, apmax;
 
-	private class Edge {
-		private Node destination;
-		private float cost;
-
-		Edge(Node destination, float cost) {
-			this.destination = destination;
-			this.cost = cost;
-		}
-
-		public Node getDestination() {
-			return destination;
-		}
-
-		public float cost() {
-			return cost;
-		}
-	}
-
-	private class Node {
-		private GridPosition pos;
-		private ArrayList<Edge> edges;
-		private boolean added, visited;
-		private float totalCost;
-		private Node path;
-		private int apNeeded;
-
-		Node(GridPosition pos) {
-			this.pos = pos;
-			edges = new ArrayList<Edge>();
-			apNeeded = Integer.MAX_VALUE;
-		}
-
-		public void addEdge(Node node) {
-			edges.add(new Edge(node, (float) pos.distance(node.pos)));
-		}
-
-		public boolean isVisited() {
-			return visited;
-		}
-
-		public void visit() {
-			visited = true;
-		}
-
-		public boolean isAdded() {
-			return added;
-		}
-
-		public void setAdded() {
-			added = true;
-		}
-
-		public float getTotalCost() {
-			return totalCost;
-		}
-
-		public void setTotalCost(float totalCost) {
-			this.totalCost = totalCost;
-		}
-
-		// public int getCost() { return this.cost; }
-		public void setPath(Node from) {
-			path = from;
-		}
-
-		public Node getPath() {
-			return path;
-		}
-
-		public GridPosition getPosition() {
-			return pos;
-		}
-
-		public void setAPNeeded(int ap) {
-			apNeeded = ap;
-		}
-
-		public int getAPNeeded() {
-			return apNeeded;
-		}
-
-		public ArrayList<Edge> getEdges() {
-			return edges;
-		}
-
-		@Override
-		public String toString() {
-			String s = "Node: " + pos + " Edges [ ";
-			for (Edge edge : edges) {
-				Node node = edge.getDestination();
-				s += "{" + node.getPosition() + " " + String.valueOf(node.isVisited()) + " " + String.valueOf(node.isAdded()) + "} ";
-			}
-			s += "]";
-			return s;
-		}
-	}
-
-	private class NodeComparator implements Comparator<Node> {
-		@Override
-		public int compare(Node x, Node y) {
-			if (x.totalCost > y.totalCost) {
-				return 1;
-			} else if (x.totalCost < y.totalCost) {
-				return -1;
-			}
-			return 0;
-		}
-	}
-
 	public MapGraph(BattleMap map, GridPosition start, int mobility, int ap, int apMax) {
 		this(map, start, mobility, ap, apMax, false);
 	}
@@ -295,6 +186,115 @@ public class MapGraph {
 
 	public int getAPMax() {
 		return apmax;
+	}
+
+	private class Edge {
+		private Node destination;
+		private float cost;
+
+		Edge(Node destination, float cost) {
+			this.destination = destination;
+			this.cost = cost;
+		}
+
+		public Node getDestination() {
+			return destination;
+		}
+
+		public float cost() {
+			return cost;
+		}
+	}
+
+	private class Node {
+		private GridPosition pos;
+		private ArrayList<Edge> edges;
+		private boolean added, visited;
+		private float totalCost;
+		private Node path;
+		private int apNeeded;
+
+		Node(GridPosition pos) {
+			this.pos = pos;
+			edges = new ArrayList<Edge>();
+			apNeeded = Integer.MAX_VALUE;
+		}
+
+		public void addEdge(Node node) {
+			edges.add(new Edge(node, (float) pos.distance(node.pos)));
+		}
+
+		public boolean isVisited() {
+			return visited;
+		}
+
+		public void visit() {
+			visited = true;
+		}
+
+		public boolean isAdded() {
+			return added;
+		}
+
+		public void setAdded() {
+			added = true;
+		}
+
+		public float getTotalCost() {
+			return totalCost;
+		}
+
+		public void setTotalCost(float totalCost) {
+			this.totalCost = totalCost;
+		}
+
+		// public int getCost() { return this.cost; }
+		public void setPath(Node from) {
+			path = from;
+		}
+
+		public Node getPath() {
+			return path;
+		}
+
+		public GridPosition getPosition() {
+			return pos;
+		}
+
+		public void setAPNeeded(int ap) {
+			apNeeded = ap;
+		}
+
+		public int getAPNeeded() {
+			return apNeeded;
+		}
+
+		public ArrayList<Edge> getEdges() {
+			return edges;
+		}
+
+		@Override
+		public String toString() {
+			String s = "Node: " + pos + " Edges [ ";
+			for (Edge edge : edges) {
+				Node node = edge.getDestination();
+				s += "{" + node.getPosition() + " " + String.valueOf(node.isVisited()) + " " + String.valueOf(node.isAdded()) + "} ";
+			}
+			s += "]";
+			return s;
+		}
+	}
+
+	private class NodeComparator implements Comparator<Node> {
+		@Override
+		public int compare(Node x, Node y) {
+			if (x.totalCost > y.totalCost) {
+				return 1;
+			} else if (x.totalCost < y.totalCost) {
+				return -1;
+			}
+			return 0;
+		}
 	}
 
 }

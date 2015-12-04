@@ -161,6 +161,11 @@ public class AbilityList implements Iterable<Ability> {
 		return abilityList.size();
 	}
 
+	@Override
+	public Iterator<Ability> iterator() {
+		return new AbilityListIterator(abilityList);
+	}
+
 	public static class AbilityListIterator implements Iterator<Ability> {
 
 		Iterator<Ability> it;
@@ -184,11 +189,6 @@ public class AbilityList implements Iterable<Ability> {
 			throw new UnsupportedOperationException();
 		}
 
-	}
-
-	@Override
-	public Iterator<Ability> iterator() {
-		return new AbilityListIterator(abilityList);
 	}
 
 }
