@@ -11,6 +11,7 @@
 <module name="Checker">
   <property name="severity" value="warning"/>
   <module name="TreeWalker">
+    <module name="FileContentsHolder"/>
     <module name="MissingOverride"/>
     <module name="ConstantName">
       <property name="severity" value="ignore"/>
@@ -151,4 +152,7 @@
     <property name="message" value="Cannot use System.out.print"/>
   </module>
   <module name="NewlineAtEndOfFile"/>
+  <module name="SuppressWithNearbyCommentFilter">
+    <property name="influenceFormat" value="1"/>
+  </module>
 </module>

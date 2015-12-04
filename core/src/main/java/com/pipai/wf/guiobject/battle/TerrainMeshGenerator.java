@@ -26,6 +26,7 @@ public class TerrainMeshGenerator {
 
 		int index = 0;
 		for (int y = 0; y < rows; y++) {
+			// SUPPRESS CHECKSTYLE ChildBlockLength Splitting this will not enhance readability
 			for (int x = 0; x < cols; x++) {
 				float fx = x;
 				float fy = y;
