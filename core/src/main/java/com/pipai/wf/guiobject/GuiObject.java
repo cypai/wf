@@ -6,7 +6,7 @@ import com.pipai.wf.gui.Gui;
 
 public abstract class GuiObject {
 
-	private static int nextID = 0;
+	private static int nextID;
 
 	protected Gui gui;
 	protected int id;

@@ -110,7 +110,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	private ArrayList<LeftClickable> overlayLeftClickables;
 	private Mode mode;
 	private boolean aiTurn;
-	private int aiMoveWait = 0;
+	private int aiMoveWait;
 	private AI ai;
 	private BattleTerrainRenderer terrainRenderer;
 	private ActionToolTip tooltip;

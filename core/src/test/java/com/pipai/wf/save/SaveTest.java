@@ -15,7 +15,7 @@ import com.pipai.wf.unit.schema.UnitSchema;
 
 public class SaveTest extends GdxMockedTest {
 
-	private static int SAVE_SLOT = 0;
+	private static int SAVE_SLOT;
 	private static SaveManager MANAGER = new SaveManager();
 
 	@After
