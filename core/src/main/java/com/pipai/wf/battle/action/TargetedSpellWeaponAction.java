@@ -1,5 +1,8 @@
 package com.pipai.wf.battle.action;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
@@ -13,6 +16,8 @@ import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.UtilFunctions;
 
 public class TargetedSpellWeaponAction extends OverwatchableTargetedAction {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(TargetedSpellWeaponAction.class);
 
 	private final Spell spell;
 
@@ -66,12 +71,14 @@ public class TargetedSpellWeaponAction extends OverwatchableTargetedAction {
 	@Override
 	protected void performImpl(int owPenalty) throws IllegalActionException {
 		Agent target = getTarget();
+		SpellWeapon w = getWeapon();
+		Spell readiedSpell = w.getSpell();
+		LOGGER.debug("Performed by '" + getPerformer().getName() + "' on '" + getTarget()
+				+ "' with spell " + readiedSpell + " and owPenalty " + owPenalty);
 		if (target == null) {
 			throw new IllegalActionException("Target not specified");
 		}
 		Agent a = getPerformer();
-		SpellWeapon w = getWeapon();
-		Spell readiedSpell = w.getSpell();
 		if (readiedSpell == null) {
 			throw new IllegalActionException("No readied spell available");
 		}

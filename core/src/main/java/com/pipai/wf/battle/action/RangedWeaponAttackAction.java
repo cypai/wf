@@ -1,5 +1,8 @@
 package com.pipai.wf.battle.action;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
@@ -11,6 +14,8 @@ import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.UtilFunctions;
 
 public class RangedWeaponAttackAction extends OverwatchableTargetedAction {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(RangedWeaponAttackAction.class);
 
 	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller, performerAgent, targetAgent);
@@ -49,6 +54,7 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction {
 	@Override
 	protected void performImpl(int owPenalty) throws IllegalActionException {
 		Agent target = getTarget();
+		LOGGER.debug("Performed by '" + getPerformer().getName() + "' on '" + getTarget() + "' with owPenalty " + owPenalty);
 		if (target == null) {
 			throw new IllegalActionException("Target not specified");
 		}
