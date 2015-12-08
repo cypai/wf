@@ -16,6 +16,21 @@ public class BasicStats {
 		this.defense = defense;
 	}
 
+	/**
+	 * Constructor that sets each stat to its maximum
+	 */
+	public BasicStats(int maxHP, int maxMP, int maxAP, int aim, int mobility, int defense) {
+		hp = maxHP;
+		this.maxHP = maxHP;
+		mp = maxMP;
+		this.maxMP = maxMP;
+		ap = maxAP;
+		this.maxAP = maxAP;
+		this.aim = aim;
+		this.mobility = mobility;
+		this.defense = defense;
+	}
+
 	public BasicStats() {
 		// Empty constructor for Jackson
 	}

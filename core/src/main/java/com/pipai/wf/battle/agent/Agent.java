@@ -52,6 +52,8 @@ public class Agent implements HasName, HasBasicStats {
 		innateAbilities.registerToAgent(this);
 		name = state.getName();
 		statusEffects = new StatusEffectList();
+		exp = state.getExp();
+		expGiven = state.getExpGiven();
 	}
 
 	@Override

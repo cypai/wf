@@ -6,6 +6,7 @@ import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.NoArmor;
 import com.pipai.wf.battle.weapon.InnateCasting;
 import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.FireActualizationAbility;
 import com.pipai.wf.unit.ability.FireballAbility;
@@ -17,7 +18,7 @@ public class SlimeSchema extends NewUnitSchema {
 	private int level;
 
 	public SlimeSchema(int level) {
-		super("Slime", 4 + level, 7 + level / 2, 2, 60, 8, 0);
+		super("Slime", new BasicStats(4 + level, 7 + level / 2, 2, 60, 8, 0));
 		this.level = level;
 	}
 
@@ -40,6 +41,11 @@ public class SlimeSchema extends NewUnitSchema {
 		ArrayList<Weapon> l = new ArrayList<>();
 		l.add(new InnateCasting());
 		return l;
+	}
+
+	@Override
+	public int getLevel() {
+		return level;
 	}
 
 	@Override

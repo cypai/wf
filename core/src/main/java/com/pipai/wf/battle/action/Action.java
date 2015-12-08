@@ -70,9 +70,14 @@ public abstract class Action implements HasName, HasDescription {
 		performImpl();
 		battleController.performPostActionNotifications();
 		performer.onAction(this);
+		postPerform();
 	}
 
 	protected abstract void performImpl() throws IllegalActionException;
+
+	protected void postPerform() {
+		// Override if anything needs to be done after the action is complete
+	}
 
 	/*
 	 * Returns the minimum AP required to perform the action

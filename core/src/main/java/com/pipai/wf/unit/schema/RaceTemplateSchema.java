@@ -17,7 +17,7 @@ public class RaceTemplateSchema extends NewUnitSchema {
 	private Race race;
 
 	public RaceTemplateSchema(Race race) {
-		super(race.getName(), race.getHP(), race.getMP(), race.getAP(), race.getAim(), race.getMobility(), race.getDefense());
+		super(race.getName(), race.getBasicStats());
 		this.race = race;
 	}
 
@@ -44,6 +44,16 @@ public class RaceTemplateSchema extends NewUnitSchema {
 			l.add(new InnateCasting());
 		}
 		return l;
+	}
+
+	@Override
+	public int getLevel() {
+		return 1;
+	}
+
+	@Override
+	public int getExpGiven() {
+		return 0;
 	}
 
 	@Override

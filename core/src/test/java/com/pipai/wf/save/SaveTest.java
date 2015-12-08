@@ -48,7 +48,7 @@ public class SaveTest extends GdxMockedTest {
 		Save save = new Save();
 		ArrayList<UnitSchema> party = new ArrayList<>();
 		party.add(new UnitSchema(name, new BasicStats(hp, maxHP, mp, maxMP, ap, maxAP, aim, mobility, defense),
-				new AbilityList(), new LeatherArmor(), new ArrayList<Weapon>(), exp, 0));
+				new AbilityList(), new LeatherArmor(), new ArrayList<Weapon>(), 1, exp, 0));
 		save.setParty(party);
 		MANAGER.save(save, SAVE_SLOT);
 		Save load;
@@ -67,6 +67,7 @@ public class SaveTest extends GdxMockedTest {
 		Assert.assertEquals(0, schema.getAbilities().size());
 		Assert.assertTrue(schema.getArmor() instanceof LeatherArmor);
 		Assert.assertEquals(0, schema.getWeapons().size());
+		Assert.assertEquals(1, schema.getLevel());
 		Assert.assertEquals(exp, schema.getExp());
 	}
 
