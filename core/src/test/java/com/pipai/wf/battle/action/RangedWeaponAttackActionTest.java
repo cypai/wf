@@ -50,7 +50,7 @@ public class RangedWeaponAttackActionTest {
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
 		Assert.assertFalse(player == null || enemy == null);
-		TargetedWithAccuracyActionOWCapable atk = (TargetedWithAccuracyActionOWCapable) ((Pistol) player.getCurrentWeapon()).getAction(controller, player, enemy);
+		OverwatchableTargetedAction atk = (OverwatchableTargetedAction) ((Pistol) player.getCurrentWeapon()).getAction(controller, player, enemy);
 		try {
 			atk.perform();
 		} catch (IllegalActionException e) {

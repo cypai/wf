@@ -19,7 +19,7 @@ public class SwitchWeaponAction extends AlterStateAction {
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		getPerformer().switchWeapon();
-		log(BattleEvent.switchWeaponEvent(getPerformer()));
+		logBattleEvent(BattleEvent.switchWeaponEvent(getPerformer()));
 	}
 
 	@Override

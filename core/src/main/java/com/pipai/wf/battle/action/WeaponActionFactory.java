@@ -2,7 +2,6 @@ package com.pipai.wf.battle.action;
 
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.overwatch.OverwatchActivatedActionSchema;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 
@@ -14,7 +13,7 @@ public class WeaponActionFactory {
 		this.controller = controller;
 	}
 
-	public TargetedWithAccuracyActionOWCapable defaultWeaponAction(Agent performer, Agent target) {
+	public OverwatchableTargetedAction defaultWeaponAction(Agent performer, Agent target) {
 		Weapon weapon = performer.getCurrentWeapon();
 		if (weapon instanceof SpellWeapon) {
 			return new TargetedSpellWeaponAction(controller, performer, target);
@@ -23,21 +22,21 @@ public class WeaponActionFactory {
 		}
 	}
 
-	public OverwatchActivatedActionSchema defaultWeaponActionSchema(Agent performer) {
+	public OverwatchableTargetedAction defaultWeaponActionSchema(Agent performer) {
 		Weapon weapon = performer.getCurrentWeapon();
 		if (weapon instanceof SpellWeapon) {
-			return new OverwatchActivatedActionSchema(TargetedSpellWeaponAction.class);
+			return new TargetedSpellWeaponAction(controller, performer);
 		} else {
-			return new OverwatchActivatedActionSchema(RangedWeaponAttackAction.class);
+			return new RangedWeaponAttackAction(controller, performer);
 		}
 	}
 
 	public String defaultWeaponActionName(Agent performer) {
 		Weapon weapon = performer.getCurrentWeapon();
 		if (weapon instanceof SpellWeapon) {
-			return new TargetedSpellWeaponAction(controller, performer, null).getName();
+			return new TargetedSpellWeaponAction(controller, performer).getName();
 		} else {
-			return new RangedWeaponAttackAction(controller, performer, null).getName();
+			return new RangedWeaponAttackAction(controller, performer).getName();
 		}
 	}
 

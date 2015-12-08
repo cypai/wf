@@ -3,17 +3,15 @@ package com.pipai.wf.battle.action;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.overwatch.OverwatchActivatedActionSchema;
-import com.pipai.wf.battle.overwatch.OverwatchHelper;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class OverwatchAction extends AlterStateAction {
 
-	private OverwatchActivatedActionSchema overwatchActionSchema;
+	private OverwatchableTargetedAction overwatchAction;
 
 	public OverwatchAction(BattleController controller, Agent performerAgent) {
 		super(controller, performerAgent);
-		overwatchActionSchema = new WeaponActionFactory(controller).defaultWeaponActionSchema(performerAgent);
+		overwatchAction = new WeaponActionFactory(controller).defaultWeaponActionSchema(performerAgent);
 	}
 
 	@Override
@@ -32,8 +30,8 @@ public class OverwatchAction extends AlterStateAction {
 				throw new IllegalActionException("Not enough ammo to overwatch");
 			}
 		}
-		performer.setOverwatch(overwatchActionSchema);
-		log(BattleEvent.overwatchEvent(getPerformer(), OverwatchHelper.getName(this)));
+		performer.setOverwatch(overwatchAction);
+		logBattleEvent(BattleEvent.overwatchEvent(getPerformer(), overwatchAction.getName()));
 	}
 
 	@Override
@@ -44,10 +42,6 @@ public class OverwatchAction extends AlterStateAction {
 	@Override
 	public String getDescription() {
 		return "Attack the first enemy that moves in range";
-	}
-
-	public OverwatchActivatedActionSchema getOverwatchActionSchema() {
-		return overwatchActionSchema;
 	}
 
 }

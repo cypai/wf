@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
+import com.pipai.wf.battle.action.OverwatchableTargetedAction;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.effect.StatusEffect;
 import com.pipai.wf.battle.effect.StatusEffectList;
 import com.pipai.wf.battle.effect.SuppressedStatusEffect;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.overwatch.OverwatchActivatedActionSchema;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.NoRegisteredAgentException;
@@ -34,7 +34,7 @@ public class Agent implements HasName, HasBasicStats {
 	private int weaponIndex;
 	private Armor armor;
 	private GridPosition position;
-	private OverwatchActivatedActionSchema overwatchAction;
+	private OverwatchableTargetedAction overwatchAction;
 	private AbilityList innateAbilities;
 	private StatusEffectList statusEffects;
 
@@ -248,13 +248,13 @@ public class Agent implements HasName, HasBasicStats {
 		}
 	}
 
-	public void setOverwatch(OverwatchActivatedActionSchema owAction) {
+	public void setOverwatch(OverwatchableTargetedAction owAction) {
 		overwatchAction = owAction;
 		state = State.OVERWATCH;
 		setAP(0);
 	}
 
-	public OverwatchActivatedActionSchema getOverwatchAction() {
+	public OverwatchableTargetedAction getOverwatchAction() {
 		return overwatchAction;
 	}
 

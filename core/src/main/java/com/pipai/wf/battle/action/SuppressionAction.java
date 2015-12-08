@@ -21,7 +21,7 @@ public class SuppressionAction extends TargetedAction {
 		a.suppressOther(target);
 		a.setAP(0);
 		a.getCurrentWeapon().expendAmmo(2);
-		log(BattleEvent.targetedActionEvent(a, target, this));
+		logBattleEvent(BattleEvent.targetedActionEvent(a, target, this));
 	}
 
 	@Override

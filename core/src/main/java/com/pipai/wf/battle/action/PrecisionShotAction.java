@@ -65,7 +65,7 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 		getDamageDealer().doDamage(adjustedResult, target);
 		attacker.setAP(0);
 		ability.setCooldown(2);
-		log(BattleEvent.rangedWeaponAttackEvent(attacker, target, w, adjustedResult));
+		logBattleEvent(BattleEvent.rangedWeaponAttackEvent(attacker, target, w, adjustedResult));
 	}
 
 	@Override

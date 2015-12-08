@@ -44,7 +44,7 @@ public class ReadySpellAction extends AlterStateAction {
 			quicken = false;
 		}
 		((SpellWeapon) a.getCurrentWeapon()).ready(spell);
-		log(BattleEvent.readySpellEvent(a, spell, quicken));
+		logBattleEvent(BattleEvent.readySpellEvent(a, spell, quicken));
 	}
 
 	@Override

@@ -3,8 +3,8 @@ package com.pipai.wf.battle.log;
 import java.util.LinkedList;
 
 import com.pipai.wf.battle.Team;
+import com.pipai.wf.battle.action.OverwatchableTargetedAction;
 import com.pipai.wf.battle.action.TargetedAction;
-import com.pipai.wf.battle.action.TargetedWithAccuracyActionOWCapable;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.map.GridPosition;
@@ -31,7 +31,7 @@ public final class BattleEvent {
 	private GridPosition targetTile;
 	private String actionName;
 	private TargetedAction targetedAction;
-	private TargetedWithAccuracyActionOWCapable activatedOverwatchAction;
+	private OverwatchableTargetedAction activatedOverwatchAction;
 	private boolean quickened;
 
 	public static BattleEvent moveEvent(Agent performer, LinkedList<GridPosition> path) {
@@ -67,10 +67,15 @@ public final class BattleEvent {
 		return event;
 	}
 
-	public static BattleEvent overwatchActivationEvent(Agent performer, Agent target, TargetedWithAccuracyActionOWCapable action, GridPosition targetTile, DamageResult dmgResult) {
-		BattleEvent event = new BattleEvent(Type.OVERWATCH_ACTIVATION, performer, target);
+	/**
+	 * @param ev The general event from which to convert into an overwatch event.
+	 * @param action
+	 * @param targetTile
+	 */
+	public static BattleEvent overwatchActivationEvent(BattleEvent ev, OverwatchableTargetedAction action, GridPosition targetTile) {
+		BattleEvent event = new BattleEvent(Type.OVERWATCH_ACTIVATION, ev.performer, ev.target);
 		event.activatedOverwatchAction = action;
-		event.damageResult = dmgResult;
+		event.damageResult = ev.getDamageResult();
 		event.targetTile = targetTile;
 		return event;
 	}
@@ -136,7 +141,7 @@ public final class BattleEvent {
 		return actionName;
 	}
 
-	public TargetedWithAccuracyActionOWCapable getActivatedOverwatchAction() {
+	public OverwatchableTargetedAction getActivatedOverwatchAction() {
 		return activatedOverwatchAction;
 	}
 

@@ -26,7 +26,7 @@ public class ReloadAction extends AlterStateAction {
 		} else {
 			agent.setAP(0);
 		}
-		log(BattleEvent.reloadEvent(agent));
+		logBattleEvent(BattleEvent.reloadEvent(agent));
 	}
 
 	@Override

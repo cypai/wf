@@ -12,8 +12,17 @@ public abstract class TargetedAction extends Action {
 		target = targetAgent;
 	}
 
+	public TargetedAction(BattleController controller, Agent performerAgent) {
+		super(controller, performerAgent);
+		target = null;
+	}
+
 	public Agent getTarget() {
 		return target;
+	}
+
+	public void setTarget(Agent target) {
+		this.target = target;
 	}
 
 }

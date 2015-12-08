@@ -23,7 +23,7 @@ public abstract class Action implements HasName, HasDescription {
 
 	public Action(BattleController controller, Agent performerAgent) {
 		performer = performerAgent;
-		this.battleController = controller;
+		battleController = controller;
 		if (controller != null) {
 			// TODO: Fix this hack for NullPointerException calling this constructor during OverwatchHelper.getName()
 			log = controller.getLog();
@@ -79,7 +79,7 @@ public abstract class Action implements HasName, HasDescription {
 	 */
 	public abstract int getAPRequired();
 
-	protected final void log(BattleEvent ev) {
+	protected void logBattleEvent(BattleEvent ev) {
 		if (log != null) {
 			log.logEvent(ev);
 		}

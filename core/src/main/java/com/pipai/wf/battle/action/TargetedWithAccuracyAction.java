@@ -11,6 +11,10 @@ public abstract class TargetedWithAccuracyAction extends TargetedAction implemen
 		super(controller, performerAgent, targetAgent);
 	}
 
+	public TargetedWithAccuracyAction(BattleController controller, Agent performerAgent) {
+		super(controller, performerAgent);
+	}
+
 	public abstract PercentageModifierList getHitCalculation();
 
 	public abstract PercentageModifierList getCritCalculation();

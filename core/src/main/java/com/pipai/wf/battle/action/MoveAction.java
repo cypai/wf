@@ -10,7 +10,6 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.overwatch.OverwatchActivatedActionSchema;
 import com.pipai.wf.battle.vision.AgentVisionCalculator;
 import com.pipai.wf.exception.IllegalActionException;
 
@@ -41,7 +40,7 @@ public class MoveAction extends AlterStateAction {
 		}
 		BattleEvent event = BattleEvent.moveEvent(movingAgent, path);
 		if (pathIsValid()) {
-			log(event);
+			logBattleEvent(event);
 		} else {
 			throw new IllegalActionException("Move path sequence is not valid");
 		}
@@ -50,10 +49,9 @@ public class MoveAction extends AlterStateAction {
 			setAgentPosition(movingAgent, pos);
 			for (Agent a : visionCalc.enemiesInRangeOf(movingAgent)) {
 				if (a.isOverwatching()) {
-					OverwatchActivatedActionSchema owAction = a.getOverwatchAction();
+					OverwatchableTargetedAction owAction = a.getOverwatchAction();
 					setAgentPosition(movingAgent, pos);
-					TargetedWithAccuracyActionOWCapable action = owAction.build(getBattleController(), a, movingAgent);
-					action.performOnOverwatch(event);
+					owAction.performOnOverwatch(event, movingAgent);
 					a.clearOverwatch();
 					if (movingAgent.isKO()) {
 						return;

@@ -10,10 +10,14 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.UtilFunctions;
 
-public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapable {
+public class RangedWeaponAttackAction extends OverwatchableTargetedAction {
 
 	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller, performerAgent, targetAgent);
+	}
+
+	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent) {
+		super(controller, performerAgent);
 	}
 
 	@Override
@@ -43,36 +47,25 @@ public class RangedWeaponAttackAction extends TargetedWithAccuracyActionOWCapabl
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
-		Agent a = getPerformer();
+	protected void performImpl(int owPenalty) throws IllegalActionException {
 		Agent target = getTarget();
+		if (target == null) {
+			throw new IllegalActionException("Target not specified");
+		}
+		Agent a = getPerformer();
 		Weapon w = a.getCurrentWeapon();
 		if (w.needsAmmunition() && w.currentAmmo() == 0) {
 			throw new IllegalActionException("Not enough ammo to fire " + w.getName());
 		}
-		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
+		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), owPenalty);
 		a.setAP(0);
 		getDamageDealer().doDamage(result, target);
-		log(BattleEvent.rangedWeaponAttackEvent(a, target, w, result));
+		logBattleEvent(BattleEvent.rangedWeaponAttackEvent(a, target, w, result));
 	}
 
 	@Override
 	public int getAPRequired() {
 		return 1;
-	}
-
-	@Override
-	public void performOnOverwatch(BattleEvent parent) throws IllegalActionException {
-		Agent a = getPerformer();
-		Agent target = getTarget();
-		Weapon w = a.getCurrentWeapon();
-		if (w.needsAmmunition() && w.currentAmmo() == 0) {
-			throw new IllegalActionException("Not enough ammo to fire " + w.getName());
-		}
-		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 1);
-		a.setAP(0);
-		getDamageDealer().doDamage(result, target);
-		parent.addChainEvent(BattleEvent.overwatchActivationEvent(a, target, this, target.getPosition(), result));
 	}
 
 	@Override
