@@ -148,4 +148,12 @@ public class AgentState implements HasBasicStats, HasName {
 		return expGiven;
 	}
 
+	public void setExp(int exp) {
+		this.exp = exp;
+	}
+
+	public void setExpGiven(int expGiven) {
+		this.expGiven = expGiven;
+	}
+
 }

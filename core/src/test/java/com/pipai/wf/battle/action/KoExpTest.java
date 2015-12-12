@@ -27,7 +27,9 @@ public class KoExpTest extends GdxMockedTest {
 		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
 		playerState.getWeapons().add(new Pistol());
 		map.addAgent(playerState);
-		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, 1, 5, 2, 5, 65, -100));
+		AgentState enemyState = factory.battleAgentFromStats(Team.ENEMY, enemyPos, 1, 5, 2, 5, 65, -100);
+		enemyState.setExpGiven(5);
+		map.addAgent(enemyState);
 		BattleController controller = new BattleController(map, config);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
@@ -39,6 +41,7 @@ public class KoExpTest extends GdxMockedTest {
 			Assert.fail(e.getMessage());
 		}
 		Assert.assertTrue(enemy.isKO());
+		Assert.assertTrue(enemy.getExpGiven() > 0);
 		Assert.assertEquals(player.getExp(), enemy.getExpGiven());
 	}
 
