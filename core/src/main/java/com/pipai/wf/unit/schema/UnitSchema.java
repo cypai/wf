@@ -46,7 +46,9 @@ public class UnitSchema implements HasName, HasBasicStats {
 		abilities = as.getAbilities().clone();
 		armor = as.getArmor();
 		weapons = as.getWeapons();
-		level = 1;
+		level = as.getLevel();
+		exp = as.getExp();
+		expGiven = as.getExpGiven();
 	}
 
 	public UnitSchema(UnitSchema schema) {

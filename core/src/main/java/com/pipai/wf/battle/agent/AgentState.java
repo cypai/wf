@@ -25,6 +25,7 @@ public class AgentState implements HasBasicStats, HasName {
 	private Armor armor;
 	private String name;
 
+	private int level;
 	private int expGiven;
 	private int exp;
 
@@ -45,6 +46,9 @@ public class AgentState implements HasBasicStats, HasName {
 		weapons = agent.getWeapons();
 		armor = agent.getArmor();
 		name = agent.getName();
+		level = agent.getLevel();
+		exp = agent.getExp();
+		expGiven = agent.getExpGiven();
 	}
 
 	public void addAbilities(AbilityList abilityList) {
@@ -140,12 +144,20 @@ public class AgentState implements HasBasicStats, HasName {
 		this.abilities = abilities;
 	}
 
+	public int getLevel() {
+		return level;
+	}
+
 	public int getExp() {
 		return exp;
 	}
 
 	public int getExpGiven() {
 		return expGiven;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 	public void setExp(int exp) {

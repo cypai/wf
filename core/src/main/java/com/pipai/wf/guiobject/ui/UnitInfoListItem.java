@@ -17,19 +17,18 @@ public class UnitInfoListItem extends UIListItem {
 	// public static final int WIDTH = 2 * PADDING + STAT_SPACING * 6;
 	// public static final int HEIGHT = 2 * PADDING + 32;
 
-	private String name;
-	private BasicStats stats;
+	private UnitSchema schema;
 	private float width, padding, stat_spacing, height;
 	private ArrayList<String> statLine;
 
 	public UnitInfoListItem(Gui gui, UnitSchema schema, float x, float y, float width, float padding) {
 		super(gui, x, y, width, 2 * padding + 32, Color.ORANGE);
+		this.schema = schema;
 		this.width = width;
 		this.padding = padding;
 		stat_spacing = (width - 2 * padding) / 6;
 		height = 2 * padding + 32;
-		stats = schema.getBasicStats();
-		name = schema.getName();
+		BasicStats stats = schema.getBasicStats();
 		statLine = new ArrayList<String>();
 		statLine.add("HP: " + stats.getHP() + "/" + stats.getMaxHP());
 		statLine.add("MP: " + stats.getMP() + "/" + stats.getMaxMP());
@@ -57,7 +56,9 @@ public class UnitInfoListItem extends UIListItem {
 		float leftX = getX() + padding;
 		float line1y = getY() - padding;
 		float line2y = line1y - font.getLineHeight();
-		font.draw(spr, name, leftX, line1y);
+		font.draw(spr, schema.getName(), leftX, line1y);
+		font.draw(spr, "Lv: " + schema.getLevel(), getX() + width / 2, line1y);
+		font.draw(spr, "Exp: " + schema.getExp(), getX() + width * 3 / 4, line1y);
 		float textX = leftX;
 		for (String s : statLine) {
 			font.draw(spr, s, textX, line2y);

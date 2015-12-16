@@ -18,7 +18,7 @@ public class PartyInfoList extends UIList {
 		list = new ArrayList<UnitInfoListItem>();
 		float listy = y - padding - 1;
 		for (UnitSchema a : party) {
-			UnitInfoListItem li = new UnitInfoListItem(gui, a, x + padding + 1, listy, width - 2 - 2 * padding, 2);
+			UnitInfoListItem li = new UnitInfoListItem(gui, a, x + padding + 1, listy, width - 2 - 2 * padding, 3);
 			list.add(li);
 			gui.createInstance(li);
 			listy -= li.getHeight() + padding;
