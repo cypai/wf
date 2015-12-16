@@ -3,6 +3,7 @@ package com.pipai.wf.save;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -77,7 +78,7 @@ public class SaveTest extends GdxMockedTest {
 		Save save = generator.generateNewSave();
 		MANAGER.save(save, SAVE_SLOT);
 		Save load = MANAGER.load(SAVE_SLOT);
-		ArrayList<UnitSchema> party = load.getParty();
+		List<UnitSchema> party = load.getParty();
 		Assert.assertEquals(6, party.size());
 		UnitSchema tidus = party.get(0);
 		Assert.assertEquals(3, tidus.getAbilities().size());

@@ -1,22 +1,23 @@
 package com.pipai.wf.save;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public class Save {
 
-	private ArrayList<UnitSchema> party;
+	private List<UnitSchema> party;
 
 	public Save() {
 		party = new ArrayList<>();
 	}
 
-	public ArrayList<UnitSchema> getParty() {
+	public List<UnitSchema> getParty() {
 		return party;
 	}
 
-	public void setParty(ArrayList<UnitSchema> party) {
+	public void setParty(List<UnitSchema> party) {
 		this.party = party;
 	}
 

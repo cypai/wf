@@ -21,10 +21,6 @@ import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.ui.PartyInfoList;
 import com.pipai.wf.save.Save;
 import com.pipai.wf.save.SaveManager;
-import com.pipai.wf.unit.race.Race;
-import com.pipai.wf.unit.schema.FlameFairySchema;
-import com.pipai.wf.unit.schema.RaceTemplateSchema;
-import com.pipai.wf.unit.schema.TidusSchema;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public final class PartyInfoGui extends Gui {
@@ -33,7 +29,7 @@ public final class PartyInfoGui extends Gui {
 
 	private OrthographicCamera camera;
 	private ArrayList<GuiRenderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;
-	private ArrayList<UnitSchema> partySchema = new ArrayList<>();
+	private List<UnitSchema> partySchema = new ArrayList<>();
 
 	public PartyInfoGui(WFGame game, List<UnitSchema> party) {
 		super(game);
@@ -42,13 +38,7 @@ public final class PartyInfoGui extends Gui {
 		renderables = new ArrayList<GuiRenderable>();
 		renderablesCreateBuffer = new ArrayList<GuiRenderable>();
 		renderablesDelBuffer = new ArrayList<GuiRenderable>();
-		partySchema = new ArrayList<UnitSchema>();
-		partySchema.add(new TidusSchema());	// Tidus
-		partySchema.add(new RaceTemplateSchema(Race.HUMAN));	// Sienna
-		partySchema.add(new RaceTemplateSchema(Race.FAIRY));	// Sapphire
-		partySchema.add(new RaceTemplateSchema(Race.CAT));	// Mira
-		partySchema.add(new FlameFairySchema());	// Sunny
-		partySchema.add(new RaceTemplateSchema(Race.FOX));	// Nolan
+		partySchema = party;
 		createInstance(new PartyInfoList(this, party, 4, getScreenHeight() - 4, getScreenWidth() / 2, getScreenHeight() / 2, Color.CYAN));
 	}
 
