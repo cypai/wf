@@ -42,7 +42,8 @@ public class UnitSchema implements HasName, HasBasicStats {
 	 */
 	public UnitSchema(AgentState as) {
 		name = as.getName();
-		basicStats = as.getBasicStats();
+		basicStats = new BasicStats(as.getHP(), as.getMaxHP(), as.getMaxMP(), as.getMaxMP(), as.getMaxAP(), as.getMaxAP(),
+				as.getAim(), as.getMobility(), as.getDefense());
 		abilities = as.getAbilities().clone();
 		armor = as.getArmor();
 		weapons = as.getWeapons();

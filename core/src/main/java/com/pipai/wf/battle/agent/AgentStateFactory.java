@@ -16,6 +16,7 @@ public class AgentStateFactory {
 		as.setTeam(team);
 		as.setState(State.NEUTRAL);
 		as.setPosition(position);
+		as.setLevel(schema.getLevel());
 		as.setExp(schema.getExp());
 		as.setExpGiven(schema.getExpGiven());
 		return as;

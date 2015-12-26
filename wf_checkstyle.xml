@@ -146,6 +146,10 @@
     <module name="OneTopLevelClass"/>
     <module name="EmptyCatchBlock"/>
     <module name="RedundantModifier"/>
+    <module name="SuperClone">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
   </module>
   <module name="RegexpSingleline">
     <property name="format" value="^.*System.out.print.*$"/>

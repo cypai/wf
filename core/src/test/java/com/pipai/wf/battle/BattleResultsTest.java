@@ -48,8 +48,11 @@ public class BattleResultsTest extends GdxMockedTest {
 		UnitSchema unitState = result.getPartyState().get(0);
 		Assert.assertEquals(1, unitState.getHP());
 		Assert.assertEquals(3, unitState.getMaxHP());
-		Assert.assertEquals(2, unitState.getMP());
+		// MP should be refreshed after battle
+		Assert.assertEquals(5, unitState.getMP());
 		Assert.assertEquals(5, unitState.getMaxMP());
+		// AP should be refreshed after battle
+		Assert.assertEquals(2, unitState.getAP());
 		Assert.assertEquals(2, unitState.getMaxAP());
 		Assert.assertEquals(5, unitState.getMobility());
 		Assert.assertEquals(1000, unitState.getAim());

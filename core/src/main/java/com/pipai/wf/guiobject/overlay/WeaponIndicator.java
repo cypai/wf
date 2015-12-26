@@ -33,6 +33,7 @@ public class WeaponIndicator extends GuiObject implements GuiRenderable {
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		weapons = new ArrayList<>();
 	}
 
 	public void updateToAgent(AgentGuiObject a) {

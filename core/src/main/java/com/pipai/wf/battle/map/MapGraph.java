@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 public class MapGraph {
 
-	private static final Logger logger = LoggerFactory.getLogger(MapGraph.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MapGraph.class);
 
 	private Node root;
 	private HashMap<String, Node> nodeMap;
@@ -124,18 +124,18 @@ public class MapGraph {
 			}
 			current.visit();
 			if (DEBUG) {
-				logger.debug("Current " + current);
+				LOGGER.debug("Current " + current);
 			}
 			for (Edge edge : current.getEdges()) {
 				Node node = edge.getDestination();
 				if (DEBUG) {
-					logger.debug("Checking " + node.getPosition());
+					LOGGER.debug("Checking " + node.getPosition());
 				}
 				if (!node.isVisited() && !node.isAdded()) {
 					float totalCost = edge.cost() + current.getTotalCost();
 					if (totalCost <= maxMove) {
 						if (DEBUG) {
-							logger.debug("Added " + node.getPosition() + " Dist " + String.valueOf(totalCost));
+							LOGGER.debug("Added " + node.getPosition() + " Dist " + String.valueOf(totalCost));
 						}
 						node.setAdded();
 						node.setTotalCost(totalCost);

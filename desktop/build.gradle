@@ -62,6 +62,12 @@ eclipse {
         name = appName + "-desktop"
         linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/core/assets'
     }
+    
+    tasks.withType(JavaExec) {
+	    if (System.getProperty('debug', 'false') == 'true') {
+	        jvmArgs '-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9009'
+	    }
+    }
 }
 
 task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
