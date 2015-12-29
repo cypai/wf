@@ -9,6 +9,12 @@ public enum UnitClassTree {
 	RANGER(new AbilityTree.Builder(new QuickReloadAbility())
 			.addAbilityAtCurrentLevel(new SuppressionAbility())
 			.addAbilityAtCurrentLevel(new PrecisionShotAbility())
+			.goToNextLevel()
+			.addAbilityAtCurrentLevel(new SuppressionAbility())
+			.addAbilityAtCurrentLevel(new SuppressionAbility())
+			.addAbilityAtCurrentLevel(new SuppressionAbility())
+			.goToNextLevel()
+			.addAbilityAtCurrentLevel(new SuppressionAbility())
 			.build());
 
 	private AbilityTree abilityTree;

@@ -3,6 +3,7 @@ package com.pipai.wf.guiobject.ui;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.Gui;
 import com.pipai.wf.guiobject.GuiObject;
@@ -12,13 +13,13 @@ import com.pipai.wf.guiobject.XYPositioned;
 
 public class UIListItem extends GuiObject implements XYPositioned, GuiRenderable, LeftClickable {
 
-	private float x, y, width, height;
+	private Vector2 position;
+	private float width, height;
 	private Color color;
 
 	public UIListItem(Gui gui, float x, float y, float width, float height, Color color) {
 		super(gui);
-		this.x = x;
-		this.y = y;
+		position = new Vector2(x, y);
 		this.width = width;
 		this.height = height;
 		this.color = color;
@@ -39,28 +40,13 @@ public class UIListItem extends GuiObject implements XYPositioned, GuiRenderable
 		ShapeRenderer r = batch.getShapeRenderer();
 		r.begin(ShapeType.Line);
 		r.setColor(color);
-		r.rect(x, y, width, -height);
+		r.rect(position.x, position.y, width, -height);
 		r.end();
 	}
 
 	@Override
-	public float getX() {
-		return x;
-	}
-
-	@Override
-	public float getY() {
-		return y;
-	}
-
-	@Override
-	public void setX(float x) {
-		this.x = x;
-	}
-
-	@Override
-	public void setY(float y) {
-		this.y = y;
+	public Vector2 getPosition() {
+		return position;
 	}
 
 }

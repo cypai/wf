@@ -1,13 +1,25 @@
 package com.pipai.wf.guiobject;
 
+import com.badlogic.gdx.math.Vector2;
+
 public interface XYPositioned {
 
-	float getX();
+	Vector2 getPosition();
 
-	float getY();
+	default float getX() {
+		return getPosition().x;
+	}
 
-	void setX(float x);
+	default float getY() {
+		return getPosition().y;
+	}
 
-	void setY(float y);
+	default void setX(float x) {
+		getPosition().x = x;
+	}
+
+	default void setY(float y) {
+		getPosition().y = y;
+	}
 
 }

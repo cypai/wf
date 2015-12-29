@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.Gui;
 import com.pipai.wf.guiobject.GuiObject;
@@ -16,7 +17,8 @@ import com.pipai.wf.util.UtilFunctions;
 
 public abstract class CenteredButton extends GuiObject implements XYPositioned, GuiRenderable, LeftClickable {
 
-	private float x, y, w, h;
+	private Vector2 position;
+	private float w, h;
 	private Color border, backgroundColor;
 	private String label;
 
@@ -24,8 +26,7 @@ public abstract class CenteredButton extends GuiObject implements XYPositioned, 
 
 	public CenteredButton(Gui gui, float x, float y, float width, float height, Color border, Color background, String label) {
 		super(gui);
-		this.x = x;
-		this.y = y;
+		position = new Vector2(x, y);
 		w = width;
 		h = height;
 		this.border = border;
@@ -36,7 +37,7 @@ public abstract class CenteredButton extends GuiObject implements XYPositioned, 
 
 	@Override
 	public final void onLeftClick(int gameX, int gameY) {
-		if (UtilFunctions.isInBoundingBox(x, y, w, h, gameX, gameY)) {
+		if (UtilFunctions.isInBoundingBox(position.x, position.y, w, h, gameX, gameY)) {
 			onLeftClickImpl();
 		}
 	}
@@ -49,23 +50,8 @@ public abstract class CenteredButton extends GuiObject implements XYPositioned, 
 	}
 
 	@Override
-	public float getX() {
-		return x;
-	}
-
-	@Override
-	public float getY() {
-		return y;
-	}
-
-	@Override
-	public void setX(float x) {
-		this.x = x;
-	}
-
-	@Override
-	public void setY(float y) {
-		this.y = y;
+	public Vector2 getPosition() {
+		return position;
 	}
 
 	@Override
@@ -73,18 +59,18 @@ public abstract class CenteredButton extends GuiObject implements XYPositioned, 
 		ShapeRenderer r = batch.getShapeRenderer();
 		r.begin(ShapeType.Filled);
 		r.setColor(backgroundColor);
-		r.rect(x - w / 2, y - h / 2, w, h);
+		r.rect(position.x - w / 2, position.y - h / 2, w, h);
 		r.end();
 		r.begin(ShapeType.Line);
 		r.setColor(border);
-		r.rect(x - w / 2, y - h / 2, w, h);
+		r.rect(position.x - w / 2, position.y - h / 2, w, h);
 		r.end();
 		SpriteBatch spr = batch.getSpriteBatch();
 		BitmapFont font = batch.getFont();
 		glayout.setText(font, label);
 		spr.begin();
 		font.setColor(Color.BLACK);
-		font.draw(spr, label, x - glayout.width / 2, y + glayout.height / 2);
+		font.draw(spr, label, position.x - glayout.width / 2, position.y + glayout.height / 2);
 		spr.end();
 	}
 

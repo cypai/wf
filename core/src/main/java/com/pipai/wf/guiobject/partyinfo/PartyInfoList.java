@@ -1,10 +1,11 @@
-package com.pipai.wf.guiobject.ui;
+package com.pipai.wf.guiobject.partyinfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Color;
 import com.pipai.wf.gui.Gui;
+import com.pipai.wf.guiobject.ui.UIList;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public class PartyInfoList extends UIList {

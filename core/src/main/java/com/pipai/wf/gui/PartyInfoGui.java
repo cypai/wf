@@ -18,9 +18,11 @@ import com.pipai.wf.battle.BattleFactory;
 import com.pipai.wf.battle.BattleSchema;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
-import com.pipai.wf.guiobject.ui.PartyInfoList;
+import com.pipai.wf.guiobject.partyinfo.AbilityTreeDisplay;
+import com.pipai.wf.guiobject.partyinfo.PartyInfoList;
 import com.pipai.wf.save.Save;
 import com.pipai.wf.save.SaveManager;
+import com.pipai.wf.unit.abilitytree.UnitClassTree;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public final class PartyInfoGui extends Gui {
@@ -36,6 +38,7 @@ public final class PartyInfoGui extends Gui {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, getScreenWidth(), getScreenHeight());
 		renderables = new ArrayList<GuiRenderable>();
+		renderables.add(new AbilityTreeDisplay(this, UnitClassTree.RANGER.getAbilityTree(), getScreenWidth() * 3 / 4, getScreenHeight() - 64));
 		renderablesCreateBuffer = new ArrayList<GuiRenderable>();
 		renderablesDelBuffer = new ArrayList<GuiRenderable>();
 		partySchema = party;

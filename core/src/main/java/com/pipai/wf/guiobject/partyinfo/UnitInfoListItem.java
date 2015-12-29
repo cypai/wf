@@ -1,4 +1,4 @@
-package com.pipai.wf.guiobject.ui;
+package com.pipai.wf.guiobject.partyinfo;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.Gui;
+import com.pipai.wf.guiobject.ui.UIListItem;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.unit.schema.UnitSchema;
 
