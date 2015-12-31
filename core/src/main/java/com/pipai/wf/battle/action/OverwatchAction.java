@@ -3,6 +3,8 @@ package com.pipai.wf.battle.action;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.battle.weapon.WeaponFlag;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class OverwatchAction extends AlterStateAction {
@@ -22,11 +24,15 @@ public class OverwatchAction extends AlterStateAction {
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		Agent performer = getPerformer();
-		if (performer.getCurrentWeapon() == null) {
+		Weapon weapon = performer.getCurrentWeapon();
+		if (weapon == null) {
 			throw new IllegalActionException("Not currently wielding a weapon");
 		}
-		if (performer.getCurrentWeapon().needsAmmunition()) {
-			if (performer.getCurrentWeapon().currentAmmo() == 0) {
+		if (!weapon.hasFlag(WeaponFlag.OVERWATCH)) {
+			throw new IllegalActionException(weapon.getName() + " cannot overwatch");
+		}
+		if (weapon.hasFlag(WeaponFlag.NEEDS_AMMUNITION)) {
+			if (weapon.currentAmmo() == 0) {
 				throw new IllegalActionException("Not enough ammo to overwatch");
 			}
 		}

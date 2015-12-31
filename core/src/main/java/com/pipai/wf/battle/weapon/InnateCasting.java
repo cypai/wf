@@ -1,11 +1,10 @@
 package com.pipai.wf.battle.weapon;
 
+import com.google.common.collect.ImmutableSet;
+
 public class InnateCasting extends SpellWeapon {
 
-	@Override
-	public boolean needsAmmunition() {
-		return false;
-	}
+	private static final ImmutableSet<WeaponFlag> FLAGS = ImmutableSet.<WeaponFlag> of(WeaponFlag.OVERWATCH);
 
 	@Override
 	public int baseAmmoCapacity() {
@@ -20,6 +19,11 @@ public class InnateCasting extends SpellWeapon {
 	@Override
 	public String getDescription() {
 		return "Enables casting without a physical spell weapon";
+	}
+
+	@Override
+	public boolean hasFlag(WeaponFlag flag) {
+		return FLAGS.contains(flag);
 	}
 
 }

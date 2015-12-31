@@ -33,8 +33,6 @@ public abstract class Weapon extends Item {
 
 	public abstract int maxBaseDamage();
 
-	public abstract boolean needsAmmunition();
-
 	public abstract int baseAmmoCapacity();
 
 	public void expendAmmo(int amount) {
@@ -52,5 +50,7 @@ public abstract class Weapon extends Item {
 	public final AbilityList getGrantedAbilities() {
 		return grantedAbilities;
 	}
+
+	public abstract boolean hasFlag(WeaponFlag flag);
 
 }

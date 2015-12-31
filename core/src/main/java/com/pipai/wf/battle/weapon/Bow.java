@@ -1,5 +1,6 @@
 package com.pipai.wf.battle.weapon;
 
+import com.google.common.collect.ImmutableSet;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.RangedWeaponAttackAction;
@@ -12,6 +13,9 @@ import com.pipai.wf.unit.ability.QuickReloadAbility;
 public class Bow extends Weapon implements TargetedActionable {
 
 	public static final int BASE_AMMO = 3;
+
+	private static final ImmutableSet<WeaponFlag> FLAGS = ImmutableSet.<WeaponFlag> of(
+			WeaponFlag.BOW, WeaponFlag.NEEDS_AMMUNITION, WeaponFlag.OVERWATCH, WeaponFlag.PRECISE_SHOT);
 
 	public Bow() {
 		super(BASE_AMMO);
@@ -67,11 +71,6 @@ public class Bow extends Weapon implements TargetedActionable {
 	}
 
 	@Override
-	public boolean needsAmmunition() {
-		return true;
-	}
-
-	@Override
 	public int baseAmmoCapacity() {
 		return BASE_AMMO;
 	}
@@ -89,6 +88,11 @@ public class Bow extends Weapon implements TargetedActionable {
 	@Override
 	public TargetedAction getAction(BattleController controller, Agent performer, Agent target) {
 		return new RangedWeaponAttackAction(controller, performer, target);
+	}
+
+	@Override
+	public boolean hasFlag(WeaponFlag flag) {
+		return FLAGS.contains(flag);
 	}
 
 }

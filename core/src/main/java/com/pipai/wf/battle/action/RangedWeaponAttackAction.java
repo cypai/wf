@@ -9,8 +9,11 @@ import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.WeaponDamageFunction;
 import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.weapon.Bow;
 import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.battle.weapon.WeaponFlag;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.unit.ability.ArrowRainAbility;
 import com.pipai.wf.util.UtilFunctions;
 
 public class RangedWeaponAttackAction extends OverwatchableTargetedAction {
@@ -58,15 +61,21 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction {
 		if (target == null) {
 			throw new IllegalActionException("Target not specified");
 		}
-		Agent a = getPerformer();
-		Weapon w = a.getCurrentWeapon();
-		if (w.needsAmmunition() && w.currentAmmo() == 0) {
+		Agent performer = getPerformer();
+		Weapon w = performer.getCurrentWeapon();
+		if (w.hasFlag(WeaponFlag.NEEDS_AMMUNITION) && w.currentAmmo() == 0) {
 			throw new IllegalActionException("Not enough ammo to fire " + w.getName());
 		}
 		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), owPenalty);
-		a.setAP(0);
+		if (performer.getCurrentWeapon() instanceof Bow
+				&& performer.getAbilities().hasAbility(ArrowRainAbility.class)
+				&& performer.getAP() == performer.getMaxAP()) {
+			performer.setAP(performer.getAP() - 1);
+		} else {
+			performer.setAP(0);
+		}
 		getDamageDealer().doDamage(result, target);
-		logBattleEvent(BattleEvent.rangedWeaponAttackEvent(a, target, w, result));
+		logBattleEvent(BattleEvent.rangedWeaponAttackEvent(performer, target, w, result));
 	}
 
 	@Override
@@ -82,7 +91,7 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction {
 	@Override
 	public String getDescription() {
 		Weapon weapon = getPerformer().getCurrentWeapon();
-		if (weapon.needsAmmunition() && weapon.currentAmmo() <= 0) {
+		if (weapon.hasFlag(WeaponFlag.NEEDS_AMMUNITION) && weapon.currentAmmo() <= 0) {
 			return "Not enough ammunition";
 		} else {
 			return "Attack with the selected ranged weapon";

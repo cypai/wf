@@ -21,6 +21,7 @@ import com.pipai.wf.battle.spell.FireballSpell;
 import com.pipai.wf.battle.vision.AgentVisionCalculator;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.battle.weapon.WeaponFlag;
 
 public class GeneralModularAI extends ModularAI {
 
@@ -63,6 +64,7 @@ public class GeneralModularAI extends ModularAI {
 	private ActionScore getBestAttackAction() {
 		Agent a = getAiAgent();
 		Weapon w = a.getCurrentWeapon();
+		boolean needsAmmo = w.hasFlag(WeaponFlag.NEEDS_AMMUNITION);
 		if (agentVisionCalc.enemiesInRangeOf(a).size() == 0) {
 			if (w instanceof SpellWeapon) {
 				SpellWeapon sw = (SpellWeapon) w;
@@ -72,14 +74,14 @@ public class GeneralModularAI extends ModularAI {
 					return new ActionScore(new OverwatchAction(getBattleController(), a), 30);
 				}
 			} else {
-				if (!w.needsAmmunition() || (w.needsAmmunition() && w.currentAmmo() > 0)) {
+				if (!needsAmmo || (needsAmmo && w.currentAmmo() > 0)) {
 					return new ActionScore(new OverwatchAction(getBattleController(), a), 30);
 				} else {
 					return new ActionScore(new ReloadAction(getBattleController(), a), 20);
 				}
 			}
 		} else {
-			if (w.needsAmmunition() && w.currentAmmo() == 0) {
+			if (needsAmmo && w.currentAmmo() == 0) {
 				return new ActionScore(new ReloadAction(getBattleController(), a), 20);
 			} else {
 				if (w instanceof SpellWeapon) {

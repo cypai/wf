@@ -18,7 +18,7 @@ import com.pipai.wf.battle.damage.DamageFunction;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.weapon.Pistol;
+import com.pipai.wf.battle.weapon.Bow;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class PrecisionShotAbilityTest {
@@ -38,7 +38,7 @@ public class PrecisionShotAbilityTest {
 		AgentStateFactory factory = new AgentStateFactory();
 		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
 		playerState.getAbilities().add(new PrecisionShotAbility());
-		playerState.getWeapons().add(new Pistol());
+		playerState.getWeapons().add(new Bow());
 		map.addAgent(playerState);
 		Agent agent = map.getAgentAtPos(playerPos);
 		BattleController controller = new BattleController(map, mockConfig);

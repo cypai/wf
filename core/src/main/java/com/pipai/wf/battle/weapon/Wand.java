@@ -5,11 +5,6 @@ import com.pipai.wf.battle.spell.Spell;
 public class Wand extends SpellWeapon {
 
 	@Override
-	public boolean needsAmmunition() {
-		return true;
-	}
-
-	@Override
 	public int baseAmmoCapacity() {
 		return 1;
 	}
@@ -34,6 +29,11 @@ public class Wand extends SpellWeapon {
 	@Override
 	public String getDescription() {
 		return "A typical wand";
+	}
+
+	@Override
+	public boolean hasFlag(WeaponFlag flag) {
+		return false;
 	}
 
 }
