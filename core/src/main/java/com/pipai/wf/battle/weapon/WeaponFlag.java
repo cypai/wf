@@ -4,7 +4,7 @@ public enum WeaponFlag {
 	// Weapon types flags here
 	BOW,
 	// Capabilities here
-	OVERWATCH, PRECISE_SHOT,
+	OVERWATCH, SUPPRESSION, PRECISE_SHOT,
 	// Other
 	NEEDS_AMMUNITION;
 }

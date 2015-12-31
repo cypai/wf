@@ -15,7 +15,7 @@ public class Bow extends Weapon implements TargetedActionable {
 	public static final int BASE_AMMO = 3;
 
 	private static final ImmutableSet<WeaponFlag> FLAGS = ImmutableSet.<WeaponFlag> of(
-			WeaponFlag.BOW, WeaponFlag.NEEDS_AMMUNITION, WeaponFlag.OVERWATCH, WeaponFlag.PRECISE_SHOT);
+			WeaponFlag.BOW, WeaponFlag.NEEDS_AMMUNITION, WeaponFlag.OVERWATCH, WeaponFlag.PRECISE_SHOT, WeaponFlag.SUPPRESSION);
 
 	public Bow() {
 		super(BASE_AMMO);

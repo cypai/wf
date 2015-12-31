@@ -3,6 +3,8 @@ package com.pipai.wf.battle.action;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.battle.weapon.WeaponFlag;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class SuppressionAction extends TargetedAction {
@@ -14,7 +16,11 @@ public class SuppressionAction extends TargetedAction {
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		Agent a = getPerformer();
-		if (a.getCurrentWeapon().currentAmmo() < 2) {
+		Weapon w = a.getCurrentWeapon();
+		if (!w.hasFlag(WeaponFlag.SUPPRESSION)) {
+			throw new IllegalActionException(w.getName() + " cannot use suppression");
+		}
+		if (w.currentAmmo() < 2) {
 			throw new IllegalActionException("Not enough ammo to suppress");
 		}
 		Agent target = getTarget();
