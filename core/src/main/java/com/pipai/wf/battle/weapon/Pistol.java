@@ -12,7 +12,7 @@ public class Pistol extends Weapon implements TargetedActionable {
 
 	public static final int BASE_AMMO = 2;
 
-	private static final ImmutableSet<WeaponFlag> FLAGS = ImmutableSet.<WeaponFlag> of(
+	private static final ImmutableSet<WeaponFlag> FLAGS = ImmutableSet.<WeaponFlag>of(
 			WeaponFlag.NEEDS_AMMUNITION, WeaponFlag.OVERWATCH);
 
 	public Pistol() {

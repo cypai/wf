@@ -6,13 +6,13 @@ public interface CooldownComponent extends RoundEndComponent {
 
 	void startCooldown();
 
-	public boolean onCooldown();
+	boolean onCooldown();
 
-	public int getCooldown();
+	int getCooldown();
 
-	public void setCooldown(int cooldown);
+	void setCooldown(int cooldown);
 
-	public void decrementCooldown();
+	void decrementCooldown();
 
 	@Override
 	default void onRoundEnd(Agent agent) {

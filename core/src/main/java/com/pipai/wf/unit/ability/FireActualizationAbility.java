@@ -6,7 +6,7 @@ import com.pipai.wf.unit.ability.component.LevelledAbilityImpl;
 
 public class FireActualizationAbility extends Ability implements HasLevelledAbilityComponent {
 
-	private LevelledAbilityComponent levelledAbilityImpl = new LevelledAbilityImpl();
+	private LevelledAbilityComponent levelledAbilityComponent = new LevelledAbilityImpl();
 
 	public FireActualizationAbility() {
 		setLevel(1);
@@ -18,7 +18,7 @@ public class FireActualizationAbility extends Ability implements HasLevelledAbil
 
 	@Override
 	public LevelledAbilityComponent getLevelledAbilityComponent() {
-		return levelledAbilityImpl;
+		return levelledAbilityComponent;
 	}
 
 	@Override

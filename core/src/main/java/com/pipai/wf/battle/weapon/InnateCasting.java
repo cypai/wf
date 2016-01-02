@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableSet;
 
 public class InnateCasting extends SpellWeapon {
 
-	private static final ImmutableSet<WeaponFlag> FLAGS = ImmutableSet.<WeaponFlag> of(WeaponFlag.OVERWATCH);
+	private static final ImmutableSet<WeaponFlag> FLAGS = ImmutableSet.<WeaponFlag>of(WeaponFlag.OVERWATCH);
 
 	@Override
 	public int baseAmmoCapacity() {

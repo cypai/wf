@@ -12,7 +12,7 @@ public abstract class TargetedAction extends Action implements HasPerformerTarge
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TargetedAction.class);
 
-	private PerformerTargetComponentImpl performerTargetImpl = new PerformerTargetComponentImpl();
+	private PerformerTargetComponentImpl performerTargetComponentImpl = new PerformerTargetComponentImpl();
 
 	public TargetedAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller);
@@ -27,7 +27,7 @@ public abstract class TargetedAction extends Action implements HasPerformerTarge
 
 	@Override
 	public PerformerTargetComponentImpl getPerformerTargetComponentImpl() {
-		return performerTargetImpl;
+		return performerTargetComponentImpl;
 	}
 
 	@Override
