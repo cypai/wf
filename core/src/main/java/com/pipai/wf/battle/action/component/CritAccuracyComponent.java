@@ -8,8 +8,8 @@ public interface CritAccuracyComponent {
 	PercentageModifierList getCritCalculation();
 
 	default int toCrit() {
-		int crit_prob = getCritCalculation().total();
-		return UtilFunctions.clamp(1, 100, crit_prob);
+		int critProb = getCritCalculation().total();
+		return UtilFunctions.clamp(1, 100, critProb);
 	}
 
 }

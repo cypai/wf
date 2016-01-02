@@ -76,7 +76,7 @@ import com.pipai.wf.util.RayMapper;
 
 public final class BattleGui extends Gui implements BattleObserver, AnimationControllerObserver {
 
-	private static final Logger logger = LoggerFactory.getLogger(BattleGui.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BattleGui.class);
 
 	public enum Mode {
 		MOVE(true), TARGET_SELECT(true), PRE_ANIMATION(false), ANIMATION(false), AI(false);
@@ -361,7 +361,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			try {
 				atk.perform();
 			} catch (IllegalActionException e) {
-				logger.error("Illegal move: " + e.getMessage());
+				LOGGER.error("Illegal move: " + e.getMessage());
 			}
 		}
 	}
@@ -376,7 +376,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				try {
 					move.perform();
 				} catch (IllegalActionException e) {
-					logger.error("IllegalMoveException detected: " + e.getMessage());
+					LOGGER.error("IllegalMoveException detected: " + e.getMessage());
 				}
 			}
 		}
@@ -436,7 +436,8 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		boolean animating = true;
 		switch (event.getType()) {
 		case MOVE:
-			animationController.startAnimation(new MoveAnimationHandler(this, animationController, event, event.getPerformer().getTeam() == Team.PLAYER));
+			animationController.startAnimation(
+					new MoveAnimationHandler(this, animationController, event, event.getPerformer().getTeam() == Team.PLAYER));
 			break;
 		case ATTACK:
 		case RANGED_WEAPON_ATTACK:
@@ -452,7 +453,8 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			animationController.startAnimation(new ReloadAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER));
 			break;
 		case READY:
-			animationController.startAnimation(new ReadySpellAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER));
+			animationController.startAnimation(
+					new ReadySpellAnimationHandler(this, event, event.getPerformer().getTeam() == Team.PLAYER));
 			break;
 		case TARGETED_ACTION:
 			animationController.startAnimation(new SuppressionAnimationHandler(this, event));
@@ -499,7 +501,8 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		}
 		terrainRenderer.clearShadedTiles();
 		targetAgentList = new LinkedList<AgentGuiObject>();
-		AgentVisionCalculator agentVisionCalculator = new AgentVisionCalculator(battleController.getBattleMap(), battleController.getBattleConfiguration());
+		AgentVisionCalculator agentVisionCalculator = new AgentVisionCalculator(battleController.getBattleMap(),
+				battleController.getBattleConfiguration());
 		for (Agent a : agentVisionCalculator.enemiesInRangeOf(selectedAgent.getAgent())) {
 			targetAgentList.add(agentMap.get(a));
 		}
@@ -507,7 +510,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		if (targetAgentList.size() == 0) {
 			targetedAction = null;
 			if (ability == null) {
-				tooltip.setToGeneralDescription(new WeaponActionFactory(battleController).defaultWeaponActionName(selectedAgent.getAgent()), "No enemies in range");
+				tooltip.setToGeneralDescription(
+						new WeaponActionFactory(battleController).defaultWeaponActionName(selectedAgent.getAgent()),
+						"No enemies in range");
 			} else {
 				tooltip.setToGeneralDescription(ability.getName(), "No enemies in range");
 			}
@@ -533,7 +538,8 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				terrainRenderer.setTargetTiles(targetTiles);
 				targetAgent = target;
 				if (ability == null) {
-					targetedAction = new WeaponActionFactory(battleController).defaultWeaponAction(selectedAgent.getAgent(), target.getAgent());
+					targetedAction = new WeaponActionFactory(battleController)
+							.defaultWeaponAction(selectedAgent.getAgent(), target.getAgent());
 				} else {
 					targetedAction = ability.getTargetedAction(battleController, selectedAgent.getAgent(), target.getAgent());
 				}
@@ -690,7 +696,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				mode = Mode.PRE_ANIMATION;
 				action.perform();
 			} catch (IllegalActionException e) {
-				logger.error("Illegal move: " + e.getMessage());
+				LOGGER.error("Illegal move: " + e.getMessage());
 				mode = Mode.MOVE;
 			}
 		}
@@ -753,7 +759,10 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		BitmapFont font = getBatch().getFont();
 		getBatch().getSpriteBatch().begin();
 		font.setColor(Color.WHITE);
-		font.draw(getBatch().getSpriteBatch(), String.valueOf(Gdx.graphics.getFramesPerSecond()), getScreenWidth() - 24, getScreenHeight() - font.getLineHeight() / 2);
+		font.draw(getBatch().getSpriteBatch(),
+				String.valueOf(Gdx.graphics.getFramesPerSecond()),
+				getScreenWidth() - 24,
+				getScreenHeight() - font.getLineHeight() / 2);
 		getBatch().getSpriteBatch().end();
 	}
 

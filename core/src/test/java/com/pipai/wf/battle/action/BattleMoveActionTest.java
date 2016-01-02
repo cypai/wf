@@ -200,7 +200,8 @@ public class BattleMoveActionTest {
 			Assert.fail("Expected IllegalMoveException was not thrown");
 		} catch (IllegalActionException e) {
 			BattleEvent ev2 = observer.getEvent();
-			Assert.assertEquals(ev, ev2);	// Check that notifyBattleEvent was not called
+			// Check that notifyBattleEvent was not called
+			Assert.assertEquals(ev, ev2);
 		}
 	}
 

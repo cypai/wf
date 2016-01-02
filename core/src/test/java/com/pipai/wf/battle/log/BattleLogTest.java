@@ -21,8 +21,10 @@ public class BattleLogTest {
 		LinkedList<BattleEvent> l = popped.getChainEvents();
 		l.pop();
 		Assert.assertEquals(0, l.size());
-		Assert.assertEquals(1, popped.getNumChainEvents());	// Make sure getChainEvent() returns a copy
-		Assert.assertEquals(1, log.getLastEvent().getNumChainEvents());	// Make sure log does not change
+		// Make sure getChainEvent() returns a copy
+		Assert.assertEquals(1, popped.getNumChainEvents());
+		// Make sure log does not change
+		Assert.assertEquals(1, log.getLastEvent().getNumChainEvents());
 	}
 
 }

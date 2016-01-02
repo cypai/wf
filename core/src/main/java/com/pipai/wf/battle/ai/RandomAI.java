@@ -18,7 +18,7 @@ import com.pipai.wf.util.Rng;
 
 public class RandomAI extends AI {
 
-	private static final Logger logger = LoggerFactory.getLogger(RandomAI.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RandomAI.class);
 
 	private LinkedList<Agent> enemyAgents, playerAgents, toAct;
 
@@ -57,7 +57,7 @@ public class RandomAI extends AI {
 			try {
 				act.perform();
 			} catch (IllegalActionException e) {
-				logger.error("AI tried to perform illegal move: " + e.getMessage());
+				LOGGER.error("AI tried to perform illegal move: " + e.getMessage());
 			}
 		}
 	}

@@ -29,9 +29,9 @@ public class FogOfWarTest {
 	@Ignore
 	@Test
 	public void testTinyVisionRadius() {
-		final int VISUAL_RANGE = 1;
+		final int visualRange = 1;
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
-		Mockito.when(mockConfig.sightRange()).thenReturn(VISUAL_RANGE);
+		Mockito.when(mockConfig.sightRange()).thenReturn(visualRange);
 		Mockito.when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(2, 2);
@@ -52,9 +52,9 @@ public class FogOfWarTest {
 	@Ignore
 	@Test
 	public void testSmallVisionRadius() {
-		final int VISUAL_RANGE = 2;
+		final int visualRange = 2;
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
-		Mockito.when(mockConfig.sightRange()).thenReturn(VISUAL_RANGE);
+		Mockito.when(mockConfig.sightRange()).thenReturn(visualRange);
 		Mockito.when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(2, 2);

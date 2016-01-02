@@ -13,7 +13,7 @@ import com.pipai.wf.guiobject.LeftClickable;
 
 public class AttackButtonOverlay extends GuiObject implements GuiRenderable, LeftClickable {
 
-	private final int SQUARE_SIZE = 30;
+	private static final int SQUARE_SIZE = 30;
 
 	private int x, y;
 

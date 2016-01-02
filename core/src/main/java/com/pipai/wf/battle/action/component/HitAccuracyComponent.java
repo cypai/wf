@@ -8,8 +8,8 @@ public interface HitAccuracyComponent {
 	PercentageModifierList getHitCalculation();
 
 	default int toHit() {
-		int total_aim = getHitCalculation().total();
-		return UtilFunctions.clamp(1, 100, total_aim);
+		int totalAim = getHitCalculation().total();
+		return UtilFunctions.clamp(1, 100, totalAim);
 	}
 
 }

@@ -5,29 +5,29 @@ import java.util.Map;
 
 public final class RomanNumerals {
 
-	private static LinkedHashMap<String, Integer> roman_numerals;
+	private static final LinkedHashMap<String, Integer> ROMAN_NUMERALS;
 
 	static {
-		roman_numerals = new LinkedHashMap<String, Integer>();
-		roman_numerals.put("M", 1000);
-		roman_numerals.put("CM", 900);
-		roman_numerals.put("D", 500);
-		roman_numerals.put("CD", 400);
-		roman_numerals.put("C", 100);
-		roman_numerals.put("XC", 90);
-		roman_numerals.put("L", 50);
-		roman_numerals.put("XL", 40);
-		roman_numerals.put("X", 10);
-		roman_numerals.put("IX", 9);
-		roman_numerals.put("V", 5);
-		roman_numerals.put("IV", 4);
-		roman_numerals.put("I", 1);
+		ROMAN_NUMERALS = new LinkedHashMap<String, Integer>();
+		ROMAN_NUMERALS.put("M", 1000);
+		ROMAN_NUMERALS.put("CM", 900);
+		ROMAN_NUMERALS.put("D", 500);
+		ROMAN_NUMERALS.put("CD", 400);
+		ROMAN_NUMERALS.put("C", 100);
+		ROMAN_NUMERALS.put("XC", 90);
+		ROMAN_NUMERALS.put("L", 50);
+		ROMAN_NUMERALS.put("XL", 40);
+		ROMAN_NUMERALS.put("X", 10);
+		ROMAN_NUMERALS.put("IX", 9);
+		ROMAN_NUMERALS.put("V", 5);
+		ROMAN_NUMERALS.put("IV", 4);
+		ROMAN_NUMERALS.put("I", 1);
 	}
 
 	public static String romanNumeralify(int num) {
 		int i = num;
 		String res = "";
-		for (Map.Entry<String, Integer> entry : roman_numerals.entrySet()) {
+		for (Map.Entry<String, Integer> entry : ROMAN_NUMERALS.entrySet()) {
 			int matches = i / entry.getValue();
 			res += repeat(entry.getKey(), matches);
 			i = i % entry.getValue();

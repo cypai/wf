@@ -1,6 +1,7 @@
 package com.pipai.wf.battle.vision;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.math.Vector2;
 import com.pipai.wf.battle.map.BattleMap;
@@ -45,6 +46,7 @@ public class LineOfSightCalculator {
 	}
 
 	private static Supercover supercover(Vector2 a, Vector2 b) {
+		// CHECKSTYLE:OFF Trailing Comments actually help readability here
 		Supercover points = new Supercover();
 		int i; // loop counter
 		int ystep, xstep; // the step on y and x axis
@@ -67,7 +69,8 @@ public class LineOfSightCalculator {
 		} else {
 			xstep = 1;
 		}
-		ddy = 2 * dy; // work with double values for full precision
+		// work with double values for full precision
+		ddy = 2 * dy;
 		ddx = 2 * dx;
 		if (ddx >= ddy) { // first octant (0 <= slope <= 1)
 			// compulsory initialization (even for errorprev, needed when dx==dy)
@@ -113,6 +116,7 @@ public class LineOfSightCalculator {
 			}
 		}
 		points.remove(new GridPosition((int) b.x, (int) b.y));
+		// CHECKSTYLE:ON
 		return points;
 	}
 
@@ -122,12 +126,16 @@ public class LineOfSightCalculator {
 
 	protected static class Supercover {
 
-		public ArrayList<GridPosition> supercover;
-		public ArrayList<CornerPair> corners;
+		private ArrayList<GridPosition> supercover;
+		private ArrayList<CornerPair> corners;
 
 		public Supercover() {
 			supercover = new ArrayList<GridPosition>();
 			corners = new ArrayList<CornerPair>();
+		}
+
+		public List<GridPosition> getSupercover() {
+			return supercover;
 		}
 
 		public void remove(GridPosition pos) {
@@ -143,7 +151,7 @@ public class LineOfSightCalculator {
 		}
 
 		public class CornerPair {
-			public GridPosition a, b;
+			private GridPosition a, b;
 
 			CornerPair(GridPosition a, GridPosition b) {
 				this.a = a;

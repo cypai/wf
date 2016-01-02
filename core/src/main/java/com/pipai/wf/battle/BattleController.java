@@ -86,22 +86,22 @@ public class BattleController {
 	}
 
 	public BattleResult battleResult() {
-		int ko_amount = 0;
+		int koAmount = 0;
 		for (Agent a : enemyList) {
 			if (a.isKO()) {
-				ko_amount += 1;
+				koAmount += 1;
 			}
 		}
-		if (ko_amount == enemyList.size()) {
+		if (koAmount == enemyList.size()) {
 			return new BattleResult(BattleResult.Result.VICTORY, playerList);
 		}
-		ko_amount = 0;
+		koAmount = 0;
 		for (Agent a : playerList) {
 			if (a.isKO()) {
-				ko_amount += 1;
+				koAmount += 1;
 			}
 		}
-		if (ko_amount == playerList.size()) {
+		if (koAmount == playerList.size()) {
 			return new BattleResult(BattleResult.Result.DEFEAT, playerList);
 		}
 		return new BattleResult(BattleResult.Result.NONE, playerList);

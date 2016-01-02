@@ -74,7 +74,7 @@ public class WeaponIndicator extends GuiObject implements GuiRenderable {
 					weaponInfo += spell.getName();
 				}
 			} else {
-				weaponInfo = weapon.getName() + "   " + String.valueOf(weapon.currentAmmo()) + "/" + String.valueOf(weapon.baseAmmoCapacity());
+				weaponInfo = weapon.getName() + "   " + weapon.currentAmmo() + "/" + weapon.baseAmmoCapacity();
 			}
 			if (weapon == agent.getAgent().getCurrentWeapon()) {
 				f.setColor(Color.ORANGE);

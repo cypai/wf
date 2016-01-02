@@ -8,8 +8,8 @@ import com.pipai.wf.gui.BattleGui;
 
 public class FireballGuiObject extends BulletGuiObject {
 
-	public FireballGuiObject(BattleGui gui, float x, float y, float dest_x, float dest_y, AgentGuiObject target) {
-		super(gui, x, y, dest_x, dest_y, target);
+	public FireballGuiObject(BattleGui gui, float x, float y, float destX, float destY, AgentGuiObject target) {
+		super(gui, x, y, destX, destY, target);
 	}
 
 	@Override

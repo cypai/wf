@@ -107,10 +107,12 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		f.draw(spr, targetedAction.getTarget().getName(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
 		spr.end();
 		if (targetedAction instanceof HitAccuracyComponent) {
-			renderCalc(batch, padding * 2, height - f.getLineHeight() * 2, ((HitAccuracyComponent) targetedAction).getHitCalculation(), "Hit Calculation");
+			renderCalc(batch, padding * 2, height - f.getLineHeight() * 2,
+					((HitAccuracyComponent) targetedAction).getHitCalculation(), "Hit Calculation");
 		}
 		if (targetedAction instanceof CritAccuracyComponent) {
-			renderCalc(batch, width - padding - 120, height - f.getLineHeight() * 2, ((CritAccuracyComponent) targetedAction).getCritCalculation(), "Crit Calculation");
+			renderCalc(batch, width - padding - 120, height - f.getLineHeight() * 2,
+					((CritAccuracyComponent) targetedAction).getCritCalculation(), "Crit Calculation");
 		}
 		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 12, targetedAction.getTarget());
 	}
@@ -139,14 +141,14 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		r.end();
 	}
 
-	private void renderAbilities(BatchHelper batch, float abilityX, float abilityY, Agent the_agent) {
+	private void renderAbilities(BatchHelper batch, float abilityX, float abilityY, Agent theAgent) {
 		SpriteBatch spr = batch.getSpriteBatch();
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
 		f.draw(spr, "Abilities", abilityX, abilityY, 0, Align.left, true);
 		float currY = abilityY - f.getLineHeight() * 2;
-		for (Ability a : the_agent.getAbilities()) {
+		for (Ability a : theAgent.getAbilities()) {
 			String levelString = a instanceof LevelledAbilityComponent
 					? " " + RomanNumerals.romanNumeralify(((LevelledAbilityComponent) a).getLevel())
 					: "";

@@ -5,26 +5,26 @@ import com.badlogic.gdx.utils.NumberUtils;
 import com.pipai.wf.battle.map.GridPosition;
 
 public class GridPositionAttribute extends Attribute {
-	public final static String GridPositionAlias = "gridPosition";
-	public final static long Type = register(GridPositionAlias);
-	private static long Mask = Type;
+	public static final String GRID_POSITION_ALIAS = "gridPosition";
+	public static final long TYPE = register(GRID_POSITION_ALIAS);
+	private static final long MASK = TYPE;
 
 	/**
 	 * Method to check whether the specified type is a valid
 	 * GridPositionAttribute type
 	 */
 	public static Boolean is(final long type) {
-		return (type & Mask) != 0;
+		return (type & MASK) != 0;
 	}
 
 	private GridPosition value;
 
 	public GridPositionAttribute() {
-		super(Type);
+		super(TYPE);
 	}
 
 	public GridPositionAttribute(final GridPosition value) {
-		super(Type);
+		super(TYPE);
 		this.value = new GridPosition(value);
 	}
 
@@ -51,6 +51,7 @@ public class GridPositionAttribute extends Attribute {
 			return type < o.type ? -1 : 1;
 		}
 		GridPosition otherValue = ((GridPositionAttribute) o).value;
-		return value.equals(otherValue) ? 0 : (value.x < otherValue.x ? -1 : 1);	// Arbitrary left to right comparison
+		// Arbitrary left to right comparison
+		return value.equals(otherValue) ? 0 : (value.x < otherValue.x ? -1 : 1);
 	}
 }

@@ -10,10 +10,10 @@ import com.pipai.wf.battle.damage.DamageResult;
 
 public class AcidStatusEffect extends StatusEffect {
 
-	private static final ArrayList<Class<? extends Action>> actionWhitelist = new ArrayList<>();
+	private static final ArrayList<Class<? extends Action>> ACTION_WHITELIST = new ArrayList<>(1);
 
 	static {
-		actionWhitelist.add(SwitchWeaponAction.class);
+		ACTION_WHITELIST.add(SwitchWeaponAction.class);
 	}
 
 	private DamageDealer damageDealer;
@@ -45,7 +45,7 @@ public class AcidStatusEffect extends StatusEffect {
 
 	@Override
 	protected void onActionImpl(Action action) {
-		for (Class<? extends Action> klass : actionWhitelist) {
+		for (Class<? extends Action> klass : ACTION_WHITELIST) {
 			if (klass.isInstance(action)) {
 				// Passes whitelist, don't take damage
 				return;

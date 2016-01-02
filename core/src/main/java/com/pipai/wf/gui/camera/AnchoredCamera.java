@@ -14,11 +14,11 @@ public class AnchoredCamera {
 	private float cameraMoveTime;
 	private Vector3 cameraStart, cameraDest, anchorStart, anchorDest;
 
-	private float STEP_SIZE = 0.05f;
+	private static final float STEP_SIZE = 0.05f;
 
 	private int angle;
 
-	private final Vector3 rot_axis = new Vector3(0, 0, 1);
+	private final Vector3 rotAxis = new Vector3(0, 0, 1);
 
 	private CameraMovementObserver observer;
 
@@ -49,7 +49,7 @@ public class AnchoredCamera {
 		setNewObserver(null);
 		cameraMoveTime = 2;
 		Vector3 v = new Vector3(0, 3, 0);
-		v.rotate(rot_axis, angle - 90);
+		v.rotate(rotAxis, angle - 90);
 		camera.translate(v);
 		anchor.add(v);
 	}
@@ -58,7 +58,7 @@ public class AnchoredCamera {
 		setNewObserver(null);
 		cameraMoveTime = 2;
 		Vector3 v = new Vector3(0, -3, 0);
-		v.rotate(rot_axis, angle - 90);
+		v.rotate(rotAxis, angle - 90);
 		camera.translate(v);
 		anchor.add(v);
 	}
@@ -67,7 +67,7 @@ public class AnchoredCamera {
 		setNewObserver(null);
 		cameraMoveTime = 2;
 		Vector3 v = new Vector3(-3, 0, 0);
-		v.rotate(rot_axis, angle - 90);
+		v.rotate(rotAxis, angle - 90);
 		camera.translate(v);
 		anchor.add(v);
 	}
@@ -76,7 +76,7 @@ public class AnchoredCamera {
 		setNewObserver(null);
 		cameraMoveTime = 2;
 		Vector3 v = new Vector3(3, 0, 0);
-		v.rotate(rot_axis, angle - 90);
+		v.rotate(rotAxis, angle - 90);
 		camera.translate(v);
 		anchor.add(v);
 	}
@@ -97,7 +97,7 @@ public class AnchoredCamera {
 	}
 
 	public void arcballRotationCW() {
-		camera.rotateAround(anchor, rot_axis, -45);
+		camera.rotateAround(anchor, rotAxis, -45);
 		angle -= 45;
 		if (angle < 0) {
 			angle += 360;
@@ -105,7 +105,7 @@ public class AnchoredCamera {
 	}
 
 	public void arcballRotationCCW() {
-		camera.rotateAround(anchor, rot_axis, 45);
+		camera.rotateAround(anchor, rotAxis, 45);
 		angle += 45;
 		if (angle > 360) {
 			angle -= 360;

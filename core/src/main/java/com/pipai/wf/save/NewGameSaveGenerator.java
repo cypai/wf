@@ -18,12 +18,12 @@ public class NewGameSaveGenerator {
 
 	private ArrayList<UnitSchema> generateParty() {
 		ArrayList<UnitSchema> party = new ArrayList<>();
-		party.add(new UnitSchema(new TidusSchema()));	// Tidus
-		party.add(new UnitSchema(new RaceTemplateSchema(Race.HUMAN)));	// Sienna
-		party.add(new UnitSchema(new RaceTemplateSchema(Race.FAIRY)));	// Sapphire
-		party.add(new UnitSchema(new RaceTemplateSchema(Race.CAT)));	// Mira
-		party.add(new UnitSchema(new FlameFairySchema()));	// Sunny
-		party.add(new UnitSchema(new RaceTemplateSchema(Race.FOX)));	// Nolan
+		party.add(new UnitSchema(new TidusSchema()));
+		party.add(new UnitSchema(new RaceTemplateSchema(Race.HUMAN)));
+		party.add(new UnitSchema(new RaceTemplateSchema(Race.FAIRY)));
+		party.add(new UnitSchema(new RaceTemplateSchema(Race.CAT)));
+		party.add(new UnitSchema(new FlameFairySchema()));
+		party.add(new UnitSchema(new RaceTemplateSchema(Race.FOX)));
 		return party;
 	}
 

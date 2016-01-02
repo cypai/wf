@@ -12,7 +12,7 @@ import com.pipai.wf.exception.IllegalActionException;
 
 public class TopModularAI extends AI {
 
-	private static final Logger logger = LoggerFactory.getLogger(TopModularAI.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TopModularAI.class);
 
 	private ArrayList<Agent> enemyAgents, playerAgents;
 	private ArrayList<ModularAI> ais;
@@ -54,7 +54,7 @@ public class TopModularAI extends AI {
 		try {
 			best.getAction().perform();
 		} catch (IllegalActionException e) {
-			logger.error("AI tried to perform illegal move: " + e.getMessage());
+			LOGGER.error("AI tried to perform illegal move: " + e.getMessage());
 		}
 	}
 

@@ -23,7 +23,8 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 	private boolean cameraDone, go;
 	private LinkedList<Vector2> moveSeq;
 	private Vector2 start, dest;
-	private int t;	// Animation time t counter
+	// Animation time t counter
+	private int t;
 	private LinkedList<BattleEvent> currentOWChain;
 
 	public MoveAnimationHandler(BattleGui gui, AnimationController controller, BattleEvent moveEvent, boolean noCameraFollow) {

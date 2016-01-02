@@ -13,23 +13,23 @@ import com.pipai.wf.guiobject.XYZPositioned;
 
 public class BulletGuiObject extends GuiObject implements GuiRenderable, XYZPositioned {
 
-	private float x, y, dest_x, dest_y;
-	private int t, final_t;
+	private float x, y, destX, destY;
+	private int t, finalT;
 	private Vector2 dir;
 
 	private static final int SPEED = 16;
 
-	public BulletGuiObject(BattleGui gui, float x, float y, float dest_x, float dest_y, AgentGuiObject target) {
+	public BulletGuiObject(BattleGui gui, float x, float y, float destX, float destY, AgentGuiObject target) {
 		super(gui);
 		this.x = x;
 		this.y = y;
-		this.dest_x = dest_x;
-		this.dest_y = dest_y;
-		dir = new Vector2(dest_x - x, dest_y - y);
+		this.destX = destX;
+		this.destY = destY;
+		dir = new Vector2(destX - x, destY - y);
 		dir.nor();
-		final_t = (int) Math.ceil((dest_x - x) / (SPEED * dir.x));
-		if (final_t == 0) {
-			final_t = (int) Math.ceil((dest_y - y) / (SPEED * dir.y));
+		finalT = (int) Math.ceil((destX - x) / (SPEED * dir.x));
+		if (finalT == 0) {
+			finalT = (int) Math.ceil((destY - y) / (SPEED * dir.y));
 		}
 	}
 
@@ -41,12 +41,12 @@ public class BulletGuiObject extends GuiObject implements GuiRenderable, XYZPosi
 	@Override
 	public void update() {
 		t += 1;
-		if (t < final_t) {
+		if (t < finalT) {
 			x += SPEED * dir.x;
 			y += SPEED * dir.y;
-		} else if (t == final_t) {
-			x = dest_x;
-			y = dest_y;
+		} else if (t == finalT) {
+			x = destX;
+			y = destY;
 			destroy();
 		}
 	}

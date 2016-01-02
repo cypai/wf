@@ -20,8 +20,8 @@ import com.pipai.wf.unit.schema.UnitSchema;
 
 public class SaveTest extends GdxMockedTest {
 
-	private static int SAVE_SLOT;
-	private static SaveManager MANAGER = new SaveManager();
+	private static final int SAVE_SLOT = 0;
+	private static final SaveManager MANAGER = new SaveManager();
 
 	@After
 	public void tearDown() {

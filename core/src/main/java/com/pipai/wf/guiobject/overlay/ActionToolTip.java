@@ -18,13 +18,10 @@ import com.pipai.wf.guiobject.GuiRenderable;
 
 public class ActionToolTip extends GuiObject implements GuiRenderable {
 
-	public enum Mode {
-		GENERAL, ACCURACY_ACTION;
-	}
+	private static final int PADDING = 6;
 
 	private BattleGui gui;
 	private Mode mode;
-	private final int PADDING = 6;
 	private float x, y, width, height;
 	private String title, description;
 	private int accuracy, critProb;
@@ -91,6 +88,10 @@ public class ActionToolTip extends GuiObject implements GuiRenderable {
 			f.draw(spr, "Crit: " + String.valueOf(critProb) + "%", x + width - PADDING, y - height + f.getLineHeight(), 0, Align.right, true);
 		}
 		spr.end();
+	}
+
+	public enum Mode {
+		GENERAL, ACCURACY_ACTION;
 	}
 
 }

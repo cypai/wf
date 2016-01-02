@@ -24,7 +24,7 @@ public class MapString {
 	public MapString(String mapString) throws BadStateStringException {
 		header = mapString.substring(0, mapString.indexOf("\n"));
 		map = mapString.substring(mapString.indexOf("\n") + 1);
-		String dimensions[] = header.split(" ");
+		String[] dimensions = header.split(" ");
 		rows = Integer.parseInt(dimensions[0]);
 		cols = Integer.parseInt(dimensions[1]);
 		parse();
@@ -33,8 +33,8 @@ public class MapString {
 	public MapString(int m, int n, String mapOnlyString) throws BadStateStringException {
 		header = Integer.toString(m) + " " + Integer.toString(n);
 		map = mapOnlyString;
-		this.rows = m;
-		this.cols = n;
+		rows = m;
+		cols = n;
 		parse();
 	}
 
@@ -58,9 +58,9 @@ public class MapString {
 	private void parse() throws BadStateStringException {
 		solidPositions = new ArrayList<GridPosition>();
 		agentStates = new ArrayList<AgentState>();
-		String lines[] = map.split("\n");
+		String[] lines = map.split("\n");
 		for (String line : lines) {
-			String params[] = line.split(" ");
+			String[] params = line.split(" ");
 			String type = params[0];
 			if ("s".equals(type)) {
 				solidPositions.add(new GridPosition(Integer.parseInt(params[1]), Integer.parseInt(params[2])));

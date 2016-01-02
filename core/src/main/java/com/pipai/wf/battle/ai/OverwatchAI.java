@@ -13,7 +13,7 @@ import com.pipai.wf.exception.IllegalActionException;
 
 public class OverwatchAI extends AI {
 
-	private static final Logger logger = LoggerFactory.getLogger(OverwatchAI.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OverwatchAI.class);
 
 	private LinkedList<Agent> enemyAgents, toAct;
 
@@ -49,7 +49,7 @@ public class OverwatchAI extends AI {
 			try {
 				ow.perform();
 			} catch (IllegalActionException e) {
-				logger.error("AI tried to perform illegal move: " + e.getMessage());
+				LOGGER.error("AI tried to perform illegal move: " + e.getMessage());
 			}
 		}
 	}

@@ -66,7 +66,9 @@ public class BattleMapGenerator {
 		GridPosition center = randPos(new GridPosition(1, 1), new GridPosition(map.getCols() - 1, 4));
 		for (int i = 0; i < partyRelativeStartingPositions.size() && i < party.size(); i++) {
 			GridPosition relativePos = partyRelativeStartingPositions.get(i);
-			AgentState as = factory.battleAgentFromSchema(Team.PLAYER, new GridPosition(center.x + relativePos.x, center.y + relativePos.y), party.get(i));
+			AgentState as = factory.battleAgentFromSchema(Team.PLAYER,
+					new GridPosition(center.x + relativePos.x, center.y + relativePos.y),
+					party.get(i));
 			map.addAgent(as);
 		}
 	}
@@ -79,7 +81,7 @@ public class BattleMapGenerator {
 	}
 
 	private void generateEnemyPod(BattleMap map) {
-		int amt = 1;	// rng.randInt(2, 3);
+		int amt = 1;
 		GridPosition center = randPos(new GridPosition(8, 8), new GridPosition(map.getCols() - 8, map.getRows() - 8));
 		List<GridPosition> enemyPos = new ArrayList<>();
 		for (int i = 0; i < amt; i++) {

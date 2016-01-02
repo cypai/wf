@@ -46,7 +46,8 @@ public class CastTargetAnimationHandler extends AnimationHandler implements Came
 		alarm.setTime(60);
 		TemporaryText dmgTxt;
 		if (outcome.isHit()) {
-			dmgTxt = new TemporaryText(getGui(), target.getPosition(), (outcome.isCrit() ? "/!\\ " : "Hit: ") + String.valueOf(outcome.getDamage()));
+			dmgTxt = new TemporaryText(getGui(), target.getPosition(),
+					(outcome.isCrit() ? "/!\\ " : "Hit: ") + String.valueOf(outcome.getDamage()));
 		} else {
 			dmgTxt = new TemporaryText(getGui(), target.getPosition(), "Missed");
 		}

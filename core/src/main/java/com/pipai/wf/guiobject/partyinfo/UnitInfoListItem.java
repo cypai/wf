@@ -19,7 +19,7 @@ public class UnitInfoListItem extends UIListItem {
 	// public static final int HEIGHT = 2 * PADDING + 32;
 
 	private UnitSchema schema;
-	private float width, padding, stat_spacing, height;
+	private float width, padding, statSpacing, height;
 	private ArrayList<String> statLine;
 
 	public UnitInfoListItem(Gui gui, UnitSchema schema, float x, float y, float width, float padding) {
@@ -27,13 +27,14 @@ public class UnitInfoListItem extends UIListItem {
 		this.schema = schema;
 		this.width = width;
 		this.padding = padding;
-		stat_spacing = (width - 2 * padding) / 6;
+		statSpacing = (width - 2 * padding) / 6;
 		height = 2 * padding + 32;
 		BasicStats stats = schema.getBasicStats();
 		statLine = new ArrayList<String>();
 		statLine.add("HP: " + stats.getHP() + "/" + stats.getMaxHP());
 		statLine.add("MP: " + stats.getMP() + "/" + stats.getMaxMP());
-		statLine.add("");	// Hack for buffer between HP/MP and immutable stats
+		// Hack for buffer between HP/MP and immutable stats
+		statLine.add("");
 		statLine.add("Mob: " + stats.getMobility());
 		statLine.add("Aim: " + stats.getAim());
 		statLine.add("Def: " + stats.getDefense());
@@ -63,7 +64,7 @@ public class UnitInfoListItem extends UIListItem {
 		float textX = leftX;
 		for (String s : statLine) {
 			font.draw(spr, s, textX, line2y);
-			textX += stat_spacing;
+			textX += statSpacing;
 		}
 		spr.end();
 	}

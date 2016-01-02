@@ -8,7 +8,8 @@ import com.pipai.wf.battle.agent.AgentState;
 
 public class BattleMap {
 
-	private int rows, cols; // Size of the map
+	// Size of the map
+	private int rows, cols;
 	private HashMap<String, BattleMapCell> cellMap;
 	private ArrayList<Agent> agents;
 

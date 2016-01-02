@@ -17,7 +17,8 @@ public class StatusEffectList implements Iterable<StatusEffect> {
 
 	public void add(StatusEffect newEffect) {
 		// If we add the same effect, replace the old one with the new one
-		StatusEffect identical = null;	// If list already has it then store the identical version here
+		// If list already has it then store the identical version
+		StatusEffect identical = null;
 		for (StatusEffect se : list) {
 			if (se.getClass().isInstance(newEffect)) {
 				identical = se;

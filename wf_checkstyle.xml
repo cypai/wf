@@ -13,10 +13,7 @@
   <module name="TreeWalker">
     <module name="FileContentsHolder"/>
     <module name="MissingOverride"/>
-    <module name="ConstantName">
-      <property name="severity" value="ignore"/>
-      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
-    </module>
+    <module name="ConstantName"/>
     <module name="RedundantImport"/>
     <module name="UnusedImports"/>
     <module name="OuterTypeNumber"/>
@@ -150,6 +147,38 @@
       <property name="severity" value="ignore"/>
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
+    <module name="AbbreviationAsWordInName">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="TypeName"/>
+    <module name="MethodName"/>
+    <module name="LocalVariableName"/>
+    <module name="MemberName"/>
+    <module name="MethodTypeParameterName"/>
+    <module name="LocalFinalVariableName"/>
+    <module name="ClassTypeParameterName"/>
+    <module name="InterfaceTypeParameterName"/>
+    <module name="PackageName"/>
+    <module name="ParameterName"/>
+    <module name="StaticVariableName"/>
+    <module name="CustomDeclarationOrder">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="MethodLength"/>
+    <module name="LineLength">
+      <property name="max" value="150"/>
+      <property name="tabWidth" value="4"/>
+    </module>
+    <module name="ModifierOrder"/>
+    <module name="DeclarationOrder">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
+    <module name="UnnecessaryParentheses"/>
+    <module name="ArrayTypeStyle"/>
+    <module name="TrailingComment"/>
   </module>
   <module name="RegexpSingleline">
     <property name="format" value="^.*System.out.print.*$"/>
@@ -157,6 +186,10 @@
   </module>
   <module name="NewlineAtEndOfFile"/>
   <module name="SuppressWithNearbyCommentFilter">
+    <property name="commentFormat" value="SUPPRESS CHECKSTYLE (\w+) (\w+)"/>
     <property name="influenceFormat" value="1"/>
+  </module>
+  <module name="SuppressionCommentFilter">
+    <property name="offCommentFormat" value="CHECKSTYLE\:OFF \w+"/>
   </module>
 </module>

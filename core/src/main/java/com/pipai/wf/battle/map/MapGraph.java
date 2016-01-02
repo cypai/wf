@@ -21,7 +21,7 @@ public class MapGraph {
 	private HashMap<String, Node> nodeMap;
 	private float[] moveBounds;
 	private ArrayList<ArrayList<GridPosition>> reachableLists;
-	private boolean DEBUG;
+	private boolean debug;
 	private int ap, apmax;
 
 	public MapGraph(BattleMap map, GridPosition start, int mobility, int ap, int apMax) {
@@ -29,7 +29,7 @@ public class MapGraph {
 	}
 
 	public MapGraph(BattleMap map, GridPosition start, int mobility, int ap, int apMax, boolean debug) {
-		DEBUG = debug;
+		this.debug = debug;
 		this.ap = ap;
 		apmax = apMax;
 		reachableLists = new ArrayList<ArrayList<GridPosition>>();
@@ -55,7 +55,8 @@ public class MapGraph {
 					nodeMap.put(cellPos.toString(), cell);
 					Node west = getNode(new GridPosition(x - 1, y));
 					if (west != null) {
-						west.addEdge(cell);	// Will add height-weights later
+						// Will add height-weights later
+						west.addEdge(cell);
 						cell.addEdge(west);
 					}
 					Node south = getNode(new GridPosition(x, y - 1));
@@ -65,7 +66,8 @@ public class MapGraph {
 					}
 					Node sw = getNode(new GridPosition(x - 1, y - 1));
 					if (sw != null) {
-						sw.addEdge(cell);	// Will add height-weights later
+						// Will add height-weights later
+						sw.addEdge(cell);
 						cell.addEdge(sw);
 					}
 					Node nw = getNode(new GridPosition(x - 1, y + 1));
@@ -97,9 +99,9 @@ public class MapGraph {
 	}
 
 	private int apRequiredToMoveTo(Node destination) {
-		float DELTA = 0.000001f;
+		float delta = 0.000001f;
 		for (int i = 1; i <= moveBounds.length; i++) {
-			if (destination.getTotalCost() - DELTA <= moveBounds[i - 1]) {
+			if (destination.getTotalCost() - delta <= moveBounds[i - 1]) {
 				return i;
 			}
 		}
@@ -123,18 +125,18 @@ public class MapGraph {
 				current.setAPNeeded(apNeeded);
 			}
 			current.visit();
-			if (DEBUG) {
+			if (debug) {
 				LOGGER.debug("Current " + current);
 			}
 			for (Edge edge : current.getEdges()) {
 				Node node = edge.getDestination();
-				if (DEBUG) {
+				if (debug) {
 					LOGGER.debug("Checking " + node.getPosition());
 				}
 				if (!node.isVisited() && !node.isAdded()) {
 					float totalCost = edge.cost() + current.getTotalCost();
 					if (totalCost <= maxMove) {
-						if (DEBUG) {
+						if (debug) {
 							LOGGER.debug("Added " + node.getPosition() + " Dist " + String.valueOf(totalCost));
 						}
 						node.setAdded();

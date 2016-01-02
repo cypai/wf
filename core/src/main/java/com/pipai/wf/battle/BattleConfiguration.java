@@ -14,7 +14,7 @@ import com.pipai.wf.util.Rng;
 
 public class BattleConfiguration {
 
-	private static final Logger logger = LoggerFactory.getLogger(BattleConfiguration.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BattleConfiguration.class);
 
 	private final Properties battleProps;
 	private final Rng rng;
@@ -30,7 +30,7 @@ public class BattleConfiguration {
 			FileHandle configFile = Gdx.files.local("config/battle.properties");
 			battleProps.load(configFile.reader());
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			LOGGER.error(e.getMessage());
 		}
 	}
 

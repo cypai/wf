@@ -41,23 +41,12 @@ import com.pipai.wf.guiobject.RightClickable3D;
 public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, RightClickable3D {
 
 	public static final int SQUARE_SIZE = 40;
+
 	private static final Color MOVE_COLOR = new Color(0.5f, 0.5f, 1, 0.5f);
 	private static final Color MID_DASH_COLOR = new Color(0.8f, 0.8f, 0, 0.5f);
 	private static final Color DASH_COLOR = new Color(1f, 0.8f, 0, 0.5f);
 	private static final Color TARGET_COLOR = new Color(0.5f, 0, 0, 0.5f);
 	private static final Color TARGETABLE_COLOR = new Color(1f, 0.8f, 0, 0.5f);
-
-	public static GridPosition gamePosToGridPos(float gameX, float gameY) {
-		int gameX_i = (int) gameX;
-		int gameY_i = (int) gameY;
-		int x_offset = gameX_i % SQUARE_SIZE;
-		int y_offset = gameY_i % SQUARE_SIZE;
-		return new GridPosition((gameX_i - x_offset) / SQUARE_SIZE, (gameY_i - y_offset) / SQUARE_SIZE);
-	}
-
-	public static Vector2 centerOfGridPos(GridPosition pos) {
-		return new Vector2(pos.x * SQUARE_SIZE + SQUARE_SIZE / 2, pos.y * SQUARE_SIZE + SQUARE_SIZE / 2);
-	}
 
 	private BattleGui gui;
 	private BattleMap map;
@@ -72,10 +61,25 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	private Texture grassTexture;
 	private ShaderProgram fogOfWarShader;
 
+	// SUPPRESS CHECKSTYLE MemberNames these match with style in GLSL
 	private int u_projViewTrans, u_worldTrans, u_lightColor;
+
+	// SUPPRESS CHECKSTYLE MemberNames these match with style in GLSL
 	private int u_texture, u_fogOfWarTexture;
 
 	private boolean renderingTextures = true;
+
+	public static GridPosition gamePosToGridPos(float gameX, float gameY) {
+		int gameXi = (int) gameX;
+		int gameYi = (int) gameY;
+		int xOffset = gameXi % SQUARE_SIZE;
+		int yOffset = gameYi % SQUARE_SIZE;
+		return new GridPosition((gameXi - xOffset) / SQUARE_SIZE, (gameYi - yOffset) / SQUARE_SIZE);
+	}
+
+	public static Vector2 centerOfGridPos(GridPosition pos) {
+		return new Vector2(pos.x * SQUARE_SIZE + SQUARE_SIZE / 2, pos.y * SQUARE_SIZE + SQUARE_SIZE / 2);
+	}
 
 	public BattleTerrainRenderer(BattleGui gui, BattleMap map, FogOfWar fogOfWar) {
 		super(gui);
@@ -118,7 +122,10 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 			for (int c = 0; c < map.getCols(); c++) {
 				EnvironmentObject env = map.getCell(new GridPosition(c, r)).getTileEnvironmentObject();
 				if (env != null && env.getCoverType() == CoverType.FULL) {
-					wallModels.add(new ModelInstance(boxModel, c * SQUARE_SIZE + SQUARE_SIZE / 2, r * SQUARE_SIZE + SQUARE_SIZE / 2, SQUARE_SIZE / 2));
+					wallModels.add(new ModelInstance(boxModel,
+							c * SQUARE_SIZE + SQUARE_SIZE / 2,
+							r * SQUARE_SIZE + SQUARE_SIZE / 2,
+							SQUARE_SIZE / 2));
 				}
 			}
 		}
@@ -233,12 +240,12 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		batch.begin(ShapeType.Line);
 		batch.setColor(0, 0.7f, 0.7f, 0.5f);
 		for (int i = 0; i <= numCols; i++) {
-			float horiz_pos = x + i * width / numCols;
-			batch.line(horiz_pos, y, horiz_pos, y + height);
+			float horizPos = x + i * width / numCols;
+			batch.line(horizPos, y, horizPos, y + height);
 		}
 		for (int i = 0; i <= numRows; i++) {
-			float vert_pos = y + i * height / numRows;
-			batch.line(x, vert_pos, x + width, vert_pos);
+			float vertPos = y + i * height / numRows;
+			batch.line(x, vertPos, x + width, vertPos);
 		}
 		batch.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);

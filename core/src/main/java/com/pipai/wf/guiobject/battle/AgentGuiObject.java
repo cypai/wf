@@ -43,16 +43,16 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 		displayHP = agent.getHP();
 		displayArmorHP = agent.getArmor().getHP();
 		selected = false;
-		int SQUARE_SIZE = BattleTerrainRenderer.SQUARE_SIZE;
+		int squareSize = BattleTerrainRenderer.SQUARE_SIZE;
 		Vector2 xy = BattleTerrainRenderer.centerOfGridPos(agent.getPosition());
 		x = xy.x;
 		y = xy.y;
-		radius = SQUARE_SIZE / 2;
+		radius = squareSize / 2;
 		showingKO = false;
-		Pixmap pixmap = new Pixmap(SQUARE_SIZE, SQUARE_SIZE, Pixmap.Format.RGBA8888);
+		Pixmap pixmap = new Pixmap(squareSize, squareSize, Pixmap.Format.RGBA8888);
 		pixmap.fill();
 		pixmap.setColor(Color.RED);
-		pixmap.fillCircle(SQUARE_SIZE / 2, SQUARE_SIZE / 2, SQUARE_SIZE / 2 - 1);
+		pixmap.fillCircle(squareSize / 2, squareSize / 2, squareSize / 2 - 1);
 		circleTex = new Texture(pixmap);
 		pixmap.dispose();
 		decal = Decal.newDecal(new TextureRegion(circleTex), true);
@@ -140,7 +140,8 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 		int dmg = outcome.getDamage();
 		displayArmorHP -= dmg;
 		if (displayArmorHP < 0) {
-			displayHP += displayArmorHP;	// Add the negative damage
+			// Add the negative damage
+			displayHP += displayArmorHP;
 			displayArmorHP = 0;
 		}
 		if (displayHP <= 0) {
@@ -160,7 +161,8 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 			return false;
 		}
 		if (agent.getTeam() != Team.PLAYER) {
-			AgentVisionCalculator agentVisionCalculator = new AgentVisionCalculator(gui.getBattleController().getBattleMap(), gui.getBattleController().getBattleConfiguration());
+			AgentVisionCalculator agentVisionCalculator = new AgentVisionCalculator(gui.getBattleController().getBattleMap(),
+					gui.getBattleController().getBattleConfiguration());
 			if (agentVisionCalculator.enemiesInRangeOf(agent).size() == 0) {
 				return false;
 			}

@@ -8,9 +8,12 @@ import com.pipai.wf.battle.map.BattleMap;
 public class TerrainMeshGenerator {
 
 	public static Mesh generateMeshFromBattleMap(BattleMap map, int squareSize) {
-		final int posComponents = 3;		// x, y, z
-		final int texCoordComponents = 2;	// u, v
-		final int gridPosComponents = 2;	// x, y
+		// x, y, z
+		final int posComponents = 3;
+		// u, v
+		final int texCoordComponents = 2;
+		// x, y
+		final int gridPosComponents = 2;
 		final int numComponents = posComponents + texCoordComponents + gridPosComponents;
 		final int rows = map.getRows();
 		final int cols = map.getCols();

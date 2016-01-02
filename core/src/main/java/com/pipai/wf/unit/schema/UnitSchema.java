@@ -96,10 +96,6 @@ public class UnitSchema implements HasName, HasBasicStats {
 		return name;
 	}
 
-	public AbilityList getAbilities() {
-		return abilities.clone();
-	}
-
 	public Armor getArmor() {
 		return armor;
 	}
@@ -126,6 +122,10 @@ public class UnitSchema implements HasName, HasBasicStats {
 
 	public void setExp(int exp) {
 		this.exp = exp;
+	}
+
+	public AbilityList getAbilities() {
+		return abilities.clone();
 	}
 
 	@Override

@@ -109,7 +109,8 @@ public class GeneralModularAI extends ModularAI {
 		ActionScore best = new ActionScore(null, Float.MIN_NORMAL);
 		for (GridPosition pos : potentialTiles) {
 			float score = scorePosition(pos);
-			best = best.compareAndReturnBetter(new ActionScore(new MoveAction(getBattleController(), getAiAgent(), mapgraph.getPath(pos), 1), score));
+			MoveAction moveAction = new MoveAction(getBattleController(), getAiAgent(), mapgraph.getPath(pos), 1);
+			best = best.compareAndReturnBetter(new ActionScore(moveAction, score));
 		}
 		return best;
 	}
