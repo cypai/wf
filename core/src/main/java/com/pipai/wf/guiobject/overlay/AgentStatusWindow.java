@@ -17,6 +17,7 @@ import com.pipai.wf.gui.Gui;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.unit.ability.Ability;
+import com.pipai.wf.unit.ability.component.LevelledAbilityComponent;
 import com.pipai.wf.util.RomanNumerals;
 
 public class AgentStatusWindow extends GuiObject implements GuiRenderable {
@@ -140,7 +141,10 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		f.draw(spr, "Abilities", abilityX, abilityY, 0, Align.left, true);
 		float currY = abilityY - f.getLineHeight() * 2;
 		for (Ability a : the_agent.getAbilities()) {
-			String abilityName = a.getName() + (a.getLevel() > 0 ? " " + RomanNumerals.romanNumeralify(a.getLevel()) : "");
+			String levelString = a instanceof LevelledAbilityComponent
+					? " " + RomanNumerals.romanNumeralify(((LevelledAbilityComponent) a).getLevel())
+					: "";
+			String abilityName = a.getName() + levelString;
 			f.draw(spr, abilityName, abilityX, currY, width / 3, Align.left, true);
 			f.draw(spr, a.getDescription(), abilityX, currY - f.getLineHeight(), width / 3, Align.left, true);
 			currY -= f.getLineHeight() * 3;

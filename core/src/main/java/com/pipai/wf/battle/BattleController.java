@@ -22,14 +22,14 @@ public class BattleController {
 
 	public BattleController(BattleMap map, BattleConfiguration config) {
 		log = new BattleLog();
-		this.battleMap = map;
+		battleMap = map;
 		currentTeam = Team.PLAYER;
 		observerList = new LinkedList<BattleObserver>();
 		playerList = new LinkedList<Agent>();
 		enemyList = new LinkedList<Agent>();
-		this.battleConfiguration = config;
+		battleConfiguration = config;
 
-		for (Agent a : this.battleMap.getAgents()) {
+		for (Agent a : battleMap.getAgents()) {
 			if (a.getTeam() == Team.PLAYER) {
 				playerList.add(a);
 			} else {
@@ -62,9 +62,6 @@ public class BattleController {
 
 	public void endTurn() {
 		if (currentTeam == Team.PLAYER) {
-			for (Agent a : playerList) {
-				a.onTurnEnd();
-			}
 			currentTeam = Team.ENEMY;
 			for (Agent a : enemyList) {
 				a.onTurnBegin();
@@ -72,9 +69,6 @@ public class BattleController {
 			notifyObservers(BattleEvent.startTurnEvent(Team.ENEMY));
 		} else {
 			// Round ended
-			for (Agent a : enemyList) {
-				a.onTurnEnd();
-			}
 			for (Agent a : battleMap.getAgents()) {
 				a.onRoundEnd();
 			}

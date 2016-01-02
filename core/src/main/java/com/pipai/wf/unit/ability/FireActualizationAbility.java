@@ -1,13 +1,23 @@
 package com.pipai.wf.unit.ability;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pipai.wf.unit.ability.component.HasLevelledAbilityComponent;
+import com.pipai.wf.unit.ability.component.LevelledAbilityImpl;
 
-public class FireActualizationAbility extends PassiveAbility {
+public class FireActualizationAbility extends Ability implements HasLevelledAbilityComponent {
 
-	@JsonCreator
-	public FireActualizationAbility(@JsonProperty("level") int level) {
-		super(level);
+	private LevelledAbilityImpl levelledAbilityImpl = new LevelledAbilityImpl();
+
+	public FireActualizationAbility() {
+		setLevel(1);
+	}
+
+	public FireActualizationAbility(int level) {
+		setLevel(level);
+	}
+
+	@Override
+	public LevelledAbilityImpl getLevelledAbilityImpl() {
+		return levelledAbilityImpl;
 	}
 
 	@Override

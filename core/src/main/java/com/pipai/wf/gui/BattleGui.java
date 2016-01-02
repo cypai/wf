@@ -66,9 +66,9 @@ import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
 import com.pipai.wf.guiobject.overlay.WeaponIndicator;
 import com.pipai.wf.unit.ability.Ability;
-import com.pipai.wf.unit.ability.ActiveSkillTargetedAbility;
 import com.pipai.wf.unit.ability.PrecisionShotAbility;
 import com.pipai.wf.unit.ability.SuppressionAbility;
+import com.pipai.wf.unit.ability.component.TargetedAbilityComponent;
 import com.pipai.wf.util.RayMapper;
 
 /*
@@ -494,7 +494,10 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		switchToTargetMode(null);
 	}
 
-	public void switchToTargetMode(ActiveSkillTargetedAbility ability) {
+	public void switchToTargetMode(Ability ability) {
+		if (ability != null && !(ability instanceof TargetedAbilityComponent)) {
+			throw new IllegalArgumentException(ability.getName() + " cannot target anything");
+		}
 		terrainRenderer.clearShadedTiles();
 		targetAgentList = new LinkedList<AgentGuiObject>();
 		AgentVisionCalculator agentVisionCalculator = new AgentVisionCalculator(battleController.getBattleMap(), battleController.getBattleConfiguration());
@@ -511,14 +514,14 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			}
 			return;
 		}
-		this.switchTarget(targetAgentList.getFirst(), ability);
+		this.switchTarget(targetAgentList.getFirst(), (TargetedAbilityComponent) ability);
 	}
 
 	public void switchTarget(AgentGuiObject target) {
 		switchTarget(target, null);
 	}
 
-	public void switchTarget(AgentGuiObject target, ActiveSkillTargetedAbility ability) {
+	public void switchTarget(AgentGuiObject target, TargetedAbilityComponent ability) {
 		if (mode == Mode.TARGET_SELECT) {
 			if (targetAgentList.contains(target)) {
 				ArrayList<GridPosition> targetTiles = new ArrayList<>();
@@ -533,7 +536,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				if (ability == null) {
 					targetedAction = new WeaponActionFactory(battleController).defaultWeaponAction(selectedAgent.getAgent(), target.getAgent());
 				} else {
-					targetedAction = ability.getAction(battleController, selectedAgent.getAgent(), target.getAgent());
+					targetedAction = ability.getTargetedAction(battleController, selectedAgent.getAgent(), target.getAgent());
 				}
 				tooltip.setToActionDescription(targetedAction);
 				moveCameraToPos((selectedAgent.getX() + target.getX()) / 2, (selectedAgent.getY() + target.getY()) / 2);
@@ -633,11 +636,11 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 			// Skill
 			if (mode == Mode.MOVE) {
 				for (Ability a : selectedAgent.getAgent().getAbilities()) {
-					if (a instanceof PrecisionShotAbility && !a.onCooldown()) {
-						this.switchToTargetMode((PrecisionShotAbility) a);
+					if (a instanceof PrecisionShotAbility && !((PrecisionShotAbility) a).onCooldown()) {
+						this.switchToTargetMode(a);
 						break;
 					} else if (a instanceof SuppressionAbility) {
-						this.switchToTargetMode((SuppressionAbility) a);
+						this.switchToTargetMode(a);
 						break;
 					}
 				}

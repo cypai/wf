@@ -1,9 +1,25 @@
 package com.pipai.wf.unit.ability;
 
-public class RegenerationAbility extends PassiveAbility {
+import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.unit.ability.component.HasLevelledAbilityComponent;
+import com.pipai.wf.unit.ability.component.LevelledAbilityImpl;
+import com.pipai.wf.unit.ability.component.RoundEndComponent;
+
+public class RegenerationAbility extends Ability implements RoundEndComponent, HasLevelledAbilityComponent {
+
+	private LevelledAbilityImpl levelledAbilityImpl = new LevelledAbilityImpl();
+
+	public RegenerationAbility() {
+		setLevel(1);
+	}
 
 	public RegenerationAbility(int level) {
-		super(level);
+		setLevel(level);
+	}
+
+	@Override
+	public LevelledAbilityImpl getLevelledAbilityImpl() {
+		return levelledAbilityImpl;
 	}
 
 	@Override
@@ -22,8 +38,8 @@ public class RegenerationAbility extends PassiveAbility {
 	}
 
 	@Override
-	protected void onRoundEndImpl() {
-		getAgent().heal(super.getLevel());
+	public void onRoundEnd(Agent agent) {
+		agent.heal(getLevel());
 	}
 
 }

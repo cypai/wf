@@ -28,7 +28,9 @@ public class TidusSchema extends RaceTemplateSchema {
 	@Override
 	public AbilityList getAbilities() {
 		AbilityList l = new AbilityList();
-		l.add(new FireActualizationAbility(1));
+		FireActualizationAbility fireAbility = new FireActualizationAbility();
+		fireAbility.setLevel(1);
+		l.add(fireAbility);
 		l.add(new FireballAbility());
 		l.add(new SuppressionAbility());
 		return l;

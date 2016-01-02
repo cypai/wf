@@ -18,6 +18,7 @@ import com.pipai.wf.misc.HasBasicStats;
 import com.pipai.wf.misc.HasName;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
+import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
 
 // TODO: Make this a stupid data structure class
 public class Agent implements HasName, HasBasicStats {
@@ -176,8 +177,8 @@ public class Agent implements HasName, HasBasicStats {
 	public ArrayList<Spell> getSpellList() {
 		ArrayList<Spell> l = new ArrayList<>();
 		for (Ability a : innateAbilities) {
-			if (a.grantsSpell()) {
-				l.add(a.grantedSpell());
+			if (a instanceof SpellAbilityComponent) {
+				l.add(((SpellAbilityComponent) a).grantedSpell());
 			}
 		}
 		return l;
@@ -214,13 +215,10 @@ public class Agent implements HasName, HasBasicStats {
 		}
 	}
 
-	public void onTurnEnd() {
-		decrementCooldowns();
-	}
-
 	public void onRoundEnd() {
 		try {
 			innateAbilities.onRoundEnd();
+			getWeaponGrantedAbilities().onRoundEnd();
 		} catch (NoRegisteredAgentException e) {
 			throw new IllegalStateException(e);
 		}
@@ -229,20 +227,6 @@ public class Agent implements HasName, HasBasicStats {
 
 	public void onAction(Action action) {
 		statusEffects.onAction(action);
-	}
-
-	public void decrementCooldowns() {
-		for (Ability a : getInnateAbilities()) {
-			if (a.onCooldown()) {
-				a.decrementCooldown();
-			}
-		}
-
-		for (Ability a : getWeaponGrantedAbilities()) {
-			if (a.onCooldown()) {
-				a.decrementCooldown();
-			}
-		}
 	}
 
 	public void switchWeapon() {

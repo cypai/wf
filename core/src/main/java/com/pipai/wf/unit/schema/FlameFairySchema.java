@@ -16,7 +16,9 @@ public class FlameFairySchema extends RaceTemplateSchema {
 	@Override
 	public AbilityList getAbilities() {
 		AbilityList l = new AbilityList();
-		l.add(new FireActualizationAbility(2));
+		FireActualizationAbility fireActualizationAbility = new FireActualizationAbility();
+		fireActualizationAbility.setLevel(2);
+		l.add(fireActualizationAbility);
 		l.add(new FireballAbility());
 		return l;
 	}

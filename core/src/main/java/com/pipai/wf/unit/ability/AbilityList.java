@@ -10,6 +10,8 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.spell.SpellElement;
 import com.pipai.wf.exception.NoRegisteredAgentException;
+import com.pipai.wf.unit.ability.component.RoundEndComponent;
+import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
 
 public class AbilityList implements Iterable<Ability> {
 
@@ -23,9 +25,6 @@ public class AbilityList implements Iterable<Ability> {
 	}
 
 	public void registerToAgent(Agent agent) {
-		for (Ability a : abilityList) {
-			a.registerToAgent(agent);
-		}
 		registeredAgent = agent;
 	}
 
@@ -72,32 +71,7 @@ public class AbilityList implements Iterable<Ability> {
 			switch (e) {
 			case FIRE:
 				if (a instanceof FireActualizationAbility) {
-					return a.getLevel();
-				}
-				break;
-			case WATER:
-				if (a instanceof WaterActualizationAbility) {
-					return a.getLevel();
-				}
-				break;
-			case EARTH:
-				if (a instanceof EarthActualizationAbility) {
-					return a.getLevel();
-				}
-				break;
-			case ELECTRIC:
-				if (a instanceof ElectricActualizationAbility) {
-					return a.getLevel();
-				}
-				break;
-			case LIGHT:
-				if (a instanceof LightActualizationAbility) {
-					return a.getLevel();
-				}
-				break;
-			case FORCE:
-				if (a instanceof ForceActualizationAbility) {
-					return a.getLevel();
+					return ((FireActualizationAbility) a).getLevel();
 				}
 				break;
 			default:
@@ -109,16 +83,17 @@ public class AbilityList implements Iterable<Ability> {
 
 	public void onRoundEnd() throws NoRegisteredAgentException {
 		for (Ability a : abilityList) {
-			a.onRoundEnd();
+			if (a instanceof RoundEndComponent) {
+				((RoundEndComponent) a).onRoundEnd(registeredAgent);
+			}
 		}
 	}
 
 	public boolean add(Ability arg0) {
 		abilityList.add(arg0);
-		if (arg0 instanceof SpellAbility) {
-			spellMap.put(arg0.grantedSpell().getClass(), 1);
+		if (arg0 instanceof SpellAbilityComponent) {
+			spellMap.put(((SpellAbilityComponent) arg0).grantedSpell().getClass(), 1);
 		}
-		arg0.registerToAgent(registeredAgent);
 		return true;
 	}
 
@@ -153,7 +128,9 @@ public class AbilityList implements Iterable<Ability> {
 
 	public boolean remove(Ability arg0) {
 		abilityList.remove(arg0);
-		spellMap.remove(arg0.grantedSpell().getClass());
+		if (arg0 instanceof SpellAbilityComponent) {
+			spellMap.remove(((SpellAbilityComponent) arg0).grantedSpell().getClass());
+		}
 		return true;
 	}
 

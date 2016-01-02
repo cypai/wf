@@ -1,10 +1,6 @@
 package com.pipai.wf.unit.ability;
 
-public class QuickReloadAbility extends PassiveAbility {
-
-	public QuickReloadAbility() {
-		super(0);
-	}
+public class QuickReloadAbility extends Ability {
 
 	@Override
 	public String getName() {

@@ -1,10 +1,6 @@
 package com.pipai.wf.unit.ability;
 
-public class ArrowRainAbility extends PassiveAbility {
-
-	public ArrowRainAbility() {
-		super(0);
-	}
+public class ArrowRainAbility extends Ability {
 
 	@Override
 	public String getName() {

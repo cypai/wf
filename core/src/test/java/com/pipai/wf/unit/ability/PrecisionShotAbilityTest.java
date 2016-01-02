@@ -42,23 +42,23 @@ public class PrecisionShotAbilityTest {
 		map.addAgent(playerState);
 		Agent agent = map.getAgentAtPos(playerPos);
 		BattleController controller = new BattleController(map, mockConfig);
+		PrecisionShotAbility ability = (PrecisionShotAbility) agent.getInnateAbilities().getAbility(PrecisionShotAbility.class);
 		try {
 			new PrecisionShotAction(controller, agent, mockTarget).perform();
-			Assert.assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
+			Assert.assertTrue(ability.onCooldown());
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
 		controller.endTurn();
-		Assert.assertTrue(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
+		Assert.assertTrue(ability.onCooldown());
 		try {
 			new PrecisionShotAction(controller, agent, mockTarget).perform();
 			Assert.fail("Expected IllegalActionException not thrown");
 		} catch (IllegalActionException e) {
 			// Expected, don't do anything
 		}
-
 		controller.endTurn();
-		Assert.assertFalse(agent.getInnateAbilities().getAbility(PrecisionShotAbility.class).onCooldown());
+		Assert.assertFalse(ability.onCooldown());
 		try {
 			new PrecisionShotAction(controller, agent, mockTarget).perform();
 		} catch (IllegalActionException e) {

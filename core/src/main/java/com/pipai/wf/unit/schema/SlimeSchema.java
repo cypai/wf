@@ -25,8 +25,12 @@ public class SlimeSchema extends NewUnitSchema {
 	@Override
 	public AbilityList getAbilities() {
 		AbilityList l = new AbilityList();
-		l.add(new RegenerationAbility(UtilFunctions.clamp(1, 5, level / 2)));
-		l.add(new FireActualizationAbility(1));
+		RegenerationAbility regen = new RegenerationAbility();
+		regen.setLevel(UtilFunctions.clamp(1, 5, level / 2));
+		l.add(regen);
+		FireActualizationAbility fireAbility = new FireActualizationAbility();
+		fireAbility.setLevel(1);
+		l.add(fireAbility);
 		l.add(new FireballAbility());
 		return l;
 	}

@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.pipai.wf.battle.spell.FireballSpell;
 import com.pipai.wf.battle.spell.Spell;
+import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
 
 public class AbilityListTest {
 
@@ -42,8 +43,8 @@ public class AbilityListTest {
 		alist.add(new FireballAbility());
 		alist.add(new RegenerationAbility(1));
 		for (Ability a : alist) {
-			if (a.grantsSpell()) {
-				spellList.add(a.grantedSpell());
+			if (a instanceof SpellAbilityComponent) {
+				spellList.add(((SpellAbilityComponent) a).grantedSpell());
 			}
 		}
 		Assert.assertEquals(1, spellList.size());
