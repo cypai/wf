@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
 import com.pipai.wf.battle.action.Action;
-import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
+import com.pipai.wf.battle.action.component.CritAccuracyComponent;
+import com.pipai.wf.battle.action.component.HitAccuracyComponent;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
@@ -49,19 +50,21 @@ public class ActionToolTip extends GuiObject implements GuiRenderable {
 	}
 
 	public void setToActionDescription(Action a) {
-		if (a instanceof TargetedWithAccuracyAction) {
-			setToTargetedAccuracyActionDescription((TargetedWithAccuracyAction) a);
-		} else {
-			setToGeneralDescription(a.getName(), a.getDescription());
+		boolean hasHit = a instanceof HitAccuracyComponent;
+		boolean hasCrit = a instanceof CritAccuracyComponent;
+		if (hasHit) {
+			accuracy = ((HitAccuracyComponent) a).toHit();
 		}
-	}
-
-	public void setToTargetedAccuracyActionDescription(TargetedWithAccuracyAction a) {
-		mode = Mode.ACCURACY_ACTION;
+		if (hasCrit) {
+			critProb = ((CritAccuracyComponent) a).toCrit();
+		}
+		if (hasHit || hasCrit) {
+			mode = Mode.ACCURACY_ACTION;
+		} else {
+			mode = Mode.GENERAL;
+		}
 		title = a.getName();
 		description = a.getDescription();
-		accuracy = a.toHit();
-		critProb = a.toCrit();
 	}
 
 	@Override

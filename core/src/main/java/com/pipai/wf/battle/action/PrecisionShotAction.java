@@ -1,6 +1,8 @@
 package com.pipai.wf.battle.action;
 
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.action.component.ApRequiredComponent;
+import com.pipai.wf.battle.action.component.HasHitCritComponents;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifier;
@@ -11,24 +13,11 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.battle.weapon.WeaponFlag;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.unit.ability.PrecisionShotAbility;
-import com.pipai.wf.util.UtilFunctions;
 
-public class PrecisionShotAction extends TargetedWithAccuracyAction {
+public class PrecisionShotAction extends TargetedAction implements ApRequiredComponent, HasHitCritComponents {
 
 	public PrecisionShotAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller, performerAgent, targetAgent);
-	}
-
-	@Override
-	public int toHit() {
-		int total_aim = getHitCalculation().total();
-		return UtilFunctions.clamp(1, 100, total_aim);
-	}
-
-	@Override
-	public int toCrit() {
-		int crit_prob = getCritCalculation().total();
-		return UtilFunctions.clamp(1, 100, crit_prob);
 	}
 
 	@Override
@@ -53,6 +42,9 @@ public class PrecisionShotAction extends TargetedWithAccuracyAction {
 		PrecisionShotAbility ability = (PrecisionShotAbility) attacker.getAbility(PrecisionShotAbility.class);
 		if (ability == null) {
 			throw new IllegalActionException(attacker.getName() + "does not have Precision Shot ability");
+		}
+		if (ability.onCooldown()) {
+			throw new IllegalActionException("Ability is still on cooldown");
 		}
 		Agent target = getTarget();
 		Weapon w = attacker.getCurrentWeapon();

@@ -7,9 +7,9 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.OverwatchAction;
+import com.pipai.wf.battle.action.OverwatchableTargetedAction;
 import com.pipai.wf.battle.action.ReadySpellAction;
 import com.pipai.wf.battle.action.ReloadAction;
-import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.AgentCoverCalculator;
@@ -96,7 +96,7 @@ public class GeneralModularAI extends ModularAI {
 						continue;
 					}
 					WeaponActionFactory wFactory = new WeaponActionFactory(getBattleController());
-					TargetedWithAccuracyAction action = wFactory.defaultWeaponAction(a, player);
+					OverwatchableTargetedAction action = wFactory.defaultWeaponAction(a, player);
 					best = best.compareAndReturnBetter(new ActionScore(action, action.toHit()));
 				}
 				return best;

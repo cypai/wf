@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
-import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
+import com.pipai.wf.battle.action.TargetedAction;
+import com.pipai.wf.battle.action.component.CritAccuracyComponent;
+import com.pipai.wf.battle.action.component.HitAccuracyComponent;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.PercentageModifier;
 import com.pipai.wf.battle.damage.PercentageModifierList;
@@ -29,7 +31,7 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 	private Mode mode;
 	private boolean visible;
 	private Agent agent;
-	private TargetedWithAccuracyAction targetAccAction;
+	private TargetedAction targetedAction;
 	private float x, y, width, height;
 
 	private final int padding = 32;
@@ -49,9 +51,9 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		agent = a;
 	}
 
-	public void setTargetedWithAccuracyAction(TargetedWithAccuracyAction a) {
+	public void setTargetedAction(TargetedAction a) {
 		mode = Mode.TARGETED_ACC_STATUS;
-		targetAccAction = a;
+		targetedAction = a;
 	}
 
 	public boolean getVisible() {
@@ -83,7 +85,7 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		if (mode == Mode.AGENT_STATUS) {
 			renderAgentMode(batch);
 		} else {
-			renderTAccActionMode(batch);
+			renderTargetedMode(batch);
 		}
 	}
 
@@ -97,16 +99,20 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 2, agent);
 	}
 
-	private void renderTAccActionMode(BatchHelper batch) {
+	private void renderTargetedMode(BatchHelper batch) {
 		SpriteBatch spr = batch.getSpriteBatch();
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
-		f.draw(spr, targetAccAction.getTarget().getName(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
+		f.draw(spr, targetedAction.getTarget().getName(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
 		spr.end();
-		renderCalc(batch, padding * 2, height - f.getLineHeight() * 2, targetAccAction.getHitCalculation(), "Hit Calculation");
-		renderCalc(batch, width - padding - 120, height - f.getLineHeight() * 2, targetAccAction.getCritCalculation(), "Crit Calculation");
-		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 12, targetAccAction.getTarget());
+		if (targetedAction instanceof HitAccuracyComponent) {
+			renderCalc(batch, padding * 2, height - f.getLineHeight() * 2, ((HitAccuracyComponent) targetedAction).getHitCalculation(), "Hit Calculation");
+		}
+		if (targetedAction instanceof CritAccuracyComponent) {
+			renderCalc(batch, width - padding - 120, height - f.getLineHeight() * 2, ((CritAccuracyComponent) targetedAction).getCritCalculation(), "Crit Calculation");
+		}
+		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 12, targetedAction.getTarget());
 	}
 
 	private void renderCalc(BatchHelper batch, float calcX, float calcY, PercentageModifierList pmList, String title) {

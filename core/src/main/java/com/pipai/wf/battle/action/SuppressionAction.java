@@ -1,13 +1,14 @@
 package com.pipai.wf.battle.action;
 
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.action.component.ApRequiredComponent;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.battle.weapon.WeaponFlag;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class SuppressionAction extends TargetedAction {
+public class SuppressionAction extends TargetedAction implements ApRequiredComponent {
 
 	public SuppressionAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller, performerAgent, targetAgent);

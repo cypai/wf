@@ -1,24 +1,35 @@
 package com.pipai.wf.battle.action;
 
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.action.component.ApRequiredComponent;
+import com.pipai.wf.battle.action.component.HasPerformerComponent;
+import com.pipai.wf.battle.action.component.PerformerComponent;
+import com.pipai.wf.battle.action.component.PerformerComponentImpl;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.battle.weapon.WeaponFlag;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class OverwatchAction extends AlterStateAction {
+public class OverwatchAction extends Action implements ApRequiredComponent, HasPerformerComponent {
 
+	private PerformerComponent performerComponent = new PerformerComponentImpl();
 	private OverwatchableTargetedAction overwatchAction;
 
 	public OverwatchAction(BattleController controller, Agent performerAgent) {
-		super(controller, performerAgent);
+		super(controller);
+		setPerformer(performerAgent);
 		overwatchAction = new WeaponActionFactory(controller).defaultWeaponActionSchema(performerAgent);
 	}
 
 	@Override
 	public int getAPRequired() {
 		return 1;
+	}
+
+	@Override
+	public PerformerComponent getPerformerComponent() {
+		return performerComponent;
 	}
 
 	@Override

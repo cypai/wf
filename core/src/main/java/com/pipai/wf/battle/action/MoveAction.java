@@ -6,6 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.action.component.ApRequiredComponent;
+import com.pipai.wf.battle.action.component.HasPerformerComponent;
+import com.pipai.wf.battle.action.component.PerformerComponent;
+import com.pipai.wf.battle.action.component.PerformerComponentImpl;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMapCell;
@@ -13,17 +17,25 @@ import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.vision.AgentVisionCalculator;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class MoveAction extends AlterStateAction {
+public class MoveAction extends Action implements ApRequiredComponent, HasPerformerComponent {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MoveAction.class);
+
+	private PerformerComponent performerComponent = new PerformerComponentImpl();
 
 	private LinkedList<GridPosition> path;
 	private int useAP;
 
 	public MoveAction(BattleController controller, Agent performerAgent, LinkedList<GridPosition> path, int useAP) {
-		super(controller, performerAgent);
+		super(controller);
+		setPerformer(performerAgent);
 		this.path = path;
 		this.useAP = useAP;
+	}
+
+	@Override
+	public PerformerComponent getPerformerComponent() {
+		return performerComponent;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.action.component.ApRequiredComponent;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifierList;
@@ -13,9 +14,8 @@ import com.pipai.wf.battle.spell.Spell;
 import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
-import com.pipai.wf.util.UtilFunctions;
 
-public class TargetedSpellWeaponAction extends OverwatchableTargetedAction {
+public class TargetedSpellWeaponAction extends OverwatchableTargetedAction implements ApRequiredComponent {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TargetedSpellWeaponAction.class);
 
@@ -40,18 +40,6 @@ public class TargetedSpellWeaponAction extends OverwatchableTargetedAction {
 			throw new IllegalArgumentException("Currently selected weapon is not a spell weapon");
 		}
 		return (SpellWeapon) w;
-	}
-
-	@Override
-	public int toHit() {
-		int total_aim = getHitCalculation().total();
-		return UtilFunctions.clamp(1, 100, total_aim);
-	}
-
-	@Override
-	public int toCrit() {
-		int crit_prob = getCritCalculation().total();
-		return UtilFunctions.clamp(1, 100, crit_prob);
 	}
 
 	@Override

@@ -2,7 +2,8 @@ package com.pipai.wf.battle.action;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
-import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.action.component.ApRequiredComponent;
+import com.pipai.wf.battle.action.component.PerformerComponent;
 import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageDealer;
 import com.pipai.wf.battle.damage.TargetedActionCalculator;
@@ -17,12 +18,10 @@ public abstract class Action implements HasName, HasDescription {
 
 	private BattleController battleController;
 	private BattleLog log;
-	private Agent performer;
 	private BattleMap battleMap;
 	private DamageDealer damageDealer;
 
-	public Action(BattleController controller, Agent performerAgent) {
-		performer = performerAgent;
+	public Action(BattleController controller) {
 		battleController = controller;
 		if (controller != null) {
 			// TODO: Fix this hack for NullPointerException calling this constructor during OverwatchHelper.getName()
@@ -30,10 +29,6 @@ public abstract class Action implements HasName, HasDescription {
 			battleMap = controller.getBattleMap();
 			damageDealer = new DamageDealer(battleMap);
 		}
-	}
-
-	public final Agent getPerformer() {
-		return performer;
 	}
 
 	public final BattleController getBattleController() {
@@ -61,28 +56,27 @@ public abstract class Action implements HasName, HasDescription {
 	}
 
 	public final void perform() throws IllegalActionException {
-		if (performer.getAP() < getAPRequired()) {
-			throw new IllegalActionException("Not enough AP for action");
-		}
-		if (performer.isKO()) {
-			throw new IllegalActionException("KOed unit cannot act");
+		if (this instanceof ApRequiredComponent && this instanceof PerformerComponent) {
+			if (((PerformerComponent) this).getPerformer().getAP() < ((ApRequiredComponent) this).getAPRequired()) {
+				throw new IllegalActionException("Not enough AP to perform this action");
+			}
 		}
 		performImpl();
 		battleController.performPostActionNotifications();
-		performer.onAction(this);
+		if (this instanceof PerformerComponent) {
+			((PerformerComponent) this).getPerformer().onAction(this);
+		}
 		postPerform();
 	}
 
 	protected abstract void performImpl() throws IllegalActionException;
 
-	protected void postPerform() {
-		// Override if anything needs to be done after the action is complete
-	}
-
-	/*
-	 * Returns the minimum AP required to perform the action
+	/**
+	 * Override if anything needs to be done after the action is complete
 	 */
-	public abstract int getAPRequired();
+	protected void postPerform() {
+		// Nothing
+	}
 
 	protected void logBattleEvent(BattleEvent ev) {
 		if (log != null) {

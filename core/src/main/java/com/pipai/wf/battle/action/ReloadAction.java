@@ -1,20 +1,32 @@
 package com.pipai.wf.battle.action;
 
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.action.component.ApRequiredComponent;
+import com.pipai.wf.battle.action.component.HasPerformerComponent;
+import com.pipai.wf.battle.action.component.PerformerComponent;
+import com.pipai.wf.battle.action.component.PerformerComponentImpl;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.unit.ability.QuickReloadAbility;
 
-public class ReloadAction extends AlterStateAction {
+public class ReloadAction extends Action implements ApRequiredComponent, HasPerformerComponent {
+
+	private PerformerComponent performerComponent = new PerformerComponentImpl();
 
 	public ReloadAction(BattleController controller, Agent performerAgent) {
-		super(controller, performerAgent);
+		super(controller);
+		setPerformer(performerAgent);
 	}
 
 	@Override
 	public int getAPRequired() {
 		return 1;
+	}
+
+	@Override
+	public PerformerComponent getPerformerComponent() {
+		return performerComponent;
 	}
 
 	@Override

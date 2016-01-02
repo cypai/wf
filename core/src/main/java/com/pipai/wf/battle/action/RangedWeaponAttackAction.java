@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.action.component.ApRequiredComponent;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifierList;
@@ -14,9 +15,8 @@ import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.battle.weapon.WeaponFlag;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.unit.ability.ArrowRainAbility;
-import com.pipai.wf.util.UtilFunctions;
 
-public class RangedWeaponAttackAction extends OverwatchableTargetedAction {
+public class RangedWeaponAttackAction extends OverwatchableTargetedAction implements ApRequiredComponent {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RangedWeaponAttackAction.class);
 
@@ -26,18 +26,6 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction {
 
 	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent) {
 		super(controller, performerAgent);
-	}
-
-	@Override
-	public int toHit() {
-		int total_aim = getHitCalculation().total();
-		return UtilFunctions.clamp(1, 100, total_aim);
-	}
-
-	@Override
-	public int toCrit() {
-		int crit_prob = getCritCalculation().total();
-		return UtilFunctions.clamp(1, 100, crit_prob);
 	}
 
 	@Override
