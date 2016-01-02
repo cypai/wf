@@ -1,17 +1,20 @@
 package com.pipai.wf.unit.ability.component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public interface HasLevelledAbilityComponent extends LevelledAbilityComponent {
 
-	LevelledAbilityImpl getLevelledAbilityImpl();
+	@JsonIgnore
+	LevelledAbilityComponent getLevelledAbilityComponent();
 
 	@Override
 	default int getLevel() {
-		return getLevelledAbilityImpl().getLevel();
+		return getLevelledAbilityComponent().getLevel();
 	}
 
 	@Override
 	default void setLevel(int level) {
-		getLevelledAbilityImpl().setLevel(level);
+		getLevelledAbilityComponent().setLevel(level);
 	}
 
 }

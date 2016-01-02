@@ -2,12 +2,13 @@ package com.pipai.wf.unit.ability;
 
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.unit.ability.component.HasLevelledAbilityComponent;
+import com.pipai.wf.unit.ability.component.LevelledAbilityComponent;
 import com.pipai.wf.unit.ability.component.LevelledAbilityImpl;
 import com.pipai.wf.unit.ability.component.RoundEndComponent;
 
 public class RegenerationAbility extends Ability implements RoundEndComponent, HasLevelledAbilityComponent {
 
-	private LevelledAbilityImpl levelledAbilityImpl = new LevelledAbilityImpl();
+	private LevelledAbilityComponent levelledAbilityImpl = new LevelledAbilityImpl();
 
 	public RegenerationAbility() {
 		setLevel(1);
@@ -18,7 +19,7 @@ public class RegenerationAbility extends Ability implements RoundEndComponent, H
 	}
 
 	@Override
-	public LevelledAbilityImpl getLevelledAbilityImpl() {
+	public LevelledAbilityComponent getLevelledAbilityComponent() {
 		return levelledAbilityImpl;
 	}
 

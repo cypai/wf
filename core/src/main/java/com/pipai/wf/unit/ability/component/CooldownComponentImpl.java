@@ -1,11 +1,11 @@
 package com.pipai.wf.unit.ability.component;
 
-public class CooldownImpl implements CooldownComponent {
+public class CooldownComponentImpl implements CooldownComponent {
 
 	private int maxCooldown;
 	private int cooldown;
 
-	public CooldownImpl(int maxCooldown) {
+	public CooldownComponentImpl(int maxCooldown) {
 		this.maxCooldown = maxCooldown;
 	}
 

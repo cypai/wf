@@ -1,32 +1,35 @@
 package com.pipai.wf.unit.ability.component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public interface HasCooldownComponent extends CooldownComponent {
 
-	CooldownImpl getCooldownImpl();
+	@JsonIgnore
+	CooldownComponent getCooldownComponent();
 
 	@Override
 	default void startCooldown() {
-		getCooldownImpl().startCooldown();
+		getCooldownComponent().startCooldown();
 	}
 
 	@Override
 	default boolean onCooldown() {
-		return getCooldownImpl().onCooldown();
+		return getCooldownComponent().onCooldown();
 	}
 
 	@Override
 	default int getCooldown() {
-		return getCooldownImpl().getCooldown();
+		return getCooldownComponent().getCooldown();
 	}
 
 	@Override
 	default void setCooldown(int cooldown) {
-		getCooldownImpl().setCooldown(cooldown);
+		getCooldownComponent().setCooldown(cooldown);
 	}
 
 	@Override
 	default void decrementCooldown() {
-		getCooldownImpl().decrementCooldown();
+		getCooldownComponent().decrementCooldown();
 	}
 
 }

@@ -4,13 +4,14 @@ import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.PrecisionShotAction;
 import com.pipai.wf.battle.action.TargetedWithAccuracyAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.unit.ability.component.CooldownImpl;
+import com.pipai.wf.unit.ability.component.CooldownComponent;
+import com.pipai.wf.unit.ability.component.CooldownComponentImpl;
 import com.pipai.wf.unit.ability.component.HasCooldownComponent;
 import com.pipai.wf.unit.ability.component.TargetedAccAbilityComponent;
 
 public class PrecisionShotAbility extends Ability implements TargetedAccAbilityComponent, HasCooldownComponent {
 
-	private CooldownImpl cooldownImpl = new CooldownImpl(1);
+	private CooldownComponent cooldownImpl = new CooldownComponentImpl(1);
 
 	@Override
 	public String getName() {
@@ -28,7 +29,7 @@ public class PrecisionShotAbility extends Ability implements TargetedAccAbilityC
 	}
 
 	@Override
-	public CooldownImpl getCooldownImpl() {
+	public CooldownComponent getCooldownComponent() {
 		return cooldownImpl;
 	}
 
