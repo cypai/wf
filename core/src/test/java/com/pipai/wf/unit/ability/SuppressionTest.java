@@ -16,10 +16,10 @@ import com.pipai.wf.battle.damage.TargetedActionCalculator;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.weapon.Bow;
-import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.BadStateStringException;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Bow;
+import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.test.MockGUIObserver;
 
 public class SuppressionTest {

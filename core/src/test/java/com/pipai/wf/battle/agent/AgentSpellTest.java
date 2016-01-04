@@ -6,7 +6,7 @@ import org.mockito.Mockito;
 
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.spell.FireballSpell;
+import com.pipai.wf.spell.FireballSpell;
 import com.pipai.wf.unit.ability.FireballAbility;
 
 public class AgentSpellTest {

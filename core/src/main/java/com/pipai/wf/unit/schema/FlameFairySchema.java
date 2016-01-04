@@ -1,7 +1,7 @@
 package com.pipai.wf.unit.schema;
 
-import com.pipai.wf.battle.armor.Armor;
-import com.pipai.wf.battle.armor.LeatherArmor;
+import com.pipai.wf.item.armor.Armor;
+import com.pipai.wf.item.armor.LeatherArmor;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.FireActualizationAbility;
 import com.pipai.wf.unit.ability.FireballAbility;

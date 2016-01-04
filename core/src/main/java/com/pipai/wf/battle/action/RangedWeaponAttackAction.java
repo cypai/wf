@@ -10,10 +10,10 @@ import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.WeaponDamageFunction;
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.weapon.Bow;
-import com.pipai.wf.battle.weapon.Weapon;
-import com.pipai.wf.battle.weapon.WeaponFlag;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Bow;
+import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.item.weapon.WeaponFlag;
 import com.pipai.wf.unit.ability.ArrowRainAbility;
 
 public class RangedWeaponAttackAction extends OverwatchableTargetedAction implements ApRequiredComponent {

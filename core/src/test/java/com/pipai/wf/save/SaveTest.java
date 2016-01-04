@@ -11,9 +11,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.pipai.libgdx.test.GdxMockedTest;
-import com.pipai.wf.battle.armor.LeatherArmor;
-import com.pipai.wf.battle.weapon.Pistol;
-import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.item.armor.LeatherArmor;
+import com.pipai.wf.item.weapon.Pistol;
+import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.schema.UnitSchema;

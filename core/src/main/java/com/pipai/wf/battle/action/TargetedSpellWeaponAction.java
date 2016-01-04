@@ -10,10 +10,10 @@ import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.SpellDamageFunction;
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.spell.Spell;
-import com.pipai.wf.battle.weapon.SpellWeapon;
-import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.SpellWeapon;
+import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.spell.Spell;
 
 public class TargetedSpellWeaponAction extends OverwatchableTargetedAction implements ApRequiredComponent {
 

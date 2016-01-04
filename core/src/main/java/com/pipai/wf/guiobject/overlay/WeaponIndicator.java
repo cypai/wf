@@ -10,14 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Align;
-import com.pipai.wf.battle.spell.Spell;
-import com.pipai.wf.battle.weapon.SpellWeapon;
-import com.pipai.wf.battle.weapon.Weapon;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.gui.BattleGui;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
+import com.pipai.wf.item.weapon.SpellWeapon;
+import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.spell.Spell;
 
 public class WeaponIndicator extends GuiObject implements GuiRenderable {
 

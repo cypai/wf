@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.weapon;
+package com.pipai.wf.item.weapon;
 
 import com.google.common.collect.ImmutableSet;
 import com.pipai.wf.battle.BattleConfiguration;

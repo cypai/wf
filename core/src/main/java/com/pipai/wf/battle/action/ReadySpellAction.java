@@ -7,9 +7,9 @@ import com.pipai.wf.battle.action.component.PerformerComponent;
 import com.pipai.wf.battle.action.component.PerformerComponentImpl;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.spell.Spell;
-import com.pipai.wf.battle.weapon.SpellWeapon;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.SpellWeapon;
+import com.pipai.wf.spell.Spell;
 
 public class ReadySpellAction extends Action implements ApRequiredComponent, HasPerformerComponent {
 

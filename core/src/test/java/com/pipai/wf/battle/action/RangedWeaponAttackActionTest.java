@@ -18,8 +18,8 @@ import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.weapon.Pistol;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Pistol;
 import com.pipai.wf.test.MockGUIObserver;
 import com.pipai.wf.util.UtilFunctions;
 

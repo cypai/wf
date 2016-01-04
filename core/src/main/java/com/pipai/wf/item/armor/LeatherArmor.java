@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.armor;
+package com.pipai.wf.item.armor;
 
 public class LeatherArmor extends Armor {
 

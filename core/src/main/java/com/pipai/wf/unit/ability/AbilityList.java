@@ -7,9 +7,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.spell.Spell;
-import com.pipai.wf.battle.spell.SpellElement;
 import com.pipai.wf.exception.NoRegisteredAgentException;
+import com.pipai.wf.spell.Spell;
+import com.pipai.wf.spell.SpellElement;
 import com.pipai.wf.unit.ability.component.RoundEndComponent;
 import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
 

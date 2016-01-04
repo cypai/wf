@@ -1,7 +1,7 @@
 package com.pipai.wf.unit.ability;
 
-import com.pipai.wf.battle.spell.FireballSpell;
-import com.pipai.wf.battle.spell.Spell;
+import com.pipai.wf.spell.FireballSpell;
+import com.pipai.wf.spell.Spell;
 import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
 
 public class FireballAbility extends Ability implements SpellAbilityComponent {

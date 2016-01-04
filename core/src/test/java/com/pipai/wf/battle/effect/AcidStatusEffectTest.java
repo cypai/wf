@@ -16,8 +16,8 @@ import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.damage.DamageDealer;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.weapon.Bow;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Bow;
 
 public class AcidStatusEffectTest {
 

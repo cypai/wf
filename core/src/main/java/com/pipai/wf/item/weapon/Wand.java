@@ -1,6 +1,6 @@
-package com.pipai.wf.battle.weapon;
+package com.pipai.wf.item.weapon;
 
-import com.pipai.wf.battle.spell.Spell;
+import com.pipai.wf.spell.Spell;
 
 public class Wand extends SpellWeapon {
 

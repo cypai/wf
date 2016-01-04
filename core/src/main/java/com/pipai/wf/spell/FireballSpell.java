@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.spell;
+package com.pipai.wf.spell;
 
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.TargetedAction;

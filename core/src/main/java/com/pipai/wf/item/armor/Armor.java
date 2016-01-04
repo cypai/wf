@@ -1,7 +1,7 @@
-package com.pipai.wf.battle.armor;
+package com.pipai.wf.item.armor;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.pipai.wf.battle.item.Item;
+import com.pipai.wf.item.Item;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public abstract class Armor extends Item {

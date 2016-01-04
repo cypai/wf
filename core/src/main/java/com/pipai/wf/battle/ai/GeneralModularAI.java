@@ -17,11 +17,11 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
-import com.pipai.wf.battle.spell.FireballSpell;
 import com.pipai.wf.battle.vision.AgentVisionCalculator;
-import com.pipai.wf.battle.weapon.SpellWeapon;
-import com.pipai.wf.battle.weapon.Weapon;
-import com.pipai.wf.battle.weapon.WeaponFlag;
+import com.pipai.wf.item.weapon.SpellWeapon;
+import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.item.weapon.WeaponFlag;
+import com.pipai.wf.spell.FireballSpell;
 
 public class GeneralModularAI extends ModularAI {
 

@@ -9,9 +9,9 @@ import com.pipai.wf.battle.damage.PercentageModifier;
 import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.WeaponDamageFunction;
 import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.weapon.Weapon;
-import com.pipai.wf.battle.weapon.WeaponFlag;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.item.weapon.WeaponFlag;
 import com.pipai.wf.unit.ability.PrecisionShotAbility;
 
 public class PrecisionShotAction extends TargetedAction implements ApRequiredComponent, HasHitCritComponents {

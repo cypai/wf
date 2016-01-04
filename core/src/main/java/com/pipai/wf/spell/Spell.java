@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.spell;
+package com.pipai.wf.spell;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;

@@ -3,8 +3,8 @@ package com.pipai.wf.battle.damage;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.BattleMap;
+import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.battle.map.AgentCoverCalculator;
-import com.pipai.wf.battle.weapon.Weapon;
 
 public class TargetedActionCalculator {
 

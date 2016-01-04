@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.weapon;
+package com.pipai.wf.item.weapon;
 
 public enum WeaponFlag {
 	// Weapon types flags here

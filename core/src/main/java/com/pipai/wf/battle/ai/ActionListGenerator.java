@@ -8,7 +8,7 @@ import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.vision.AgentVisionCalculator;
-import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.item.weapon.Weapon;
 
 public class ActionListGenerator {
 

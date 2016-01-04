@@ -18,8 +18,8 @@ import com.pipai.wf.battle.damage.DamageFunction;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.weapon.Bow;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Bow;
 
 public class ArrowRainAbilityTest {
 

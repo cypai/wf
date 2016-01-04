@@ -1,8 +1,8 @@
-package com.pipai.wf.battle.weapon;
+package com.pipai.wf.item.weapon;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.pipai.wf.battle.BattleConfiguration;
-import com.pipai.wf.battle.item.Item;
+import com.pipai.wf.item.Item;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
 

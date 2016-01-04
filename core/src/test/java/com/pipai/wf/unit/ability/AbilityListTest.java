@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.pipai.wf.battle.spell.FireballSpell;
-import com.pipai.wf.battle.spell.Spell;
+import com.pipai.wf.spell.FireballSpell;
+import com.pipai.wf.spell.Spell;
 import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
 
 public class AbilityListTest {

@@ -8,8 +8,8 @@ import com.pipai.wf.battle.action.TargetedAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.map.GridPosition;
-import com.pipai.wf.battle.spell.Spell;
-import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.spell.Spell;
 
 /*
  * For use in BattleLog and reporting back to a GUI on battle events/actions/outcomes

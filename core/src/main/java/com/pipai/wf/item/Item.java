@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.item;
+package com.pipai.wf.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pipai.wf.misc.HasDescription;

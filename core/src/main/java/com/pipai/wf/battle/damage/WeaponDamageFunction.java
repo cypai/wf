@@ -1,6 +1,6 @@
 package com.pipai.wf.battle.damage;
 
-import com.pipai.wf.battle.weapon.Weapon;
+import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.util.Rng;
 
 public class WeaponDamageFunction extends DamageFunction {
