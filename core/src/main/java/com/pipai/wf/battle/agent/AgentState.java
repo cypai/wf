@@ -3,7 +3,6 @@ package com.pipai.wf.battle.agent;
 import java.util.ArrayList;
 
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.armor.Armor;
 import com.pipai.wf.battle.armor.NoArmor;
 import com.pipai.wf.battle.map.GridPosition;

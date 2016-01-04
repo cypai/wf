@@ -1,7 +1,6 @@
 package com.pipai.wf.battle.agent;
 
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.Agent.State;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.unit.schema.UnitSchema;

@@ -23,10 +23,6 @@ import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
 // TODO: Make this a stupid data structure class
 public class Agent implements HasName, HasBasicStats {
 
-	public enum State {
-		NEUTRAL, KO, OVERWATCH, SUPPRESSING
-	};
-
 	private Team team;
 	private BasicStats basicStats;
 	private String name;
