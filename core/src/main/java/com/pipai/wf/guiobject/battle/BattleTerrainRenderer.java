@@ -78,7 +78,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 	}
 
 	public static Vector2 centerOfGridPos(GridPosition pos) {
-		return new Vector2(pos.x * SQUARE_SIZE + SQUARE_SIZE / 2, pos.y * SQUARE_SIZE + SQUARE_SIZE / 2);
+		return new Vector2(pos.getX() * SQUARE_SIZE + SQUARE_SIZE / 2, pos.getY() * SQUARE_SIZE + SQUARE_SIZE / 2);
 	}
 
 	public BattleTerrainRenderer(BattleGui gui, BattleMap map, FogOfWar fogOfWar) {
@@ -256,7 +256,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.begin(ShapeType.Filled);
 		batch.setColor(color);
-		batch.rect(pos.x * SQUARE_SIZE, pos.y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+		batch.rect(pos.getX() * SQUARE_SIZE, pos.getY() * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
 		batch.end();
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}

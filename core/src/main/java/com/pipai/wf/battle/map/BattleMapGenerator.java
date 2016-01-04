@@ -49,8 +49,8 @@ public class BattleMapGenerator {
 	 * @param ur Upper right corner
 	 */
 	private GridPosition randPos(GridPosition bl, GridPosition ur) {
-		int x = rng.randInt(bl.x, ur.x);
-		int y = rng.randInt(bl.y, ur.y);
+		int x = rng.randInt(bl.getX(), ur.getX());
+		int y = rng.randInt(bl.getY(), ur.getY());
 		return new GridPosition(x, y);
 	}
 
@@ -67,7 +67,7 @@ public class BattleMapGenerator {
 		for (int i = 0; i < partyRelativeStartingPositions.size() && i < party.size(); i++) {
 			GridPosition relativePos = partyRelativeStartingPositions.get(i);
 			AgentState as = factory.battleAgentFromSchema(Team.PLAYER,
-					new GridPosition(center.x + relativePos.x, center.y + relativePos.y),
+					new GridPosition(center.getX() + relativePos.getX(), center.getY() + relativePos.getY()),
 					party.get(i));
 			map.addAgent(as);
 		}
@@ -85,7 +85,7 @@ public class BattleMapGenerator {
 		GridPosition center = randPos(new GridPosition(8, 8), new GridPosition(map.getCols() - 8, map.getRows() - 8));
 		List<GridPosition> enemyPos = new ArrayList<>();
 		for (int i = 0; i < amt; i++) {
-			enemyPos.add(randPos(new GridPosition(center.x - 2, center.y - 2), new GridPosition(center.x + 2, center.y + 2)));
+			enemyPos.add(randPos(new GridPosition(center.getX() - 2, center.getY() - 2), new GridPosition(center.getX() + 2, center.getY() + 2)));
 		}
 		for (GridPosition pos : enemyPos) {
 			generateEnemyIfEmpty(map, pos);

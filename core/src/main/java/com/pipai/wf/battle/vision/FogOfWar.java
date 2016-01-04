@@ -60,13 +60,13 @@ public final class FogOfWar {
 	public void setVisible(GridPosition tile) {
 		visibleTiles.add(tile);
 		visibilityPixmap.setColor(VISIBLE_COLOR);
-		visibilityPixmap.drawPixel(tile.x, tile.y);
+		visibilityPixmap.drawPixel(tile.getX(), tile.getY());
 	}
 
 	public void setNotVisible(GridPosition tile) {
 		visibleTiles.remove(tile);
 		visibilityPixmap.setColor(SEEN_COLOR);
-		visibilityPixmap.drawPixel(tile.x, tile.y);
+		visibilityPixmap.drawPixel(tile.getX(), tile.getY());
 	}
 
 	public void fullScan() {
@@ -80,7 +80,7 @@ public final class FogOfWar {
 
 		for (AgentGuiObject a : agents) {
 			GridPosition pos = a.getDisplayPosition();
-			visibilityPixmap.fillCircle(pos.x, pos.y, config.sightRange());
+			visibilityPixmap.fillCircle(pos.getX(), pos.getY(), config.sightRange());
 			// spiralPathScan(a);
 		}
 		fogOfWarStateTexture = new Texture(visibilityPixmap);
@@ -111,50 +111,50 @@ public final class FogOfWar {
 	}
 
 	private void initializeSpiralPathQueue(LinkedList<GridPosition> queue, GridPosition center) {
-		queue.add(new GridPosition(center.x + 1, center.y));
-		queue.add(new GridPosition(center.x, center.y + 1));
-		queue.add(new GridPosition(center.x - 1, center.y));
-		queue.add(new GridPosition(center.x, center.y - 1));
+		queue.add(new GridPosition(center.getX() + 1, center.getY()));
+		queue.add(new GridPosition(center.getX(), center.getY() + 1));
+		queue.add(new GridPosition(center.getX() - 1, center.getY()));
+		queue.add(new GridPosition(center.getX(), center.getY() - 1));
 	}
 
 	private void passLight(LinkedList<GridPosition> queue, GridPosition center, GridPosition tile) {
 		Direction dirToTile = center.directionTo(tile);
 		switch (dirToTile) {
 		case E:
-			queue.add(new GridPosition(tile.x, tile.y - 1));
-			queue.add(new GridPosition(tile.x + 1, tile.y));
-			queue.add(new GridPosition(tile.x, tile.y + 1));
+			queue.add(new GridPosition(tile.getX(), tile.getY() - 1));
+			queue.add(new GridPosition(tile.getX() + 1, tile.getY()));
+			queue.add(new GridPosition(tile.getX(), tile.getY() + 1));
 			break;
 		case NE:
-			queue.add(new GridPosition(tile.x + 1, tile.y));
-			queue.add(new GridPosition(tile.x, tile.y + 1));
+			queue.add(new GridPosition(tile.getX() + 1, tile.getY()));
+			queue.add(new GridPosition(tile.getX(), tile.getY() + 1));
 			break;
 		case N:
-			queue.add(new GridPosition(tile.x + 1, tile.y));
-			queue.add(new GridPosition(tile.x, tile.y + 1));
-			queue.add(new GridPosition(tile.x - 1, tile.y));
+			queue.add(new GridPosition(tile.getX() + 1, tile.getY()));
+			queue.add(new GridPosition(tile.getX(), tile.getY() + 1));
+			queue.add(new GridPosition(tile.getX() - 1, tile.getY()));
 			break;
 		case NW:
-			queue.add(new GridPosition(tile.x, tile.y + 1));
-			queue.add(new GridPosition(tile.x - 1, tile.y));
+			queue.add(new GridPosition(tile.getX(), tile.getY() + 1));
+			queue.add(new GridPosition(tile.getX() - 1, tile.getY()));
 			break;
 		case W:
-			queue.add(new GridPosition(tile.x, tile.y + 1));
-			queue.add(new GridPosition(tile.x - 1, tile.y));
-			queue.add(new GridPosition(tile.x, tile.y - 1));
+			queue.add(new GridPosition(tile.getX(), tile.getY() + 1));
+			queue.add(new GridPosition(tile.getX() - 1, tile.getY()));
+			queue.add(new GridPosition(tile.getX(), tile.getY() - 1));
 			break;
 		case SW:
-			queue.add(new GridPosition(tile.x - 1, tile.y));
-			queue.add(new GridPosition(tile.x, tile.y - 1));
+			queue.add(new GridPosition(tile.getX() - 1, tile.getY()));
+			queue.add(new GridPosition(tile.getX(), tile.getY() - 1));
 			break;
 		case S:
-			queue.add(new GridPosition(tile.x - 1, tile.y));
-			queue.add(new GridPosition(tile.x, tile.y - 1));
-			queue.add(new GridPosition(tile.x + 1, tile.y));
+			queue.add(new GridPosition(tile.getX() - 1, tile.getY()));
+			queue.add(new GridPosition(tile.getX(), tile.getY() - 1));
+			queue.add(new GridPosition(tile.getX() + 1, tile.getY()));
 			break;
 		case SE:
-			queue.add(new GridPosition(tile.x, tile.y - 1));
-			queue.add(new GridPosition(tile.x + 1, tile.y));
+			queue.add(new GridPosition(tile.getX(), tile.getY() - 1));
+			queue.add(new GridPosition(tile.getX() + 1, tile.getY()));
 			break;
 		default:
 			throw new IllegalStateException("Received unexpected direction for the direction to tile: " + dirToTile);

@@ -26,7 +26,7 @@ public final class UtilFunctions {
 	}
 
 	public static float gridPositionDistance(GridPosition pos1, GridPosition pos2) {
-		return (float) Math.sqrt(Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2));
+		return (float) Math.sqrt(Math.pow(pos1.getX() - pos2.getX(), 2) + Math.pow(pos1.getY() - pos2.getY(), 2));
 	}
 
 	private UtilFunctions() {

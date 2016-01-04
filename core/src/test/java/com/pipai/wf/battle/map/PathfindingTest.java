@@ -123,7 +123,7 @@ public class PathfindingTest {
 		GridPosition prev = start;
 		for (GridPosition pos : list) {
 			if (prev != null) {
-				if (Math.abs(prev.x - pos.x) > 1 || Math.abs(prev.y - pos.y) > 1) {
+				if (Math.abs(prev.getX() - pos.getX()) > 1 || Math.abs(prev.getY() - pos.getY()) > 1) {
 					return false;
 				}
 			}

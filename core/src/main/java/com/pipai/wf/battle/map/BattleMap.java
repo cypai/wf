@@ -66,28 +66,28 @@ public class BattleMap {
 		GridPosition cellPos = null;
 		switch (d) {
 		case W:
-			cellPos = new GridPosition(pos.x - 1, pos.y);
+			cellPos = new GridPosition(pos.getX() - 1, pos.getY());
 			break;
 		case E:
-			cellPos = new GridPosition(pos.x + 1, pos.y);
+			cellPos = new GridPosition(pos.getX() + 1, pos.getY());
 			break;
 		case N:
-			cellPos = new GridPosition(pos.x, pos.y + 1);
+			cellPos = new GridPosition(pos.getX(), pos.getY() + 1);
 			break;
 		case S:
-			cellPos = new GridPosition(pos.x, pos.y - 1);
+			cellPos = new GridPosition(pos.getX(), pos.getY() - 1);
 			break;
 		case NW:
-			cellPos = new GridPosition(pos.x - 1, pos.y + 1);
+			cellPos = new GridPosition(pos.getX() - 1, pos.getY() + 1);
 			break;
 		case NE:
-			cellPos = new GridPosition(pos.x + 1, pos.y + 1);
+			cellPos = new GridPosition(pos.getX() + 1, pos.getY() + 1);
 			break;
 		case SW:
-			cellPos = new GridPosition(pos.x - 1, pos.y - 1);
+			cellPos = new GridPosition(pos.getX() - 1, pos.getY() - 1);
 			break;
 		case SE:
-			cellPos = new GridPosition(pos.x + 1, pos.y - 1);
+			cellPos = new GridPosition(pos.getX() + 1, pos.getY() - 1);
 			break;
 		default:
 			throw new IllegalArgumentException("Received unexpected parameter for Direction d: " + d);

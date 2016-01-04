@@ -121,7 +121,7 @@ public class LineOfSightCalculator {
 	}
 
 	private static Vector2 gridCenter(GridPosition pos) {
-		return new Vector2(pos.x + 0.5f, pos.y + 0.5f);
+		return new Vector2(pos.getX() + 0.5f, pos.getY() + 0.5f);
 	}
 
 	protected static class Supercover {

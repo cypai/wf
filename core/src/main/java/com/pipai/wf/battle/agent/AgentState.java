@@ -62,7 +62,7 @@ public class AgentState implements HasBasicStats, HasName {
 	 */
 	public String generateString() {
 		String s = "a ";
-		s += String.valueOf(getPosition().x) + " " + String.valueOf(getPosition().y) + " ";
+		s += String.valueOf(getPosition().getX()) + " " + String.valueOf(getPosition().getY()) + " ";
 		s += getTeam() + " ";
 		s += String.valueOf(getHP()) + " " + String.valueOf(getMaxHP()) + " ";
 		s += String.valueOf(getAP()) + " " + String.valueOf(getMaxAP()) + " ";

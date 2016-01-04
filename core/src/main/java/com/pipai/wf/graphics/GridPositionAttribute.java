@@ -41,7 +41,7 @@ public class GridPositionAttribute extends Attribute {
 	@Override
 	public int hashCode() {
 		final int prime = 17;
-		final long v = NumberUtils.doubleToLongBits(value.x + Integer.MAX_VALUE + value.y);
+		final long v = NumberUtils.doubleToLongBits(value.getX() + Integer.MAX_VALUE + value.getY());
 		return prime * super.hashCode() + (int) (v ^ (v >>> 32));
 	}
 
@@ -52,6 +52,6 @@ public class GridPositionAttribute extends Attribute {
 		}
 		GridPosition otherValue = ((GridPositionAttribute) o).value;
 		// Arbitrary left to right comparison
-		return value.equals(otherValue) ? 0 : (value.x < otherValue.x ? -1 : 1);
+		return value.equals(otherValue) ? 0 : (value.getX() < otherValue.getX() ? -1 : 1);
 	}
 }

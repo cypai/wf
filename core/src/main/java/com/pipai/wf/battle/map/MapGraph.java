@@ -75,7 +75,7 @@ public class MapGraph {
 						nw.addEdge(cell);
 						cell.addEdge(nw);
 					}
-					if (rootPos != null && x == rootPos.x && y == rootPos.y) {
+					if (rootPos != null && x == rootPos.getX() && y == rootPos.getY()) {
 						root = cell;
 					}
 				}
