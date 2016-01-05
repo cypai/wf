@@ -12,8 +12,6 @@ import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.damage.AccuracyPercentages;
 import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageFunction;
@@ -26,6 +24,7 @@ import com.pipai.wf.item.weapon.InnateCasting;
 import com.pipai.wf.item.weapon.SpellWeapon;
 import com.pipai.wf.spell.FireballSpell;
 import com.pipai.wf.test.MockGUIObserver;
+import com.pipai.wf.test.WfTestUtils;
 import com.pipai.wf.unit.ability.FireActualizationAbility;
 import com.pipai.wf.unit.ability.FireballAbility;
 import com.pipai.wf.util.UtilFunctions;
@@ -44,38 +43,36 @@ public class CastFireballTest extends GdxMockedTest {
 		BattleMap map = new BattleMap(3, 4);
 		GridPosition playerPos = new GridPosition(1, 0);
 		GridPosition enemyPos = new GridPosition(2, 2);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
-		playerState.getWeapons().add(new InnateCasting());
-		playerState.getAbilities().add(new FireActualizationAbility(1));
-		playerState.getAbilities().add(new FireballAbility());
-		map.addAgent(playerState);
-		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		Agent player = WfTestUtils.createGenericAgent(Team.PLAYER, playerPos);
+		SpellWeapon spellWeapon = new InnateCasting();
+		player.getInventory().setItem(spellWeapon, 1);
+		player.getAbilities().add(new FireActualizationAbility(1));
+		player.getAbilities().add(new FireballAbility());
+		map.addAgent(player);
+		Agent enemy = WfTestUtils.createGenericAgent(Team.ENEMY, enemyPos);
+		map.addAgent(enemy);
 		BattleController controller = new BattleController(map, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		Agent agent = map.getAgentAtPos(playerPos);
-		Agent target = map.getAgentAtPos(enemyPos);
 		try {
-			new ReadySpellAction(controller, agent, new FireballSpell()).perform();
-			Assert.assertTrue(((SpellWeapon) agent.getCurrentWeapon()).getSpell() != null);
-			WeaponActionFactory wFactory = new WeaponActionFactory(controller);
-			wFactory.defaultWeaponAction(agent, target).perform();
+			new ReadySpellAction(controller, player, spellWeapon, new FireballSpell()).perform();
+			Assert.assertTrue(spellWeapon.getSpell() != null);
+			new TargetedSpellWeaponAction(controller, player, enemy, spellWeapon).perform();
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
 		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.CAST_TARGET, ev.getType());
-		Assert.assertEquals(agent, ev.getPerformer());
-		Assert.assertEquals(target, ev.getTarget());
+		Assert.assertEquals(player, ev.getPerformer());
+		Assert.assertEquals(enemy, ev.getTarget());
 		Assert.assertTrue(ev.getSpell() instanceof FireballSpell);
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Player has 1000 aim, cannot miss
 		Assert.assertTrue(ev.getDamageResult().isHit());
-		int expectedHP = UtilFunctions.clamp(0, target.getMaxHP(), target.getMaxHP() - ev.getDamage());
-		Assert.assertEquals(expectedHP, target.getHP());
-		Assert.assertEquals(agent.getMaxHP(), agent.getHP());
-		Assert.assertEquals(null, ((SpellWeapon) agent.getCurrentWeapon()).getSpell());
+		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.getDamage());
+		Assert.assertEquals(expectedHP, enemy.getHP());
+		Assert.assertEquals(player.getMaxHP(), player.getHP());
+		Assert.assertEquals(null, spellWeapon.getSpell());
 	}
 
 	@Test
@@ -91,22 +88,21 @@ public class CastFireballTest extends GdxMockedTest {
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		playerState.getWeapons().add(new InnateCasting());
-		playerState.getAbilities().add(new FireActualizationAbility(1));
-		playerState.getAbilities().add(new FireballAbility());
-		map.addAgent(playerState);
-		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		Agent player = WfTestUtils.createGenericAgent(Team.PLAYER, playerPos);
+		SpellWeapon spellWeapon = new InnateCasting();
+		player.getInventory().setItem(spellWeapon, 1);
+		player.getAbilities().add(new FireActualizationAbility(1));
+		player.getAbilities().add(new FireballAbility());
+		map.addAgent(player);
+		Agent enemy = WfTestUtils.createGenericAgent(Team.ENEMY, enemyPos);
+		map.addAgent(enemy);
 		BattleController controller = new BattleController(map, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		Agent player = map.getAgentAtPos(playerPos);
-		Agent enemy = map.getAgentAtPos(enemyPos);
-		Assert.assertFalse(player == null || enemy == null);
 		try {
-			new ReadySpellAction(controller, player, new FireballSpell()).perform();
-			Assert.assertTrue(((SpellWeapon) player.getCurrentWeapon()).getSpell() != null);
+			new ReadySpellAction(controller, player, spellWeapon, new FireballSpell()).perform();
+			Assert.assertTrue(spellWeapon.getSpell() != null);
+			new TargetedSpellWeaponAction(controller, player, enemy, spellWeapon).perform();
 			new OverwatchAction(controller, player).perform();
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
@@ -142,6 +138,6 @@ public class CastFireballTest extends GdxMockedTest {
 		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv.getDamage());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
-		Assert.assertEquals(null, ((SpellWeapon) player.getCurrentWeapon()).getSpell());
+		Assert.assertEquals(null, spellWeapon.getSpell());
 	}
 }

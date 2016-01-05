@@ -8,8 +8,11 @@ import org.slf4j.LoggerFactory;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.OverwatchAction;
+import com.pipai.wf.battle.action.WaitAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.item.weapon.WeaponFlag;
 
 public class OverwatchAI extends AI {
 
@@ -45,9 +48,15 @@ public class OverwatchAI extends AI {
 		}
 		Agent a = toAct.poll();
 		if (a.getAP() > 0) {
-			OverwatchAction ow = new OverwatchAction(getBattleController(), a);
+			Weapon w = AiHelper.getAgentWeapon(a);
+
 			try {
-				ow.perform();
+				if (w.hasFlag(WeaponFlag.OVERWATCH)) {
+					OverwatchAction ow = (OverwatchAction) w.getParticularAction(OverwatchAction.class, getBattleController(), a);
+					ow.perform();
+				} else {
+					new WaitAction(getBattleController(), a).perform();
+				}
 			} catch (IllegalActionException e) {
 				LOGGER.error("AI tried to perform illegal move: " + e.getMessage());
 			}

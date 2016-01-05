@@ -2,7 +2,7 @@ package com.pipai.wf.battle.map;
 
 import java.util.ArrayList;
 
-import com.pipai.wf.battle.agent.AgentState;
+import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.exception.BadStateStringException;
 
 /*
@@ -19,7 +19,7 @@ public class MapString {
 	private String map;
 	private int rows, cols;
 	private ArrayList<GridPosition> solidPositions;
-	private ArrayList<AgentState> agentStates;
+	private ArrayList<Agent> agents;
 
 	public MapString(String mapString) throws BadStateStringException {
 		header = mapString.substring(0, mapString.indexOf("\n"));
@@ -57,7 +57,7 @@ public class MapString {
 
 	private void parse() throws BadStateStringException {
 		solidPositions = new ArrayList<GridPosition>();
-		agentStates = new ArrayList<AgentState>();
+		agents = new ArrayList<Agent>();
 		String[] lines = map.split("\n");
 		for (String line : lines) {
 			String[] params = line.split(" ");
@@ -82,8 +82,8 @@ public class MapString {
 		return solidPositions;
 	}
 
-	public ArrayList<AgentState> getAgentStates() {
-		return agentStates;
+	public ArrayList<Agent> getAgents() {
+		return agents;
 	}
 
 	@Override

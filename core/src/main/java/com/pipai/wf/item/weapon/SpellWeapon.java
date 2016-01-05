@@ -11,16 +11,16 @@ public abstract class SpellWeapon extends Weapon {
 		super(0);
 	}
 
-	public void ready(Spell spell) {
+	public void setSpell(Spell spell) {
 		this.spell = spell;
-	}
-
-	public void cast() {
-		spell = null;
 	}
 
 	public Spell getSpell() {
 		return spell;
+	}
+
+	public void cast() {
+		spell = null;
 	}
 
 	@Override
@@ -51,6 +51,14 @@ public abstract class SpellWeapon extends Weapon {
 	@Override
 	public int maxBaseDamage() {
 		return 0;
+	}
+
+	@Override
+	public SpellWeapon copy() {
+		SpellWeapon copy = (SpellWeapon) copyAsNew();
+		copy.setCurrentAmmo(getCurrentAmmo());
+		copy.setSpell(getSpell());
+		return copy;
 	}
 
 }

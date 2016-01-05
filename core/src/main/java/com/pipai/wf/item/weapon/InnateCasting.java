@@ -26,4 +26,9 @@ public class InnateCasting extends SpellWeapon {
 		return FLAGS.contains(flag);
 	}
 
+	@Override
+	public InnateCasting copyAsNew() {
+		return new InnateCasting();
+	}
+
 }

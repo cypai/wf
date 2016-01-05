@@ -10,8 +10,6 @@ import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.PrecisionShotAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.damage.AccuracyPercentages;
 import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageFunction;
@@ -20,6 +18,7 @@ import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Bow;
+import com.pipai.wf.test.WfTestUtils;
 
 public class PrecisionShotAbilityTest {
 
@@ -35,11 +34,10 @@ public class PrecisionShotAbilityTest {
 				Matchers.anyInt())).thenReturn(new DamageResult(false, false, 0, 0));
 		Mockito.when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
 		Agent mockTarget = Mockito.mock(Agent.class);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		playerState.getAbilities().add(new PrecisionShotAbility());
-		playerState.getWeapons().add(new Bow());
-		map.addAgent(playerState);
+		Agent player = WfTestUtils.createGenericAgent(Team.PLAYER, playerPos);
+		player.getAbilities().add(new PrecisionShotAbility());
+		player.getInventory().setItem(new Bow(), 1);
+		map.addAgent(player);
 		Agent agent = map.getAgentAtPos(playerPos);
 		BattleController controller = new BattleController(map, mockConfig);
 		PrecisionShotAbility ability = (PrecisionShotAbility) agent.getInnateAbilities().getAbility(PrecisionShotAbility.class);

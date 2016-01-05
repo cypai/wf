@@ -1,15 +1,17 @@
 package com.pipai.wf.battle.action;
 
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.component.ApRequiredComponent;
-import com.pipai.wf.battle.action.component.HasPerformerComponent;
-import com.pipai.wf.battle.action.component.PerformerComponent;
-import com.pipai.wf.battle.action.component.PerformerComponentImpl;
+import com.pipai.wf.battle.action.verification.ActionVerifier;
+import com.pipai.wf.battle.action.verification.BaseVerifier;
+import com.pipai.wf.battle.action.verification.SupplierVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMapCell;
@@ -17,45 +19,36 @@ import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.vision.AgentVisionCalculator;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class MoveAction extends Action implements ApRequiredComponent, HasPerformerComponent {
+public class MoveAction extends PerformerAction implements ApRequiredComponent {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MoveAction.class);
-
-	private PerformerComponent performerComponent = new PerformerComponentImpl();
 
 	private LinkedList<GridPosition> path;
 	private int useAP;
 
 	public MoveAction(BattleController controller, Agent performerAgent, LinkedList<GridPosition> path, int useAP) {
-		super(controller);
-		setPerformer(performerAgent);
+		super(controller, performerAgent);
 		this.path = path;
 		this.useAP = useAP;
 	}
 
 	@Override
-	public PerformerComponent getPerformerComponent() {
-		return performerComponent;
+	protected List<ActionVerifier> getVerifiers() {
+		return Arrays.asList(BaseVerifier.getInstance(),
+				new SupplierVerifier(this::pathIsValid, "Move path sequence is not valid"));
 	}
 
 	@Override
 	public int getAPRequired() {
-		return 1;
+		return useAP;
 	}
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		LOGGER.debug("Performed by '" + getPerformer().getName() + "' with path " + path + " and useAP " + useAP);
 		Agent movingAgent = getPerformer();
-		if (useAP > movingAgent.getAP()) {
-			throw new IllegalActionException("AP required for movement greater than current AP");
-		}
 		BattleEvent event = BattleEvent.moveEvent(movingAgent, path);
-		if (pathIsValid()) {
-			logBattleEvent(event);
-		} else {
-			throw new IllegalActionException("Move path sequence is not valid");
-		}
+		logBattleEvent(event);
 		AgentVisionCalculator visionCalc = new AgentVisionCalculator(getBattleMap(), getBattleConfiguration());
 		for (GridPosition pos : path) {
 			setAgentPosition(movingAgent, pos);

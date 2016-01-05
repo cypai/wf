@@ -1,9 +1,6 @@
 package com.pipai.wf.unit.schema;
 
-import java.util.ArrayList;
-
-import com.pipai.wf.item.armor.Armor;
-import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.battle.inventory.AgentInventory;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.unit.ability.AbilityList;
 
@@ -47,10 +44,7 @@ public abstract class NewUnitSchema extends UnitSchema {
 	public abstract AbilityList getAbilities();
 
 	@Override
-	public abstract Armor getArmor();
-
-	@Override
-	public abstract ArrayList<Weapon> getWeapons();
+	public abstract AgentInventory getInventory();
 
 	@Override
 	public abstract int getLevel();

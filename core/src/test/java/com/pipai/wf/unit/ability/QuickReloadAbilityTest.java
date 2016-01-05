@@ -9,12 +9,11 @@ import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Pistol;
+import com.pipai.wf.test.WfTestUtils;
 
 public class QuickReloadAbilityTest {
 
@@ -23,13 +22,12 @@ public class QuickReloadAbilityTest {
 		BattleMap mockMap = Mockito.mock(BattleMap.class);
 		GridPosition mockPosition = Mockito.mock(GridPosition.class);
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState as = factory.battleAgentFromStats(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
-		as.getWeapons().add(new Pistol());
+		Agent agent = WfTestUtils.createGenericAgent(Team.PLAYER, mockPosition);
+		Pistol pistol = new Pistol();
+		agent.getInventory().setItem(pistol, 1);
 		BattleController controller = new BattleController(mockMap, mockConfig);
-		Agent agent = new Agent(as);
 		try {
-			new ReloadAction(controller, agent).perform();
+			new ReloadAction(controller, agent, pistol).perform();
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
@@ -41,14 +39,13 @@ public class QuickReloadAbilityTest {
 		BattleMap mockMap = Mockito.mock(BattleMap.class);
 		GridPosition mockPosition = Mockito.mock(GridPosition.class);
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState as = factory.battleAgentFromStats(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
-		as.getAbilities().add(new QuickReloadAbility());
-		as.getWeapons().add(new Pistol());
+		Agent agent = WfTestUtils.createGenericAgent(Team.PLAYER, mockPosition);
+		Pistol pistol = new Pistol();
+		agent.getAbilities().add(new QuickReloadAbility());
+		agent.getInventory().setItem(pistol, 1);
 		BattleController controller = new BattleController(mockMap, mockConfig);
-		Agent agent = new Agent(as);
 		try {
-			new ReloadAction(controller, agent).perform();
+			new ReloadAction(controller, agent, pistol).perform();
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}

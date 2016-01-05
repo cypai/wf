@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 
@@ -15,7 +15,7 @@ public class DamageDealerTest {
 	public void testMakeAgentInactiveOnKO() {
 		BattleMap map = new BattleMap(1, 1);
 		GridPosition agentPosition = new GridPosition(0, 0);
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, agentPosition, 1, 1, 1, 1, 1, 1));
 		Agent a = map.getAgentAtPos(agentPosition);
 		DamageDealer damageDealer = new DamageDealer(map);

@@ -9,19 +9,20 @@ import org.mockito.Mockito;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapString;
 import com.pipai.wf.battle.map.PeekingSquaresCalculator;
 import com.pipai.wf.exception.BadStateStringException;
+import com.pipai.wf.test.WfTestUtils;
 
 public class PeekingSquaresTest {
 
 	private static BattleMap generateMap(String mapString, GridPosition playerPos) throws BadStateStringException {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		Mockito.when(mockConfig.sightRange()).thenReturn(17);
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		BattleMap map = new BattleMap(new MapString(mapString));
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0));
 		return map;
@@ -37,8 +38,7 @@ public class PeekingSquaresTest {
 		 */
 		BattleMap map = new BattleMap(3, 3);
 		GridPosition playerPos = new GridPosition(1, 1);
-		AgentStateFactory factory = new AgentStateFactory();
-		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0));
+		map.addAgent(WfTestUtils.createGenericAgent(Team.PLAYER, playerPos));
 		Agent a = map.getAgentAtPos(playerPos);
 		PeekingSquaresCalculator peekingCalc = new PeekingSquaresCalculator(map);
 		List<GridPosition> peekSquares = peekingCalc.getPeekingSquares(a);
@@ -193,8 +193,7 @@ public class PeekingSquaresTest {
 		GridPosition playerPos = new GridPosition(1, 1);
 		BattleMap map = generateMap(rawMapString, playerPos);
 		GridPosition enemyPos = new GridPosition(0, 2);
-		AgentStateFactory factory = new AgentStateFactory();
-		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		map.addAgent(WfTestUtils.createGenericAgent(Team.ENEMY, enemyPos));
 		Agent a = map.getAgentAtPos(playerPos);
 		PeekingSquaresCalculator peekingCalc = new PeekingSquaresCalculator(map);
 		List<GridPosition> peekSquares = peekingCalc.getPeekingSquares(a);

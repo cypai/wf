@@ -1,15 +1,10 @@
 package com.pipai.wf.unit.schema;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.item.armor.Armor;
-import com.pipai.wf.item.armor.NoArmor;
-import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.inventory.AgentInventory;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.misc.HasBasicStats;
 import com.pipai.wf.misc.HasName;
@@ -24,40 +19,38 @@ import com.pipai.wf.unit.ability.AbilityList;
  * Although this class is mutable, subclasses might not be. Immutable subclasses should throw UnsupportedMethodException for setters.
  *
  */
+// TODO: Make this an interface and move implementation to MutableUnitSchema
 public class UnitSchema implements HasName, HasBasicStats {
 
 	private String name;
 	private BasicStats basicStats;
 
 	private AbilityList abilities;
-	private Armor armor;
-	private ArrayList<Weapon> weapons;
+	private AgentInventory inventory;
 
 	private int level;
 	private int expGiven;
 	private int exp;
 
 	/**
-	 * Creates a schema using the AgentState's stats
+	 * Creates a schema using the Agent's stats
 	 */
-	public UnitSchema(AgentState as) {
-		name = as.getName();
-		basicStats = new BasicStats(as.getHP(), as.getMaxHP(), as.getMaxMP(), as.getMaxMP(), as.getMaxAP(), as.getMaxAP(),
-				as.getAim(), as.getMobility(), as.getDefense());
-		abilities = as.getAbilities().clone();
-		armor = as.getArmor();
-		weapons = as.getWeapons();
-		level = as.getLevel();
-		exp = as.getExp();
-		expGiven = as.getExpGiven();
+	public UnitSchema(Agent agent) {
+		name = agent.getName();
+		basicStats = new BasicStats(agent.getHP(), agent.getMaxHP(), agent.getMaxMP(), agent.getMaxMP(), agent.getMaxAP(), agent.getMaxAP(),
+				agent.getAim(), agent.getMobility(), agent.getDefense());
+		abilities = agent.getAbilities().deepCopyAsNew();
+		inventory = agent.getInventory();
+		level = agent.getLevel();
+		exp = agent.getExp();
+		expGiven = agent.getExpGiven();
 	}
 
 	public UnitSchema(UnitSchema schema) {
 		name = schema.getName();
 		basicStats = schema.getBasicStats();
 		abilities = schema.getAbilities();
-		armor = schema.getArmor();
-		weapons = schema.getWeapons();
+		inventory = schema.getInventory();
 		level = schema.getLevel();
 		exp = schema.getExp();
 		expGiven = schema.getExpGiven();
@@ -67,8 +60,8 @@ public class UnitSchema implements HasName, HasBasicStats {
 		this.name = name;
 		basicStats = stats;
 		abilities = new AbilityList();
-		armor = new NoArmor();
-		weapons = new ArrayList<>();
+		// TODO: Magic number here...
+		inventory = new AgentInventory(3);
 	}
 
 	@JsonCreator
@@ -76,16 +69,14 @@ public class UnitSchema implements HasName, HasBasicStats {
 			@JsonProperty("name") String name,
 			@JsonProperty("basicStats") BasicStats stats,
 			@JsonProperty("abilities") AbilityList abilities,
-			@JsonProperty("armor") Armor armor,
-			@JsonProperty("weapons") List<Weapon> weapons,
+			@JsonProperty("inventory") AgentInventory inventory,
 			@JsonProperty("level") int level,
 			@JsonProperty("exp") int exp,
 			@JsonProperty("expGiven") int expGiven) {
 		this.name = name;
 		basicStats = stats;
 		this.abilities = abilities;
-		this.armor = armor;
-		this.weapons = new ArrayList<Weapon>(weapons);
+		this.inventory = inventory;
 		this.level = level;
 		this.exp = exp;
 		this.expGiven = expGiven;
@@ -96,12 +87,8 @@ public class UnitSchema implements HasName, HasBasicStats {
 		return name;
 	}
 
-	public Armor getArmor() {
-		return armor;
-	}
-
-	public ArrayList<Weapon> getWeapons() {
-		return weapons;
+	public AgentInventory getInventory() {
+		return inventory;
 	}
 
 	public int getLevel() {
@@ -125,7 +112,7 @@ public class UnitSchema implements HasName, HasBasicStats {
 	}
 
 	public AbilityList getAbilities() {
-		return abilities.clone();
+		return abilities.shallowCopy();
 	}
 
 	@Override

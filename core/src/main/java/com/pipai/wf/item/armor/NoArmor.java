@@ -23,4 +23,9 @@ public class NoArmor extends Armor {
 		return "";
 	}
 
+	@Override
+	public NoArmor copyAsNew() {
+		return new NoArmor();
+	}
+
 }

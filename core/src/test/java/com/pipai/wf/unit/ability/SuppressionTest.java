@@ -10,8 +10,7 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.action.SuppressionAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.battle.damage.TargetedActionCalculator;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
@@ -19,26 +18,25 @@ import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.BadStateStringException;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Bow;
-import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.test.MockGUIObserver;
 
 public class SuppressionTest {
 
 	private static BattleMap generateMap(GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
 		BattleMap map = new BattleMap(2, 2);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState player = factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0);
+		AgentFactory factory = new AgentFactory();
+		Agent player = factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0);
 		player.getAbilities().add(new SuppressionAbility());
-		player.getWeapons().add(new Bow());
+		player.getInventory().setItem(new Bow(), 1);
 		map.addAgent(player);
-		AgentState enemy = factory.battleAgentFromStats(Team.ENEMY, enemyPos, 1, 1, 1, 1, 1, 0);
-		enemy.getWeapons().add(new Bow());
+		Agent enemy = factory.battleAgentFromStats(Team.ENEMY, enemyPos, 1, 1, 1, 1, 1, 0);
+		enemy.getInventory().setItem(new Bow(), 1);
 		map.addAgent(enemy);
 		return map;
 	}
 
 	@Test
-	public void testSuppression() throws BadStateStringException {
+	public void testSuppression() throws BadStateStringException, IllegalActionException {
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(0, 1);
 		BattleMap map = generateMap(playerPos, enemyPos);
@@ -47,18 +45,14 @@ public class SuppressionTest {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		Mockito.when(mockConfig.getTargetedActionCalculator()).thenReturn(new TargetedActionCalculator(mockConfig));
 		BattleController controller = new BattleController(map, mockConfig);
-		int toHit = new RangedWeaponAttackAction(controller, enemy, player).getHitCalculation().total();
-		try {
-			new SuppressionAction(controller, player, enemy).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		Bow bow = (Bow) enemy.getInventory().getItem(1);
+		int toHit = new RangedWeaponAttackAction(controller, enemy, player, bow).getHitCalculation().total();
+		new SuppressionAction(controller, player, enemy).perform();
 		Assert.assertEquals(-30, enemy.getStatusEffects().aimModifierList().total());
-		int suppressedToHit = new RangedWeaponAttackAction(controller, enemy, player).getHitCalculation().total();
+		int suppressedToHit = new RangedWeaponAttackAction(controller, enemy, player, bow).getHitCalculation().total();
 		Assert.assertEquals(toHit - 30, suppressedToHit);
 		Assert.assertEquals(0, player.getAP());
-		Weapon weapon = player.getCurrentWeapon();
-		Assert.assertEquals(weapon.baseAmmoCapacity() - 2, weapon.currentAmmo());
+		Assert.assertEquals(bow.baseAmmoCapacity() - 2, bow.getCurrentAmmo());
 	}
 
 	@Test
@@ -68,8 +62,8 @@ public class SuppressionTest {
 		BattleMap map = generateMap(playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		Assert.assertTrue(player.getCurrentWeapon() != null);
-		player.getCurrentWeapon().expendAmmo(player.getCurrentWeapon().baseAmmoCapacity() + 1);
+		Bow bow = (Bow) player.getInventory().getItem(1);
+		bow.expendAmmo(bow.baseAmmoCapacity() + 1);
 		BattleController controller = new BattleController(map, Mockito.mock(BattleConfiguration.class));
 		try {
 			new SuppressionAction(controller, player, enemy).perform();
@@ -80,7 +74,7 @@ public class SuppressionTest {
 	}
 
 	@Test
-	public void testSuppressionLog() throws BadStateStringException {
+	public void testSuppressionLog() throws BadStateStringException, IllegalActionException {
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(0, 1);
 		BattleMap map = generateMap(playerPos, enemyPos);
@@ -89,11 +83,7 @@ public class SuppressionTest {
 		BattleController controller = new BattleController(map, Mockito.mock(BattleConfiguration.class));
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		try {
-			new SuppressionAction(controller, player, enemy).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		new SuppressionAction(controller, player, enemy).perform();
 		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.TARGETED_ACTION, ev.getType());
 		Assert.assertEquals(SuppressionAction.class, ev.getTargetedAction().getClass());

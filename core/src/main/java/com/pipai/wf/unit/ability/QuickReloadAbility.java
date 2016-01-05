@@ -13,7 +13,12 @@ public class QuickReloadAbility extends Ability {
 	}
 
 	@Override
-	public Ability clone() {
+	public QuickReloadAbility copy() {
+		return new QuickReloadAbility();
+	}
+
+	@Override
+	public QuickReloadAbility copyAsNew() {
 		return new QuickReloadAbility();
 	}
 

@@ -4,16 +4,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.exception.NoRegisteredAgentException;
+import com.pipai.wf.misc.DeepCopyable;
+import com.pipai.wf.misc.DeepCopyableAsNew;
+import com.pipai.wf.misc.ShallowCopyable;
 import com.pipai.wf.spell.Spell;
 import com.pipai.wf.spell.SpellElement;
 import com.pipai.wf.unit.ability.component.RoundEndComponent;
 import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
 
-public class AbilityList implements Iterable<Ability> {
+public class AbilityList implements Iterable<Ability>, ShallowCopyable, DeepCopyable, DeepCopyableAsNew {
 
 	private Agent registeredAgent;
 	private LinkedList<Ability> abilityList;
@@ -97,24 +101,15 @@ public class AbilityList implements Iterable<Ability> {
 		return true;
 	}
 
-	public void add(AbilityList alist) {
+	public void addAllByDeepCopy(AbilityList alist) {
 		for (Ability a : alist) {
-			add(a.clone());
+			add(a.copy());
 		}
 	}
 
 	public void clear() {
 		abilityList = new LinkedList<Ability>();
 		spellMap = new HashMap<Class<? extends Spell>, Integer>();
-	}
-
-	@Override
-	public AbilityList clone() {
-		AbilityList alist = new AbilityList();
-		for (Ability a : abilityList) {
-			alist.add(a.clone());
-		}
-		return alist;
 	}
 
 	public boolean contains(Ability arg0) {
@@ -166,6 +161,29 @@ public class AbilityList implements Iterable<Ability> {
 			throw new UnsupportedOperationException();
 		}
 
+	}
+
+	@Override
+	public AbilityList deepCopyAsNew() {
+		return copyByFunction(ability -> ability.copyAsNew());
+	}
+
+	@Override
+	public AbilityList deepCopy() {
+		return copyByFunction(ability -> ability.copy());
+	}
+
+	@Override
+	public AbilityList shallowCopy() {
+		return copyByFunction(ability -> ability);
+	}
+
+	private AbilityList copyByFunction(Function<Ability, Ability> f) {
+		AbilityList copy = new AbilityList();
+		for (Ability ability : abilityList) {
+			copy.add(f.apply(ability));
+		}
+		return copy;
 	}
 
 }

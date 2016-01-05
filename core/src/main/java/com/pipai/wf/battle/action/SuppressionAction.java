@@ -1,33 +1,57 @@
 package com.pipai.wf.battle.action;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.component.ApRequiredComponent;
+import com.pipai.wf.battle.action.component.HasWeaponComponent;
+import com.pipai.wf.battle.action.component.WeaponComponent;
+import com.pipai.wf.battle.action.component.WeaponComponentImpl;
+import com.pipai.wf.battle.action.verification.ActionVerifier;
+import com.pipai.wf.battle.action.verification.BaseVerifier;
+import com.pipai.wf.battle.action.verification.HasAbilityVerifier;
+import com.pipai.wf.battle.action.verification.HasItemVerifier;
+import com.pipai.wf.battle.action.verification.WeaponAmmoVerifier;
+import com.pipai.wf.battle.action.verification.WeaponFlagVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.item.weapon.WeaponFlag;
+import com.pipai.wf.unit.ability.SuppressionAbility;
 
-public class SuppressionAction extends TargetedAction implements ApRequiredComponent {
+public class SuppressionAction extends TargetedAction implements ApRequiredComponent, HasWeaponComponent {
+
+	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 
 	public SuppressionAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller, performerAgent, targetAgent);
 	}
 
 	@Override
+	public WeaponComponent getWeaponComponent() {
+		return weaponComponent;
+	}
+
+	@Override
+	protected List<ActionVerifier> getVerifiers() {
+		return Arrays.asList(
+				BaseVerifier.getInstance(),
+				new HasAbilityVerifier(getPerformer(), SuppressionAbility.class),
+				new HasItemVerifier(getPerformer(), getWeapon()),
+				new WeaponFlagVerifier(getWeapon(), WeaponFlag.SUPPRESSION, "This weapon cannot use suppression"),
+				new WeaponAmmoVerifier(getWeapon(), 2));
+	}
+
+	@Override
 	protected void performImpl() throws IllegalActionException {
 		Agent a = getPerformer();
-		Weapon w = a.getCurrentWeapon();
-		if (!w.hasFlag(WeaponFlag.SUPPRESSION)) {
-			throw new IllegalActionException(w.getName() + " cannot use suppression");
-		}
-		if (w.currentAmmo() < 2) {
-			throw new IllegalActionException("Not enough ammo to suppress");
-		}
+		Weapon w = getWeapon();
 		Agent target = getTarget();
 		a.suppressOther(target);
 		a.setAP(0);
-		a.getCurrentWeapon().expendAmmo(2);
+		w.expendAmmo(2);
 		logBattleEvent(BattleEvent.targetedActionEvent(a, target, this));
 	}
 

@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.CoverType;
 import com.pipai.wf.battle.map.GridPosition;
@@ -29,7 +29,7 @@ public class DefenseCalculatorTest {
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(1, 0);
 		BattleMap map = new BattleMap(new MapString(rawMapString));
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0));
 		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, 1, 1, 1, 1, 1, 0));
 		Agent player = map.getAgentAtPos(playerPos);
@@ -53,7 +53,7 @@ public class DefenseCalculatorTest {
 		GridPosition playerPos = new GridPosition(1, 2);
 		GridPosition enemyPos = new GridPosition(1, 0);
 		BattleMap map = new BattleMap(new MapString(rawMapString));
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0));
 		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, 1, 1, 1, 1, 1, 0));
 		Agent player = map.getAgentAtPos(playerPos);

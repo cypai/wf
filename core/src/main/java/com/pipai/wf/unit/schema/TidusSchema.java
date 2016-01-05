@@ -1,12 +1,9 @@
 package com.pipai.wf.unit.schema;
 
-import java.util.ArrayList;
-
-import com.pipai.wf.item.armor.Armor;
+import com.pipai.wf.battle.inventory.AgentInventory;
 import com.pipai.wf.item.armor.LeatherArmor;
 import com.pipai.wf.item.weapon.Bow;
 import com.pipai.wf.item.weapon.InnateCasting;
-import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.FireActualizationAbility;
 import com.pipai.wf.unit.ability.FireballAbility;
@@ -37,16 +34,13 @@ public class TidusSchema extends RaceTemplateSchema {
 	}
 
 	@Override
-	public Armor getArmor() {
-		return new LeatherArmor();
-	}
-
-	@Override
-	public ArrayList<Weapon> getWeapons() {
-		ArrayList<Weapon> l = new ArrayList<>();
-		l.add(new Bow());
-		l.add(new InnateCasting());
-		return l;
+	public AgentInventory getInventory() {
+		// TODO: Magic number here
+		AgentInventory inventory = new AgentInventory(3);
+		inventory.setItem(new LeatherArmor(), 1);
+		inventory.setItem(new Bow(), 2);
+		inventory.setItem(new InnateCasting(), 3);
+		return inventory;
 	}
 
 	@Override

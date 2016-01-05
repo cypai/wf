@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public final class BattleResult {
@@ -16,7 +15,7 @@ public final class BattleResult {
 		this.result = result;
 		partyState = new ArrayList<>();
 		for (Agent a : partyAgents) {
-			partyState.add(new UnitSchema(new AgentState(a)));
+			partyState.add(new UnitSchema(a));
 		}
 	}
 

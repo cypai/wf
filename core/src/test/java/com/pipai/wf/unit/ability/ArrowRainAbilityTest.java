@@ -8,10 +8,9 @@ import org.mockito.Mockito;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.action.OverwatchableTargetedAction;
+import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.battle.damage.AccuracyPercentages;
 import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageFunction;
@@ -35,16 +34,15 @@ public class ArrowRainAbilityTest {
 				Matchers.anyInt())).thenReturn(new DamageResult(false, false, 0, 0));
 		Mockito.when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
 		Agent mockTarget = Mockito.mock(Agent.class);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 3, 5, 65, 0);
-		playerState.getAbilities().add(new ArrowRainAbility());
-		playerState.getWeapons().add(new Bow());
-		map.addAgent(playerState);
-		Agent agent = map.getAgentAtPos(playerPos);
+		AgentFactory factory = new AgentFactory();
+		Agent player = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 3, 5, 65, 0);
+		player.getAbilities().add(new ArrowRainAbility());
+		Bow bow = new Bow();
+		player.getInventory().setItem(bow, 1);
+		map.addAgent(player);
 		BattleController controller = new BattleController(map, mockConfig);
-		OverwatchableTargetedAction atk = (OverwatchableTargetedAction) ((Bow) agent.getCurrentWeapon()).getAction(controller, agent, mockTarget);
-		atk.perform();
-		Assert.assertEquals(2, agent.getAP());
+		new RangedWeaponAttackAction(controller, player, mockTarget, bow).perform();
+		Assert.assertEquals(2, player.getAP());
 	}
 
 	@Test
@@ -59,17 +57,16 @@ public class ArrowRainAbilityTest {
 				Matchers.anyInt())).thenReturn(new DamageResult(false, false, 0, 0));
 		Mockito.when(mockConfig.getDamageCalculator()).thenReturn(mockDamageCalculator);
 		Agent mockTarget = Mockito.mock(Agent.class);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 3, 5, 65, 0);
-		playerState.getAbilities().add(new ArrowRainAbility());
-		playerState.getWeapons().add(new Bow());
-		map.addAgent(playerState);
-		Agent agent = map.getAgentAtPos(playerPos);
-		agent.setAP(2);
+		AgentFactory factory = new AgentFactory();
+		Agent player = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 3, 5, 65, 0);
+		player.getAbilities().add(new ArrowRainAbility());
+		Bow bow = new Bow();
+		player.getInventory().setItem(bow, 1);
+		map.addAgent(player);
+		player.setAP(2);
 		BattleController controller = new BattleController(map, mockConfig);
-		OverwatchableTargetedAction atk = (OverwatchableTargetedAction) ((Bow) agent.getCurrentWeapon()).getAction(controller, agent, mockTarget);
-		atk.perform();
-		Assert.assertEquals(0, agent.getAP());
+		new RangedWeaponAttackAction(controller, player, mockTarget, bow).perform();
+		Assert.assertEquals(0, player.getAP());
 	}
 
 }

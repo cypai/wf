@@ -1,38 +1,57 @@
 package com.pipai.wf.battle.action;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pipai.wf.battle.BattleController;
-import com.pipai.wf.battle.action.component.ApRequiredComponent;
+import com.pipai.wf.battle.action.component.DefaultApRequiredComponent;
 import com.pipai.wf.battle.action.component.HasPerformerComponent;
-import com.pipai.wf.battle.action.component.PerformerComponent;
-import com.pipai.wf.battle.action.component.PerformerComponentImpl;
+import com.pipai.wf.battle.action.component.HasWeaponComponent;
+import com.pipai.wf.battle.action.component.WeaponComponent;
+import com.pipai.wf.battle.action.component.WeaponComponentImpl;
+import com.pipai.wf.battle.action.verification.ActionVerifier;
+import com.pipai.wf.battle.action.verification.BaseVerifier;
+import com.pipai.wf.battle.action.verification.HasItemVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.unit.ability.QuickReloadAbility;
 
-public class ReloadAction extends Action implements ApRequiredComponent, HasPerformerComponent {
+public class ReloadAction extends PerformerAction implements DefaultApRequiredComponent, HasPerformerComponent, HasWeaponComponent {
 
-	private PerformerComponent performerComponent = new PerformerComponentImpl();
+	private WeaponComponent weaponComponent = new WeaponComponentImpl();
+
+	public ReloadAction(BattleController controller, Agent performerAgent, Weapon weapon) {
+		super(controller, performerAgent);
+		setWeapon(weapon);
+	}
 
 	public ReloadAction(BattleController controller, Agent performerAgent) {
-		super(controller);
-		setPerformer(performerAgent);
+		super(controller, performerAgent);
+	}
+
+	public ReloadAction() {
+		// Call super
 	}
 
 	@Override
-	public int getAPRequired() {
-		return 1;
+	public WeaponComponent getWeaponComponent() {
+		return weaponComponent;
 	}
 
 	@Override
-	public PerformerComponent getPerformerComponent() {
-		return performerComponent;
+	protected List<ActionVerifier> getVerifiers() {
+		return Arrays.asList(
+				BaseVerifier.getInstance(),
+				new HasItemVerifier(getPerformer(), getWeapon()));
 	}
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		Agent agent = getPerformer();
-		agent.getCurrentWeapon().reload();
+		Weapon weapon = getWeapon();
+		weapon.reload();
 		if (agent.getAbilities().hasAbility(QuickReloadAbility.class)) {
 			agent.setAP(agent.getAP() - 1);
 		} else {

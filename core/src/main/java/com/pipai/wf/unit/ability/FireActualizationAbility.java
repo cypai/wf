@@ -32,7 +32,12 @@ public class FireActualizationAbility extends Ability implements HasLevelledAbil
 	}
 
 	@Override
-	public Ability clone() {
+	public FireActualizationAbility copy() {
+		return new FireActualizationAbility(getLevel());
+	}
+
+	@Override
+	public FireActualizationAbility copyAsNew() {
 		return new FireActualizationAbility(getLevel());
 	}
 

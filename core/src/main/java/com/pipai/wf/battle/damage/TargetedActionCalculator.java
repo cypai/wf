@@ -2,9 +2,9 @@ package com.pipai.wf.battle.damage;
 
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.map.AgentCoverCalculator;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.item.weapon.Weapon;
-import com.pipai.wf.battle.map.AgentCoverCalculator;
 
 public class TargetedActionCalculator {
 
@@ -14,9 +14,8 @@ public class TargetedActionCalculator {
 		this.config = config;
 	}
 
-	public PercentageModifierList baseHitCalculation(BattleMap map, Agent performer, Agent target) {
+	public PercentageModifierList baseHitCalculation(BattleMap map, Agent performer, Agent target, Weapon weapon) {
 		DefenseCalculator defenseCalc = new DefenseCalculator(map);
-		Weapon weapon = performer.getCurrentWeapon();
 		PercentageModifierList p = new PercentageModifierList();
 		p.add(new PercentageModifier("Aim", performer.getAim()));
 		p.add(new PercentageModifier("Weapon Aim", weapon.flatAimModifier()));
@@ -26,9 +25,8 @@ public class TargetedActionCalculator {
 		return p;
 	}
 
-	public PercentageModifierList baseCritCalculation(BattleMap map, Agent performer, Agent target) {
+	public PercentageModifierList baseCritCalculation(BattleMap map, Agent performer, Agent target, Weapon weapon) {
 		AgentCoverCalculator coverCalc = new AgentCoverCalculator(map, config);
-		Weapon weapon = performer.getCurrentWeapon();
 		PercentageModifierList p = new PercentageModifierList();
 		p.add(new PercentageModifier("Weapon Base", weapon.flatCritProbabilityModifier()));
 		p.add(new PercentageModifier("Range", weapon.rangeCritModifier(performer.getDistanceFrom(target), config)));

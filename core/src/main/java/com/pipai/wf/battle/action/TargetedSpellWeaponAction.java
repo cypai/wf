@@ -1,13 +1,22 @@
 package com.pipai.wf.battle.action;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pipai.wf.battle.BattleController;
-import com.pipai.wf.battle.action.component.ApRequiredComponent;
+import com.pipai.wf.battle.action.component.DefaultApRequiredComponent;
+import com.pipai.wf.battle.action.component.DefaultWeaponAccuracyMixin;
+import com.pipai.wf.battle.action.component.WeaponComponent;
+import com.pipai.wf.battle.action.component.WeaponComponentImpl;
+import com.pipai.wf.battle.action.verification.ActionVerifier;
+import com.pipai.wf.battle.action.verification.BaseVerifier;
+import com.pipai.wf.battle.action.verification.HasItemVerifier;
+import com.pipai.wf.battle.action.verification.PredicateVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
-import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.SpellDamageFunction;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
@@ -15,90 +24,66 @@ import com.pipai.wf.item.weapon.SpellWeapon;
 import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.spell.Spell;
 
-public class TargetedSpellWeaponAction extends OverwatchableTargetedAction implements ApRequiredComponent {
+public class TargetedSpellWeaponAction extends OverwatchableTargetedAction implements DefaultApRequiredComponent, DefaultWeaponAccuracyMixin {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TargetedSpellWeaponAction.class);
 
-	private final Spell spell;
+	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 
-	public TargetedSpellWeaponAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
+	public TargetedSpellWeaponAction(BattleController controller, Agent performerAgent, Agent targetAgent, SpellWeapon weapon) {
 		super(controller, performerAgent, targetAgent);
-		spell = getWeapon().getSpell();
+		setWeapon(weapon);
 	}
 
 	public TargetedSpellWeaponAction(BattleController controller, Agent performerAgent) {
 		super(controller, performerAgent);
-		spell = getWeapon().getSpell();
-	}
-
-	private SpellWeapon getWeapon() {
-		Weapon w = getPerformer().getCurrentWeapon();
-		if (w == null) {
-			throw new IllegalArgumentException("No weapon is equipped");
-		}
-		if (!(w instanceof SpellWeapon)) {
-			throw new IllegalArgumentException("Currently selected weapon is not a spell weapon");
-		}
-		return (SpellWeapon) w;
 	}
 
 	@Override
-	public PercentageModifierList getHitCalculation() {
-		Agent a = getPerformer();
-		Agent target = getTarget();
-		return getTargetedActionCalculator().baseHitCalculation(getBattleMap(), a, target);
+	public WeaponComponent getWeaponComponent() {
+		return weaponComponent;
 	}
 
 	@Override
-	public PercentageModifierList getCritCalculation() {
-		Agent a = getPerformer();
-		Agent target = getTarget();
-		return getTargetedActionCalculator().baseCritCalculation(getBattleMap(), a, target);
+	protected List<ActionVerifier> getVerifiers() {
+		return Arrays.asList(
+				BaseVerifier.getInstance(),
+				new HasItemVerifier(getPerformer(), getWeapon()),
+				new PredicateVerifier<Weapon>(weapon -> weapon instanceof SpellWeapon, getWeapon(), "Not a spell weapon"),
+				new PredicateVerifier<Weapon>(weapon -> ((SpellWeapon) weapon).getSpell() != null, getWeapon(), "No readied spell"),
+				new PredicateVerifier<Weapon>(weapon -> ((SpellWeapon) weapon).getSpell().canTargetAgent(), getWeapon(), "Spell is not targetable"));
 	}
 
 	@Override
 	protected void performImpl(int owPenalty) throws IllegalActionException {
 		Agent target = getTarget();
-		SpellWeapon w = getWeapon();
+		SpellWeapon w = (SpellWeapon) getWeapon();
 		Spell readiedSpell = w.getSpell();
 		LOGGER.debug("Performed by '" + getPerformer().getName() + "' on '" + getTarget()
 				+ "' with spell " + readiedSpell + " and owPenalty " + owPenalty);
-		if (target == null) {
-			throw new IllegalActionException("Target not specified");
-		}
-		Agent a = getPerformer();
-		if (readiedSpell == null) {
-			throw new IllegalActionException("No readied spell available");
-		}
-		if (readiedSpell != spell) {
-			throw new IllegalActionException("Spell being casted is not the same as the readied spell");
-		}
-		if (!readiedSpell.canTargetAgent()) {
-			throw new IllegalActionException("Cannot target with " + readiedSpell.getName());
-		}
-		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new SpellDamageFunction(spell), owPenalty);
-		a.setAP(0);
+		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new SpellDamageFunction(readiedSpell), owPenalty);
+		getPerformer().setAP(0);
 		w.cast();
 		getDamageDealer().doDamage(result, target);
-		logBattleEvent(BattleEvent.castTargetEvent(a, target, spell, result));
-	}
-
-	@Override
-	public int getAPRequired() {
-		return 1;
+		logBattleEvent(BattleEvent.castTargetEvent(getPerformer(), target, readiedSpell, result));
 	}
 
 	@Override
 	public String getName() {
-		if (spell == null) {
+		Weapon w = getWeapon();
+		if (w == null || !(w instanceof SpellWeapon) || ((SpellWeapon) w).getSpell() == null) {
 			return "No Spell";
 		}
-		return spell.getName();
+		return ((SpellWeapon) w).getSpell().getName();
 	}
 
 	@Override
 	public String getDescription() {
-		return spell.getDescription();
+		Weapon w = getWeapon();
+		if (w == null || !(w instanceof SpellWeapon) || ((SpellWeapon) w).getSpell() == null) {
+			return "No Spell";
+		}
+		return ((SpellWeapon) w).getSpell().getDescription();
 	}
 
 }

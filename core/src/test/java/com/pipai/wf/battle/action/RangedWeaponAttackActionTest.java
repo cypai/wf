@@ -9,8 +9,7 @@ import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.battle.damage.AccuracyPercentages;
 import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageFunction;
@@ -21,14 +20,14 @@ import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Pistol;
 import com.pipai.wf.test.MockGUIObserver;
+import com.pipai.wf.test.WfTestUtils;
 import com.pipai.wf.util.UtilFunctions;
 
+// TODO: Make these tests better
 public class RangedWeaponAttackActionTest {
 
-	// TODO: Make these tests better
-
 	@Test
-	public void testAttackLog() {
+	public void testAttackLog() throws IllegalActionException {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		DamageCalculator mockDamageCalculator = Mockito.mock(DamageCalculator.class);
 		Mockito.when(mockDamageCalculator.rollDamageGeneral(
@@ -39,23 +38,17 @@ public class RangedWeaponAttackActionTest {
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 1);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
-		playerState.getWeapons().add(new Pistol());
-		map.addAgent(playerState);
-		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, 3, 5, 2, 5, 65, 0));
+		AgentFactory factory = new AgentFactory();
+		Agent player = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 1000, 0);
+		Pistol pistol = new Pistol();
+		player.getInventory().setItem(pistol, 1);
+		map.addAgent(player);
+		Agent enemy = WfTestUtils.createGenericAgent(Team.ENEMY, enemyPos);
+		map.addAgent(enemy);
 		BattleController controller = new BattleController(map, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		Agent player = map.getAgentAtPos(playerPos);
-		Agent enemy = map.getAgentAtPos(enemyPos);
-		Assert.assertFalse(player == null || enemy == null);
-		OverwatchableTargetedAction atk = (OverwatchableTargetedAction) ((Pistol) player.getCurrentWeapon()).getAction(controller, player, enemy);
-		try {
-			atk.perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		new RangedWeaponAttackAction(controller, player, enemy, pistol).perform();
 		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.RANGED_WEAPON_ATTACK, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());

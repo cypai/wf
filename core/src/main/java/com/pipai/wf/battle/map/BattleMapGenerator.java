@@ -6,8 +6,8 @@ import java.util.List;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleSchema;
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.unit.schema.SlimeSchema;
 import com.pipai.wf.unit.schema.UnitSchema;
 import com.pipai.wf.util.Rng;
@@ -62,19 +62,19 @@ public class BattleMapGenerator {
 	}
 
 	private void generatePartyPod(BattleMap map, List<UnitSchema> party) {
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		GridPosition center = randPos(new GridPosition(1, 1), new GridPosition(map.getCols() - 1, 4));
 		for (int i = 0; i < partyRelativeStartingPositions.size() && i < party.size(); i++) {
 			GridPosition relativePos = partyRelativeStartingPositions.get(i);
-			AgentState as = factory.battleAgentFromSchema(Team.PLAYER,
+			Agent agent = factory.battleAgentFromSchema(Team.PLAYER,
 					new GridPosition(center.getX() + relativePos.getX(), center.getY() + relativePos.getY()),
 					party.get(i));
-			map.addAgent(as);
+			map.addAgent(agent);
 		}
 	}
 
 	private void generateEnemyIfEmpty(BattleMap map, GridPosition pos) {
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		if (map.getCell(pos).isEmpty()) {
 			map.addAgent(factory.battleAgentFromSchema(Team.ENEMY, pos, new SlimeSchema(1)));
 		}

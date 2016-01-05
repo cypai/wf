@@ -10,7 +10,7 @@ import org.mockito.Mockito;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.guiobject.battle.AgentGuiObject;
@@ -35,7 +35,7 @@ public class FogOfWarTest {
 		Mockito.when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(2, 2);
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0));
 		AgentGuiObject playerGuiObj = generateMockAgent(map.getAgentAtPos(playerPos));
 		ArrayList<AgentGuiObject> playerList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class FogOfWarTest {
 		Mockito.when(mockConfig.sightRangeAdjusted()).thenCallRealMethod();
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(2, 2);
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, playerPos, 1, 1, 1, 1, 1, 0));
 		AgentGuiObject playerGuiObj = generateMockAgent(map.getAgentAtPos(playerPos));
 		ArrayList<AgentGuiObject> playerList = new ArrayList<>();

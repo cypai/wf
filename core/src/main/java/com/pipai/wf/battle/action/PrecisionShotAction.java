@@ -1,8 +1,18 @@
 package com.pipai.wf.battle.action;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pipai.wf.battle.BattleController;
-import com.pipai.wf.battle.action.component.ApRequiredComponent;
-import com.pipai.wf.battle.action.component.HasHitCritComponents;
+import com.pipai.wf.battle.action.component.DefaultApRequiredComponent;
+import com.pipai.wf.battle.action.component.DefaultWeaponAccuracyMixin;
+import com.pipai.wf.battle.action.component.WeaponComponent;
+import com.pipai.wf.battle.action.component.WeaponComponentImpl;
+import com.pipai.wf.battle.action.verification.AbilityCooldownVerifier;
+import com.pipai.wf.battle.action.verification.ActionVerifier;
+import com.pipai.wf.battle.action.verification.BaseVerifier;
+import com.pipai.wf.battle.action.verification.HasItemVerifier;
+import com.pipai.wf.battle.action.verification.WeaponAmmoVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifier;
@@ -14,24 +24,31 @@ import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.item.weapon.WeaponFlag;
 import com.pipai.wf.unit.ability.PrecisionShotAbility;
 
-public class PrecisionShotAction extends TargetedAction implements ApRequiredComponent, HasHitCritComponents {
+public class PrecisionShotAction extends TargetedAction implements DefaultApRequiredComponent, DefaultWeaponAccuracyMixin {
+
+	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 
 	public PrecisionShotAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller, performerAgent, targetAgent);
 	}
 
 	@Override
-	public PercentageModifierList getHitCalculation() {
-		Agent a = getPerformer();
-		Agent target = getTarget();
-		return getTargetedActionCalculator().baseHitCalculation(getBattleMap(), a, target);
+	public WeaponComponent getWeaponComponent() {
+		return weaponComponent;
+	}
+
+	@Override
+	protected List<ActionVerifier> getVerifiers() {
+		return Arrays.asList(
+				BaseVerifier.getInstance(),
+				new AbilityCooldownVerifier(getPerformer(), PrecisionShotAbility.class),
+				new HasItemVerifier(getPerformer(), getWeapon()),
+				new WeaponAmmoVerifier(getWeapon(), 1));
 	}
 
 	@Override
 	public PercentageModifierList getCritCalculation() {
-		Agent a = getPerformer();
-		Agent target = getTarget();
-		PercentageModifierList calc = getTargetedActionCalculator().baseCritCalculation(getBattleMap(), a, target);
+		PercentageModifierList calc = getTargetedActionCalculator().baseCritCalculation(getBattleMap(), getPerformer(), getTarget(), getWeapon());
 		calc.add(new PercentageModifier("Precision Shot", 30));
 		return calc;
 	}
@@ -47,11 +64,11 @@ public class PrecisionShotAction extends TargetedAction implements ApRequiredCom
 			throw new IllegalActionException("Ability is still on cooldown");
 		}
 		Agent target = getTarget();
-		Weapon w = attacker.getCurrentWeapon();
+		Weapon w = getWeapon();
 		if (!w.hasFlag(WeaponFlag.PRECISE_SHOT)) {
 			throw new IllegalActionException(w.getName() + " cannot use Precise Shot");
 		}
-		if (w.hasFlag(WeaponFlag.NEEDS_AMMUNITION) && w.currentAmmo() == 0) {
+		if (w.hasFlag(WeaponFlag.NEEDS_AMMUNITION) && w.getCurrentAmmo() == 0) {
 			throw new IllegalActionException("Not enough ammo to fire " + w.getName());
 		}
 		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(w), 0);
@@ -61,11 +78,6 @@ public class PrecisionShotAction extends TargetedAction implements ApRequiredCom
 		attacker.setAP(0);
 		ability.startCooldown();
 		logBattleEvent(BattleEvent.rangedWeaponAttackEvent(attacker, target, w, adjustedResult));
-	}
-
-	@Override
-	public int getAPRequired() {
-		return 1;
 	}
 
 	@Override

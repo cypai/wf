@@ -24,7 +24,7 @@ public enum UnitClassTree {
 	}
 
 	public AbilityTree getAbilityTree() {
-		return abilityTree.cleanCopy();
+		return abilityTree.deepCopyAsNew();
 	}
 
 }

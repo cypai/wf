@@ -1,7 +1,10 @@
 package com.pipai.wf.spell;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pipai.wf.battle.BattleController;
-import com.pipai.wf.battle.action.TargetedAction;
+import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.TargetedSpellWeaponAction;
 import com.pipai.wf.battle.agent.Agent;
 
@@ -43,13 +46,13 @@ public class FireballSpell extends Spell {
 	}
 
 	@Override
-	public TargetedAction getAction(BattleController controller, Agent performer, Agent target) {
-		return new TargetedSpellWeaponAction(controller, performer, target);
+	public SpellElement element() {
+		return SpellElement.FIRE;
 	}
 
 	@Override
-	public SpellElement element() {
-		return SpellElement.FIRE;
+	public List<Action> getAvailableActions(BattleController controller, Agent agent) {
+		return Arrays.asList(new TargetedSpellWeaponAction(controller, agent));
 	}
 
 }

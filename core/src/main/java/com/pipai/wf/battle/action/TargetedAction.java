@@ -25,6 +25,10 @@ public abstract class TargetedAction extends Action implements HasPerformerTarge
 		setPerformer(performerAgent);
 	}
 
+	public TargetedAction() {
+		// Call super
+	}
+
 	@Override
 	public PerformerTargetComponentImpl getPerformerTargetComponentImpl() {
 		return performerTargetComponentImpl;

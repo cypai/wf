@@ -28,4 +28,14 @@ public class SuppressionAbility extends Ability implements TargetedAbilityCompon
 		return new SuppressionAbility();
 	}
 
+	@Override
+	public SuppressionAbility copy() {
+		return new SuppressionAbility();
+	}
+
+	@Override
+	public SuppressionAbility copyAsNew() {
+		return new SuppressionAbility();
+	}
+
 }

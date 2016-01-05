@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import com.pipai.libgdx.test.GdxMockedTest;
 import com.pipai.wf.battle.action.OverwatchableTargetedAction;
+import com.pipai.wf.battle.action.RangedWeaponAttackAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
@@ -21,23 +21,23 @@ public class BattleResultsTest extends GdxMockedTest {
 	public void testVictoryResult() {
 		BattleConfiguration config = new BattleConfiguration();
 		BattleMap map = new BattleMap(2, 2);
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		GridPosition playerPos = new GridPosition(0, 0);
 		GridPosition enemyPos = new GridPosition(0, 1);
-		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 1000, 5, 0);
-		playerState.getWeapons().add(new Pistol());
+		Agent player = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 1000, 5, 0);
+		Pistol pistol = new Pistol();
+		player.getInventory().setItem(pistol, 1);
 		UnitSchema schema = new SlimeSchema(1);
-		AgentState enemyState = factory.battleAgentFromSchema(Team.ENEMY, enemyPos, schema);
-		map.addAgent(playerState);
-		map.addAgent(enemyState);
+		Agent enemy = factory.battleAgentFromSchema(Team.ENEMY, enemyPos, schema);
+		map.addAgent(player);
+		map.addAgent(enemy);
 		BattleController controller = new BattleController(map, config);
-		Agent player = map.getAgentAtPos(playerPos);
 		player.setHP(1);
 		player.setMP(2);
-		Agent enemy = map.getAgentAtPos(enemyPos);
 		// Ensure enemy will be KOed and give exp
 		enemy.setHP(1);
-		OverwatchableTargetedAction atk = (OverwatchableTargetedAction) ((Pistol) player.getCurrentWeapon()).getAction(controller, player, enemy);
+		OverwatchableTargetedAction atk = (RangedWeaponAttackAction) pistol.getParticularAction(RangedWeaponAttackAction.class, controller, player);
+		atk.setTarget(enemy);
 		try {
 			atk.perform();
 		} catch (IllegalActionException e) {

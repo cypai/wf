@@ -11,13 +11,12 @@ import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.damage.DamageDealer;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Bow;
+import com.pipai.wf.test.WfTestUtils;
 
 public class AcidStatusEffectTest {
 
@@ -27,9 +26,8 @@ public class AcidStatusEffectTest {
 		BattleMap map = new BattleMap(2, 2);
 		BattleController controller = new BattleController(map, mockConfig);
 		GridPosition playerPos = new GridPosition(0, 0);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState as = factory.battleAgentFromStats(Team.PLAYER, playerPos, 3, 5, 2, 5, 65, 0);
-		as.getWeapons().add(new Bow());
+		Agent as = WfTestUtils.createGenericAgent(Team.PLAYER, playerPos);
+		as.getInventory().setItem(new Bow(), 1);
 		map.addAgent(as);
 		Agent agent = map.getAgentAtPos(playerPos);
 		Assert.assertEquals(agent.getMobility(), agent.getEffectiveMobility());

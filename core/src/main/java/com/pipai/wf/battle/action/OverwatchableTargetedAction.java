@@ -19,6 +19,10 @@ public abstract class OverwatchableTargetedAction extends TargetedAction impleme
 		super(controller, performerAgent);
 	}
 
+	public OverwatchableTargetedAction() {
+		// Call super
+	}
+
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		fromOverwatch = false;

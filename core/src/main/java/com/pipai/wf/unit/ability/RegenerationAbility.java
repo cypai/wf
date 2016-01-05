@@ -34,13 +34,18 @@ public class RegenerationAbility extends Ability implements RoundEndComponent, H
 	}
 
 	@Override
-	public Ability clone() {
+	public void onRoundEnd(Agent agent) {
+		agent.heal(getLevel());
+	}
+
+	@Override
+	public RegenerationAbility copy() {
 		return new RegenerationAbility(getLevel());
 	}
 
 	@Override
-	public void onRoundEnd(Agent agent) {
-		agent.heal(getLevel());
+	public RegenerationAbility copyAsNew() {
+		return new RegenerationAbility(getLevel());
 	}
 
 }

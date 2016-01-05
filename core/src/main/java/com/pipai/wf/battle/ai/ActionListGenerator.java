@@ -4,11 +4,10 @@ import java.util.ArrayList;
 
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.Action;
-import com.pipai.wf.battle.action.OverwatchAction;
-import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.inventory.AgentInventory;
 import com.pipai.wf.battle.vision.AgentVisionCalculator;
-import com.pipai.wf.item.weapon.Weapon;
+import com.pipai.wf.item.Item;
 
 public class ActionListGenerator {
 
@@ -19,14 +18,15 @@ public class ActionListGenerator {
 	}
 
 	public ArrayList<Action> generateWeaponActionList(Agent a) {
+		// TODO: Fix this
 		AgentVisionCalculator calc = new AgentVisionCalculator(controller.getBattleMap(), controller.getBattleConfiguration());
 		ArrayList<Action> list = new ArrayList<>();
-		ArrayList<Weapon> weaponList = a.getWeapons();
-		if (weaponList.size() > 0 && weaponList.get(0).currentAmmo() > 0) {
-			for (Agent target : calc.enemiesInRangeOf(a)) {
-				list.add(new WeaponActionFactory(controller).defaultWeaponAction(a, target));
+		AgentInventory inventory = a.getInventory();
+		for (int i = 1; i <= inventory.getSlots(); i++) {
+			Item item = inventory.getItem(i);
+			if (item != null) {
+				list.addAll(item.getAvailableActions(controller, a));
 			}
-			list.add(new OverwatchAction(controller, a));
 		}
 		return list;
 	}

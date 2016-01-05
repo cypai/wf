@@ -2,12 +2,12 @@ package com.pipai.wf.spell;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.pipai.wf.battle.action.TargetedActionable;
+import com.pipai.wf.battle.action.HasActions;
 import com.pipai.wf.misc.HasDescription;
 import com.pipai.wf.misc.HasName;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
-public abstract class Spell implements HasName, HasDescription, TargetedActionable {
+public abstract class Spell implements HasName, HasDescription, HasActions {
 
 	public abstract int requiredMP();
 

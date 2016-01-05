@@ -8,14 +8,13 @@ import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Pistol;
 import com.pipai.wf.test.MockGUIObserver;
+import com.pipai.wf.test.WfTestUtils;
 
 public class ReloadActionTest {
 
@@ -24,21 +23,18 @@ public class ReloadActionTest {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		BattleMap mockMap = Mockito.mock(BattleMap.class);
 		GridPosition mockPos = Mockito.mock(GridPosition.class);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
+		Agent player = WfTestUtils.createGenericAgent(Team.PLAYER, mockPos);
 		Pistol pistol = new Pistol();
 		pistol.expendAmmo(1);
-		playerState.getWeapons().add(pistol);
+		player.getInventory().setItem(pistol, 1);
 		BattleController controller = new BattleController(mockMap, mockConfig);
-		Agent player = new Agent(playerState);
-		Assert.assertEquals(pistol, player.getCurrentWeapon());
-		Assert.assertTrue(pistol.currentAmmo() < pistol.baseAmmoCapacity());
+		Assert.assertTrue(pistol.getCurrentAmmo() < pistol.baseAmmoCapacity());
 		try {
 			new ReloadAction(controller, player).perform();
 		} catch (IllegalActionException e) {
 			Assert.fail(e.getMessage());
 		}
-		Assert.assertEquals(pistol.baseAmmoCapacity(), pistol.currentAmmo());
+		Assert.assertEquals(pistol.baseAmmoCapacity(), pistol.getCurrentAmmo());
 	}
 
 	@Test
@@ -46,11 +42,9 @@ public class ReloadActionTest {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		BattleMap mockMap = Mockito.mock(BattleMap.class);
 		GridPosition mockPos = Mockito.mock(GridPosition.class);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState playerState = factory.battleAgentFromStats(Team.PLAYER, mockPos, 3, 5, 2, 5, 65, 0);
-		playerState.getWeapons().add(new Pistol());
+		Agent player = WfTestUtils.createGenericAgent(Team.PLAYER, mockPos);
+		player.getInventory().setItem(new Pistol(), 1);
 		BattleController controller = new BattleController(mockMap, mockConfig);
-		Agent player = new Agent(playerState);
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
 		try {

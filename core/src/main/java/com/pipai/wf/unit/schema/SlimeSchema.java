@@ -1,11 +1,7 @@
 package com.pipai.wf.unit.schema;
 
-import java.util.ArrayList;
-
-import com.pipai.wf.item.armor.Armor;
-import com.pipai.wf.item.armor.NoArmor;
+import com.pipai.wf.battle.inventory.AgentInventory;
 import com.pipai.wf.item.weapon.InnateCasting;
-import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.FireActualizationAbility;
@@ -36,15 +32,10 @@ public class SlimeSchema extends NewUnitSchema {
 	}
 
 	@Override
-	public Armor getArmor() {
-		return new NoArmor();
-	}
-
-	@Override
-	public ArrayList<Weapon> getWeapons() {
-		ArrayList<Weapon> l = new ArrayList<>();
-		l.add(new InnateCasting());
-		return l;
+	public AgentInventory getInventory() {
+		AgentInventory inventory = new AgentInventory(3);
+		inventory.setItem(new InnateCasting(), 1);
+		return inventory;
 	}
 
 	@Override

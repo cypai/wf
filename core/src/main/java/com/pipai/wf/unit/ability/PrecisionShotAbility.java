@@ -24,11 +24,6 @@ public class PrecisionShotAbility extends Ability implements TargetedAbilityComp
 	}
 
 	@Override
-	public Ability clone() {
-		return new PrecisionShotAbility();
-	}
-
-	@Override
 	public CooldownComponent getCooldownComponent() {
 		return cooldownComponent;
 	}
@@ -36,6 +31,18 @@ public class PrecisionShotAbility extends Ability implements TargetedAbilityComp
 	@Override
 	public TargetedAction getTargetedAction(BattleController controller, Agent performer, Agent target) {
 		return new PrecisionShotAction(controller, performer, target);
+	}
+
+	@Override
+	public PrecisionShotAbility copy() {
+		PrecisionShotAbility copy = new PrecisionShotAbility();
+		copy.setCooldown(getCooldown());
+		return copy;
+	}
+
+	@Override
+	public PrecisionShotAbility copyAsNew() {
+		return new PrecisionShotAbility();
 	}
 
 }

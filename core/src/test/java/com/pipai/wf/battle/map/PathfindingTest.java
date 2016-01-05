@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class PathfindingTest {
@@ -163,7 +163,7 @@ public class PathfindingTest {
 		} catch (BadStateStringException e) {
 			Assert.fail(e.getMessage());
 		}
-		AgentStateFactory factory = new AgentStateFactory();
+		AgentFactory factory = new AgentFactory();
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, new GridPosition(1, 1), 3, 5, 2, 5, 65, 0));
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, new GridPosition(2, 1), 3, 5, 2, 5, 65, 0));
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1, 1);

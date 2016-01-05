@@ -2,15 +2,10 @@ package com.pipai.wf.item.weapon;
 
 import com.google.common.collect.ImmutableSet;
 import com.pipai.wf.battle.BattleConfiguration;
-import com.pipai.wf.battle.BattleController;
-import com.pipai.wf.battle.action.RangedWeaponAttackAction;
-import com.pipai.wf.battle.action.TargetedAction;
-import com.pipai.wf.battle.action.TargetedActionable;
-import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.math.LinearFunction;
 import com.pipai.wf.unit.ability.QuickReloadAbility;
 
-public class Bow extends Weapon implements TargetedActionable {
+public class Bow extends Weapon {
 
 	public static final int BASE_AMMO = 3;
 
@@ -86,13 +81,13 @@ public class Bow extends Weapon implements TargetedActionable {
 	}
 
 	@Override
-	public TargetedAction getAction(BattleController controller, Agent performer, Agent target) {
-		return new RangedWeaponAttackAction(controller, performer, target);
+	public boolean hasFlag(WeaponFlag flag) {
+		return FLAGS.contains(flag);
 	}
 
 	@Override
-	public boolean hasFlag(WeaponFlag flag) {
-		return FLAGS.contains(flag);
+	public Bow copyAsNew() {
+		return new Bow();
 	}
 
 }

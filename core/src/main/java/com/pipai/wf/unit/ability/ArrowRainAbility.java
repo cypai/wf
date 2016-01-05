@@ -13,7 +13,12 @@ public class ArrowRainAbility extends Ability {
 	}
 
 	@Override
-	public Ability clone() {
+	public ArrowRainAbility copyAsNew() {
+		return new ArrowRainAbility();
+	}
+
+	@Override
+	public ArrowRainAbility copy() {
 		return new ArrowRainAbility();
 	}
 

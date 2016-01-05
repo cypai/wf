@@ -23,13 +23,7 @@ import com.pipai.wf.battle.BattleResult;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
-import com.pipai.wf.battle.action.OverwatchAction;
-import com.pipai.wf.battle.action.ReadySpellAction;
-import com.pipai.wf.battle.action.ReloadAction;
-import com.pipai.wf.battle.action.SwitchWeaponAction;
 import com.pipai.wf.battle.action.TargetedAction;
-import com.pipai.wf.battle.action.TargetedActionable;
-import com.pipai.wf.battle.action.WeaponActionFactory;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.ai.AI;
 import com.pipai.wf.battle.ai.AIMoveRunnable;
@@ -61,9 +55,6 @@ import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
 import com.pipai.wf.guiobject.overlay.WeaponIndicator;
-import com.pipai.wf.item.weapon.SpellWeapon;
-import com.pipai.wf.item.weapon.Weapon;
-import com.pipai.wf.spell.FireballSpell;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.PrecisionShotAbility;
 import com.pipai.wf.unit.ability.SuppressionAbility;
@@ -341,29 +332,29 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	}
 
 	public void performAttackAction(AgentGuiObject target) {
-		if (selectedAgent != null) {
-			Action atk = null;
-			Weapon weapon = selectedAgent.getAgent().getCurrentWeapon();
-			if (weapon instanceof SpellWeapon) {
-				SpellWeapon sw = (SpellWeapon) weapon;
-				atk = sw.getSpell().getAction(battleController, selectedAgent.getAgent(), target.getAgent());
-			} else {
-				if (weapon.currentAmmo() > 0) {
-					if (targetedAction == null) {
-						atk = ((TargetedActionable) weapon).getAction(battleController, selectedAgent.getAgent(), target.getAgent());
-					} else {
-						atk = targetedAction;
-					}
-				} else {
-					return;
-				}
-			}
-			try {
-				atk.perform();
-			} catch (IllegalActionException e) {
-				LOGGER.error("Illegal move: " + e.getMessage());
-			}
-		}
+		// if (selectedAgent != null) {
+		// Action atk = null;
+		// Weapon weapon = selectedAgent.getAgent().getCurrentWeapon();
+		// if (weapon instanceof SpellWeapon) {
+		// SpellWeapon sw = (SpellWeapon) weapon;
+		// atk = sw.getSpell().getAction(battleController, selectedAgent.getAgent(), target.getAgent());
+		// } else {
+		// if (weapon.currentAmmo() > 0) {
+		// if (targetedAction == null) {
+		// atk = ((TargetedActionable) weapon).getAction(battleController, selectedAgent.getAgent(), target.getAgent());
+		// } else {
+		// atk = targetedAction;
+		// }
+		// } else {
+		// return;
+		// }
+		// }
+		// try {
+		// atk.perform();
+		// } catch (IllegalActionException e) {
+		// LOGGER.error("Illegal move: " + e.getMessage());
+		// }
+		// }
 	}
 
 	public void performMoveWithSelectedAgent(GridPosition destination) {
@@ -510,9 +501,9 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 		if (targetAgentList.size() == 0) {
 			targetedAction = null;
 			if (ability == null) {
-				tooltip.setToGeneralDescription(
-						new WeaponActionFactory(battleController).defaultWeaponActionName(selectedAgent.getAgent()),
-						"No enemies in range");
+				// tooltip.setToGeneralDescription(
+				// new WeaponActionFactory(battleController).defaultWeaponActionName(selectedAgent.getAgent()),
+				// "No enemies in range");
 			} else {
 				tooltip.setToGeneralDescription(ability.getName(), "No enemies in range");
 			}
@@ -538,8 +529,8 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				terrainRenderer.setTargetTiles(targetTiles);
 				targetAgent = target;
 				if (ability == null) {
-					targetedAction = new WeaponActionFactory(battleController)
-							.defaultWeaponAction(selectedAgent.getAgent(), target.getAgent());
+					// targetedAction = new WeaponActionFactory(battleController)
+					// .defaultWeaponAction(selectedAgent.getAgent(), target.getAgent());
 				} else {
 					targetedAction = ability.getTargetedAction(battleController, selectedAgent.getAgent(), target.getAgent());
 				}
@@ -617,22 +608,17 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 				performAttackAction(targetAgent);
 			}
 			break;
-		case Keys.X:
-			if (mode == Mode.MOVE) {
-				action = new SwitchWeaponAction(battleController, selectedAgent.getAgent());
-			}
-			break;
 		case Keys.R:
 			// Reload
-			if (selectedAgent.getAgent().getCurrentWeapon() instanceof SpellWeapon) {
-				action = new ReadySpellAction(battleController, selectedAgent.getAgent(), new FireballSpell());
-			} else {
-				action = new ReloadAction(battleController, selectedAgent.getAgent());
-			}
+			// if (selectedAgent.getAgent().getCurrentWeapon() instanceof SpellWeapon) {
+			// action = new ReadySpellAction(battleController, selectedAgent.getAgent(), new FireballSpell());
+			// } else {
+			// action = new ReloadAction(battleController, selectedAgent.getAgent());
+			// }
 			break;
 		case Keys.Y:
 			// Overwatch
-			action = new OverwatchAction(battleController, selectedAgent.getAgent());
+			// action = new OverwatchAction(battleController, selectedAgent.getAgent());
 			break;
 		case Keys.H:
 			// Hunker

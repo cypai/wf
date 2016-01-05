@@ -1,23 +1,37 @@
 package com.pipai.wf.battle.action;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.component.ApRequiredComponent;
-import com.pipai.wf.battle.action.component.HasPerformerComponent;
-import com.pipai.wf.battle.action.component.PerformerComponent;
-import com.pipai.wf.battle.action.component.PerformerComponentImpl;
+import com.pipai.wf.battle.action.component.HasWeaponComponent;
+import com.pipai.wf.battle.action.component.WeaponComponent;
+import com.pipai.wf.battle.action.component.WeaponComponentImpl;
+import com.pipai.wf.battle.action.verification.ActionVerifier;
+import com.pipai.wf.battle.action.verification.BaseVerifier;
+import com.pipai.wf.battle.action.verification.HasSpellVerifier;
+import com.pipai.wf.battle.action.verification.PredicateVerifier;
+import com.pipai.wf.battle.action.verification.SpellMpVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.SpellWeapon;
+import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.spell.Spell;
 
-public class ReadySpellAction extends Action implements ApRequiredComponent, HasPerformerComponent {
+public class ReadySpellAction extends PerformerAction implements ApRequiredComponent, HasWeaponComponent {
 
-	private PerformerComponent performerComponent = new PerformerComponentImpl();
+	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 
 	private Spell spell;
 
-	public ReadySpellAction(BattleController controller, Agent performerAgent, Spell spell) {
+	public ReadySpellAction(BattleController controller, Agent performerAgent, SpellWeapon weapon) {
+		super(controller);
+		setPerformer(performerAgent);
+	}
+
+	public ReadySpellAction(BattleController controller, Agent performerAgent, SpellWeapon weapon, Spell spell) {
 		super(controller);
 		setPerformer(performerAgent);
 		this.spell = spell;
@@ -29,22 +43,21 @@ public class ReadySpellAction extends Action implements ApRequiredComponent, Has
 	}
 
 	@Override
-	public PerformerComponent getPerformerComponent() {
-		return performerComponent;
+	public WeaponComponent getWeaponComponent() {
+		return weaponComponent;
+	}
+
+	@Override
+	protected List<ActionVerifier> getVerifiers() {
+		return Arrays.asList(BaseVerifier.getInstance(),
+				new HasSpellVerifier(getPerformer(), spell),
+				new SpellMpVerifier(getPerformer(), spell),
+				new PredicateVerifier<Weapon>(weapon -> weapon instanceof SpellWeapon, getWeapon(), "Weapon is not a spell weapon"));
 	}
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		Agent a = getPerformer();
-		if (!a.getAbilities().hasSpell(spell)) {
-			throw new IllegalActionException("Does not have the ability to cast " + spell.getName());
-		}
-		if (a.getMP() < spell.requiredMP()) {
-			throw new IllegalActionException("Not enough mp to cast " + spell.getName());
-		}
-		if (!(a.getCurrentWeapon() instanceof SpellWeapon)) {
-			throw new IllegalActionException("Currently selected weapon is not a spell weapon");
-		}
 		int actLevel = a.getAbilities().getActualizationLevel(spell.element());
 		if (actLevel == 0) {
 			throw new IllegalActionException("Does not have required actualization ability");
@@ -55,7 +68,7 @@ public class ReadySpellAction extends Action implements ApRequiredComponent, Has
 			a.setAP(a.getAP() - 1);
 			quicken = false;
 		}
-		((SpellWeapon) a.getCurrentWeapon()).ready(spell);
+		((SpellWeapon) getWeapon()).setSpell(spell);
 		logBattleEvent(BattleEvent.readySpellEvent(a, spell, quicken));
 	}
 

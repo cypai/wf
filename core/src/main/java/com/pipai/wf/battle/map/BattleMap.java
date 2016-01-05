@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
 
 public class BattleMap {
 
@@ -26,7 +25,7 @@ public class BattleMap {
 		for (GridPosition pos : mapString.getSolidPositions()) {
 			getCell(pos).setTileEnvironmentObject(new FullCoverIndestructibleObject());
 		}
-		for (AgentState state : mapString.getAgentStates()) {
+		for (Agent state : mapString.getAgents()) {
 			addAgent(state);
 		}
 	}
@@ -103,8 +102,7 @@ public class BattleMap {
 		return getCell(pos).getAgent();
 	}
 
-	public void addAgent(AgentState state) {
-		Agent agent = new Agent(state);
+	public void addAgent(Agent agent) {
 		BattleMapCell cell = getCell(agent.getPosition());
 		if (cell == null) {
 			throw new IllegalArgumentException("Cell " + agent.getPosition().toString() + " does not exist");

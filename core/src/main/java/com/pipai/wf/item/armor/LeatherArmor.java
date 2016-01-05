@@ -23,4 +23,9 @@ public class LeatherArmor extends Armor {
 		return "Simple leather armor.";
 	}
 
+	@Override
+	public LeatherArmor copyAsNew() {
+		return new LeatherArmor();
+	}
+
 }

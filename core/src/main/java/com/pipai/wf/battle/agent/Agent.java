@@ -8,10 +8,10 @@ import com.pipai.wf.battle.action.OverwatchableTargetedAction;
 import com.pipai.wf.battle.effect.StatusEffect;
 import com.pipai.wf.battle.effect.StatusEffectList;
 import com.pipai.wf.battle.effect.SuppressedStatusEffect;
+import com.pipai.wf.battle.inventory.AgentInventory;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.NoRegisteredAgentException;
 import com.pipai.wf.item.armor.Armor;
-import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.misc.HasBasicStats;
 import com.pipai.wf.misc.HasName;
@@ -19,6 +19,7 @@ import com.pipai.wf.spell.Spell;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
+import com.pipai.wf.unit.schema.UnitSchema;
 
 // TODO: Make this a stupid data structure class
 public class Agent implements HasName, HasBasicStats {
@@ -27,32 +28,32 @@ public class Agent implements HasName, HasBasicStats {
 	private BasicStats basicStats;
 	private String name;
 	private State state;
-	private ArrayList<Weapon> weapons;
-	private int weaponIndex;
-	private Armor armor;
 	private GridPosition position;
 	private OverwatchableTargetedAction overwatchAction;
 	private AbilityList innateAbilities;
 	private StatusEffectList statusEffects;
 
+	private AgentInventory inventory;
+
 	private int level;
 	private int expGiven;
 	private int exp;
 
-	public Agent(AgentState state) {
-		team = state.getTeam();
-		position = state.getPosition();
-		basicStats = state.getBasicStats().clone();
-		weapons = state.getWeapons();
-		weaponIndex = 0;
-		armor = state.getArmor();
-		innateAbilities = state.getAbilities().clone();
-		innateAbilities.registerToAgent(this);
-		name = state.getName();
+	public Agent(String name, BasicStats basicStats) {
+		this.basicStats = basicStats;
+		inventory = new AgentInventory(3);
 		statusEffects = new StatusEffectList();
-		level = state.getLevel();
-		exp = state.getExp();
-		expGiven = state.getExpGiven();
+		innateAbilities = new AbilityList();
+	}
+
+	public Agent(UnitSchema schema) {
+		name = schema.getName();
+		basicStats = schema.getBasicStats();
+		innateAbilities = schema.getAbilities().deepCopy();
+		level = schema.getLevel();
+		expGiven = schema.getExpGiven();
+		exp = schema.getExp();
+		inventory = schema.getInventory().deepCopy();
 	}
 
 	@Override
@@ -66,6 +67,10 @@ public class Agent implements HasName, HasBasicStats {
 
 	public void setTeam(Team team) {
 		this.team = team;
+	}
+
+	public AgentInventory getInventory() {
+		return inventory;
 	}
 
 	public void setAP(int ap) {
@@ -90,7 +95,7 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public void takeDamage(int amt) {
-		int pierceDmg = armor.takeDamage(amt);
+		int pierceDmg = inventory.isEquippingArmor() ? inventory.getEquippedArmor().takeDamage(amt) : amt;
 		setHP(getHP() - pierceDmg);
 	}
 
@@ -110,15 +115,8 @@ public class Agent implements HasName, HasBasicStats {
 		return getMobility() + statusEffects.totalMobilityModifier();
 	}
 
-	public Weapon getCurrentWeapon() {
-		if (weapons.size() == 0) {
-			return null;
-		}
-		return weapons.get(weaponIndex);
-	}
-
-	public Armor getArmor() {
-		return armor;
+	public Armor getEquippedArmor() {
+		return inventory.getEquippedArmor();
 	}
 
 	public boolean isKO() {
@@ -130,8 +128,7 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public AbilityList getAbilities() {
-		AbilityList allAbilities = innateAbilities.clone();
-		allAbilities.add(getWeaponGrantedAbilities());
+		AbilityList allAbilities = innateAbilities.deepCopy();
 		return allAbilities;
 	}
 
@@ -139,20 +136,8 @@ public class Agent implements HasName, HasBasicStats {
 		return innateAbilities;
 	}
 
-	public AbilityList getWeaponGrantedAbilities() {
-		if (getCurrentWeapon() != null) {
-			return getCurrentWeapon().getGrantedAbilities();
-		}
-		return new AbilityList();
-	}
-
 	public Ability getAbility(Class<? extends Ability> abilityClass) {
 		for (Ability a : innateAbilities) {
-			if (abilityClass.isInstance(a)) {
-				return a;
-			}
-		}
-		for (Ability a : getCurrentWeapon().getGrantedAbilities()) {
 			if (abilityClass.isInstance(a)) {
 				return a;
 			}
@@ -163,11 +148,6 @@ public class Agent implements HasName, HasBasicStats {
 	@Override
 	public String getName() {
 		return name;
-	}
-
-	@SuppressWarnings("unchecked")
-	public ArrayList<Weapon> getWeapons() {
-		return (ArrayList<Weapon>) weapons.clone();
 	}
 
 	public ArrayList<Spell> getSpellList() {
@@ -204,6 +184,10 @@ public class Agent implements HasName, HasBasicStats {
 		return state;
 	}
 
+	public void setState(State state) {
+		this.state = state;
+	}
+
 	public void onTurnBegin() {
 		basicStats.setAP(basicStats.getMaxAP());
 		if (!isKO()) {
@@ -214,7 +198,6 @@ public class Agent implements HasName, HasBasicStats {
 	public void onRoundEnd() {
 		try {
 			innateAbilities.onRoundEnd();
-			getWeaponGrantedAbilities().onRoundEnd();
 		} catch (NoRegisteredAgentException e) {
 			throw new IllegalStateException(e);
 		}
@@ -223,13 +206,6 @@ public class Agent implements HasName, HasBasicStats {
 
 	public void onAction(Action action) {
 		statusEffects.onAction(action);
-	}
-
-	public void switchWeapon() {
-		weaponIndex += 1;
-		if (weaponIndex == weapons.size()) {
-			weaponIndex = 0;
-		}
 	}
 
 	public void setOverwatch(OverwatchableTargetedAction owAction) {

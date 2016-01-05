@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.pipai.wf.misc.DeepCopyableAsNew;
 import com.pipai.wf.unit.ability.Ability;
 
-public class AbilityTree {
+public class AbilityTree implements DeepCopyableAsNew {
 
 	private AbilityTreeNode root;
 	private ArrayList<ArrayList<AbilityTreeNode>> abilities;
@@ -30,13 +31,14 @@ public class AbilityTree {
 		}
 	}
 
-	public AbilityTree cleanCopy() {
+	@Override
+	public AbilityTree deepCopyAsNew() {
 		AbilityTree tree = new AbilityTree();
-		tree.root = new AbilityTreeNode(root.getAbility().clone());
+		tree.root = new AbilityTreeNode(root.getAbility().copyAsNew());
 		for (ArrayList<AbilityTreeNode> levelAbilities : abilities) {
 			ArrayList<AbilityTreeNode> copy = new ArrayList<>();
 			levelAbilities.forEach((node) -> {
-				copy.add(new AbilityTreeNode(node.getAbility().clone()));
+				copy.add(new AbilityTreeNode(node.getAbility().copyAsNew()));
 			});
 			tree.abilities.add(copy);
 		}

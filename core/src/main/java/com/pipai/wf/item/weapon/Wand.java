@@ -10,8 +10,8 @@ public class Wand extends SpellWeapon {
 	}
 
 	@Override
-	public void ready(Spell spell) {
-		super.ready(spell);
+	public void setSpell(Spell spell) {
+		super.setSpell(spell);
 		reload();
 	}
 
@@ -34,6 +34,11 @@ public class Wand extends SpellWeapon {
 	@Override
 	public boolean hasFlag(WeaponFlag flag) {
 		return false;
+	}
+
+	@Override
+	public Wand copyAsNew() {
+		return new Wand();
 	}
 
 }

@@ -14,11 +14,6 @@ public class FireballAbility extends Ability implements SpellAbilityComponent {
 	}
 
 	@Override
-	public Ability clone() {
-		return new FireballAbility();
-	}
-
-	@Override
 	public String getName() {
 		return SPELL.getName();
 	}
@@ -26,6 +21,16 @@ public class FireballAbility extends Ability implements SpellAbilityComponent {
 	@Override
 	public String getDescription() {
 		return SPELL.getDescription();
+	}
+
+	@Override
+	public FireballAbility copy() {
+		return new FireballAbility();
+	}
+
+	@Override
+	public FireballAbility copyAsNew() {
+		return new FireballAbility();
 	}
 
 }

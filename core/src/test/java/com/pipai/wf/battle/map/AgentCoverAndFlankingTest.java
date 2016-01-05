@@ -7,8 +7,7 @@ import org.mockito.Mockito;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.agent.AgentState;
-import com.pipai.wf.battle.agent.AgentStateFactory;
+import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.exception.BadStateStringException;
 
 public class AgentCoverAndFlankingTest {
@@ -19,15 +18,15 @@ public class AgentCoverAndFlankingTest {
 		return mockConfig;
 	}
 
-	private static AgentState getDummyAgentState(Team team, GridPosition position) {
-		AgentStateFactory factory = new AgentStateFactory();
+	private static Agent getDummyAgent(Team team, GridPosition position) {
+		AgentFactory factory = new AgentFactory();
 		return factory.battleAgentFromStats(team, position, 1, 1, 1, 1, 1, 0);
 	}
 
 	private static BattleMap generateMap(String mapString, GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
 		BattleMap map = new BattleMap(new MapString(mapString));
-		map.addAgent(getDummyAgentState(Team.PLAYER, playerPos));
-		map.addAgent(getDummyAgentState(Team.ENEMY, enemyPos));
+		map.addAgent(getDummyAgent(Team.PLAYER, playerPos));
+		map.addAgent(getDummyAgent(Team.ENEMY, enemyPos));
 		return map;
 	}
 

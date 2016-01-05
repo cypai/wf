@@ -7,6 +7,7 @@ import org.mockito.Mockito;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.spell.FireballSpell;
+import com.pipai.wf.test.WfTestUtils;
 import com.pipai.wf.unit.ability.FireballAbility;
 
 public class AgentSpellTest {
@@ -14,10 +15,8 @@ public class AgentSpellTest {
 	@Test
 	public void testSpellGranted() {
 		GridPosition mockPosition = Mockito.mock(GridPosition.class);
-		AgentStateFactory factory = new AgentStateFactory();
-		AgentState as = factory.battleAgentFromStats(Team.PLAYER, mockPosition, 3, 5, 2, 5, 65, 0);
-		as.getAbilities().add(new FireballAbility());
-		Agent agent = new Agent(as);
+		Agent agent = WfTestUtils.createGenericAgent(Team.PLAYER, mockPosition);
+		agent.getAbilities().add(new FireballAbility());
 		Assert.assertTrue(agent.getAbilities().hasSpell(FireballSpell.class));
 	}
 
