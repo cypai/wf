@@ -121,7 +121,7 @@ public class MoveAnimationHandler extends AnimationHandler implements CameraMove
 		go = false;
 	}
 
-	private LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
+	private static LinkedList<Vector2> vectorizePath(LinkedList<GridPosition> path) {
 		LinkedList<Vector2> vectorized = new LinkedList<>();
 		for (GridPosition p : path) {
 			vectorized.add(BattleTerrainRenderer.centerOfGridPos(p));

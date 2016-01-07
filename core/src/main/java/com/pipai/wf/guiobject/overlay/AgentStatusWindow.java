@@ -117,7 +117,7 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 12, targetedAction.getTarget());
 	}
 
-	private void renderCalc(BatchHelper batch, float calcX, float calcY, PercentageModifierList pmList, String title) {
+	private static void renderCalc(BatchHelper batch, float calcX, float calcY, PercentageModifierList pmList, String title) {
 		ShapeRenderer r = batch.getShapeRenderer();
 		SpriteBatch spr = batch.getSpriteBatch();
 		BitmapFont f = batch.getFont();

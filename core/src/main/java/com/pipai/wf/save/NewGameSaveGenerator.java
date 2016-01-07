@@ -16,7 +16,7 @@ public class NewGameSaveGenerator {
 		return save;
 	}
 
-	private ArrayList<UnitSchema> generateParty() {
+	private static ArrayList<UnitSchema> generateParty() {
 		ArrayList<UnitSchema> party = new ArrayList<>();
 		party.add(new UnitSchema(new TidusSchema()));
 		party.add(new UnitSchema(new RaceTemplateSchema(Race.HUMAN)));

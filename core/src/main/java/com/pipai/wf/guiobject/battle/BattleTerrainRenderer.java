@@ -234,7 +234,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		this.targetableTiles = targetableTiles;
 	}
 
-	private void drawGrid(ShapeRenderer batch, float x, float y, float width, float height, int numCols, int numRows) {
+	private static void drawGrid(ShapeRenderer batch, float x, float y, float width, float height, int numCols, int numRows) {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.begin(ShapeType.Line);
@@ -251,7 +251,7 @@ public class BattleTerrainRenderer extends GuiObject implements GuiRenderable, R
 		Gdx.gl.glDisable(GL20.GL_BLEND);
 	}
 
-	private void shadeSquare(ShapeRenderer batch, GridPosition pos, Color color) {
+	private static void shadeSquare(ShapeRenderer batch, GridPosition pos, Color color) {
 		Gdx.gl.glEnable(GL20.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 		batch.begin(ShapeType.Filled);

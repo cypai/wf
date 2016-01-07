@@ -110,14 +110,14 @@ public final class FogOfWar {
 		}
 	}
 
-	private void initializeSpiralPathQueue(LinkedList<GridPosition> queue, GridPosition center) {
+	private static void initializeSpiralPathQueue(LinkedList<GridPosition> queue, GridPosition center) {
 		queue.add(new GridPosition(center.getX() + 1, center.getY()));
 		queue.add(new GridPosition(center.getX(), center.getY() + 1));
 		queue.add(new GridPosition(center.getX() - 1, center.getY()));
 		queue.add(new GridPosition(center.getX(), center.getY() - 1));
 	}
 
-	private void passLight(LinkedList<GridPosition> queue, GridPosition center, GridPosition tile) {
+	private static void passLight(LinkedList<GridPosition> queue, GridPosition center, GridPosition tile) {
 		Direction dirToTile = center.directionTo(tile);
 		switch (dirToTile) {
 		case E:

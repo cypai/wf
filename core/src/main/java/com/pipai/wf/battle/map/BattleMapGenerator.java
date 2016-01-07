@@ -73,7 +73,7 @@ public class BattleMapGenerator {
 		}
 	}
 
-	private void generateEnemyIfEmpty(BattleMap map, GridPosition pos) {
+	private static void generateEnemyIfEmpty(BattleMap map, GridPosition pos) {
 		AgentFactory factory = new AgentFactory();
 		if (map.getCell(pos).isEmpty()) {
 			map.addAgent(factory.battleAgentFromSchema(Team.ENEMY, pos, new SlimeSchema(1)));

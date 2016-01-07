@@ -20,7 +20,7 @@ import com.pipai.wf.guiobject.battle.AgentGuiObject;
  */
 public class FogOfWarTest {
 
-	private AgentGuiObject generateMockAgent(Agent a) {
+	private static AgentGuiObject generateMockAgent(Agent a) {
 		AgentGuiObject mockAgent = Mockito.mock(AgentGuiObject.class);
 		Mockito.when(mockAgent.getDisplayPosition()).thenReturn(a.getPosition());
 		return mockAgent;

@@ -94,7 +94,7 @@ public class BattleMap {
 		return cellMap.get(coordinatesToKey(cellPos));
 	}
 
-	private String coordinatesToKey(GridPosition pos) {
+	private static String coordinatesToKey(GridPosition pos) {
 		return pos.toString();
 	}
 

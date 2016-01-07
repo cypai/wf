@@ -19,7 +19,7 @@ public class SaveLoader {
 		save.setParty(party);
 	}
 
-	private ArrayList<UnitSchema> readPartySave(String rawSaveData) throws CorruptedSaveException {
+	private static ArrayList<UnitSchema> readPartySave(String rawSaveData) throws CorruptedSaveException {
 		UnitSchemaSaveConverter converter = new UnitSchemaSaveConverter();
 		ArrayList<String> rawPartyInfo = getLinesUnderHeader(SaveHeader.PARTY, rawSaveData);
 		ArrayList<UnitSchema> party = new ArrayList<>();
@@ -29,7 +29,7 @@ public class SaveLoader {
 		return party;
 	}
 
-	private ArrayList<String> getLinesUnderHeader(SaveHeader header, String rawSaveData) {
+	private static ArrayList<String> getLinesUnderHeader(SaveHeader header, String rawSaveData) {
 		String[] lines = rawSaveData.split("\n");
 		ArrayList<String> retLines = new ArrayList<>();
 		boolean isUnderHeader = false;
@@ -49,7 +49,7 @@ public class SaveLoader {
 		return retLines;
 	}
 
-	private boolean isHeader(String line) {
+	private static boolean isHeader(String line) {
 		return line.startsWith("[") && line.endsWith("]");
 	}
 }

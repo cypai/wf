@@ -116,7 +116,7 @@ public class PathfindingTest {
 	/*
 	 * Checks to see if the list contains a valid path from start to end
 	 */
-	private boolean checkPathingList(LinkedList<GridPosition> list, GridPosition start, GridPosition end) {
+	private static boolean checkPathingList(LinkedList<GridPosition> list, GridPosition start, GridPosition end) {
 		if (!list.peekLast().equals(end)) {
 			return false;
 		}

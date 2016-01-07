@@ -66,7 +66,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 	}
 
 	@Test
-	public void testOverwatchLog() {
+	public void testOverwatchLog() throws IllegalActionException {
 		BattleConfiguration mockConfig = new BattleConfiguration();
 		BattleMap map = new BattleMap(5, 5);
 		BattleController controller = new BattleController(map, mockConfig);
@@ -96,11 +96,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 		path.add(enemy.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(controller, enemy, path, 1);
-		try {
-			move.perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		move.perform();
 		BattleEvent moveEv = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.MOVE, moveEv.getType());
 		Assert.assertEquals(enemy, moveEv.getPerformer());
@@ -119,7 +115,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 	}
 
 	@Test
-	public void testDualOverwatchLog() {
+	public void testDualOverwatchLog() throws IllegalActionException {
 		BattleConfiguration mockConfig = new BattleConfiguration();
 		BattleMap map = new BattleMap(5, 5);
 		BattleController controller = new BattleController(map, mockConfig);
@@ -141,23 +137,15 @@ public class OverwatchActionTest extends GdxMockedTest {
 		Agent player1 = map.getAgentAtPos(player1Pos);
 		Agent player2 = map.getAgentAtPos(player2Pos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		try {
-			new OverwatchAction(controller, player1).perform();
-			new OverwatchAction(controller, player2).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		new OverwatchAction(controller, player1).perform();
+		new OverwatchAction(controller, player2).perform();
 		// Test Overwatch Activation
 		LinkedList<GridPosition> path = new LinkedList<>();
 		GridPosition dest = new GridPosition(2, 1);
 		path.add(enemy.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(controller, enemy, path, 1);
-		try {
-			move.perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		move.perform();
 		BattleEvent moveEv = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.MOVE, moveEv.getType());
 		Assert.assertEquals(enemy, moveEv.getPerformer());
