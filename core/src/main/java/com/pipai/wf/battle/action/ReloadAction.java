@@ -44,7 +44,7 @@ public class ReloadAction extends PerformerAction implements DefaultApRequiredCo
 		Agent agent = getPerformer();
 		Weapon weapon = getWeapon();
 		weapon.reload();
-		if (agent.getAbilities().hasAbility(QuickReloadAbility.class)) {
+		if (agent.getAbilities().hasAbility(QuickReloadAbility.class) || weapon.getGrantedAbilities().hasAbility(QuickReloadAbility.class)) {
 			agent.setAP(agent.getAP() - 1);
 		} else {
 			agent.setAP(0);

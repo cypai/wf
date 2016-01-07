@@ -12,6 +12,7 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Bow;
 import com.pipai.wf.item.weapon.Pistol;
 import com.pipai.wf.test.WfTestUtils;
 
@@ -41,6 +42,19 @@ public class QuickReloadAbilityTest {
 		agent.getInventory().setItem(pistol, 1);
 		BattleController controller = new BattleController(mockMap, mockConfig);
 		new ReloadAction(controller, agent, pistol).perform();
+		Assert.assertEquals(1, agent.getAP());
+	}
+
+	@Test
+	public void testWeaponGrantedQuickReload() throws IllegalActionException {
+		BattleMap mockMap = Mockito.mock(BattleMap.class);
+		GridPosition mockPosition = Mockito.mock(GridPosition.class);
+		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
+		Agent agent = WfTestUtils.createGenericAgent(Team.PLAYER, mockPosition);
+		Bow bow = new Bow();
+		agent.getInventory().setItem(bow, 1);
+		BattleController controller = new BattleController(mockMap, mockConfig);
+		new ReloadAction(controller, agent, bow).perform();
 		Assert.assertEquals(1, agent.getAP());
 	}
 
