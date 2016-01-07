@@ -165,23 +165,23 @@ public class AbilityList implements Iterable<Ability>, ShallowCopyable, DeepCopy
 
 	@Override
 	public AbilityList deepCopyAsNew() {
-		return copyByFunction(ability -> ability.copyAsNew());
+		return copyByStrategy(ability -> ability.copyAsNew());
 	}
 
 	@Override
 	public AbilityList deepCopy() {
-		return copyByFunction(ability -> ability.copy());
+		return copyByStrategy(ability -> ability.copy());
 	}
 
 	@Override
 	public AbilityList shallowCopy() {
-		return copyByFunction(ability -> ability);
+		return copyByStrategy(ability -> ability);
 	}
 
-	private AbilityList copyByFunction(Function<Ability, Ability> f) {
+	private AbilityList copyByStrategy(Function<Ability, Ability> strategy) {
 		AbilityList copy = new AbilityList();
 		for (Ability ability : abilityList) {
-			copy.add(f.apply(ability));
+			copy.add(strategy.apply(ability));
 		}
 		return copy;
 	}

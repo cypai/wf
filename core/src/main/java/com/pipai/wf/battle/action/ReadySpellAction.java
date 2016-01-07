@@ -33,6 +33,7 @@ public class ReadySpellAction extends PerformerAction implements ApRequiredCompo
 
 	public ReadySpellAction(BattleController controller, Agent performerAgent, SpellWeapon weapon, Spell spell) {
 		super(controller);
+		setWeapon(weapon);
 		setPerformer(performerAgent);
 		this.spell = spell;
 	}

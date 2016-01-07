@@ -24,26 +24,6 @@ import com.pipai.wf.util.UtilFunctions;
 public class OverwatchActionTest extends GdxMockedTest {
 
 	@Test
-	public void testNoWeaponOverwatch() {
-		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
-		BattleMap map = new BattleMap(5, 5);
-		BattleController controller = new BattleController(map, mockConfig);
-		GridPosition playerPos = new GridPosition(1, 1);
-		GridPosition enemyPos = new GridPosition(2, 2);
-		Agent player = WfTestUtils.createGenericAgent(Team.PLAYER, playerPos);
-		map.addAgent(player);
-		Agent enemy = WfTestUtils.createGenericAgent(Team.ENEMY, enemyPos);
-		map.addAgent(enemy);
-		OverwatchAction ow = new OverwatchAction(controller, player);
-		try {
-			ow.perform();
-			Assert.fail("Expected exception not thrown");
-		} catch (IllegalActionException e) {
-			// Expected, don't do anything
-		}
-	}
-
-	@Test
 	public void testNoAmmoOverwatch() {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		BattleMap map = new BattleMap(5, 5);
@@ -56,7 +36,7 @@ public class OverwatchActionTest extends GdxMockedTest {
 		player.getInventory().setItem(pistol, 1);
 		map.addAgent(player);
 		map.addAgent(WfTestUtils.createGenericAgent(Team.ENEMY, enemyPos));
-		OverwatchAction ow = new OverwatchAction(controller, player);
+		OverwatchAction ow = new OverwatchAction(controller, player, pistol, new RangedWeaponAttackAction(controller, player, pistol));
 		try {
 			ow.perform();
 			Assert.fail("Expected exception not thrown");
@@ -73,18 +53,15 @@ public class OverwatchActionTest extends GdxMockedTest {
 		GridPosition playerPos = new GridPosition(1, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
 		Agent player = WfTestUtils.createGenericAgent(Team.PLAYER, playerPos);
-		player.getInventory().setItem(new Pistol(), 1);
+		Pistol pistol = new Pistol();
+		player.getInventory().setItem(pistol, 1);
 		map.addAgent(player);
 		Agent enemy = WfTestUtils.createGenericAgent(Team.ENEMY, enemyPos);
 		map.addAgent(enemy);
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		OverwatchAction ow = new OverwatchAction(controller, player);
-		try {
-			ow.perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		OverwatchAction ow = new OverwatchAction(controller, player, pistol, new RangedWeaponAttackAction(controller, player, pistol));
+		ow.perform();
 		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.OVERWATCH, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());
@@ -122,23 +99,23 @@ public class OverwatchActionTest extends GdxMockedTest {
 		GridPosition player1Pos = new GridPosition(1, 1);
 		GridPosition player2Pos = new GridPosition(0, 1);
 		GridPosition enemyPos = new GridPosition(2, 2);
-		Agent player1State = WfTestUtils.createGenericAgent(Team.PLAYER, player1Pos);
-		player1State.getInventory().setItem(new Pistol(), 1);
-		map.addAgent(player1State);
+		Agent player1 = WfTestUtils.createGenericAgent(Team.PLAYER, player1Pos);
+		Pistol pistol1 = new Pistol();
+		player1.getInventory().setItem(pistol1, 1);
+		map.addAgent(player1);
 		map.addAgent(WfTestUtils.createGenericAgent(Team.ENEMY, enemyPos));
-		Agent player2State = WfTestUtils.createGenericAgent(Team.PLAYER, player2Pos);
-		player2State.getInventory().setItem(new Pistol(), 1);
-		map.addAgent(player2State);
+		Agent player2 = WfTestUtils.createGenericAgent(Team.PLAYER, player2Pos);
+		Pistol pistol2 = new Pistol();
+		player2.getInventory().setItem(pistol2, 1);
+		map.addAgent(player2);
 		// Enemy needs more HP to more accurately test damage
 		AgentFactory factory = new AgentFactory();
 		map.addAgent(factory.battleAgentFromStats(Team.ENEMY, enemyPos, 10, 5, 2, 5, 65, 0));
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		Agent player1 = map.getAgentAtPos(player1Pos);
-		Agent player2 = map.getAgentAtPos(player2Pos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		new OverwatchAction(controller, player1).perform();
-		new OverwatchAction(controller, player2).perform();
+		new OverwatchAction(controller, player1, pistol1, new RangedWeaponAttackAction(controller, player1, pistol1)).perform();
+		new OverwatchAction(controller, player2, pistol2, new RangedWeaponAttackAction(controller, player2, pistol2)).perform();
 		// Test Overwatch Activation
 		LinkedList<GridPosition> path = new LinkedList<>();
 		GridPosition dest = new GridPosition(2, 1);

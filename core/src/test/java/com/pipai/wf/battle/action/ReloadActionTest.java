@@ -19,7 +19,7 @@ import com.pipai.wf.test.WfTestUtils;
 public class ReloadActionTest {
 
 	@Test
-	public void testReloadWeapon() {
+	public void testReloadWeapon() throws IllegalActionException {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		BattleMap mockMap = Mockito.mock(BattleMap.class);
 		GridPosition mockPos = Mockito.mock(GridPosition.class);
@@ -29,29 +29,23 @@ public class ReloadActionTest {
 		player.getInventory().setItem(pistol, 1);
 		BattleController controller = new BattleController(mockMap, mockConfig);
 		Assert.assertTrue(pistol.getCurrentAmmo() < pistol.baseAmmoCapacity());
-		try {
-			new ReloadAction(controller, player).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		new ReloadAction(controller, player, pistol).perform();
 		Assert.assertEquals(pistol.baseAmmoCapacity(), pistol.getCurrentAmmo());
 	}
 
 	@Test
-	public void testReloadLog() {
+	public void testReloadLog() throws IllegalActionException {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		BattleMap mockMap = Mockito.mock(BattleMap.class);
 		GridPosition mockPos = Mockito.mock(GridPosition.class);
 		Agent player = WfTestUtils.createGenericAgent(Team.PLAYER, mockPos);
-		player.getInventory().setItem(new Pistol(), 1);
+		Pistol pistol = new Pistol();
+		pistol.expendAmmo(1);
+		player.getInventory().setItem(pistol, 1);
 		BattleController controller = new BattleController(mockMap, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		try {
-			new ReloadAction(controller, player).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		new ReloadAction(controller, player, pistol).perform();
 		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.RELOAD, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());

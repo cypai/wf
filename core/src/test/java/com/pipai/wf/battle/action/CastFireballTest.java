@@ -32,7 +32,7 @@ import com.pipai.wf.util.UtilFunctions;
 public class CastFireballTest extends GdxMockedTest {
 
 	@Test
-	public void testCastFireballLog() {
+	public void testCastFireballLog() throws IllegalActionException {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		DamageCalculator mockDamageCalculator = Mockito.mock(DamageCalculator.class);
 		Mockito.when(mockDamageCalculator.rollDamageGeneral(
@@ -54,13 +54,9 @@ public class CastFireballTest extends GdxMockedTest {
 		BattleController controller = new BattleController(map, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		try {
-			new ReadySpellAction(controller, player, spellWeapon, new FireballSpell()).perform();
-			Assert.assertTrue(spellWeapon.getSpell() != null);
-			new TargetedSpellWeaponAction(controller, player, enemy, spellWeapon).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		new ReadySpellAction(controller, player, spellWeapon, new FireballSpell()).perform();
+		Assert.assertTrue(spellWeapon.getSpell() != null);
+		new TargetedSpellWeaponAction(controller, player, enemy, spellWeapon).perform();
 		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.CAST_TARGET, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());
@@ -76,7 +72,7 @@ public class CastFireballTest extends GdxMockedTest {
 	}
 
 	@Test
-	public void testFireballOverwatchLog() {
+	public void testFireballOverwatchLog() throws IllegalActionException {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		Mockito.when(mockConfig.sightRange()).thenReturn(17);
 		DamageCalculator mockDamageCalculator = Mockito.mock(DamageCalculator.class);
@@ -99,18 +95,15 @@ public class CastFireballTest extends GdxMockedTest {
 		BattleController controller = new BattleController(map, mockConfig);
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		try {
-			new ReadySpellAction(controller, player, spellWeapon, new FireballSpell()).perform();
-			Assert.assertTrue(spellWeapon.getSpell() != null);
-			new TargetedSpellWeaponAction(controller, player, enemy, spellWeapon).perform();
-			new OverwatchAction(controller, player).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		new ReadySpellAction(controller, player, spellWeapon, new FireballSpell()).perform();
+		Assert.assertTrue(spellWeapon.getSpell() instanceof FireballSpell);
+		// Hack to refresh AP
+		player.setAP(2);
+		new OverwatchAction(controller, player, spellWeapon, new TargetedSpellWeaponAction(controller, player, spellWeapon)).perform();
 		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.OVERWATCH, ev.getType());
 		Assert.assertEquals(player, ev.getPerformer());
-		Assert.assertTrue(ev.getPreparedOWName().equals("Fireball"));
+		Assert.assertEquals("Fireball", ev.getPreparedOWName());
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Test Overwatch Activation
 		LinkedList<GridPosition> path = new LinkedList<>();
@@ -118,11 +111,7 @@ public class CastFireballTest extends GdxMockedTest {
 		path.add(enemy.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(controller, enemy, path, 1);
-		try {
-			move.perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		move.perform();
 		BattleEvent moveEv = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.MOVE, moveEv.getType());
 		Assert.assertEquals(enemy, moveEv.getPerformer());

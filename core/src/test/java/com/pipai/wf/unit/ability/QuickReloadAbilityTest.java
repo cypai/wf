@@ -18,7 +18,7 @@ import com.pipai.wf.test.WfTestUtils;
 public class QuickReloadAbilityTest {
 
 	@Test
-	public void testNoQuickReload() {
+	public void testNoQuickReload() throws IllegalActionException {
 		BattleMap mockMap = Mockito.mock(BattleMap.class);
 		GridPosition mockPosition = Mockito.mock(GridPosition.class);
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
@@ -26,16 +26,12 @@ public class QuickReloadAbilityTest {
 		Pistol pistol = new Pistol();
 		agent.getInventory().setItem(pistol, 1);
 		BattleController controller = new BattleController(mockMap, mockConfig);
-		try {
-			new ReloadAction(controller, agent, pistol).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		new ReloadAction(controller, agent, pistol).perform();
 		Assert.assertEquals(0, agent.getAP());
 	}
 
 	@Test
-	public void testQuickReload() {
+	public void testQuickReload() throws IllegalActionException {
 		BattleMap mockMap = Mockito.mock(BattleMap.class);
 		GridPosition mockPosition = Mockito.mock(GridPosition.class);
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
@@ -44,11 +40,7 @@ public class QuickReloadAbilityTest {
 		agent.getAbilities().add(new QuickReloadAbility());
 		agent.getInventory().setItem(pistol, 1);
 		BattleController controller = new BattleController(mockMap, mockConfig);
-		try {
-			new ReloadAction(controller, agent, pistol).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		new ReloadAction(controller, agent, pistol).perform();
 		Assert.assertEquals(1, agent.getAP());
 	}
 

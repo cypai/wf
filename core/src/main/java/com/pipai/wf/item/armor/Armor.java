@@ -3,7 +3,6 @@ package com.pipai.wf.item.armor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.EquipArmorAction;
@@ -11,7 +10,6 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.item.Item;
 import com.sun.javafx.util.Utils;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public abstract class Armor extends Item {
 
 	private static final EquipArmorAction EQUIP_ARMOR_ACTION = new EquipArmorAction();

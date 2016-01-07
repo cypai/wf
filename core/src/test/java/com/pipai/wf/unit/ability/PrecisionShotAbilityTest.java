@@ -23,7 +23,7 @@ import com.pipai.wf.test.WfTestUtils;
 public class PrecisionShotAbilityTest {
 
 	@Test
-	public void testPrecisionShotCooldown() {
+	public void testPrecisionShotCooldown() throws IllegalActionException {
 		BattleMap map = new BattleMap(5, 5);
 		GridPosition playerPos = new GridPosition(0, 0);
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
@@ -36,32 +36,30 @@ public class PrecisionShotAbilityTest {
 		Agent mockTarget = Mockito.mock(Agent.class);
 		Agent player = WfTestUtils.createGenericAgent(Team.PLAYER, playerPos);
 		player.getAbilities().add(new PrecisionShotAbility());
-		player.getInventory().setItem(new Bow(), 1);
+		Bow bow = new Bow();
+		player.getInventory().setItem(bow, 1);
 		map.addAgent(player);
-		Agent agent = map.getAgentAtPos(playerPos);
 		BattleController controller = new BattleController(map, mockConfig);
-		PrecisionShotAbility ability = (PrecisionShotAbility) agent.getInnateAbilities().getAbility(PrecisionShotAbility.class);
-		try {
-			new PrecisionShotAction(controller, agent, mockTarget).perform();
-			Assert.assertTrue(ability.onCooldown());
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		PrecisionShotAbility ability = (PrecisionShotAbility) player.getInnateAbilities().getAbility(PrecisionShotAbility.class);
+		new PrecisionShotAction(controller, player, mockTarget, bow).perform();
+		Assert.assertTrue(ability.onCooldown());
+		controller.endTurn();
+		// Enemy turn ends immediately
 		controller.endTurn();
 		Assert.assertTrue(ability.onCooldown());
 		try {
-			new PrecisionShotAction(controller, agent, mockTarget).perform();
+			new PrecisionShotAction(controller, player, mockTarget, bow).perform();
 			Assert.fail("Expected IllegalActionException not thrown");
 		} catch (IllegalActionException e) {
-			// Expected, don't do anything
+			Assert.assertEquals("Ability is on cooldown", e.getMessage());
 		}
 		controller.endTurn();
+		// Enemy turn ends immediately
+		controller.endTurn();
 		Assert.assertFalse(ability.onCooldown());
-		try {
-			new PrecisionShotAction(controller, agent, mockTarget).perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
+		// Check that we can perform it again
+		new PrecisionShotAction(controller, player, mockTarget, bow).perform();
+		Assert.assertTrue(ability.onCooldown());
 	}
 
 }

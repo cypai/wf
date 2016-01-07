@@ -27,14 +27,6 @@ public class ReloadAction extends PerformerAction implements DefaultApRequiredCo
 		setWeapon(weapon);
 	}
 
-	public ReloadAction(BattleController controller, Agent performerAgent) {
-		super(controller, performerAgent);
-	}
-
-	public ReloadAction() {
-		// Call super
-	}
-
 	@Override
 	public WeaponComponent getWeaponComponent() {
 		return weaponComponent;

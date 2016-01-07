@@ -29,6 +29,16 @@ public class SuppressionAction extends TargetedAction implements ApRequiredCompo
 		super(controller, performerAgent, targetAgent);
 	}
 
+	public SuppressionAction(BattleController controller, Agent performerAgent, Weapon weapon) {
+		super(controller, performerAgent);
+		setWeapon(weapon);
+	}
+
+	public SuppressionAction(BattleController controller, Agent performerAgent, Agent targetAgent, Weapon weapon) {
+		super(controller, performerAgent, targetAgent);
+		setWeapon(weapon);
+	}
+
 	@Override
 	public WeaponComponent getWeaponComponent() {
 		return weaponComponent;

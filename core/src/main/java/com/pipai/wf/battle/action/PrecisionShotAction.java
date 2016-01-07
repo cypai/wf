@@ -28,8 +28,18 @@ public class PrecisionShotAction extends TargetedAction implements DefaultApRequ
 
 	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 
+	public PrecisionShotAction(BattleController controller, Agent performerAgent, Weapon weapon) {
+		super(controller, performerAgent);
+		setWeapon(weapon);
+	}
+
 	public PrecisionShotAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller, performerAgent, targetAgent);
+	}
+
+	public PrecisionShotAction(BattleController controller, Agent performerAgent, Agent targetAgent, Weapon weapon) {
+		super(controller, performerAgent, targetAgent);
+		setWeapon(weapon);
 	}
 
 	@Override

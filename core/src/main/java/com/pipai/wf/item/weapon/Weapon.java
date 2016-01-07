@@ -3,7 +3,7 @@ package com.pipai.wf.item.weapon;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.Action;
@@ -16,12 +16,7 @@ import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.sun.javafx.util.Utils;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public abstract class Weapon extends Item {
-
-	private static final RangedWeaponAttackAction RANGED_ATTACK_ACTION = new RangedWeaponAttackAction();
-	private static final ReloadAction RELOAD_ACTION = new ReloadAction();
-	private static final OverwatchAction OVERWATCH_ACTION = new OverwatchAction();
 
 	private int currentAmmo;
 	private AbilityList grantedAbilities;
@@ -65,6 +60,7 @@ public abstract class Weapon extends Item {
 		currentAmmo = baseAmmoCapacity();
 	}
 
+	@JsonIgnore
 	public final AbilityList getGrantedAbilities() {
 		return grantedAbilities;
 	}
@@ -77,21 +73,15 @@ public abstract class Weapon extends Item {
 		if (agent.getInventory().contains(this)) {
 			boolean canFire = currentAmmo > 0 || !hasFlag(WeaponFlag.NEEDS_AMMUNITION);
 			if (canFire) {
-				RANGED_ATTACK_ACTION.setBattleController(controller);
-				RANGED_ATTACK_ACTION.setPerformer(agent);
-				actions.add(RANGED_ATTACK_ACTION);
+				actions.add(new RangedWeaponAttackAction(controller, agent, this));
 				if (hasFlag(WeaponFlag.OVERWATCH)) {
-					OVERWATCH_ACTION.setBattleController(controller);
-					OVERWATCH_ACTION.setPerformer(agent);
-					OVERWATCH_ACTION.setOverwatchAction(new RangedWeaponAttackAction(controller, agent));
+					OverwatchAction owAction = new OverwatchAction(controller, agent, this, new RangedWeaponAttackAction(controller, agent, this));
+					actions.add(owAction);
 				}
 			}
 			boolean needsReload = hasFlag(WeaponFlag.NEEDS_AMMUNITION) && currentAmmo < baseAmmoCapacity();
 			if (needsReload) {
-				RELOAD_ACTION.setBattleController(controller);
-				RELOAD_ACTION.setPerformer(agent);
-				RELOAD_ACTION.setWeapon(this);
-				actions.add(RELOAD_ACTION);
+				actions.add(new ReloadAction(controller, agent, this));
 			}
 		}
 		return actions;

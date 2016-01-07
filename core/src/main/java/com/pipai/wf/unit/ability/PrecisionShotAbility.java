@@ -11,7 +11,7 @@ import com.pipai.wf.unit.ability.component.TargetedAbilityComponent;
 
 public class PrecisionShotAbility extends Ability implements TargetedAbilityComponent, HasCooldownComponent {
 
-	private CooldownComponent cooldownComponent = new CooldownComponentImpl(1);
+	private CooldownComponent cooldownComponent = new CooldownComponentImpl(2);
 
 	@Override
 	public String getName() {

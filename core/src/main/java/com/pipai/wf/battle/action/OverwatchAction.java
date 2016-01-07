@@ -16,6 +16,7 @@ import com.pipai.wf.battle.action.verification.WeaponFlagVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.item.weapon.WeaponFlag;
 
 public class OverwatchAction extends PerformerAction implements DefaultApRequiredComponent, HasWeaponComponent {
@@ -23,16 +24,10 @@ public class OverwatchAction extends PerformerAction implements DefaultApRequire
 	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 	private OverwatchableTargetedAction overwatchAction;
 
-	public OverwatchAction(BattleController controller, Agent performerAgent) {
+	public OverwatchAction(BattleController controller, Agent performerAgent, Weapon weapon, OverwatchableTargetedAction action) {
 		super(controller, performerAgent);
-	}
-
-	public OverwatchAction(BattleController controller) {
-		super(controller);
-	}
-
-	public OverwatchAction() {
-		// Call super
+		setWeapon(weapon);
+		setOverwatchAction(action);
 	}
 
 	@Override

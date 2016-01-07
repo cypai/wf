@@ -44,12 +44,14 @@ public class Agent implements HasName, HasBasicStats {
 		inventory = new AgentInventory(3);
 		statusEffects = new StatusEffectList();
 		innateAbilities = new AbilityList();
+		innateAbilities.registerToAgent(this);
 	}
 
 	public Agent(UnitSchema schema) {
 		name = schema.getName();
 		basicStats = schema.getBasicStats();
 		innateAbilities = schema.getAbilities().deepCopy();
+		innateAbilities.registerToAgent(this);
 		level = schema.getLevel();
 		expGiven = schema.getExpGiven();
 		exp = schema.getExp();
@@ -128,8 +130,7 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public AbilityList getAbilities() {
-		AbilityList allAbilities = innateAbilities.deepCopy();
-		return allAbilities;
+		return innateAbilities;
 	}
 
 	public AbilityList getInnateAbilities() {

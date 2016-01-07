@@ -1,6 +1,11 @@
 package com.pipai.wf.battle.inventory;
 
+import java.util.Objects;
+import java.util.function.Function;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pipai.wf.item.Item;
 import com.pipai.wf.item.armor.Armor;
 import com.pipai.wf.misc.DeepCopyable;
@@ -18,7 +23,8 @@ public class AgentInventory implements DeepCopyable, DeepCopyableAsNew {
 		items = new Item[slots];
 	}
 
-	public AgentInventory(int slots, Item[] items, int equippedSlot) {
+	@JsonCreator
+	public AgentInventory(@JsonProperty("slots") int slots, @JsonProperty("items") Item[] items, @JsonProperty("equippedSlot") int equippedSlot) {
 		if (slots != items.length) {
 			throw new IllegalArgumentException("Size of inventory does not match item array size");
 		}
@@ -81,7 +87,7 @@ public class AgentInventory implements DeepCopyable, DeepCopyableAsNew {
 
 	public boolean contains(Item item) {
 		for (int i = 1; i <= getSlots(); i++) {
-			if (getItem(i).equals(item)) {
+			if (Objects.equals(getItem(i), item)) {
 				return true;
 			}
 		}
@@ -139,25 +145,24 @@ public class AgentInventory implements DeepCopyable, DeepCopyableAsNew {
 
 	@Override
 	public AgentInventory deepCopyAsNew() {
-		AgentInventory copy = new AgentInventory(getSlots());
-		for (int i = 0; i < items.length; i++) {
-			copy.items[i] = items[i].copyAsNew();
-		}
-		copy.itemsAmount = itemsAmount;
-		copy.equippedSlot = equippedSlot;
-		copy.equippedArmor = (Armor) copy.items[equippedSlot];
-		return copy;
+		return copyByStrategy(item -> item == null ? null : item.copyAsNew());
 	}
 
 	@Override
 	public AgentInventory deepCopy() {
+		return copyByStrategy(item -> item == null ? null : item.copy());
+	}
+
+	private AgentInventory copyByStrategy(Function<Item, Item> strategy) {
 		AgentInventory copy = new AgentInventory(getSlots());
 		for (int i = 0; i < items.length; i++) {
-			copy.items[i] = items[i].copy();
+			copy.items[i] = strategy.apply(items[i]);
 		}
 		copy.itemsAmount = itemsAmount;
 		copy.equippedSlot = equippedSlot;
-		copy.equippedArmor = (Armor) copy.items[equippedSlot];
+		if (isEquippingArmor()) {
+			copy.equippedArmor = (Armor) copy.items[equippedSlot];
+		}
 		return copy;
 	}
 

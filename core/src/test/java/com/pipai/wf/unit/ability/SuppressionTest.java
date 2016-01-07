@@ -45,14 +45,15 @@ public class SuppressionTest {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		Mockito.when(mockConfig.getTargetedActionCalculator()).thenReturn(new TargetedActionCalculator(mockConfig));
 		BattleController controller = new BattleController(map, mockConfig);
-		Bow bow = (Bow) enemy.getInventory().getItem(1);
-		int toHit = new RangedWeaponAttackAction(controller, enemy, player, bow).getHitCalculation().total();
-		new SuppressionAction(controller, player, enemy).perform();
+		Bow playerBow = (Bow) player.getInventory().getItem(1);
+		Bow enemyBow = (Bow) enemy.getInventory().getItem(1);
+		int toHit = new RangedWeaponAttackAction(controller, enemy, player, enemyBow).getHitCalculation().total();
+		new SuppressionAction(controller, player, enemy, playerBow).perform();
 		Assert.assertEquals(-30, enemy.getStatusEffects().aimModifierList().total());
-		int suppressedToHit = new RangedWeaponAttackAction(controller, enemy, player, bow).getHitCalculation().total();
+		int suppressedToHit = new RangedWeaponAttackAction(controller, enemy, player, enemyBow).getHitCalculation().total();
 		Assert.assertEquals(toHit - 30, suppressedToHit);
 		Assert.assertEquals(0, player.getAP());
-		Assert.assertEquals(bow.baseAmmoCapacity() - 2, bow.getCurrentAmmo());
+		Assert.assertEquals(playerBow.baseAmmoCapacity() - 2, playerBow.getCurrentAmmo());
 	}
 
 	@Test
@@ -62,14 +63,14 @@ public class SuppressionTest {
 		BattleMap map = generateMap(playerPos, enemyPos);
 		Agent player = map.getAgentAtPos(playerPos);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		Bow bow = (Bow) player.getInventory().getItem(1);
-		bow.expendAmmo(bow.baseAmmoCapacity() + 1);
+		Bow playerBow = (Bow) player.getInventory().getItem(1);
+		playerBow.expendAmmo(playerBow.baseAmmoCapacity() + 1);
 		BattleController controller = new BattleController(map, Mockito.mock(BattleConfiguration.class));
 		try {
-			new SuppressionAction(controller, player, enemy).perform();
+			new SuppressionAction(controller, player, enemy, playerBow).perform();
 			Assert.fail("Expected not enough ammo exception not thrown");
 		} catch (IllegalActionException e) {
-			// Expected, don't do anything
+			Assert.assertTrue(e.getMessage().endsWith("Not enough ammunition"));
 		}
 	}
 
@@ -83,7 +84,8 @@ public class SuppressionTest {
 		BattleController controller = new BattleController(map, Mockito.mock(BattleConfiguration.class));
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		new SuppressionAction(controller, player, enemy).perform();
+		Bow bow = (Bow) player.getInventory().getItem(1);
+		new SuppressionAction(controller, player, enemy, bow).perform();
 		BattleEvent ev = observer.getEvent();
 		Assert.assertEquals(BattleEvent.Type.TARGETED_ACTION, ev.getType());
 		Assert.assertEquals(SuppressionAction.class, ev.getTargetedAction().getClass());

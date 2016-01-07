@@ -30,12 +30,9 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction implem
 
 	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 
-	public RangedWeaponAttackAction() {
-		// Call super
-	}
-
-	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent) {
+	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent, Weapon weapon) {
 		super(controller, performerAgent);
+		setWeapon(weapon);
 	}
 
 	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent, Agent targetAgent, Weapon weapon) {

@@ -35,6 +35,11 @@ public class TargetedSpellWeaponAction extends OverwatchableTargetedAction imple
 		setWeapon(weapon);
 	}
 
+	public TargetedSpellWeaponAction(BattleController controller, Agent performerAgent, SpellWeapon weapon) {
+		super(controller, performerAgent);
+		setWeapon(weapon);
+	}
+
 	public TargetedSpellWeaponAction(BattleController controller, Agent performerAgent) {
 		super(controller, performerAgent);
 	}
