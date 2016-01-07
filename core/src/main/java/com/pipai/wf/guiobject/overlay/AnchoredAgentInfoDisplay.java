@@ -40,7 +40,7 @@ public class AnchoredAgentInfoDisplay extends AnchoredGuiObject {
 		Vector2 agentPoint = getScreenPosition();
 		Vector2 barLeftTop = new Vector2(getScreenX() + 24, getScreenY() + 24);
 		Vector2 barRightFullTop = new Vector2(getScreenX() + 24 + barWidth, getScreenY() + 24);
-		float armorHpPercent = (float) a.getDisplayArmorHP() / (float) a.getAgent().getEquippedArmor().maxHP();
+		float armorHpPercent = a.getDisplayArmorHP() == 0 ? 0 : (float) a.getDisplayArmorHP() / (float) a.getAgent().getEquippedArmor().maxHP();
 		Vector2 barRightTop = new Vector2(getScreenX() + 24 + barWidth * armorHpPercent, getScreenY() + 24);
 		Vector2 barLeftBot = new Vector2(getScreenX() + 24, getScreenY() + 18);
 		Vector2 barRightFullBot = new Vector2(getScreenX() + 24 + barWidth, getScreenY() + 18);

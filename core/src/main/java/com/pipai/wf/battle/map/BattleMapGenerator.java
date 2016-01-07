@@ -3,6 +3,9 @@ package com.pipai.wf.battle.map;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleSchema;
 import com.pipai.wf.battle.Team;
@@ -13,6 +16,8 @@ import com.pipai.wf.unit.schema.UnitSchema;
 import com.pipai.wf.util.Rng;
 
 public class BattleMapGenerator {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BattleMapGenerator.class);
 
 	private static ArrayList<GridPosition> partyRelativeStartingPositions = new ArrayList<>();
 
@@ -34,6 +39,7 @@ public class BattleMapGenerator {
 	public BattleMap generateMap(BattleSchema schema) {
 		int rows = rng.randInt(30, 40);
 		int cols = rng.randInt(30, 40);
+		LOGGER.debug("Made map with " + rows + " rows and " + cols + "cols");
 		BattleMap map = new BattleMap(rows, cols);
 		generateRandomEnvironment(map);
 		generatePartyPod(map, schema.getPartySchemas());

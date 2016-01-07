@@ -41,7 +41,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 		this.gui = gui;
 		this.agent = agent;
 		displayHP = agent.getHP();
-		displayArmorHP = agent.getEquippedArmor().getHP();
+		displayArmorHP = agent.getInventory().isEquippingArmor() ? agent.getEquippedArmor().getHP() : 0;
 		selected = false;
 		int squareSize = BattleTerrainRenderer.SQUARE_SIZE;
 		Vector2 xy = BattleTerrainRenderer.centerOfGridPos(agent.getPosition());

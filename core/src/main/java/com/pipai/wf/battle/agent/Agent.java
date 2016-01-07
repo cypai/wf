@@ -56,6 +56,7 @@ public class Agent implements HasName, HasBasicStats {
 		expGiven = schema.getExpGiven();
 		exp = schema.getExp();
 		inventory = schema.getInventory().deepCopy();
+		statusEffects = new StatusEffectList();
 	}
 
 	@Override

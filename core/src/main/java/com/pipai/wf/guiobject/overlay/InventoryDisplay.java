@@ -75,7 +75,7 @@ public class InventoryDisplay extends GuiObject implements GuiRenderable {
 				}
 				f.setColor(Color.WHITE);
 			} else {
-				itemInfo = item.getName();
+				itemInfo = item == null ? "-" : item.getName();
 			}
 			f.draw(spr, itemInfo, x + f.getLineHeight(), y - f.getLineHeight() * line, 0, Align.left, true);
 			line += 1;
