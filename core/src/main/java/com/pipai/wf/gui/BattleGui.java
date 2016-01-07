@@ -54,7 +54,7 @@ import com.pipai.wf.guiobject.battle.AgentGuiObject;
 import com.pipai.wf.guiobject.battle.BattleTerrainRenderer;
 import com.pipai.wf.guiobject.overlay.ActionToolTip;
 import com.pipai.wf.guiobject.overlay.AgentStatusWindow;
-import com.pipai.wf.guiobject.overlay.WeaponIndicator;
+import com.pipai.wf.guiobject.overlay.InventoryDisplay;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.PrecisionShotAbility;
 import com.pipai.wf.unit.ability.SuppressionAbility;
@@ -104,7 +104,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 	private AI ai;
 	private BattleTerrainRenderer terrainRenderer;
 	private ActionToolTip tooltip;
-	private WeaponIndicator weaponIndicator;
+	private InventoryDisplay weaponIndicator;
 	private AgentStatusWindow agentStatusWindow;
 	private TargetedAction targetedAction;
 	private AnimationController animationController;
@@ -158,7 +158,7 @@ public final class BattleGui extends Gui implements BattleObserver, AnimationCon
 
 	private void generateOverlays() {
 		tooltip = new ActionToolTip(this, 0, 120, 320, 120);
-		weaponIndicator = new WeaponIndicator(this, getScreenWidth() - 120, 80, 120, 80);
+		weaponIndicator = new InventoryDisplay(this, getScreenWidth() - 120, 80, 120, 80);
 		agentStatusWindow = new AgentStatusWindow(this);
 		overlayRenderables.add(tooltip);
 		overlayRenderables.add(weaponIndicator);
