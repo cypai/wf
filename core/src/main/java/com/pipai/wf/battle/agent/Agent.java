@@ -30,7 +30,7 @@ public class Agent implements HasName, HasBasicStats {
 	private State state;
 	private GridPosition position;
 	private OverwatchableTargetedAction overwatchAction;
-	private AbilityList innateAbilities;
+	private AbilityList abilities;
 	private StatusEffectList statusEffects;
 
 	private AgentInventory inventory;
@@ -43,15 +43,15 @@ public class Agent implements HasName, HasBasicStats {
 		this.basicStats = basicStats;
 		inventory = new AgentInventory(3);
 		statusEffects = new StatusEffectList();
-		innateAbilities = new AbilityList();
-		innateAbilities.registerToAgent(this);
+		abilities = new AbilityList();
+		abilities.registerToAgent(this);
 	}
 
 	public Agent(UnitSchema schema) {
 		name = schema.getName();
 		basicStats = schema.getBasicStats();
-		innateAbilities = schema.getAbilities().deepCopy();
-		innateAbilities.registerToAgent(this);
+		abilities = schema.getAbilities().deepCopy();
+		abilities.registerToAgent(this);
 		level = schema.getLevel();
 		expGiven = schema.getExpGiven();
 		exp = schema.getExp();
@@ -130,15 +130,11 @@ public class Agent implements HasName, HasBasicStats {
 	}
 
 	public AbilityList getAbilities() {
-		return innateAbilities;
-	}
-
-	public AbilityList getInnateAbilities() {
-		return innateAbilities;
+		return abilities;
 	}
 
 	public Ability getAbility(Class<? extends Ability> abilityClass) {
-		for (Ability a : innateAbilities) {
+		for (Ability a : abilities) {
 			if (abilityClass.isInstance(a)) {
 				return a;
 			}
@@ -153,7 +149,7 @@ public class Agent implements HasName, HasBasicStats {
 
 	public ArrayList<Spell> getSpellList() {
 		ArrayList<Spell> l = new ArrayList<>();
-		for (Ability a : innateAbilities) {
+		for (Ability a : abilities) {
 			if (a instanceof SpellAbilityComponent) {
 				l.add(((SpellAbilityComponent) a).grantedSpell());
 			}
@@ -198,7 +194,7 @@ public class Agent implements HasName, HasBasicStats {
 
 	public void onRoundEnd() {
 		try {
-			innateAbilities.onRoundEnd();
+			abilities.onRoundEnd();
 		} catch (NoRegisteredAgentException e) {
 			throw new IllegalStateException(e);
 		}

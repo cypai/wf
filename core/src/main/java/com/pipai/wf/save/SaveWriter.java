@@ -21,9 +21,10 @@ public class SaveWriter {
 		buildHeader(saveBuilder);
 		buildPartySave(saveBuilder);
 		String saveData = saveBuilder.toString();
-		OutputStream ostream = file.write(false);
-		ostream.write(saveData.getBytes());
-		ostream.close();
+		try (OutputStream ostream = file.write(false)) {
+			ostream.write(saveData.getBytes());
+			ostream.close();
+		}
 	}
 
 	private void buildHeader(StringBuilder builder) {

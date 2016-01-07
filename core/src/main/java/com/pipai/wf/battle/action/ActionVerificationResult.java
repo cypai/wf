@@ -1,8 +1,8 @@
 package com.pipai.wf.battle.action;
 
-public class ActionVerificationResult {
+public final class ActionVerificationResult {
 
-	private final boolean isValid;
+	private final boolean valid;
 	private final String reason;
 
 	private static final ActionVerificationResult VALID_RESULT = new ActionVerificationResult();
@@ -16,17 +16,17 @@ public class ActionVerificationResult {
 	}
 
 	private ActionVerificationResult() {
-		isValid = true;
+		valid = true;
 		reason = "";
 	}
 
 	private ActionVerificationResult(String reason) {
-		isValid = false;
+		valid = false;
 		this.reason = reason;
 	}
 
 	public boolean isValid() {
-		return isValid;
+		return valid;
 	}
 
 	public String getReason() {

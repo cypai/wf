@@ -9,10 +9,10 @@ import com.pipai.wf.battle.action.component.WeaponComponent;
 
 public class BaseVerifier implements ActionVerifier {
 
-	private static final BaseVerifier VERIFIER = new BaseVerifier();
+	private static final BaseVerifier INSTANCE = new BaseVerifier();
 
 	public static BaseVerifier getInstance() {
-		return VERIFIER;
+		return INSTANCE;
 	}
 
 	@Override

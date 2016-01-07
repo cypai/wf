@@ -8,7 +8,7 @@ import com.pipai.wf.exception.BadStateStringException;
 public class MapGenerationTest {
 
 	@Test
-	public void testMapString() {
+	public void testMapString() throws BadStateStringException {
 		/*
 		 * Map looks like:
 		 * 0 1 1
@@ -18,11 +18,7 @@ public class MapGenerationTest {
 				+ "s 1 1\n"
 				+ "s 2 1";
 		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			Assert.fail(e.getMessage());
-		}
+		map = new BattleMap(new MapString(rawMapString));
 		// Testing cell solids
 		Assert.assertTrue(map.getCell(new GridPosition(0, 0)).isEmpty());
 		Assert.assertTrue(map.getCell(new GridPosition(1, 0)).isEmpty());

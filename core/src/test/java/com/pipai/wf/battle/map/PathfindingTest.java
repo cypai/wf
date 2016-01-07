@@ -154,15 +154,11 @@ public class PathfindingTest {
 	}
 
 	@Test
-	public void testCannotMoveToNonEmpty() {
+	public void testCannotMoveToNonEmpty() throws BadStateStringException {
 		String rawMapString = "4 4\n"
 				+ "s 3 0";
 		BattleMap map = null;
-		try {
-			map = new BattleMap(new MapString(rawMapString));
-		} catch (BadStateStringException e) {
-			Assert.fail(e.getMessage());
-		}
+		map = new BattleMap(new MapString(rawMapString));
 		AgentFactory factory = new AgentFactory();
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, new GridPosition(1, 1), 3, 5, 2, 5, 65, 0));
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, new GridPosition(2, 1), 3, 5, 2, 5, 65, 0));

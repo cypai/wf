@@ -35,11 +35,6 @@ public class BasicStats {
 		// Empty constructor for Jackson
 	}
 
-	@Override
-	public BasicStats clone() {
-		return new BasicStats(hp, maxHP, mp, maxMP, ap, maxAP, aim, mobility, defense);
-	}
-
 	public int getHP() {
 		return hp;
 	}

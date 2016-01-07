@@ -24,11 +24,6 @@ public class SuppressionAbility extends Ability implements TargetedAbilityCompon
 	}
 
 	@Override
-	public Ability clone() {
-		return new SuppressionAbility();
-	}
-
-	@Override
 	public SuppressionAbility copy() {
 		return new SuppressionAbility();
 	}

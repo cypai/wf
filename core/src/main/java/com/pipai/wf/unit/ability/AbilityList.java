@@ -138,6 +138,29 @@ public class AbilityList implements Iterable<Ability>, ShallowCopyable, DeepCopy
 		return new AbilityListIterator(abilityList);
 	}
 
+	@Override
+	public AbilityList deepCopyAsNew() {
+		return copyByStrategy(ability -> ability.copyAsNew());
+	}
+
+	@Override
+	public AbilityList deepCopy() {
+		return copyByStrategy(ability -> ability.copy());
+	}
+
+	@Override
+	public AbilityList shallowCopy() {
+		return copyByStrategy(ability -> ability);
+	}
+
+	private AbilityList copyByStrategy(Function<Ability, Ability> strategy) {
+		AbilityList copy = new AbilityList();
+		for (Ability ability : abilityList) {
+			copy.add(strategy.apply(ability));
+		}
+		return copy;
+	}
+
 	public static class AbilityListIterator implements Iterator<Ability> {
 
 		private Iterator<Ability> it;
@@ -161,29 +184,6 @@ public class AbilityList implements Iterable<Ability>, ShallowCopyable, DeepCopy
 			throw new UnsupportedOperationException();
 		}
 
-	}
-
-	@Override
-	public AbilityList deepCopyAsNew() {
-		return copyByStrategy(ability -> ability.copyAsNew());
-	}
-
-	@Override
-	public AbilityList deepCopy() {
-		return copyByStrategy(ability -> ability.copy());
-	}
-
-	@Override
-	public AbilityList shallowCopy() {
-		return copyByStrategy(ability -> ability);
-	}
-
-	private AbilityList copyByStrategy(Function<Ability, Ability> strategy) {
-		AbilityList copy = new AbilityList();
-		for (Ability ability : abilityList) {
-			copy.add(strategy.apply(ability));
-		}
-		return copy;
 	}
 
 }

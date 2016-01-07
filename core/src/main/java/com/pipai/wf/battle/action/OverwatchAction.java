@@ -27,7 +27,7 @@ public class OverwatchAction extends PerformerAction implements DefaultApRequire
 	public OverwatchAction(BattleController controller, Agent performerAgent, Weapon weapon, OverwatchableTargetedAction action) {
 		super(controller, performerAgent);
 		setWeapon(weapon);
-		setOverwatchAction(action);
+		overwatchAction = action;
 	}
 
 	@Override

@@ -24,12 +24,12 @@ public class MoveAction extends PerformerAction implements ApRequiredComponent {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MoveAction.class);
 
 	private LinkedList<GridPosition> path;
-	private int useAP;
+	private int apRequired;
 
 	public MoveAction(BattleController controller, Agent performerAgent, LinkedList<GridPosition> path, int useAP) {
 		super(controller, performerAgent);
 		this.path = path;
-		this.useAP = useAP;
+		this.apRequired = useAP;
 	}
 
 	@Override
@@ -40,12 +40,12 @@ public class MoveAction extends PerformerAction implements ApRequiredComponent {
 
 	@Override
 	public int getAPRequired() {
-		return useAP;
+		return apRequired;
 	}
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
-		LOGGER.debug("Performed by '" + getPerformer().getName() + "' with path " + path + " and useAP " + useAP);
+		LOGGER.debug("Performed by '" + getPerformer().getName() + "' with path " + path + " and useAP " + apRequired);
 		Agent movingAgent = getPerformer();
 		BattleEvent event = BattleEvent.moveEvent(movingAgent, path);
 		logBattleEvent(event);
@@ -66,7 +66,7 @@ public class MoveAction extends PerformerAction implements ApRequiredComponent {
 		}
 		GridPosition dest = path.peekLast();
 		setAgentPosition(movingAgent, dest);
-		movingAgent.useAP(useAP);
+		movingAgent.useAP(apRequired);
 	}
 
 	private boolean pathIsValid() {

@@ -11,9 +11,9 @@ public class AcidStatusEffect extends StatusEffect {
 
 	private static final ArrayList<Class<? extends Action>> ACTION_WHITELIST = new ArrayList<>(1);
 
-	static {
-		// ACTION_WHITELIST.add(SwitchWeaponAction.class);
-	}
+	// static {
+	// ACTION_WHITELIST.add(SwitchWeaponAction.class);
+	// }
 
 	private DamageDealer damageDealer;
 
