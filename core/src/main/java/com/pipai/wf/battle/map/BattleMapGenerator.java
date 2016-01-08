@@ -69,7 +69,7 @@ public class BattleMapGenerator {
 
 	private void generatePartyPod(BattleMap map, List<UnitSchema> party) {
 		AgentFactory factory = new AgentFactory();
-		GridPosition center = randPos(new GridPosition(1, 1), new GridPosition(map.getCols() - 1, 4));
+		GridPosition center = randPos(new GridPosition(1, 1), new GridPosition(map.getCols() - 2, 4));
 		for (int i = 0; i < partyRelativeStartingPositions.size() && i < party.size(); i++) {
 			GridPosition relativePos = partyRelativeStartingPositions.get(i);
 			Agent agent = factory.battleAgentFromSchema(Team.PLAYER,
