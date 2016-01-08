@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pipai.wf.WFGame;
+import com.pipai.wf.artemis.battle.ArtemisBattleGui;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleFactory;
 import com.pipai.wf.battle.BattleSchema;
@@ -78,7 +79,7 @@ public final class PartyInfoGui extends Gui {
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
 		BattleFactory factory = new BattleFactory(new BattleConfiguration());
-		switchGui(new BattleGui(getGame(), factory.build(new BattleSchema(partySchema))));
+		switchGui(new ArtemisBattleGui(getGame(), factory.build(new BattleSchema(partySchema))));
 	}
 
 	@Override

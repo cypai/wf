@@ -66,7 +66,7 @@ public abstract class Gui implements Screen, InputProcessor {
 		instanceIndex.remove(id);
 	}
 
-	public void switchGui(Gui gui) {
+	public void switchGui(Screen gui) {
 		LOGGER.debug("Switching Gui to " + gui.getClass());
 		dispose();
 		game.setScreen(gui);

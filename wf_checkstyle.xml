@@ -136,7 +136,10 @@
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
     <module name="OverloadMethodsDeclarationOrder"/>
-    <module name="VisibilityModifier"/>
+    <module name="VisibilityModifier">
+      <property name="severity" value="ignore"/>
+      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
+    </module>
     <module name="OneTopLevelClass"/>
     <module name="EmptyCatchBlock"/>
     <module name="RedundantModifier"/>
