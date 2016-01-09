@@ -72,7 +72,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 
 	@Override
 	public float getZ() {
-		return 0;
+		return 16;
 	}
 
 	@Override
@@ -152,7 +152,7 @@ public class AgentGuiObject extends GuiObject implements XYZPositioned, GuiRende
 
 	@Override
 	public void update() {
-		decal.setPosition(x, y, 0);
+		decal.setPosition(x, y, getZ());
 		decal.setRotation(gui.getCamera().getCamera().direction, gui.getCamera().getCamera().up);
 	}
 
