@@ -1,8 +1,10 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
+    	classpath "net.onedaybeard.artemis:artemis-odb-gradle-plugin:1.3.1"
     }
 }
 
