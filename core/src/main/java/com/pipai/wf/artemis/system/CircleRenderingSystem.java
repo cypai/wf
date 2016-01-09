@@ -2,6 +2,7 @@ package com.pipai.wf.artemis.system;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
+import com.artemis.managers.TagManager;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -11,27 +12,28 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
 import com.pipai.wf.artemis.components.CircleDecalComponent;
+import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.VisibleComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
-import com.pipai.wf.gui.BatchHelper;
 
 public class CircleRenderingSystem extends IteratingSystem {
 
 	private static final int SQUARE_SIZE = 40;
 
-	ComponentMapper<XYZPositionComponent> xyzMapper;
-	ComponentMapper<CircleDecalComponent> circleMapper;
-	ComponentMapper<VisibleComponent> visibleMapper;
+	private ComponentMapper<XYZPositionComponent> xyzMapper;
+	private ComponentMapper<CircleDecalComponent> circleMapper;
+	private ComponentMapper<VisibleComponent> visibleMapper;
+	private ComponentMapper<PerspectiveCameraComponent> mPerspectiveCamera;
 
-	private PerspectiveCamera camera;
-	private DecalBatch batch;
+	private BatchRenderingSystem batchRenderingSystem;
+
 	private Pixmap pixmap;
 	private Texture circleTexture;
 
-	public CircleRenderingSystem(BatchHelper batch, PerspectiveCamera camera) {
+	private TagManager tagManager;
+
+	public CircleRenderingSystem() {
 		super(Aspect.all(XYZPositionComponent.class, CircleDecalComponent.class, VisibleComponent.class));
-		this.camera = camera;
-		this.batch = batch.getDecalBatch();
 	}
 
 	@Override
@@ -58,17 +60,16 @@ public class CircleRenderingSystem extends IteratingSystem {
 				if (circleDecal.decal == null) {
 					circleDecal.decal = Decal.newDecal(new TextureRegion(circleTexture), true);
 				}
+				PerspectiveCamera camera = mPerspectiveCamera.get(tagManager.getEntity(Tag.CAMERA.toString())).camera;
 				circleDecal.decal.setDimensions(32, 32);
 				circleDecal.decal.setPosition(position.position);
 				circleDecal.decal.setRotation(camera.direction, camera.up);
-				batch.add(circleDecal.decal);
+				DecalBatch batch = batchRenderingSystem.getBatch().getDecalBatch();
+				if (batch != null) {
+					batch.add(circleDecal.decal);
+				}
 			}
 		}
-	}
-
-	@Override
-	protected void end() {
-		batch.flush();
 	}
 
 	@Override

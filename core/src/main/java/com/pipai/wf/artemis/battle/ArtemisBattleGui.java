@@ -3,16 +3,24 @@ package com.pipai.wf.artemis.battle;
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
+import com.artemis.managers.GroupManager;
+import com.artemis.managers.TagManager;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.artemis.system.BatchRenderingSystem;
+import com.pipai.wf.artemis.system.BattleSystem;
+import com.pipai.wf.artemis.system.CameraUpdateSystem;
 import com.pipai.wf.artemis.system.CircleRenderingSystem;
 import com.pipai.wf.artemis.system.FpsRenderingSystem;
 import com.pipai.wf.artemis.system.InputProcessingSystem;
+import com.pipai.wf.artemis.system.InterpolationIncrementSystem;
+import com.pipai.wf.artemis.system.InterpolationMovementSystem;
+import com.pipai.wf.artemis.system.SelectedUnitSystem;
+import com.pipai.wf.artemis.system.TerrainRenderingSystem;
+import com.pipai.wf.artemis.system.UniqueEntityCreationSystem;
 import com.pipai.wf.artemis.system.UnitEntityCreationSystem;
 import com.pipai.wf.battle.Battle;
 import com.pipai.wf.gui.BatchHelper;
@@ -21,29 +29,40 @@ public class ArtemisBattleGui implements Screen {
 
 	private Game game;
 	private World world;
-	private PerspectiveCamera camera;
 	private BatchHelper batch;
-	private BatchRenderingSystem renderingSystem;
 
 	public ArtemisBattleGui(WFGame game, Battle battle) {
-		camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		camera.position.set(0, -300, 400);
-		camera.lookAt(0, 0, 0);
-		camera.near = 1f;
-		camera.far = 2000;
-
 		batch = new BatchHelper(game.getSpriteBatch(), game.getShapeRenderer(), game.getModelBatch(), game.getFont());
-		batch.set3DCamera(camera);
 
 		this.game = game;
 		WorldConfiguration config = new WorldConfigurationBuilder()
 				.with(
-						new FpsRenderingSystem(batch),
+						// Managers
+						new TagManager(),
+						new GroupManager(),
+
+						// Input
 						new InputProcessingSystem(),
+
+						// Entity Creation
 						new UnitEntityCreationSystem(battle),
-						new CircleRenderingSystem(batch, camera))
+						new UniqueEntityCreationSystem(),
+
+						// Misc
+						new CameraUpdateSystem(),
+						new InterpolationMovementSystem(),
+						new InterpolationIncrementSystem(),
+
+						// Battle Related
+						new BattleSystem(battle),
+						new SelectedUnitSystem())
+				.withPassive(0,
+						// Rendering
+						new TerrainRenderingSystem(batch, battle.getBattleMap()),
+						new CircleRenderingSystem(),
+						new FpsRenderingSystem(batch),
+						new BatchRenderingSystem(batch))
 				.build();
-		renderingSystem = new BatchRenderingSystem(batch);
 		world = new World(config);
 	}
 
@@ -51,10 +70,8 @@ public class ArtemisBattleGui implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		camera.update();
 		world.setDelta(delta);
 		world.process();
-		renderingSystem.process();
 	}
 
 	@Override

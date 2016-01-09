@@ -3,49 +3,55 @@ package com.pipai.wf.artemis.system;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.artemis.BaseSystem;
 import com.artemis.ComponentMapper;
+import com.artemis.managers.GroupManager;
 import com.pipai.wf.artemis.components.CircleDecalComponent;
+import com.pipai.wf.artemis.components.PlayerUnitComponent;
+import com.pipai.wf.artemis.components.SelectedUnitComponent;
 import com.pipai.wf.artemis.components.VisibleComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.battle.Battle;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 
-public class UnitEntityCreationSystem extends BaseSystem {
+public class UnitEntityCreationSystem extends ProcessOnceSystem {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnitEntityCreationSystem.class);
 
-	ComponentMapper<XYZPositionComponent> xyzMapper;
-	ComponentMapper<CircleDecalComponent> circleMapper;
-	ComponentMapper<VisibleComponent> visibleMapper;
+	private ComponentMapper<XYZPositionComponent> mXyzPosition;
+	private ComponentMapper<CircleDecalComponent> mCircle;
+	private ComponentMapper<VisibleComponent> mVisible;
+	private ComponentMapper<PlayerUnitComponent> mPlayerUnit;
+	private ComponentMapper<SelectedUnitComponent> mSelectedUnit;
+
+	private GroupManager groupManager;
 
 	private final Battle battle;
 
-	private boolean processing;
-
 	public UnitEntityCreationSystem(Battle battle) {
 		this.battle = battle;
-		processing = true;
 	}
 
 	@Override
-	protected boolean checkProcessing() {
-		return processing;
-	}
-
-	@Override
-	protected void processSystem() {
-		if (processing) {
-			for (Agent agent : battle.getBattleMap().getAgents()) {
-				int id = world.create();
-				visibleMapper.create(id);
-				circleMapper.create(id);
-				XYZPositionComponent xyz = xyzMapper.create(id);
-				xyz.position.set(agent.getPosition().getX() * 40, agent.getPosition().getY() * 40, 0);
-				LOGGER.debug("Created entity at " + xyz.position);
+	protected void processOnce() {
+		boolean selectedUnitCreated = false;
+		for (Agent agent : battle.getBattleMap().getAgents()) {
+			int id = world.create();
+			mVisible.create(id);
+			mCircle.create(id);
+			XYZPositionComponent xyz = mXyzPosition.create(id);
+			xyz.position.set(agent.getPosition().getX() * 40, agent.getPosition().getY() * 40, 0);
+			if (agent.getTeam().equals(Team.PLAYER)) {
+				mPlayerUnit.create(id);
+				groupManager.add(world.getEntity(id), Group.PLAYER_PARTY.toString());
+				if (!selectedUnitCreated) {
+					mSelectedUnit.create(id);
+					selectedUnitCreated = true;
+				}
+			} else {
+				groupManager.add(world.getEntity(id), Group.ENEMY_PARTY.toString());
 			}
-			// Only run once
-			processing = false;
+			LOGGER.debug("Created entity at " + xyz.position);
 		}
 	}
 

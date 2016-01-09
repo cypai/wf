@@ -7,12 +7,8 @@ public class XYZPositionComponent extends Component {
 
 	public Vector3 position;
 
-	public XYZPositionComponent(float x, float y, float z) {
-		position = new Vector3(x, y, z);
-	}
-
 	public XYZPositionComponent() {
-		this(0, 0, 0);
+		position = new Vector3();
 	}
 
 }
