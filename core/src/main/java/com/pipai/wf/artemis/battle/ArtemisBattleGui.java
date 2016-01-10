@@ -36,7 +36,6 @@ public class ArtemisBattleGui implements Screen {
 		this.game = game;
 		WorldConfiguration config = new WorldConfigurationBuilder()
 				.with(
-
 						// Managers
 						new TagManager(),
 						new GroupManager(),
@@ -55,7 +54,7 @@ public class ArtemisBattleGui implements Screen {
 						// Battle Related
 						new BattleSystem(battle),
 						new SelectedUnitSystem())
-				.withPassive(0,
+				.withPassive(-1,
 						// Rendering
 						new TerrainRenderingSystem(batch, battle.getBattleMap()),
 						new CircleRenderingSystem(),
