@@ -14,6 +14,7 @@ import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
 import com.pipai.wf.artemis.system.InterpolationIncrementSystem;
 import com.pipai.wf.artemis.system.InterpolationMovementSystem;
+import com.pipai.wf.artemis.system.NeedsUpdateSystem;
 import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
@@ -39,6 +40,7 @@ public class ArtemisBattleGui implements Screen {
 		this.game = game;
 		WorldConfiguration config = new WorldConfigurationBuilder()
 				.dependsOn(ProfilerPlugin.class)
+				.withPassive(1, new NeedsUpdateSystem())
 				.with(
 						// Managers
 						new TagManager(),
@@ -63,7 +65,7 @@ public class ArtemisBattleGui implements Screen {
 						new TerrainRenderingSystem(batch, battle.getBattleMap()),
 						new CircleRenderingSystem(),
 						new CircularShadowRenderingSystem(),
-						new FpsRenderingSystem(batch),
+						new FpsRenderingSystem(),
 						new BatchRenderingSystem(batch))
 				.build();
 		world = new World(config);

@@ -7,14 +7,18 @@ import com.artemis.ComponentMapper;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.artemis.components.CircleDecalComponent;
 import com.pipai.wf.artemis.components.CircularShadowComponent;
+import com.pipai.wf.artemis.components.NeedsUpdateComponent;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
+import com.pipai.wf.artemis.components.SphericalCoordinateComponent;
 import com.pipai.wf.artemis.components.VisibleComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.artemis.system.Group;
+import com.pipai.wf.artemis.system.NeedsUpdateSystem;
 import com.pipai.wf.artemis.system.ProcessOnceSystem;
 import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.battle.Battle;
@@ -29,6 +33,7 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BattleEntityCreationSystem.class);
 
+	private ComponentMapper<NeedsUpdateComponent> mNeedsUpdate;
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
 	private ComponentMapper<CircleDecalComponent> mCircle;
 	private ComponentMapper<VisibleComponent> mVisible;
@@ -36,9 +41,12 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 	private ComponentMapper<PlayerUnitComponent> mPlayerUnit;
 	private ComponentMapper<SelectedUnitComponent> mSelectedUnit;
 	private ComponentMapper<PerspectiveCameraComponent> mPerspectiveCamera;
+	private ComponentMapper<SphericalCoordinateComponent> mSphericalCoordinates;
 
 	private TagManager tagManager;
 	private GroupManager groupManager;
+
+	private NeedsUpdateSystem needsUpdateSystem;
 
 	private final BatchHelper batch;
 	private final Battle battle;
@@ -56,13 +64,19 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 
 	private void generateCameras() {
 		int perspectiveCameraId = world.create();
+		Vector3 lookingAt = new Vector3();
 		PerspectiveCamera camera = mPerspectiveCamera.create(perspectiveCameraId).camera;
 		camera.position.set(0, -400, 300);
-		camera.lookAt(0, 0, 0);
+		camera.lookAt(lookingAt);
 		camera.near = 1f;
 		camera.far = 2000;
 		XYZPositionComponent xyz = mXyzPosition.create(perspectiveCameraId);
-		xyz.position = camera.position;
+		xyz.position = lookingAt.cpy();
+		SphericalCoordinateComponent cSphericalCoordinates = mSphericalCoordinates.create(perspectiveCameraId);
+		cSphericalCoordinates.r = lookingAt.dst(camera.position);
+		cSphericalCoordinates.theta = (float) Math.atan(camera.position.y / camera.position.x);
+		cSphericalCoordinates.phi = (float) Math.acos(camera.position.z / cSphericalCoordinates.r);
+		needsUpdateSystem.notify(perspectiveCameraId);
 		tagManager.register(Tag.CAMERA.toString(), perspectiveCameraId);
 		batch.set3DCamera(camera);
 	}
