@@ -1,28 +1,17 @@
-package com.pipai.wf.artemis.system;
+package com.pipai.wf.artemis.system.input;
 
-import com.artemis.BaseSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
-public class InputProcessingSystem extends BaseSystem implements InputProcessor {
-
-	@Override
-	protected void initialize() {
-		Gdx.input.setInputProcessor(this);
-	}
-
-	@Override
-	protected void processSystem() {
-
-	}
+public class ExitInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.ESCAPE) {
 			Gdx.app.exit();
 		}
-		return true;
+		return false;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-package com.pipai.wf.artemis.system;
+package com.pipai.wf.artemis.system.init;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +14,9 @@ import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
 import com.pipai.wf.artemis.components.VisibleComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
+import com.pipai.wf.artemis.system.Group;
+import com.pipai.wf.artemis.system.ProcessOnceSystem;
+import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.battle.Battle;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;

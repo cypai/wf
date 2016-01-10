@@ -1,4 +1,4 @@
-package com.pipai.wf.artemis.system;
+package com.pipai.wf.artemis.system.rendering;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -16,6 +16,7 @@ import com.pipai.wf.artemis.components.CircularShadowComponent;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.VisibleComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
+import com.pipai.wf.artemis.system.Tag;
 
 public class CircularShadowRenderingSystem extends IteratingSystem {
 

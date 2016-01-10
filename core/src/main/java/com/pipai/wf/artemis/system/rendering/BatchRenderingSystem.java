@@ -1,4 +1,4 @@
-package com.pipai.wf.artemis.system;
+package com.pipai.wf.artemis.system.rendering;
 
 import com.artemis.Aspect;
 import com.artemis.systems.IteratingSystem;
