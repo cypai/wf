@@ -11,18 +11,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.decals.Decal;
 import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
-import com.pipai.wf.artemis.components.CircleDecalComponent;
+import com.badlogic.gdx.math.Vector3;
+import com.pipai.wf.artemis.components.CircularShadowComponent;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.VisibleComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 
-public class CircleRenderingSystem extends IteratingSystem {
+public class CircularShadowRenderingSystem extends IteratingSystem {
 
 	private static final int SQUARE_SIZE = 40;
 
-	private ComponentMapper<XYZPositionComponent> xyzMapper;
-	private ComponentMapper<CircleDecalComponent> circleMapper;
-	private ComponentMapper<VisibleComponent> visibleMapper;
+	private ComponentMapper<XYZPositionComponent> mXyz;
+	private ComponentMapper<CircularShadowComponent> mCircularShadow;
+	private ComponentMapper<VisibleComponent> mVisible;
 	private ComponentMapper<PerspectiveCameraComponent> mPerspectiveCamera;
 
 	private BatchRenderingSystem batchRenderingSystem;
@@ -32,15 +33,16 @@ public class CircleRenderingSystem extends IteratingSystem {
 
 	private TagManager tagManager;
 
-	public CircleRenderingSystem() {
-		super(Aspect.all(XYZPositionComponent.class, CircleDecalComponent.class, VisibleComponent.class));
+	public CircularShadowRenderingSystem() {
+		super(Aspect.all(XYZPositionComponent.class, CircularShadowComponent.class, VisibleComponent.class));
 	}
 
 	@Override
 	protected void initialize() {
 		pixmap = new Pixmap(SQUARE_SIZE, SQUARE_SIZE, Pixmap.Format.RGBA8888);
+		pixmap.setColor(new Color(0, 0, 0, 0));
 		pixmap.fill();
-		pixmap.setColor(Color.RED);
+		pixmap.setColor(new Color(0, 0, 0, 0.5f));
 		pixmap.fillCircle(SQUARE_SIZE / 2, SQUARE_SIZE / 2, SQUARE_SIZE / 2 - 1);
 		circleTexture = new Texture(pixmap);
 	}
@@ -53,20 +55,21 @@ public class CircleRenderingSystem extends IteratingSystem {
 	@Override
 	protected void process(int entityId) {
 		if (checkProcessing()) {
-			XYZPositionComponent position = xyzMapper.get(entityId);
-			VisibleComponent visibility = visibleMapper.get(entityId);
-			CircleDecalComponent circleDecal = circleMapper.get(entityId);
+			XYZPositionComponent position = mXyz.get(entityId);
+			VisibleComponent visibility = mVisible.get(entityId);
+			CircularShadowComponent cShadow = mCircularShadow.get(entityId);
 			if (visibility.visible) {
 				// TODO: Add this during initialization
-				if (circleDecal.decal == null) {
-					circleDecal.decal = Decal.newDecal(new TextureRegion(circleTexture), true);
+				if (cShadow.shadowDecal == null) {
+					cShadow.shadowDecal = Decal.newDecal(new TextureRegion(circleTexture), true);
 				}
 				PerspectiveCamera camera = mPerspectiveCamera.get(tagManager.getEntity(Tag.CAMERA.toString())).camera;
-				circleDecal.decal.setDimensions(32, 32);
-				circleDecal.decal.setPosition(position.position);
-				circleDecal.decal.setRotation(camera.direction, camera.up);
+				cShadow.shadowDecal.setDimensions(32, 32);
+				Vector3 shadowPos = new Vector3(position.position.x, position.position.y, 0.1f);
+				cShadow.shadowDecal.setPosition(shadowPos);
+				cShadow.shadowDecal.setRotation(new Vector3(0, 0, 1), camera.up);
 				DecalBatch batch = batchRenderingSystem.getBatch().getDecalBatch();
-				batch.add(circleDecal.decal);
+				batch.add(cShadow.shadowDecal);
 			}
 		}
 	}

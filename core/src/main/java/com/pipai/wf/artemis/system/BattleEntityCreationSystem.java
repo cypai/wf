@@ -8,6 +8,7 @@ import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.pipai.wf.artemis.components.CircleDecalComponent;
+import com.pipai.wf.artemis.components.CircularShadowComponent;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
@@ -28,6 +29,7 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
 	private ComponentMapper<CircleDecalComponent> mCircle;
 	private ComponentMapper<VisibleComponent> mVisible;
+	private ComponentMapper<CircularShadowComponent> mCircularShadow;
 	private ComponentMapper<PlayerUnitComponent> mPlayerUnit;
 	private ComponentMapper<SelectedUnitComponent> mSelectedUnit;
 	private ComponentMapper<PerspectiveCameraComponent> mPerspectiveCamera;
@@ -52,7 +54,7 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 	private void generateCameras() {
 		int perspectiveCameraId = world.create();
 		PerspectiveCamera camera = mPerspectiveCamera.create(perspectiveCameraId).camera;
-		camera.position.set(0, -300, 400);
+		camera.position.set(0, -400, 300);
 		camera.lookAt(0, 0, 0);
 		camera.near = 1f;
 		camera.far = 2000;
@@ -69,7 +71,8 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 			mVisible.create(id);
 			mCircle.create(id);
 			XYZPositionComponent xyz = mXyzPosition.create(id);
-			xyz.position.set(agent.getPosition().getX() * 40, agent.getPosition().getY() * 40, 0);
+			xyz.position.set(agent.getPosition().getX() * 40, agent.getPosition().getY() * 40, 20);
+			mCircularShadow.create(id);
 			if (agent.getTeam().equals(Team.PLAYER)) {
 				mPlayerUnit.create(id);
 				groupManager.add(world.getEntity(id), Group.PLAYER_PARTY.toString());
