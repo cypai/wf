@@ -65,9 +65,7 @@ public class CircleRenderingSystem extends IteratingSystem {
 				circleDecal.decal.setPosition(position.position);
 				circleDecal.decal.setRotation(camera.direction, camera.up);
 				DecalBatch batch = batchRenderingSystem.getBatch().getDecalBatch();
-				if (batch != null) {
-					batch.add(circleDecal.decal);
-				}
+				batch.add(circleDecal.decal);
 			}
 		}
 	}

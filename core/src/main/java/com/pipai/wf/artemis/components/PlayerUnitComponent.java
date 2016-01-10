@@ -4,7 +4,7 @@ import com.artemis.Component;
 
 public class PlayerUnitComponent extends Component {
 
-	private static int nextIndex = 0;
+	private static int nextIndex;
 
 	public final int index;
 

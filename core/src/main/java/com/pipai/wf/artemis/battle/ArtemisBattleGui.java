@@ -11,6 +11,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.artemis.system.BatchRenderingSystem;
+import com.pipai.wf.artemis.system.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
 import com.pipai.wf.artemis.system.CircleRenderingSystem;
@@ -20,8 +21,6 @@ import com.pipai.wf.artemis.system.InterpolationIncrementSystem;
 import com.pipai.wf.artemis.system.InterpolationMovementSystem;
 import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.TerrainRenderingSystem;
-import com.pipai.wf.artemis.system.UniqueEntityCreationSystem;
-import com.pipai.wf.artemis.system.UnitEntityCreationSystem;
 import com.pipai.wf.battle.Battle;
 import com.pipai.wf.gui.BatchHelper;
 
@@ -37,16 +36,16 @@ public class ArtemisBattleGui implements Screen {
 		this.game = game;
 		WorldConfiguration config = new WorldConfigurationBuilder()
 				.with(
+
 						// Managers
 						new TagManager(),
 						new GroupManager(),
 
+						// Entity Creation
+						new BattleEntityCreationSystem(batch, battle),
+
 						// Input
 						new InputProcessingSystem(),
-
-						// Entity Creation
-						new UnitEntityCreationSystem(battle),
-						new UniqueEntityCreationSystem(),
 
 						// Misc
 						new CameraUpdateSystem(),
