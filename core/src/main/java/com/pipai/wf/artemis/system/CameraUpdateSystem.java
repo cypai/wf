@@ -22,7 +22,7 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
 	private ComponentMapper<SphericalCoordinateComponent> mSphericalCoordinate;
 
-	private NeedsUpdateSystem needsUpdateSystem;
+	// private NeedsUpdateSystem needsUpdateSystem;
 
 	private TagManager tagManager;
 
@@ -86,9 +86,6 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 			processed = false;
 			break;
 		}
-		if (processed) {
-			needsUpdateSystem.notify(e);
-		}
 		return processed;
 	}
 
@@ -128,7 +125,6 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 		Entity e = tagManager.getEntity(Tag.CAMERA.toString());
 		SphericalCoordinateComponent cSphericalCoordinates = mSphericalCoordinate.get(e);
 		cSphericalCoordinates.r += amount * 50;
-		needsUpdateSystem.notify(e);
 		return true;
 	}
 

@@ -17,7 +17,7 @@ public class VelocitySystem extends IteratingSystem {
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
 	private ComponentMapper<VelocityComponent> mVelocity;
 
-	private NeedsUpdateSystem needsUpdateSystem;
+	// private NeedsUpdateSystem needsUpdateSystem;
 
 	public VelocitySystem() {
 		super(Aspect.all(XYZPositionComponent.class, VelocityComponent.class));
@@ -29,7 +29,6 @@ public class VelocitySystem extends IteratingSystem {
 		if (!velocity.isZero()) {
 			LOGGER.debug(velocity.toString());
 			mXyzPosition.get(entityId).position.add(velocity);
-			needsUpdateSystem.notify(entityId);
 		}
 	}
 

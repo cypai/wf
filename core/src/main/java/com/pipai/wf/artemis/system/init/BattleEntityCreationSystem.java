@@ -17,7 +17,6 @@ import com.pipai.wf.artemis.components.SphericalCoordinateComponent;
 import com.pipai.wf.artemis.components.VisibleComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.artemis.system.Group;
-import com.pipai.wf.artemis.system.NeedsUpdateSystem;
 import com.pipai.wf.artemis.system.ProcessOnceSystem;
 import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.battle.Battle;
@@ -45,7 +44,7 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 	private TagManager tagManager;
 	private GroupManager groupManager;
 
-	private NeedsUpdateSystem needsUpdateSystem;
+	// private NeedsUpdateSystem needsUpdateSystem;
 
 	private final BatchHelper batch;
 	private final Battle battle;
@@ -75,7 +74,7 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 		cSphericalCoordinates.r = lookingAt.dst(camera.position);
 		cSphericalCoordinates.theta = (float) Math.atan(camera.position.y / camera.position.x);
 		cSphericalCoordinates.phi = (float) Math.acos(camera.position.z / cSphericalCoordinates.r);
-		needsUpdateSystem.notify(perspectiveCameraId);
+		// needsUpdateSystem.notify(perspectiveCameraId);
 		tagManager.register(Tag.CAMERA.toString(), perspectiveCameraId);
 		batch.set3DCamera(camera);
 	}

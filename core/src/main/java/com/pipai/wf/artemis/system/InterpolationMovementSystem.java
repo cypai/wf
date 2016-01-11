@@ -16,7 +16,7 @@ public class InterpolationMovementSystem extends IteratingSystem {
 	private ComponentMapper<EndpointsComponent> mEndpoints;
 	private ComponentMapper<InterpolationComponent> mInterpolation;
 
-	private NeedsUpdateSystem needsUpdateSystem;
+	// private NeedsUpdateSystem needsUpdateSystem;
 
 	@SuppressWarnings("unchecked")
 	public InterpolationMovementSystem() {
@@ -30,7 +30,7 @@ public class InterpolationMovementSystem extends IteratingSystem {
 		EndpointsComponent cEndpoints = mEndpoints.get(entityId);
 		XYZPositionComponent xyz = mXyz.getSafe(entityId);
 		xyz.position.set(cEndpoints.start.cpy().interpolate(cEndpoints.end, alpha(cInterpolation), cInterpolation.interpolation));
-		needsUpdateSystem.notify(entityId);
+		// needsUpdateSystem.notify(entityId);
 		// LOGGER.debug("Entity " + entityId + " is at " + xyz.position);
 	}
 
