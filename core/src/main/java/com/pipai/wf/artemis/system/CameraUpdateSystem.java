@@ -9,10 +9,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.pipai.wf.artemis.components.NeedsUpdateComponent;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.SphericalCoordinateComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
+import com.pipai.wf.artemis.system.input.HeldKeys;
 
 public class CameraUpdateSystem extends IteratingSystem implements InputProcessor {
 
@@ -26,8 +26,11 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 
 	private TagManager tagManager;
 
+	private HeldKeys heldKeys;
+
 	public CameraUpdateSystem() {
-		super(Aspect.all(PerspectiveCameraComponent.class, XYZPositionComponent.class, SphericalCoordinateComponent.class, NeedsUpdateComponent.class));
+		super(Aspect.all(PerspectiveCameraComponent.class, XYZPositionComponent.class, SphericalCoordinateComponent.class));
+		heldKeys = new HeldKeys();
 	}
 
 	@Override
@@ -36,17 +39,34 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 		XYZPositionComponent cXyz = mXyzPosition.get(entityId);
 		SphericalCoordinateComponent cSphericalCoordinates = mSphericalCoordinate.get(entityId);
 		Vector3 pos = toCartesian(cSphericalCoordinates);
+		Vector3 translation = getTranslationVector(cSphericalCoordinates);
+		cXyz.position.add(translation);
 		camera.position.set(cXyz.position.cpy().add(pos));
-		camera.up.set(0, 0, 1);
+		camera.up.set(Vector3.Z);
 		camera.lookAt(cXyz.position);
 		camera.update();
 	}
 
 	private static Vector3 toCartesian(SphericalCoordinateComponent sphericalCoordinates) {
-		float x = (float) (sphericalCoordinates.r * Math.sin(sphericalCoordinates.phi) * Math.cos(sphericalCoordinates.theta));
-		float y = (float) (sphericalCoordinates.r * Math.sin(sphericalCoordinates.phi) * Math.sin(sphericalCoordinates.theta));
-		float z = (float) (sphericalCoordinates.r * Math.cos(sphericalCoordinates.phi));
-		return new Vector3(x, y, z);
+		return new Vector3().setFromSpherical(sphericalCoordinates.theta, sphericalCoordinates.phi).scl(sphericalCoordinates.r);
+	}
+
+	private Vector3 getTranslationVector(SphericalCoordinateComponent sphericalCoordinates) {
+		Vector3 translation = Vector3.Zero.cpy();
+		float rad = (float) (sphericalCoordinates.theta + Math.PI / 2);
+		if (heldKeys.isDown(Keys.W)) {
+			translation.add(Vector3.Y.cpy().rotateRad(Vector3.Z, rad));
+		}
+		if (heldKeys.isDown(Keys.A)) {
+			translation.add(Vector3.X.cpy().scl(-1).rotateRad(Vector3.Z, rad));
+		}
+		if (heldKeys.isDown(Keys.S)) {
+			translation.add(Vector3.Y.cpy().scl(-1).rotateRad(Vector3.Z, rad));
+		}
+		if (heldKeys.isDown(Keys.D)) {
+			translation.add(Vector3.X.cpy().rotateRad(Vector3.Z, rad));
+		}
+		return translation.scl(4);
 	}
 
 	@Override
@@ -54,25 +74,28 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 		boolean processed = true;
 		Entity e = tagManager.getEntity(Tag.CAMERA.toString());
 		SphericalCoordinateComponent cSphericalCoordinates = mSphericalCoordinate.get(e);
+		heldKeys.keyDown(keycode);
 		switch (keycode) {
 		case Keys.Q:
 			cSphericalCoordinates.theta -= Math.PI / 4;
-			needsUpdateSystem.notify(e);
 			break;
 		case Keys.E:
 			cSphericalCoordinates.theta += Math.PI / 4;
-			needsUpdateSystem.notify(e);
 			break;
 		default:
 			processed = false;
 			break;
+		}
+		if (processed) {
+			needsUpdateSystem.notify(e);
 		}
 		return processed;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		return false;
+		heldKeys.keyUp(keycode);
+		return true;
 	}
 
 	@Override
@@ -102,7 +125,11 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 
 	@Override
 	public boolean scrolled(int amount) {
-		return false;
+		Entity e = tagManager.getEntity(Tag.CAMERA.toString());
+		SphericalCoordinateComponent cSphericalCoordinates = mSphericalCoordinate.get(e);
+		cSphericalCoordinates.r += amount * 50;
+		needsUpdateSystem.notify(e);
+		return true;
 	}
 
 }

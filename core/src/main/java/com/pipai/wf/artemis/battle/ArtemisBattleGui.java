@@ -16,6 +16,7 @@ import com.pipai.wf.artemis.system.InterpolationIncrementSystem;
 import com.pipai.wf.artemis.system.InterpolationMovementSystem;
 import com.pipai.wf.artemis.system.NeedsUpdateSystem;
 import com.pipai.wf.artemis.system.SelectedUnitSystem;
+import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
@@ -56,6 +57,7 @@ public class ArtemisBattleGui implements Screen {
 						new CameraUpdateSystem(),
 						new InterpolationMovementSystem(),
 						new InterpolationIncrementSystem(),
+						new VelocitySystem(),
 
 						// Battle Related
 						new BattleSystem(battle),

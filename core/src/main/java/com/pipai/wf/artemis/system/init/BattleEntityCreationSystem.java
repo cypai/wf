@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.artemis.components.CircleDecalComponent;
 import com.pipai.wf.artemis.components.CircularShadowComponent;
-import com.pipai.wf.artemis.components.NeedsUpdateComponent;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
@@ -33,8 +32,8 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BattleEntityCreationSystem.class);
 
-	private ComponentMapper<NeedsUpdateComponent> mNeedsUpdate;
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
+	// private ComponentMapper<VelocityComponent> mVelocity;
 	private ComponentMapper<CircleDecalComponent> mCircle;
 	private ComponentMapper<VisibleComponent> mVisible;
 	private ComponentMapper<CircularShadowComponent> mCircularShadow;
@@ -88,7 +87,7 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 			mVisible.create(id);
 			mCircle.create(id);
 			XYZPositionComponent xyz = mXyzPosition.create(id);
-			xyz.position.set(agent.getPosition().getX() * 40, agent.getPosition().getY() * 40, 20);
+			xyz.position.set(agent.getPosition().getX() * 40 + 20, agent.getPosition().getY() * 40 + 20, 20);
 			mCircularShadow.create(id);
 			if (agent.getTeam().equals(Team.PLAYER)) {
 				mPlayerUnit.create(id);
