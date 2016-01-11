@@ -13,11 +13,13 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector3;
+import com.pipai.wf.artemis.components.AgentComponent;
 import com.pipai.wf.artemis.components.EndpointsComponent;
 import com.pipai.wf.artemis.components.InterpolationComponent;
 import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
+import com.pipai.wf.battle.agent.Agent;
 
 public class SelectedUnitSystem extends IteratingSystem implements InputProcessor {
 
@@ -28,9 +30,12 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 	private ComponentMapper<InterpolationComponent> mInterpolation;
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
 	private ComponentMapper<EndpointsComponent> mEndpoints;
+	private ComponentMapper<AgentComponent> mAgentInventory;
 
 	private TagManager tagManager;
 	private GroupManager groupManager;
+
+	private UiSystem uiSystem;
 
 	private boolean processing;
 
@@ -52,6 +57,7 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 			mSelectedUnit.remove(previous);
 		}
 		tagManager.register(Tag.SELECTED_UNIT.toString(), world.getEntity(e));
+		uiSystem.updateSelectedAgentUi(getSelectedAgent());
 		processing = true;
 	}
 
@@ -108,6 +114,11 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 			queue.add(e);
 		}
 		return queue;
+	}
+
+	public Agent getSelectedAgent() {
+		Entity selected = tagManager.getEntity(Tag.SELECTED_UNIT.toString());
+		return mAgentInventory.get(selected).agent;
 	}
 
 	@Override

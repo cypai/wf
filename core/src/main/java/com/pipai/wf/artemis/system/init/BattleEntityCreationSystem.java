@@ -8,6 +8,7 @@ import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.pipai.wf.artemis.components.AgentComponent;
 import com.pipai.wf.artemis.components.CircleDecalComponent;
 import com.pipai.wf.artemis.components.CircularShadowComponent;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
@@ -38,6 +39,7 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 	private ComponentMapper<CircularShadowComponent> mCircularShadow;
 	private ComponentMapper<PlayerUnitComponent> mPlayerUnit;
 	private ComponentMapper<SelectedUnitComponent> mSelectedUnit;
+	private ComponentMapper<AgentComponent> mAgentInventory;
 	private ComponentMapper<PerspectiveCameraComponent> mPerspectiveCamera;
 	private ComponentMapper<SphericalCoordinateComponent> mSphericalCoordinates;
 
@@ -88,6 +90,8 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 			XYZPositionComponent xyz = mXyzPosition.create(id);
 			xyz.position.set(agent.getPosition().getX() * 40 + 20, agent.getPosition().getY() * 40 + 20, 20);
 			mCircularShadow.create(id);
+			AgentComponent cAgentInventory = mAgentInventory.create(id);
+			cAgentInventory.agent = agent;
 			if (agent.getTeam().equals(Team.PLAYER)) {
 				mPlayerUnit.create(id);
 				groupManager.add(world.getEntity(id), Group.PLAYER_PARTY.toString());

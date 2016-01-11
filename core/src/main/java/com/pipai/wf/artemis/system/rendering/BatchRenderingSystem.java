@@ -20,7 +20,7 @@ public class BatchRenderingSystem extends IteratingSystem {
 		batch.getModelBatch().flush();
 	}
 
-	protected BatchHelper getBatch() {
+	public BatchHelper getBatch() {
 		return batch;
 	}
 

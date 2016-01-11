@@ -15,6 +15,7 @@ import com.pipai.wf.artemis.system.CameraUpdateSystem;
 import com.pipai.wf.artemis.system.InterpolationIncrementSystem;
 import com.pipai.wf.artemis.system.InterpolationMovementSystem;
 import com.pipai.wf.artemis.system.SelectedUnitSystem;
+import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
@@ -68,6 +69,9 @@ public class ArtemisBattleGui implements Screen {
 						new CircularShadowRenderingSystem(),
 						new FpsRenderingSystem(),
 						new BatchRenderingSystem(batch))
+				.withPassive(-2,
+						// Rendering
+						new UiSystem())
 				.build();
 		world = new World(config);
 	}
