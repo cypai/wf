@@ -104,7 +104,7 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 
 	private PriorityQueue<Entity> getSortedPlayerParty() {
 		ImmutableBag<Entity> party = groupManager.getEntities(Group.PLAYER_PARTY.toString());
-		PriorityQueue<Entity> queue = new PriorityQueue<Entity>(party.size(),
+		PriorityQueue<Entity> queue = new PriorityQueue<>(party.size(),
 				(e1, e2) -> {
 					int i1 = mPlayerUnit.get(e1).index;
 					int i2 = mPlayerUnit.get(e2).index;

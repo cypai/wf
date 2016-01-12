@@ -33,6 +33,10 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 		heldKeys = new HeldKeys();
 	}
 
+	public PerspectiveCamera getCamera() {
+		return mPerspectiveCamera.get(tagManager.getEntity(Tag.CAMERA.toString())).camera;
+	}
+
 	@Override
 	protected void process(int entityId) {
 		PerspectiveCamera camera = mPerspectiveCamera.get(entityId).camera;

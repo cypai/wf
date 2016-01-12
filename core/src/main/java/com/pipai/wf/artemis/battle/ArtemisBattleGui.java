@@ -9,6 +9,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
@@ -86,7 +87,9 @@ public class ArtemisBattleGui implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-
+		PerspectiveCamera camera = world.getSystem(CameraUpdateSystem.class).getCamera();
+		camera.viewportWidth = width;
+		camera.viewportHeight = height;
 	}
 
 	@Override
