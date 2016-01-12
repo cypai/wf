@@ -15,6 +15,7 @@ import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
 import com.pipai.wf.artemis.components.SphericalCoordinateComponent;
+import com.pipai.wf.artemis.components.SphericalRayPickInteractableComponent;
 import com.pipai.wf.artemis.components.VisibleComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.artemis.system.Group;
@@ -42,6 +43,7 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 	private ComponentMapper<AgentComponent> mAgentInventory;
 	private ComponentMapper<PerspectiveCameraComponent> mPerspectiveCamera;
 	private ComponentMapper<SphericalCoordinateComponent> mSphericalCoordinates;
+	private ComponentMapper<SphericalRayPickInteractableComponent> mSphericalInteractable;
 
 	private TagManager tagManager;
 	private GroupManager groupManager;
@@ -94,6 +96,7 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 			cAgentInventory.agent = agent;
 			if (agent.getTeam().equals(Team.PLAYER)) {
 				mPlayerUnit.create(id);
+				mSphericalInteractable.create(id).radius = 16;
 				groupManager.add(world.getEntity(id), Group.PLAYER_PARTY.toString());
 				if (!selectedUnitCreated) {
 					mSelectedUnit.create(id);

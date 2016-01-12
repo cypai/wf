@@ -18,6 +18,7 @@ public class InputProcessingSystem extends BaseSystem {
 		multiplexer.addProcessor(new ExitInputProcessor());
 		multiplexer.addProcessor(world.getSystem(SelectedUnitSystem.class));
 		multiplexer.addProcessor(world.getSystem(CameraUpdateSystem.class));
+		multiplexer.addProcessor(world.getSystem(RayPickingInputSystem.class));
 		Gdx.input.setInputProcessor(multiplexer);
 	}
 

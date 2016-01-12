@@ -20,6 +20,7 @@ import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
+import com.pipai.wf.artemis.system.input.RayPickingInputSystem;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.CircleRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.CircularShadowRenderingSystem;
@@ -28,6 +29,7 @@ import com.pipai.wf.artemis.system.rendering.TerrainRenderingSystem;
 import com.pipai.wf.battle.Battle;
 import com.pipai.wf.gui.BatchHelper;
 
+import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.plugin.ProfilerPlugin;
 
 public class ArtemisBattleGui implements Screen {
@@ -47,12 +49,14 @@ public class ArtemisBattleGui implements Screen {
 						// Managers
 						new TagManager(),
 						new GroupManager(),
+						new EventSystem(),
 
 						// Entity Creation
 						new BattleEntityCreationSystem(batch, battle),
 
 						// Input
 						new InputProcessingSystem(),
+						new RayPickingInputSystem(),
 
 						// Misc
 						new CameraUpdateSystem(),

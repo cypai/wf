@@ -3,6 +3,7 @@ package com.pipai.wf.artemis.system;
 import java.util.PriorityQueue;
 
 import com.artemis.Aspect;
+import com.artemis.Aspect.Builder;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.managers.GroupManager;
@@ -19,11 +20,16 @@ import com.pipai.wf.artemis.components.InterpolationComponent;
 import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
+import com.pipai.wf.artemis.event.LeftClickEvent;
 import com.pipai.wf.battle.agent.Agent;
+
+import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class SelectedUnitSystem extends IteratingSystem implements InputProcessor {
 
 	// private static final Logger LOGGER = LoggerFactory.getLogger(SelectedUnitSystem.class);
+
+	private static final Builder ASPECT_MATCHER = Aspect.all(PlayerUnitComponent.class, SelectedUnitComponent.class, XYZPositionComponent.class);
 
 	private ComponentMapper<PlayerUnitComponent> mPlayerUnit;
 	private ComponentMapper<SelectedUnitComponent> mSelectedUnit;
@@ -40,7 +46,7 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 	private boolean processing;
 
 	public SelectedUnitSystem() {
-		super(Aspect.all(PlayerUnitComponent.class, SelectedUnitComponent.class, XYZPositionComponent.class));
+		super(ASPECT_MATCHER);
 		processing = true;
 	}
 
@@ -59,6 +65,14 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 		tagManager.register(Tag.SELECTED_UNIT.toString(), world.getEntity(e));
 		uiSystem.updateSelectedAgentUi(getSelectedAgent());
 		processing = true;
+	}
+
+	@Subscribe
+	public void clickListener(LeftClickEvent event) {
+		PlayerUnitComponent player = mPlayerUnit.getSafe(event.clickedEntityId);
+		if (player != null) {
+			mSelectedUnit.create(event.clickedEntityId);
+		}
 	}
 
 	@Override
