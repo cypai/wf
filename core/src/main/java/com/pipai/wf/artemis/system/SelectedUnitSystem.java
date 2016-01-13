@@ -21,8 +21,11 @@ import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.artemis.event.LeftClickEvent;
+import com.pipai.wf.artemis.event.MovementTileUpdateEvent;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.map.MapGraph;
 
+import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class SelectedUnitSystem extends IteratingSystem implements InputProcessor {
@@ -40,8 +43,10 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 
 	private TagManager tagManager;
 	private GroupManager groupManager;
+	private EventSystem eventSystem;
 
 	private UiSystem uiSystem;
+	private BattleSystem battleSystem;
 
 	private boolean processing;
 
@@ -63,6 +68,9 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 			mSelectedUnit.remove(previous);
 		}
 		tagManager.register(Tag.SELECTED_UNIT.toString(), world.getEntity(e));
+		Agent cAgent = mAgentInventory.get(e).agent;
+		MapGraph graph = new MapGraph(battleSystem.getBattleMap(), cAgent.getPosition(), cAgent.getEffectiveMobility(), cAgent.getAP(), cAgent.getMaxAP());
+		eventSystem.dispatch(new MovementTileUpdateEvent(graph));
 		uiSystem.updateSelectedAgentUi(getSelectedAgent());
 		processing = true;
 	}

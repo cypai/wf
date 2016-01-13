@@ -15,6 +15,7 @@ import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
 import com.pipai.wf.artemis.system.InterpolationIncrementSystem;
 import com.pipai.wf.artemis.system.InterpolationMovementSystem;
+import com.pipai.wf.artemis.system.MovableTileHighlightSystem;
 import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.VelocitySystem;
@@ -26,6 +27,7 @@ import com.pipai.wf.artemis.system.rendering.CircleRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.CircularShadowRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.FpsRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.TerrainRenderingSystem;
+import com.pipai.wf.artemis.system.rendering.TileHighlightRenderingSystem;
 import com.pipai.wf.battle.Battle;
 import com.pipai.wf.gui.BatchHelper;
 
@@ -66,12 +68,14 @@ public class ArtemisBattleGui implements Screen {
 
 						// Battle Related
 						new BattleSystem(battle),
-						new SelectedUnitSystem())
+						new SelectedUnitSystem(),
+						new MovableTileHighlightSystem())
 				.withPassive(-1,
 						// Rendering
 						new TerrainRenderingSystem(batch, battle.getBattleMap()),
 						new CircleRenderingSystem(),
 						new CircularShadowRenderingSystem(),
+						new TileHighlightRenderingSystem(),
 						new FpsRenderingSystem(),
 						new BatchRenderingSystem(batch))
 				.withPassive(-2,
