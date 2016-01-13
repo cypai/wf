@@ -13,6 +13,7 @@ import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.NoRegisteredAgentException;
 import com.pipai.wf.item.armor.Armor;
 import com.pipai.wf.misc.BasicStats;
+import com.pipai.wf.misc.DeepCopyable;
 import com.pipai.wf.misc.HasBasicStats;
 import com.pipai.wf.misc.HasName;
 import com.pipai.wf.spell.Spell;
@@ -22,7 +23,7 @@ import com.pipai.wf.unit.ability.component.SpellAbilityComponent;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 // TODO: Make this a stupid data structure class
-public class Agent implements HasName, HasBasicStats {
+public class Agent implements HasName, HasBasicStats, DeepCopyable {
 
 	private Team team;
 	private BasicStats basicStats;
@@ -57,6 +58,19 @@ public class Agent implements HasName, HasBasicStats {
 		exp = schema.getExp();
 		inventory = schema.getInventory().deepCopy();
 		statusEffects = new StatusEffectList();
+	}
+
+	@Override
+	public Agent deepCopy() {
+		Agent copy = new Agent(name, basicStats.copy());
+		copy.inventory = inventory.deepCopy();
+		copy.statusEffects = statusEffects.deepCopy();
+		copy.abilities = abilities.deepCopy();
+		copy.abilities.registerToAgent(copy);
+		copy.level = level;
+		copy.expGiven = expGiven;
+		copy.exp = exp;
+		return copy;
 	}
 
 	@Override

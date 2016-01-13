@@ -15,7 +15,7 @@ import com.pipai.wf.battle.action.verification.HasItemVerifier;
 import com.pipai.wf.battle.action.verification.WeaponAmmoVerifier;
 import com.pipai.wf.battle.action.verification.WeaponFlagVerifier;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.SuppressionEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.item.weapon.WeaponFlag;
@@ -62,7 +62,7 @@ public class SuppressionAction extends TargetedAction implements ApRequiredCompo
 		a.suppressOther(target);
 		a.setAP(0);
 		w.expendAmmo(2);
-		logBattleEvent(BattleEvent.targetedActionEvent(a, target, this));
+		logBattleEvent(new SuppressionEvent(a, target));
 	}
 
 	@Override

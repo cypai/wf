@@ -2,9 +2,11 @@ package com.pipai.wf.battle.effect;
 
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.misc.Copyable;
 
-public abstract class StatusEffect {
+public abstract class StatusEffect implements Copyable {
 
+	// TODO: Remove agent reference somehow, maybe passing as argument?
 	private Agent agent;
 	private int cooldown;
 
@@ -17,13 +19,13 @@ public abstract class StatusEffect {
 
 	public abstract int flatMobilityModifier();
 
+	protected Agent getAgent() {
+		return agent;
+	}
+
 	public abstract String name();
 
 	public abstract String description();
-
-	public Agent getAgent() {
-		return agent;
-	}
 
 	public int getCooldown() {
 		return cooldown;

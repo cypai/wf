@@ -3,8 +3,9 @@ package com.pipai.wf.battle;
 import java.util.LinkedList;
 
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.log.BattleEvent;
-import com.pipai.wf.battle.log.BattleLog;
+import com.pipai.wf.battle.event.BattleEvent;
+import com.pipai.wf.battle.event.BattleLog;
+import com.pipai.wf.battle.event.StartTurnEvent;
 import com.pipai.wf.battle.map.BattleMap;
 
 /*
@@ -66,7 +67,7 @@ public class BattleController {
 			for (Agent a : enemyList) {
 				a.onTurnBegin();
 			}
-			notifyObservers(BattleEvent.startTurnEvent(Team.ENEMY));
+			notifyObservers(new StartTurnEvent(Team.ENEMY));
 		} else {
 			// Round ended
 			for (Agent a : battleMap.getAgents()) {
@@ -77,7 +78,7 @@ public class BattleController {
 			for (Agent a : playerList) {
 				a.onTurnBegin();
 			}
-			notifyObservers(BattleEvent.startTurnEvent(Team.PLAYER));
+			notifyObservers(new StartTurnEvent(Team.PLAYER));
 		}
 	}
 

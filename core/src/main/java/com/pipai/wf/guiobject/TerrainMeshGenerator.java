@@ -1,4 +1,4 @@
-package com.pipai.wf.guiobject.battle;
+package com.pipai.wf.guiobject;
 
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;

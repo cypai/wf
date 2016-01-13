@@ -6,13 +6,21 @@ import java.util.Iterator;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.damage.PercentageModifier;
 import com.pipai.wf.battle.damage.PercentageModifierList;
+import com.pipai.wf.misc.DeepCopyable;
 
-public class StatusEffectList implements Iterable<StatusEffect> {
+public class StatusEffectList implements DeepCopyable, Iterable<StatusEffect> {
 
 	private ArrayList<StatusEffect> list;
 
 	public StatusEffectList() {
 		list = new ArrayList<StatusEffect>();
+	}
+
+	@Override
+	public StatusEffectList deepCopy() {
+		StatusEffectList copy = new StatusEffectList();
+		forEach(statusEffect -> copy.add(statusEffect));
+		return copy;
 	}
 
 	public void add(StatusEffect newEffect) {

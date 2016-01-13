@@ -28,4 +28,9 @@ public class SuppressedStatusEffect extends StatusEffect {
 		return "-30 to aim, reduces range of AOE actions, and causes reaction fire upon movement";
 	}
 
+	@Override
+	public SuppressedStatusEffect copy() {
+		return new SuppressedStatusEffect(getAgent());
+	}
+
 }

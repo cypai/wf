@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pipai.wf.artemis.system.NoProcessingSystem;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
 
 import net.mostlyoriginal.api.event.common.Subscribe;
 
@@ -14,7 +14,7 @@ public class BattleEventSystem extends NoProcessingSystem {
 
 	@Subscribe
 	public void processBattleEvent(BattleEvent event) {
-		LOGGER.debug("Recieved battle log event: " + event.getType());
+		LOGGER.debug("Recieved battle log event: " + event.getClass());
 	}
 
 }

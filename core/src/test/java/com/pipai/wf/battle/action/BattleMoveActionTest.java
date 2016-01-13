@@ -11,7 +11,8 @@ import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentFactory;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
+import com.pipai.wf.battle.event.MoveEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapString;
@@ -138,7 +139,7 @@ public class BattleMoveActionTest {
 	}
 
 	@Test
-	public void testMoveLog() {
+	public void testMoveLog() throws IllegalActionException {
 		BattleConfiguration mockConfig = Mockito.mock(BattleConfiguration.class);
 		BattleMap map = new BattleMap(3, 4);
 		BattleController controller = new BattleController(map, mockConfig);
@@ -153,20 +154,15 @@ public class BattleMoveActionTest {
 		path.add(agent.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(controller, agent, path, 1);
-		try {
-			move.perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
-		BattleEvent ev = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.MOVE, ev.getType());
-		Assert.assertEquals(agent, ev.getPerformer());
-		Assert.assertTrue(ev.getPath().peekLast().equals(dest));
+		move.perform();
+		MoveEvent ev = (MoveEvent) observer.getEvent();
+		Assert.assertEquals(agent, ev.performer);
+		Assert.assertTrue(ev.path.peekLast().equals(dest));
 		Assert.assertEquals(0, ev.getChainEvents().size());
 	}
 
 	@Test
-	public void testIllegalMoveLog() throws BadStateStringException {
+	public void testIllegalMoveLog() throws BadStateStringException, IllegalActionException {
 		String rawMapString = "3 4\n"
 				+ "s 2 1";
 		GridPosition playerPos = new GridPosition(1, 0);
@@ -181,15 +177,10 @@ public class BattleMoveActionTest {
 		path.add(agent.getPosition());
 		path.add(dest);
 		MoveAction move = new MoveAction(controller, agent, path, 1);
-		try {
-			move.perform();
-		} catch (IllegalActionException e) {
-			Assert.fail(e.getMessage());
-		}
-		BattleEvent ev = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.MOVE, ev.getType());
-		Assert.assertEquals(agent, ev.getPerformer());
-		Assert.assertTrue(ev.getPath().peekLast().equals(dest));
+		move.perform();
+		MoveEvent ev = (MoveEvent) observer.getEvent();
+		Assert.assertEquals(agent, ev.performer);
+		Assert.assertTrue(ev.path.peekLast().equals(dest));
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		LinkedList<GridPosition> illegalPath = new LinkedList<>();
 		illegalPath.add(agent.getPosition());

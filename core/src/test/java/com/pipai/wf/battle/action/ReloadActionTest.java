@@ -8,7 +8,7 @@ import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.ReloadEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
@@ -46,9 +46,8 @@ public class ReloadActionTest {
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
 		new ReloadAction(controller, player, pistol).perform();
-		BattleEvent ev = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.RELOAD, ev.getType());
-		Assert.assertEquals(player, ev.getPerformer());
+		ReloadEvent ev = (ReloadEvent) observer.getEvent();
+		Assert.assertEquals(player, ev.performer);
 		Assert.assertEquals(0, ev.getChainEvents().size());
 	}
 

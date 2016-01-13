@@ -6,7 +6,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.battle.map.GridPosition;
 
-public class TileRayIntersector {
+public final class TileRayIntersector {
+
+	private TileRayIntersector() {
+	}
 
 	public static GridPosition getIntersectedTile(Ray ray) {
 		Plane plane = new Plane(Vector3.Z, Vector3.Zero);

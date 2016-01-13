@@ -14,7 +14,7 @@ import com.pipai.wf.battle.damage.AccuracyPercentages;
 import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageFunction;
 import com.pipai.wf.battle.damage.DamageResult;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.RangedWeaponAttackEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
@@ -49,14 +49,13 @@ public class RangedWeaponAttackActionTest {
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
 		new RangedWeaponAttackAction(controller, player, enemy, pistol).perform();
-		BattleEvent ev = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.RANGED_WEAPON_ATTACK, ev.getType());
-		Assert.assertEquals(player, ev.getPerformer());
-		Assert.assertEquals(enemy, ev.getTarget());
+		RangedWeaponAttackEvent ev = (RangedWeaponAttackEvent) observer.getEvent();
+		Assert.assertEquals(player, ev.performer);
+		Assert.assertEquals(enemy, ev.target);
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Player has 1000 aim, cannot miss
-		Assert.assertTrue(ev.getDamageResult().isHit());
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.getDamage());
+		Assert.assertTrue(ev.damageResult.isHit());
+		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.damageResult.getDamage());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
 	}

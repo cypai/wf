@@ -7,7 +7,7 @@ import com.pipai.wf.battle.Battle;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 
 import net.mostlyoriginal.api.event.common.EventSystem;
@@ -41,7 +41,7 @@ public class BattleSystem extends NoProcessingSystem implements BattleObserver {
 
 	@Override
 	public void notifyBattleEvent(BattleEvent ev) {
-		LOGGER.debug("Received battle event of type " + ev.getType());
+		LOGGER.debug("Received battle event of type " + ev.getClass());
 		eventSystem.dispatch(ev);
 	}
 

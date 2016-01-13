@@ -18,7 +18,7 @@ import com.pipai.wf.battle.action.verification.WeaponAmmoVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.WeaponDamageFunction;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.RangedWeaponAttackEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.item.weapon.WeaponFlag;
@@ -68,7 +68,7 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction implem
 			performer.setAP(0);
 		}
 		getDamageDealer().doDamage(result, target);
-		logBattleEvent(BattleEvent.rangedWeaponAttackEvent(performer, target, weapon, result));
+		logBattleEvent(new RangedWeaponAttackEvent(performer, target, weapon, result));
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package com.pipai.wf.battle.ai;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.BattleObserver;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 
 public abstract class AI implements BattleObserver {

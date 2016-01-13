@@ -8,7 +8,7 @@ import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.ReadySpellEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
@@ -73,11 +73,10 @@ public class ReadySpellActionTest {
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
 		new ReadySpellAction(controller, player, casting, new FireballSpell()).perform();
-		BattleEvent ev = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.READY, ev.getType());
-		Assert.assertEquals(player, ev.getPerformer());
-		Assert.assertTrue(ev.getSpell() instanceof FireballSpell);
-		Assert.assertFalse(ev.getQuickened());
+		ReadySpellEvent ev = (ReadySpellEvent) observer.getEvent();
+		Assert.assertEquals(player, ev.performer);
+		Assert.assertTrue(ev.spell instanceof FireballSpell);
+		Assert.assertFalse(ev.quicken);
 		Assert.assertEquals(1, player.getAP());
 		Assert.assertEquals(0, ev.getChainEvents().size());
 	}
@@ -97,11 +96,10 @@ public class ReadySpellActionTest {
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
 		new ReadySpellAction(controller, player, casting, new FireballSpell()).perform();
-		BattleEvent ev = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.READY, ev.getType());
-		Assert.assertEquals(player, ev.getPerformer());
-		Assert.assertTrue(ev.getSpell() instanceof FireballSpell);
-		Assert.assertTrue(ev.getQuickened());
+		ReadySpellEvent ev = (ReadySpellEvent) observer.getEvent();
+		Assert.assertEquals(player, ev.performer);
+		Assert.assertTrue(ev.spell instanceof FireballSpell);
+		Assert.assertTrue(ev.quicken);
 		Assert.assertEquals(2, player.getAP());
 		Assert.assertEquals(0, ev.getChainEvents().size());
 	}

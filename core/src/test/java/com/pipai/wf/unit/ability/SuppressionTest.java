@@ -12,7 +12,7 @@ import com.pipai.wf.battle.action.SuppressionAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.agent.AgentFactory;
 import com.pipai.wf.battle.damage.TargetedActionCalculator;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.SuppressionEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.BadStateStringException;
@@ -86,11 +86,9 @@ public class SuppressionTest {
 		controller.registerObserver(observer);
 		Bow bow = (Bow) player.getInventory().getItem(1);
 		new SuppressionAction(controller, player, enemy, bow).perform();
-		BattleEvent ev = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.TARGETED_ACTION, ev.getType());
-		Assert.assertEquals(SuppressionAction.class, ev.getTargetedAction().getClass());
-		Assert.assertEquals(player, ev.getPerformer());
-		Assert.assertEquals(enemy, ev.getTarget());
+		SuppressionEvent ev = (SuppressionEvent) observer.getEvent();
+		Assert.assertEquals(player, ev.performer);
+		Assert.assertEquals(enemy, ev.target);
 		Assert.assertEquals(0, ev.getChainEvents().size());
 	}
 

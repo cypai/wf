@@ -1,7 +1,7 @@
 package com.pipai.wf.test;
 
 import com.pipai.wf.battle.BattleObserver;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
 
 public class MockGUIObserver implements BattleObserver {
 

@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.log;
+package com.pipai.wf.battle.event;
 
 public interface BattleEventLoggable {
 

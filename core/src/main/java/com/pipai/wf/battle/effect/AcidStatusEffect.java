@@ -54,4 +54,9 @@ public class AcidStatusEffect extends StatusEffect {
 		damageDealer.doDamage(new DamageResult(true, false, 1, 0), getAgent());
 	}
 
+	@Override
+	public AcidStatusEffect copy() {
+		return new AcidStatusEffect(getAgent(), getCooldown(), damageDealer);
+	}
+
 }

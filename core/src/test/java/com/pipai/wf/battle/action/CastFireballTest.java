@@ -16,7 +16,11 @@ import com.pipai.wf.battle.damage.AccuracyPercentages;
 import com.pipai.wf.battle.damage.DamageCalculator;
 import com.pipai.wf.battle.damage.DamageFunction;
 import com.pipai.wf.battle.damage.DamageResult;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
+import com.pipai.wf.battle.event.MoveEvent;
+import com.pipai.wf.battle.event.OverwatchActivationEvent;
+import com.pipai.wf.battle.event.OverwatchEvent;
+import com.pipai.wf.battle.event.RangedSpellAttackEvent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.exception.IllegalActionException;
@@ -57,15 +61,14 @@ public class CastFireballTest extends GdxMockedTest {
 		new ReadySpellAction(controller, player, spellWeapon, new FireballSpell()).perform();
 		Assert.assertTrue(spellWeapon.getSpell() != null);
 		new TargetedSpellWeaponAction(controller, player, enemy, spellWeapon).perform();
-		BattleEvent ev = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.CAST_TARGET, ev.getType());
-		Assert.assertEquals(player, ev.getPerformer());
-		Assert.assertEquals(enemy, ev.getTarget());
-		Assert.assertTrue(ev.getSpell() instanceof FireballSpell);
+		RangedSpellAttackEvent ev = (RangedSpellAttackEvent) observer.getEvent();
+		Assert.assertEquals(player, ev.performer);
+		Assert.assertEquals(enemy, ev.target);
+		Assert.assertTrue(ev.spell instanceof FireballSpell);
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Player has 1000 aim, cannot miss
-		Assert.assertTrue(ev.getDamageResult().isHit());
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.getDamage());
+		Assert.assertTrue(ev.damageResult.isHit());
+		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.damageResult.getDamage());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
 		Assert.assertEquals(null, spellWeapon.getSpell());
@@ -100,10 +103,9 @@ public class CastFireballTest extends GdxMockedTest {
 		// Hack to refresh AP
 		player.setAP(2);
 		new OverwatchAction(controller, player, spellWeapon, new TargetedSpellWeaponAction(controller, player, spellWeapon)).perform();
-		BattleEvent ev = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.OVERWATCH, ev.getType());
-		Assert.assertEquals(player, ev.getPerformer());
-		Assert.assertEquals("Fireball", ev.getPreparedOWName());
+		OverwatchEvent ev = (OverwatchEvent) observer.getEvent();
+		Assert.assertEquals(player, ev.performer);
+		Assert.assertEquals("Overwatch: Fireball", ev.overwatchName);
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Test Overwatch Activation
 		LinkedList<GridPosition> path = new LinkedList<>();
@@ -112,19 +114,17 @@ public class CastFireballTest extends GdxMockedTest {
 		path.add(dest);
 		MoveAction move = new MoveAction(controller, enemy, path, 1);
 		move.perform();
-		BattleEvent moveEv = observer.getEvent();
-		Assert.assertEquals(BattleEvent.Type.MOVE, moveEv.getType());
-		Assert.assertEquals(enemy, moveEv.getPerformer());
+		MoveEvent moveEv = (MoveEvent) observer.getEvent();
+		Assert.assertEquals(enemy, moveEv.performer);
 		LinkedList<BattleEvent> chain = moveEv.getChainEvents();
 		Assert.assertEquals(1, chain.size());
-		BattleEvent owEv = chain.peekFirst();
-		Assert.assertEquals(BattleEvent.Type.OVERWATCH_ACTIVATION, owEv.getType());
-		Assert.assertEquals(player, owEv.getPerformer());
-		Assert.assertEquals(enemy, owEv.getTarget());
-		Assert.assertTrue(owEv.getActivatedOverwatchAction() instanceof TargetedSpellWeaponAction);
-		Assert.assertEquals(0, owEv.getChainEvents().size());
+		OverwatchActivationEvent owEv = (OverwatchActivationEvent) chain.peekFirst();
+		Assert.assertEquals(player, owEv.performer);
+		Assert.assertEquals(enemy, owEv.target);
+		Assert.assertEquals(1, owEv.getChainEvents().size());
+		RangedSpellAttackEvent spellAttackEvent = (RangedSpellAttackEvent) owEv.getChainEvents().get(0);
 		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - owEv.getDamage());
+		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - spellAttackEvent.damageResult.getDamage());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
 		Assert.assertEquals(null, spellWeapon.getSpell());

@@ -32,4 +32,9 @@ public class DamageResult {
 		return new DamageResult(false, false, 0, 0);
 	}
 
+	@Override
+	public String toString() {
+		return hit ? (crit ? "Crit: " : "Hit: ") + damage + " DR: " + damageReduction : "Miss";
+	}
+
 }

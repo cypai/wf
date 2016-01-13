@@ -13,7 +13,7 @@ import com.pipai.wf.battle.action.verification.ActionVerifier;
 import com.pipai.wf.battle.action.verification.BaseVerifier;
 import com.pipai.wf.battle.action.verification.HasItemVerifier;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.ReloadEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.unit.ability.QuickReloadAbility;
@@ -49,7 +49,7 @@ public class ReloadAction extends PerformerAction implements DefaultApRequiredCo
 		} else {
 			agent.setAP(0);
 		}
-		logBattleEvent(BattleEvent.reloadEvent(agent));
+		logBattleEvent(new ReloadEvent(agent, weapon));
 	}
 
 	@Override

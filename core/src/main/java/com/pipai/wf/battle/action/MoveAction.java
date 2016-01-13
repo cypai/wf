@@ -4,16 +4,14 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.component.ApRequiredComponent;
 import com.pipai.wf.battle.action.verification.ActionVerifier;
 import com.pipai.wf.battle.action.verification.BaseVerifier;
 import com.pipai.wf.battle.action.verification.SupplierVerifier;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
+import com.pipai.wf.battle.event.MoveEvent;
 import com.pipai.wf.battle.map.BattleMapCell;
 import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.vision.AgentVisionCalculator;
@@ -21,7 +19,7 @@ import com.pipai.wf.exception.IllegalActionException;
 
 public class MoveAction extends PerformerAction implements ApRequiredComponent {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MoveAction.class);
+	// private static final Logger LOGGER = LoggerFactory.getLogger(MoveAction.class);
 
 	private LinkedList<GridPosition> path;
 	private int apRequired;
@@ -29,7 +27,7 @@ public class MoveAction extends PerformerAction implements ApRequiredComponent {
 	public MoveAction(BattleController controller, Agent performerAgent, LinkedList<GridPosition> path, int useAP) {
 		super(controller, performerAgent);
 		this.path = path;
-		this.apRequired = useAP;
+		apRequired = useAP;
 	}
 
 	@Override
@@ -45,9 +43,8 @@ public class MoveAction extends PerformerAction implements ApRequiredComponent {
 
 	@Override
 	protected void performImpl() throws IllegalActionException {
-		LOGGER.debug("Performed by '" + getPerformer().getName() + "' with path " + path + " and useAP " + apRequired);
 		Agent movingAgent = getPerformer();
-		BattleEvent event = BattleEvent.moveEvent(movingAgent, path);
+		BattleEvent event = new MoveEvent(movingAgent, path);
 		logBattleEvent(event);
 		AgentVisionCalculator visionCalc = new AgentVisionCalculator(getBattleMap(), getBattleConfiguration());
 		for (GridPosition pos : path) {

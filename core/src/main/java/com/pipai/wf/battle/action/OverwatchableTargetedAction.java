@@ -3,7 +3,8 @@ package com.pipai.wf.battle.action;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.component.TargetedComponentAggregate;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
+import com.pipai.wf.battle.event.OverwatchActivationEvent;
 import com.pipai.wf.exception.IllegalActionException;
 
 public abstract class OverwatchableTargetedAction extends TargetedAction implements TargetedComponentAggregate {
@@ -41,7 +42,7 @@ public abstract class OverwatchableTargetedAction extends TargetedAction impleme
 	@Override
 	protected void logBattleEvent(BattleEvent ev) {
 		if (fromOverwatch) {
-			overwatchEventParent.addChainEvent(BattleEvent.overwatchActivationEvent(ev, this, getTarget().getPosition()));
+			overwatchEventParent.addChainEvent(new OverwatchActivationEvent(getPerformer(), getTarget(), getTarget().getPosition(), ev));
 		} else {
 			super.logBattleEvent(ev);
 		}

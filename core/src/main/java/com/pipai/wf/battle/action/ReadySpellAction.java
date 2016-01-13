@@ -14,7 +14,7 @@ import com.pipai.wf.battle.action.verification.HasSpellVerifier;
 import com.pipai.wf.battle.action.verification.PredicateVerifier;
 import com.pipai.wf.battle.action.verification.SpellMpVerifier;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.log.BattleEvent;
+import com.pipai.wf.battle.event.ReadySpellEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.SpellWeapon;
 import com.pipai.wf.item.weapon.Weapon;
@@ -70,7 +70,7 @@ public class ReadySpellAction extends PerformerAction implements ApRequiredCompo
 			quicken = false;
 		}
 		((SpellWeapon) getWeapon()).setSpell(spell);
-		logBattleEvent(BattleEvent.readySpellEvent(a, spell, quicken));
+		logBattleEvent(new ReadySpellEvent(a, spell, quicken));
 	}
 
 	@Override

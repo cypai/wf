@@ -1,6 +1,6 @@
 package com.pipai.wf.misc;
 
-public class BasicStats {
+public class BasicStats implements Copyable {
 
 	private int hp, maxHP, mp, maxMP, ap, maxAP, aim, mobility, defense;
 
@@ -33,6 +33,11 @@ public class BasicStats {
 
 	public BasicStats() {
 		// Empty constructor for Jackson
+	}
+
+	@Override
+	public BasicStats copy() {
+		return new BasicStats(hp, maxHP, mp, maxMP, ap, maxAP, aim, mobility, defense);
 	}
 
 	public int getHP() {
