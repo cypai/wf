@@ -11,10 +11,12 @@ import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.spell.Spell;
 
+import net.mostlyoriginal.api.event.common.Event;
+
 /*
  * For use in BattleLog and reporting back to a GUI on battle events/actions/outcomes
  */
-public final class BattleEvent {
+public final class BattleEvent implements Event {
 
 	public enum Type {
 		MOVE, RANGED_WEAPON_ATTACK, ATTACK, READY, CAST_TARGET, OVERWATCH, OVERWATCH_ACTIVATION, RELOAD, SWITCH_WEAPON, TARGETED_ACTION, START_TURN;

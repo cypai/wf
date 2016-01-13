@@ -1,13 +1,13 @@
 package com.pipai.wf.artemis.system.input;
 
-import com.artemis.BaseSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
+import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.UiSystem;
 
-public class InputProcessingSystem extends BaseSystem {
+public class InputProcessingSystem extends NoProcessingSystem {
 
 	private InputMultiplexer multiplexer;
 
@@ -20,16 +20,6 @@ public class InputProcessingSystem extends BaseSystem {
 		multiplexer.addProcessor(world.getSystem(CameraUpdateSystem.class));
 		multiplexer.addProcessor(world.getSystem(RayPickingInputSystem.class));
 		Gdx.input.setInputProcessor(multiplexer);
-	}
-
-	@Override
-	protected boolean checkProcessing() {
-		return false;
-	}
-
-	@Override
-	protected void processSystem() {
-		// Do nothing
 	}
 
 }

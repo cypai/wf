@@ -6,7 +6,7 @@ import net.mostlyoriginal.api.event.common.Event;
 
 public class MovementTileUpdateEvent implements Event {
 
-	public MapGraph mapgraph;
+	public final MapGraph mapgraph;
 
 	public MovementTileUpdateEvent(MapGraph mapgraph) {
 		this.mapgraph = mapgraph;

@@ -1,15 +1,25 @@
 package com.pipai.wf.artemis.system;
 
-import com.artemis.BaseSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pipai.wf.battle.Battle;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
+import com.pipai.wf.battle.BattleObserver;
+import com.pipai.wf.battle.log.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
+
+import net.mostlyoriginal.api.event.common.EventSystem;
 
 /**
  * Acts as a "singleton" for getting battle-related objects
  */
-public class BattleSystem extends BaseSystem {
+public class BattleSystem extends NoProcessingSystem implements BattleObserver {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(BattleSystem.class);
+
+	private EventSystem eventSystem;
 
 	private final Battle battle;
 
@@ -30,13 +40,9 @@ public class BattleSystem extends BaseSystem {
 	}
 
 	@Override
-	protected boolean checkProcessing() {
-		return false;
-	}
-
-	@Override
-	protected void processSystem() {
-		// Do nothing
+	public void notifyBattleEvent(BattleEvent ev) {
+		LOGGER.debug("Received battle event of type " + ev.getType());
+		eventSystem.dispatch(ev);
 	}
 
 }

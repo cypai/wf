@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.artemis.Aspect;
-import com.artemis.BaseSystem;
 import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
@@ -14,11 +14,14 @@ import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.artemis.components.SphericalRayPickInteractableComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.artemis.event.LeftClickEvent;
+import com.pipai.wf.artemis.event.MouseHoverRayEvent;
+import com.pipai.wf.artemis.event.RightClickRayEvent;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
+import com.pipai.wf.artemis.system.NoProcessingSystem;
 
 import net.mostlyoriginal.api.event.common.EventSystem;
 
-public class RayPickingInputSystem extends BaseSystem implements InputProcessor {
+public class RayPickingInputSystem extends NoProcessingSystem implements InputProcessor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RayPickingInputSystem.class);
 
@@ -28,16 +31,6 @@ public class RayPickingInputSystem extends BaseSystem implements InputProcessor 
 	private EventSystem eventSystem;
 
 	private CameraUpdateSystem cameraUpdateSystem;
-
-	@Override
-	protected boolean checkProcessing() {
-		return false;
-	}
-
-	@Override
-	protected void processSystem() {
-		// Do nothing
-	}
 
 	@Override
 	public boolean keyDown(int keycode) {
@@ -56,7 +49,29 @@ public class RayPickingInputSystem extends BaseSystem implements InputProcessor 
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		switch (button) {
+		case Buttons.LEFT:
+			processLeftClick(screenX, screenY);
+			break;
+		case Buttons.RIGHT:
+			processRightClick(screenX, screenY);
+			break;
+		default:
+			return false;
+		}
+		return true;
+	}
+
+	private void processLeftClick(int screenX, int screenY) {
 		Ray ray = cameraUpdateSystem.getCamera().getPickRay(screenX, screenY);
+		int playerEntity = getRayIntersectingPlayerUnit(ray);
+		LOGGER.debug("Result: " + playerEntity);
+		if (playerEntity >= 0) {
+			eventSystem.dispatch(new LeftClickEvent(playerEntity));
+		}
+	}
+
+	private int getRayIntersectingPlayerUnit(Ray ray) {
 		IntBag entities = world.getAspectSubscriptionManager()
 				.get(Aspect.all(XYZPositionComponent.class, SphericalRayPickInteractableComponent.class)).getEntities();
 		int result = -1;
@@ -73,11 +88,12 @@ public class RayPickingInputSystem extends BaseSystem implements InputProcessor 
 				distance = dist2;
 			}
 		}
-		LOGGER.debug("Result: " + result);
-		if (result >= 0) {
-			eventSystem.dispatch(new LeftClickEvent(result));
-		}
-		return result >= 0;
+		return result;
+	}
+
+	private void processRightClick(int screenX, int screenY) {
+		Ray ray = cameraUpdateSystem.getCamera().getPickRay(screenX, screenY);
+		eventSystem.dispatch(new RightClickRayEvent(ray));
 	}
 
 	@Override
@@ -92,7 +108,9 @@ public class RayPickingInputSystem extends BaseSystem implements InputProcessor 
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		return false;
+		Ray ray = cameraUpdateSystem.getCamera().getPickRay(screenX, screenY);
+		eventSystem.dispatch(new MouseHoverRayEvent(ray));
+		return true;
 	}
 
 	@Override

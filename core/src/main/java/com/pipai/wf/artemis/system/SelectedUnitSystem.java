@@ -48,11 +48,17 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 	private UiSystem uiSystem;
 	private BattleSystem battleSystem;
 
+	private MapGraph mapgraph;
+
 	private boolean processing;
 
 	public SelectedUnitSystem() {
 		super(ASPECT_MATCHER);
 		processing = true;
+	}
+
+	public MapGraph getSelectedMapGraph() {
+		return mapgraph;
 	}
 
 	@Override
@@ -69,8 +75,8 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 		}
 		tagManager.register(Tag.SELECTED_UNIT.toString(), world.getEntity(e));
 		Agent cAgent = mAgentInventory.get(e).agent;
-		MapGraph graph = new MapGraph(battleSystem.getBattleMap(), cAgent.getPosition(), cAgent.getEffectiveMobility(), cAgent.getAP(), cAgent.getMaxAP());
-		eventSystem.dispatch(new MovementTileUpdateEvent(graph));
+		mapgraph = new MapGraph(battleSystem.getBattleMap(), cAgent.getPosition(), cAgent.getEffectiveMobility(), cAgent.getAP(), cAgent.getMaxAP());
+		eventSystem.dispatch(new MovementTileUpdateEvent(mapgraph));
 		uiSystem.updateSelectedAgentUi(getSelectedAgent());
 		processing = true;
 	}

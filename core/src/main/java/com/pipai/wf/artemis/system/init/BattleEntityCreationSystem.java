@@ -19,7 +19,7 @@ import com.pipai.wf.artemis.components.SphericalRayPickInteractableComponent;
 import com.pipai.wf.artemis.components.VisibleComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.artemis.system.Group;
-import com.pipai.wf.artemis.system.ProcessOnceSystem;
+import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.battle.Battle;
 import com.pipai.wf.battle.Team;
@@ -29,7 +29,7 @@ import com.pipai.wf.gui.BatchHelper;
 /**
  * This system creates all initial entities for the Battle Screen
  */
-public class BattleEntityCreationSystem extends ProcessOnceSystem {
+public class BattleEntityCreationSystem extends NoProcessingSystem {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BattleEntityCreationSystem.class);
 
@@ -107,11 +107,6 @@ public class BattleEntityCreationSystem extends ProcessOnceSystem {
 			}
 			LOGGER.debug("Created entity at " + xyz.position);
 		}
-	}
-
-	@Override
-	protected void processOnce() {
-		// Does nothing
 	}
 
 }
