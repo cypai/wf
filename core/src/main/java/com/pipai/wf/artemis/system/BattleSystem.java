@@ -25,6 +25,7 @@ public class BattleSystem extends NoProcessingSystem implements BattleObserver {
 
 	public BattleSystem(Battle battle) {
 		this.battle = battle;
+		battle.getBattleController().registerObserver(this);
 	}
 
 	public BattleMap getBattleMap() {
@@ -41,7 +42,7 @@ public class BattleSystem extends NoProcessingSystem implements BattleObserver {
 
 	@Override
 	public void notifyBattleEvent(BattleEvent ev) {
-		LOGGER.debug("Received battle event of type " + ev.getClass());
+		LOGGER.debug("Dispatching battle event of type " + ev.getClass().getSimpleName());
 		eventSystem.dispatch(ev);
 	}
 

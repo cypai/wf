@@ -1,8 +1,5 @@
 package com.pipai.wf.artemis.system.init;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.artemis.ComponentMapper;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
@@ -31,7 +28,7 @@ import com.pipai.wf.gui.BatchHelper;
  */
 public class BattleEntityCreationSystem extends NoProcessingSystem {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(BattleEntityCreationSystem.class);
+	// private static final Logger LOGGER = LoggerFactory.getLogger(BattleEntityCreationSystem.class);
 
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
 	// private ComponentMapper<VelocityComponent> mVelocity;
@@ -105,7 +102,7 @@ public class BattleEntityCreationSystem extends NoProcessingSystem {
 			} else {
 				groupManager.add(world.getEntity(id), Group.ENEMY_PARTY.toString());
 			}
-			LOGGER.debug("Created entity at " + xyz.position);
+			// LOGGER.debug("Created entity at " + xyz.position);
 		}
 	}
 

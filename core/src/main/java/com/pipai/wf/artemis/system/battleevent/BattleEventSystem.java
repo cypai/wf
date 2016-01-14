@@ -14,7 +14,7 @@ public class BattleEventSystem extends NoProcessingSystem {
 
 	@Subscribe
 	public void processBattleEvent(BattleEvent event) {
-		LOGGER.debug("Recieved battle log event: " + event.getClass());
+		LOGGER.debug("Recieved battle log event: " + event.getClass().getSimpleName());
 	}
 
 }
