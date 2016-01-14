@@ -10,6 +10,7 @@ import com.pipai.wf.artemis.system.UiSystem;
 public class InputProcessingSystem extends NoProcessingSystem {
 
 	private InputMultiplexer multiplexer;
+	private InputMultiplexer inactiveMultiplexer;
 
 	@Override
 	protected void initialize() {
@@ -20,6 +21,16 @@ public class InputProcessingSystem extends NoProcessingSystem {
 		multiplexer.addProcessor(world.getSystem(CameraUpdateSystem.class));
 		multiplexer.addProcessor(world.getSystem(RayPickingInputSystem.class));
 		Gdx.input.setInputProcessor(multiplexer);
+		inactiveMultiplexer = new InputMultiplexer();
+		inactiveMultiplexer.addProcessor(new ExitInputProcessor());
+	}
+
+	public void activateInput() {
+		Gdx.input.setInputProcessor(multiplexer);
+	}
+
+	public void deactivateInput() {
+		Gdx.input.setInputProcessor(inactiveMultiplexer);
 	}
 
 }

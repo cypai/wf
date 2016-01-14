@@ -21,7 +21,6 @@ import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.battleaction.MoveActionSystem;
-import com.pipai.wf.artemis.system.battleevent.BattleEventSystem;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
 import com.pipai.wf.artemis.system.input.RayPickingInputSystem;
@@ -38,6 +37,7 @@ import com.pipai.wf.gui.BatchHelper;
 import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.plugin.ProfilerPlugin;
 
+// SUPPRESS CHECKSTYLE ClassComplexity This class is actually fairly simple
 public class ArtemisBattleGui implements Screen {
 
 	private Game game;
@@ -75,8 +75,7 @@ public class ArtemisBattleGui implements Screen {
 						new SelectedUnitSystem(),
 						new MovableTileHighlightSystem(),
 						new MouseHoverTileSystem(),
-						new MoveActionSystem(),
-						new BattleEventSystem())
+						new MoveActionSystem())
 				.withPassive(-1,
 						// Rendering
 						new TerrainRenderingSystem(batch, battle.getBattleMap()),
