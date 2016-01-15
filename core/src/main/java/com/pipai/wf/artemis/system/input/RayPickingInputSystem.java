@@ -1,8 +1,5 @@
 package com.pipai.wf.artemis.system.input;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
@@ -23,7 +20,7 @@ import net.mostlyoriginal.api.event.common.EventSystem;
 
 public class RayPickingInputSystem extends NoProcessingSystem implements InputProcessor {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RayPickingInputSystem.class);
+	// private static final Logger LOGGER = LoggerFactory.getLogger(RayPickingInputSystem.class);
 
 	private ComponentMapper<XYZPositionComponent> mXyz;
 	private ComponentMapper<SphericalRayPickInteractableComponent> mSphericalInteractable;
@@ -65,7 +62,7 @@ public class RayPickingInputSystem extends NoProcessingSystem implements InputPr
 	private void processLeftClick(int screenX, int screenY) {
 		Ray ray = cameraUpdateSystem.getCamera().getPickRay(screenX, screenY);
 		int playerEntity = getRayIntersectingPlayerUnit(ray);
-		LOGGER.debug("Result: " + playerEntity);
+		// LOGGER.debug("Result: " + playerEntity);
 		if (playerEntity >= 0) {
 			eventSystem.dispatch(new LeftClickEvent(playerEntity));
 		}

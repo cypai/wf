@@ -26,7 +26,7 @@ public class MouseHoverTileSystem extends BaseSystem {
 	@Subscribe
 	public void processMouseHoverRayEvent(MouseHoverRayEvent event) {
 		Ray ray = event.pickRay;
-		GridPosition newHoverTile = TileRayIntersector.getIntersectedTile(ray);
+		GridPosition newHoverTile = TileGridPositionUtils.getIntersectedTile(ray);
 		if (!newHoverTile.equals(hoverTile)) {
 			hoverTile = newHoverTile;
 			IntBag entities = world.getAspectSubscriptionManager()

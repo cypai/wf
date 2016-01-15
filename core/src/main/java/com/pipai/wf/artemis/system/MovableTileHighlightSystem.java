@@ -2,9 +2,6 @@ package com.pipai.wf.artemis.system;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.utils.IntBag;
@@ -18,7 +15,7 @@ import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class MovableTileHighlightSystem extends NoProcessingSystem {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MovableTileHighlightSystem.class);
+	// private static final Logger LOGGER = LoggerFactory.getLogger(MovableTileHighlightSystem.class);
 
 	private static final Color BLUE_MOVE = new Color(0.3f, 0.3f, 0.8f, 0.2f);
 	private static final Color GREEN_MOVE = new Color(0.3f, 0.6f, 0, 0.2f);
@@ -28,7 +25,6 @@ public class MovableTileHighlightSystem extends NoProcessingSystem {
 
 	@Subscribe
 	public void handleMovementTileChange(MovementTileUpdateEvent event) {
-		LOGGER.debug("Move tile change event called");
 		removeAllTileHighlights();
 		addAllMovementTileHighlights(event.mapgraph);
 	}

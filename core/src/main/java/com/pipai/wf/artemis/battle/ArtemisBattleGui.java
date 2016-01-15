@@ -9,6 +9,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.artemis.system.BattleSystem;
@@ -18,12 +19,16 @@ import com.pipai.wf.artemis.system.InterpolationMovementSystem;
 import com.pipai.wf.artemis.system.MouseHoverTileSystem;
 import com.pipai.wf.artemis.system.MovableTileHighlightSystem;
 import com.pipai.wf.artemis.system.SelectedUnitSystem;
+import com.pipai.wf.artemis.system.TimedDestroySystem;
 import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.battleaction.MoveActionSystem;
+import com.pipai.wf.artemis.system.battleanimation.ReloadEventAnimationHandler;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
+import com.pipai.wf.artemis.system.input.KeysInputProcessorSystem;
 import com.pipai.wf.artemis.system.input.RayPickingInputSystem;
+import com.pipai.wf.artemis.system.rendering.AnchoredTextRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.CircleRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.CircularShadowRenderingSystem;
@@ -63,19 +68,24 @@ public class ArtemisBattleGui implements Screen {
 						// Input
 						new InputProcessingSystem(),
 						new RayPickingInputSystem(),
+						new KeysInputProcessorSystem(),
 
 						// Misc
 						new CameraUpdateSystem(),
 						new InterpolationMovementSystem(),
 						new InterpolationIncrementSystem(),
 						new VelocitySystem(),
+						new TimedDestroySystem(),
 
 						// Battle Related
 						new BattleSystem(battle),
 						new SelectedUnitSystem(),
 						new MovableTileHighlightSystem(),
 						new MouseHoverTileSystem(),
-						new MoveActionSystem())
+						new MoveActionSystem(),
+
+						// Animation Handlers
+						new ReloadEventAnimationHandler())
 				.withPassive(-1,
 						// Rendering
 						new TerrainRenderingSystem(batch, battle.getBattleMap()),
@@ -86,6 +96,9 @@ public class ArtemisBattleGui implements Screen {
 						new FpsRenderingSystem(),
 						new BatchRenderingSystem(batch))
 				.withPassive(-2,
+						// Rendering
+						new AnchoredTextRenderingSystem())
+				.withPassive(-3,
 						// Rendering
 						new UiSystem())
 				.build();
@@ -105,9 +118,14 @@ public class ArtemisBattleGui implements Screen {
 		PerspectiveCamera camera = world.getSystem(CameraUpdateSystem.class).getCamera();
 		camera.viewportWidth = width;
 		camera.viewportHeight = height;
-		// TODO: This should probably use orthographic cameras
-		// camera.update();
-		// world.getSystem(BatchRenderingSystem.class).getBatch().getSpriteBatch().setProjectionMatrix(camera.projection);
+		camera.update();
+		OrthographicCamera orthoCamera = world.getSystem(CameraUpdateSystem.class).getOrthoCamera();
+		orthoCamera.viewportWidth = width;
+		orthoCamera.viewportHeight = height;
+		orthoCamera.update();
+		world.getSystem(BatchRenderingSystem.class).getBatch().getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
+		world.getSystem(BatchRenderingSystem.class).getBatch().getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
+		world.getSystem(UiSystem.class).getStage().getViewport().update(width, height, false);
 	}
 
 	@Override

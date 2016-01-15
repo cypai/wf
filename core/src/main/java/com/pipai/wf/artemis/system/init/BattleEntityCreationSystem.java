@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.artemis.components.AgentComponent;
 import com.pipai.wf.artemis.components.CircleDecalComponent;
 import com.pipai.wf.artemis.components.CircularShadowComponent;
+import com.pipai.wf.artemis.components.OrthographicCameraComponent;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
@@ -39,6 +40,7 @@ public class BattleEntityCreationSystem extends NoProcessingSystem {
 	private ComponentMapper<SelectedUnitComponent> mSelectedUnit;
 	private ComponentMapper<AgentComponent> mAgentInventory;
 	private ComponentMapper<PerspectiveCameraComponent> mPerspectiveCamera;
+	private ComponentMapper<OrthographicCameraComponent> mOrthoCamera;
 	private ComponentMapper<SphericalCoordinateComponent> mSphericalCoordinates;
 	private ComponentMapper<SphericalRayPickInteractableComponent> mSphericalInteractable;
 
@@ -78,6 +80,10 @@ public class BattleEntityCreationSystem extends NoProcessingSystem {
 		// needsUpdateSystem.notify(perspectiveCameraId);
 		tagManager.register(Tag.CAMERA.toString(), perspectiveCameraId);
 		batch.set3DCamera(camera);
+
+		int orthoCameraId = world.create();
+		mOrthoCamera.create(orthoCameraId);
+		tagManager.register(Tag.ORTHO_CAMERA.toString(), orthoCameraId);
 	}
 
 	private void generateUnits() {

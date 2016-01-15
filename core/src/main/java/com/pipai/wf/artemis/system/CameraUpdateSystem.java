@@ -7,8 +7,10 @@ import com.artemis.managers.TagManager;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
+import com.pipai.wf.artemis.components.OrthographicCameraComponent;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.SphericalCoordinateComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
@@ -19,6 +21,7 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 	// private static final Logger LOGGER = LoggerFactory.getLogger(SelectedUnitSystem.class);
 
 	private ComponentMapper<PerspectiveCameraComponent> mPerspectiveCamera;
+	private ComponentMapper<OrthographicCameraComponent> mOrthoCamera;
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
 	private ComponentMapper<SphericalCoordinateComponent> mSphericalCoordinate;
 
@@ -35,6 +38,10 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 
 	public PerspectiveCamera getCamera() {
 		return mPerspectiveCamera.get(tagManager.getEntity(Tag.CAMERA.toString())).camera;
+	}
+
+	public OrthographicCamera getOrthoCamera() {
+		return mOrthoCamera.get(tagManager.getEntity(Tag.ORTHO_CAMERA.toString())).camera;
 	}
 
 	@Override

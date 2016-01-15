@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
 import com.pipai.wf.battle.agent.Agent;
 
@@ -36,7 +37,7 @@ public class UiSystem extends BaseSystem {
 	private InventoryButton[] inventoryButtons;
 
 	public UiSystem() {
-		stage = new Stage();
+		stage = new Stage(new ScreenViewport());
 		inventoryButtons = new InventoryButton[3];
 		labelStyle = new LabelStyle();
 		skin = new Skin();

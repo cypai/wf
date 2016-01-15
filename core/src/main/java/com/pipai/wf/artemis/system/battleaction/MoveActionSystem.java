@@ -8,7 +8,7 @@ import com.pipai.wf.artemis.event.RightClickRayEvent;
 import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.SelectedUnitSystem;
-import com.pipai.wf.artemis.system.TileRayIntersector;
+import com.pipai.wf.artemis.system.TileGridPositionUtils;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.GridPosition;
@@ -27,7 +27,7 @@ public class MoveActionSystem extends NoProcessingSystem {
 	@Subscribe
 	public void processRightClickRayEvent(RightClickRayEvent event) {
 		Ray ray = event.pickRay;
-		GridPosition tile = TileRayIntersector.getIntersectedTile(ray);
+		GridPosition tile = TileGridPositionUtils.getIntersectedTile(ray);
 		MapGraph graph = selectedUnitSystem.getSelectedMapGraph();
 		Agent selectedAgent = selectedUnitSystem.getSelectedAgent();
 		MoveAction move = new MoveAction(battleSystem.getBattleController(), selectedAgent,
