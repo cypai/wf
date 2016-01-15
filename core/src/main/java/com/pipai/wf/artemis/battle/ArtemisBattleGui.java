@@ -120,11 +120,11 @@ public class ArtemisBattleGui implements Screen {
 		camera.viewportHeight = height;
 		camera.update();
 		OrthographicCamera orthoCamera = world.getSystem(CameraUpdateSystem.class).getOrthoCamera();
-		orthoCamera.viewportWidth = width;
-		orthoCamera.viewportHeight = height;
+		orthoCamera.setToOrtho(false, width, height);
 		orthoCamera.update();
 		world.getSystem(BatchRenderingSystem.class).getBatch().getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
 		world.getSystem(BatchRenderingSystem.class).getBatch().getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
+		world.getSystem(UiSystem.class).getStage().getViewport().setCamera(orthoCamera);
 		world.getSystem(UiSystem.class).getStage().getViewport().update(width, height, false);
 	}
 
