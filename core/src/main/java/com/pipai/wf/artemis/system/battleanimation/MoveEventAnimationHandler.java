@@ -3,6 +3,7 @@ package com.pipai.wf.artemis.system.battleanimation;
 import java.util.LinkedList;
 
 import com.artemis.ComponentMapper;
+import com.artemis.managers.TagManager;
 import com.badlogic.gdx.math.Interpolation;
 import com.pipai.wf.artemis.components.EndpointsComponent;
 import com.pipai.wf.artemis.components.InterpolationComponent;
@@ -10,6 +11,7 @@ import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.artemis.event.InterpolationEndEvent;
 import com.pipai.wf.artemis.system.AgentEntitySystem;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
+import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
 import com.pipai.wf.battle.event.MoveEvent;
 import com.pipai.wf.util.GridPosition;
@@ -24,6 +26,7 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 	private ComponentMapper<EndpointsComponent> mEndpoints;
 	private ComponentMapper<InterpolationComponent> mInterpolation;
 
+	private TagManager tagManager;
 	private AgentEntitySystem agentEntitySystem;
 
 	private LinkedList<GridPosition> path;
@@ -56,6 +59,17 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 		cInterpolation.maxT = 6;
 		cInterpolation.onEndEvent = new InterpolationEndEvent();
 		interpolationEndEventKey = cInterpolation.onEndEvent.getKey();
+		int cameraId = tagManager.getEntity(Tag.CAMERA.toString()).getId();
+		float cameraZ = mXyz.get(cameraId).position.z;
+		EndpointsComponent cCameraEndpoints = mEndpoints.create(cameraId);
+		cCameraEndpoints.start = TileGridPositionUtils.gridPositionToTileCenter(start);
+		cCameraEndpoints.start.z = cameraZ;
+		cCameraEndpoints.end = TileGridPositionUtils.gridPositionToTileCenter(end);
+		cCameraEndpoints.end.z = cameraZ;
+		InterpolationComponent cCameraInterpolation = mInterpolation.create(cameraId);
+		cCameraInterpolation.interpolation = Interpolation.linear;
+		cCameraInterpolation.t = 0;
+		cCameraInterpolation.maxT = 6;
 	}
 
 }
