@@ -4,12 +4,13 @@ import com.artemis.ComponentMapper;
 import com.pipai.wf.artemis.components.AnchoredPositionComponent;
 import com.pipai.wf.artemis.components.TextComponent;
 import com.pipai.wf.artemis.components.TimedDestroyComponent;
+import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
 import com.pipai.wf.battle.event.ReloadEvent;
 
 import net.mostlyoriginal.api.event.common.Subscribe;
 
-public class ReloadEventAnimationHandler extends BattleEventAnimationHandler {
+public class ReloadEventAnimationHandler extends NoProcessingSystem {
 
 	private ComponentMapper<TextComponent> mText;
 	private ComponentMapper<AnchoredPositionComponent> mAnchoredPosition;

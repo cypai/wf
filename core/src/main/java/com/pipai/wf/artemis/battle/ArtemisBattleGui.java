@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.pipai.wf.WFGame;
+import com.pipai.wf.artemis.system.AgentEntitySystem;
 import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
 import com.pipai.wf.artemis.system.InterpolationIncrementSystem;
@@ -23,6 +24,7 @@ import com.pipai.wf.artemis.system.TimedDestroySystem;
 import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.battleaction.MoveActionSystem;
+import com.pipai.wf.artemis.system.battleanimation.MoveEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.ReloadEventAnimationHandler;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
@@ -79,13 +81,15 @@ public class ArtemisBattleGui implements Screen {
 
 						// Battle Related
 						new BattleSystem(battle),
+						new AgentEntitySystem(),
 						new SelectedUnitSystem(),
 						new MovableTileHighlightSystem(),
 						new MouseHoverTileSystem(),
 						new MoveActionSystem(),
 
 						// Animation Handlers
-						new ReloadEventAnimationHandler())
+						new ReloadEventAnimationHandler(),
+						new MoveEventAnimationHandler())
 				.withPassive(-1,
 						// Rendering
 						new TerrainRenderingSystem(batch, battle.getBattleMap()),
