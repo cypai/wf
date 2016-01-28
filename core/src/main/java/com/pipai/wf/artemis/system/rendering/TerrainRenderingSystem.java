@@ -6,6 +6,7 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
@@ -13,18 +14,15 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.DirectionalLightsAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.battle.map.BattleMap;
@@ -47,9 +45,11 @@ public class TerrainRenderingSystem extends IteratingSystem {
 	private Model boxModel;
 	private Mesh terrainMesh;
 	private ArrayList<ModelInstance> wallModels;
-	private ModelBuilder modelBuilder;
+	// private ModelBuilder modelBuilder;
 	private Texture grassTexture;
 	private ShaderProgram fogOfWarShader;
+
+	private AssetManager assets;
 
 	private Texture fogOfWarStateTexture;
 	private Pixmap visibilityPixmap;
@@ -78,28 +78,40 @@ public class TerrainRenderingSystem extends IteratingSystem {
 		terrainMesh = TerrainMeshGenerator.generateMeshFromBattleMap(map, SQUARE_SIZE);
 		grassTexture = new Texture(Gdx.files.internal("graphics/textures/grass.png"));
 		wallModels = new ArrayList<ModelInstance>();
-		modelBuilder = new ModelBuilder();
-		boxModel = modelBuilder.createBox(SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE,
-				new Material(ColorAttribute.createDiffuse(Color.GRAY)),
-				Usage.Position | Usage.Normal);
+		// modelBuilder = new ModelBuilder();
+		// boxModel = modelBuilder.createBox(SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE,
+		// new Material(ColorAttribute.createDiffuse(Color.GRAY)),
+		// Usage.Position | Usage.Normal);
 		environment = new Environment();
 		environment.add(new DirectionalLight().set(0.5f, 0.5f, 0.5f, -0.5f, 0.5f, -0.8f));
-		generateSceneModels();
 		visibilityPixmap = new Pixmap(map.getCols(), map.getRows(), Format.RGBA8888);
 		visibilityPixmap.setColor(Color.WHITE);
 		visibilityPixmap.fill();
 		fogOfWarStateTexture = new Texture(visibilityPixmap);
+
+		assets = new AssetManager();
+		assets.load("graphics/models/tree.g3dj", Model.class);
+		while (!assets.update()) {
+			//
+		}
+		generateSceneModels();
 	}
 
 	private void generateSceneModels() {
+		Model treeModel = assets.get("graphics/models/tree.g3dj", Model.class);
 		for (int r = 0; r < map.getRows(); r++) {
 			for (int c = 0; c < map.getCols(); c++) {
 				EnvironmentObject env = map.getCell(new GridPosition(c, r)).getTileEnvironmentObject();
 				if (env != null && env.getCoverType() == CoverType.FULL) {
-					wallModels.add(new ModelInstance(boxModel,
-							c * SQUARE_SIZE + SQUARE_SIZE / 2,
-							r * SQUARE_SIZE + SQUARE_SIZE / 2,
-							SQUARE_SIZE / 2));
+					ModelInstance treeInstance = new ModelInstance(treeModel);
+					treeInstance.transform.setToTranslation(c * SQUARE_SIZE + SQUARE_SIZE / 2,
+							r * SQUARE_SIZE + SQUARE_SIZE / 2, SQUARE_SIZE / 2);
+					treeInstance.transform.rotate(Vector3.X, 90);
+					treeInstance.transform.scale(10, 10, 10);
+					wallModels.add(treeInstance);
+					// wallModels.add(new ModelInstance(boxModel, c *
+					// SQUARE_SIZE + SQUARE_SIZE / 2,
+					// r * SQUARE_SIZE + SQUARE_SIZE / 2, SQUARE_SIZE / 2));
 				}
 			}
 		}
@@ -109,7 +121,7 @@ public class TerrainRenderingSystem extends IteratingSystem {
 	protected void process(int entityId) {
 		PerspectiveCamera camera = mPerspectiveCamera.get(entityId).camera;
 		ModelBatch modelBatch = batch.getModelBatch();
-		// Gdx.gl20.glCullFace(GL20.GL_BACK);
+		Gdx.gl20.glCullFace(GL20.GL_BACK);
 		fogOfWarShader.begin();
 		fogOfWarShader.setUniformMatrix(u_projViewTrans, camera.combined);
 		fogOfWarShader.setUniformMatrix(u_worldTrans, new Matrix4());
