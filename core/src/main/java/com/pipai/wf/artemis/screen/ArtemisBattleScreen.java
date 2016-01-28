@@ -1,4 +1,4 @@
-package com.pipai.wf.artemis.battle;
+package com.pipai.wf.artemis.screen;
 
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
@@ -45,13 +45,13 @@ import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.plugin.ProfilerPlugin;
 
 // SUPPRESS CHECKSTYLE ClassComplexity This class is actually fairly simple
-public class ArtemisBattleGui implements Screen {
+public class ArtemisBattleScreen implements Screen {
 
 	private Game game;
 	private World world;
 	private BatchHelper batch;
 
-	public ArtemisBattleGui(WFGame game, Battle battle) {
+	public ArtemisBattleScreen(WFGame game, Battle battle) {
 		batch = new BatchHelper(game.getSpriteBatch(), game.getShapeRenderer(), game.getModelBatch(), game.getFont());
 
 		this.game = game;
@@ -126,8 +126,10 @@ public class ArtemisBattleGui implements Screen {
 		OrthographicCamera orthoCamera = world.getSystem(CameraUpdateSystem.class).getOrthoCamera();
 		orthoCamera.setToOrtho(false, width, height);
 		orthoCamera.update();
-		world.getSystem(BatchRenderingSystem.class).getBatch().getSpriteBatch().setProjectionMatrix(orthoCamera.combined);
-		world.getSystem(BatchRenderingSystem.class).getBatch().getShapeRenderer().setProjectionMatrix(orthoCamera.combined);
+		world.getSystem(BatchRenderingSystem.class).getBatch().getSpriteBatch()
+				.setProjectionMatrix(orthoCamera.combined);
+		world.getSystem(BatchRenderingSystem.class).getBatch().getShapeRenderer()
+				.setProjectionMatrix(orthoCamera.combined);
 		world.getSystem(UiSystem.class).getStage().getViewport().setCamera(orthoCamera);
 		world.getSystem(UiSystem.class).getStage().getViewport().update(width, height, false);
 	}

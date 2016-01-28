@@ -13,7 +13,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pipai.wf.WFGame;
-import com.pipai.wf.artemis.battle.ArtemisBattleGui;
+import com.pipai.wf.artemis.screen.ArtemisBattleScreen;
+import com.pipai.wf.artemis.screen.WorldMapScreen;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleFactory;
 import com.pipai.wf.battle.BattleSchema;
@@ -39,11 +40,13 @@ public final class PartyInfoGui extends Gui {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, getScreenWidth(), getScreenHeight());
 		renderables = new ArrayList<GuiRenderable>();
-		renderables.add(new AbilityTreeDisplay(this, UnitClassTree.RANGER.getAbilityTree(), getScreenWidth() * 3 / 4, getScreenHeight() - 64));
+		renderables.add(new AbilityTreeDisplay(this, UnitClassTree.RANGER.getAbilityTree(), getScreenWidth() * 3 / 4,
+				getScreenHeight() - 64));
 		renderablesCreateBuffer = new ArrayList<GuiRenderable>();
 		renderablesDelBuffer = new ArrayList<GuiRenderable>();
 		partySchema = party;
-		createInstance(new PartyInfoList(this, party, 4, getScreenHeight() - 4, getScreenWidth() / 2, getScreenHeight() / 2, Color.CYAN));
+		createInstance(new PartyInfoList(this, party, 4, getScreenHeight() - 4, getScreenWidth() / 2,
+				getScreenHeight() / 2, Color.CYAN));
 	}
 
 	@Override
@@ -79,7 +82,7 @@ public final class PartyInfoGui extends Gui {
 	@Override
 	public void onLeftClick(int screenX, int screenY) {
 		BattleFactory factory = new BattleFactory(new BattleConfiguration());
-		switchGui(new ArtemisBattleGui(getGame(), factory.build(new BattleSchema(partySchema))));
+		switchGui(new ArtemisBattleScreen(getGame(), factory.build(new BattleSchema(partySchema))));
 	}
 
 	@Override
@@ -101,6 +104,8 @@ public final class PartyInfoGui extends Gui {
 				LOGGER.error("Could not save game", e);
 			}
 			Gdx.app.exit();
+		} else if (keycode == Keys.W) {
+			switchGui(new WorldMapScreen(getGame()));
 		}
 	}
 
