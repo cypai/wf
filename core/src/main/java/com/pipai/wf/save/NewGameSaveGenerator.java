@@ -2,6 +2,7 @@ package com.pipai.wf.save;
 
 import java.util.ArrayList;
 
+import com.pipai.wf.WfConfiguration;
 import com.pipai.wf.unit.race.Race;
 import com.pipai.wf.unit.schema.FlameFairySchema;
 import com.pipai.wf.unit.schema.RaceTemplateSchema;
@@ -13,6 +14,8 @@ public class NewGameSaveGenerator {
 	public Save generateNewSave() {
 		Save save = new Save();
 		save.setParty(generateParty());
+		WfConfiguration config = new WfConfiguration();
+		save.setVariable("scenario", config.getScenario());
 		return save;
 	}
 

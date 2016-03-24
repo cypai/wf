@@ -2,6 +2,8 @@ package com.pipai.wf.save;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,13 +12,17 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.pipai.libgdx.test.GdxMockedTest;
 import com.pipai.wf.battle.inventory.AgentInventory;
 import com.pipai.wf.item.armor.LeatherArmor;
+import com.pipai.wf.item.weapon.Bow;
+import com.pipai.wf.item.weapon.InnateCasting;
 import com.pipai.wf.item.weapon.Pistol;
 import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.unit.ability.AbilityList;
+import com.pipai.wf.unit.ability.SuppressionAbility;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public class SaveTest extends GdxMockedTest {
@@ -92,5 +98,67 @@ public class SaveTest extends GdxMockedTest {
 		for (UnitSchema schema : party) {
 			Assert.assertEquals(0, schema.getExp());
 		}
+		Assert.assertEquals("scenario/main.txt", save.getVariable("scenario").get());
 	}
+
+	@Test
+	public void saveVariableTest() {
+		Save save = new Save();
+		final String SCENARIO = "scenario";
+		Assert.assertFalse(save.getVariable(SCENARIO).isPresent());
+		final String SCENARIO_VALUE = "test_scenario.txt";
+		save.setVariable(SCENARIO, SCENARIO_VALUE);
+		Assert.assertEquals(SCENARIO_VALUE, save.getVariable(SCENARIO).get());
+	}
+
+	@Test
+	public void saveLoadTest() throws URISyntaxException, CorruptedSaveException {
+		Save save = new Save();
+		SaveLoader loader = new SaveLoader(save);
+		URL url = this.getClass().getResource("/com/pipai/wf/save/save1.txt");
+		File file = new File(url.getFile());
+		FileHandle handle = new FileHandle(file);
+		loader.load(handle);
+		List<UnitSchema> party = save.getParty();
+		Assert.assertEquals(1, party.size());
+		UnitSchema schema = party.get(0);
+		Assert.assertEquals("Tidus", schema.getName());
+		Assert.assertEquals(6, schema.getHP());
+		Assert.assertEquals(7, schema.getMaxHP());
+		Assert.assertEquals(4, schema.getMP());
+		Assert.assertEquals(5, schema.getMaxMP());
+		Assert.assertEquals(1, schema.getAP());
+		Assert.assertEquals(2, schema.getMaxAP());
+		Assert.assertEquals(65, schema.getAim());
+		Assert.assertEquals(12, schema.getMobility());
+		Assert.assertEquals(0, schema.getDefense());
+		Assert.assertEquals(1, schema.getAbilities().size());
+		Assert.assertTrue(schema.getAbilities().getAbility(SuppressionAbility.class) instanceof SuppressionAbility);
+		Assert.assertTrue(schema.getInventory().getItem(1) instanceof LeatherArmor);
+		Assert.assertEquals(3, ((LeatherArmor) schema.getInventory().getItem(1)).getHP());
+		Assert.assertTrue(schema.getInventory().getItem(2) instanceof Bow);
+		Assert.assertEquals(2, ((Bow) schema.getInventory().getItem(2)).getCurrentAmmo());
+		Assert.assertTrue(schema.getInventory().getItem(3) instanceof InnateCasting);
+		Assert.assertEquals(1, schema.getLevel());
+		Assert.assertEquals(10, schema.getExp());
+		Assert.assertEquals("hello.txt", save.getVariable("scenario").get());
+		Assert.assertEquals("opening", save.getVariable("label").get());
+		Assert.assertEquals("2016", save.getVariable("year").get());
+	}
+
+	@Test
+	public void saveWriteVariablesTest() throws URISyntaxException, CorruptedSaveException, IOException {
+		Save save = new Save();
+		final String SCENARIO = "scenario";
+		final String SCENARIO_VALUE = "test.txt";
+		final String LABEL = "label";
+		final String LABEL_VALUE = "opening";
+		save.setVariable(SCENARIO, SCENARIO_VALUE);
+		save.setVariable(LABEL, LABEL_VALUE);
+		MANAGER.save(save, SAVE_SLOT);
+		Save load = MANAGER.load(SAVE_SLOT);
+		Assert.assertEquals(SCENARIO_VALUE, load.getVariable(SCENARIO).get());
+		Assert.assertEquals(LABEL_VALUE, load.getVariable(LABEL).get());
+	}
+
 }

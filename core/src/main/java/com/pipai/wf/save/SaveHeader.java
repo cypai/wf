@@ -1,7 +1,7 @@
 package com.pipai.wf.save;
 
 public enum SaveHeader {
-	PARTY("Party");
+	VARIABLES("Variables"), PARTY("Party");
 
 	private String headerText;
 

@@ -1,0 +1,9 @@
+WF Save File
+
+[Variables]
+scenario = hello.txt
+label = opening
+year = 2016
+
+[Party]
+{"name":"Tidus","basicStats":{"hp":6,"maxHP":7,"mp":4,"maxMP":5,"ap":1,"maxAP":2,"aim":65,"mobility":12,"defense":0},"abilities":{"abilityList":[{"@class":"com.pipai.wf.unit.ability.SuppressionAbility"}]},"inventory":{"slots":3,"items":[{"@class":"com.pipai.wf.item.armor.LeatherArmor","hp":3},{"@class":"com.pipai.wf.item.weapon.Bow","currentAmmo":2},{"@class":"com.pipai.wf.item.weapon.InnateCasting","currentAmmo":0,"spell":null}],"equippedSlot":0},"level":1,"exp":10,"expGiven":0}

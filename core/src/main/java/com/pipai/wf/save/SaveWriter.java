@@ -2,6 +2,7 @@ package com.pipai.wf.save;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.pipai.wf.unit.schema.UnitSchema;
@@ -19,6 +20,7 @@ public class SaveWriter {
 	public void save(FileHandle file) throws IOException {
 		saveBuilder = new StringBuilder();
 		buildHeader(saveBuilder);
+		buildSaveVariables(saveBuilder);
 		buildPartySave(saveBuilder);
 		String saveData = saveBuilder.toString();
 		try (OutputStream ostream = file.write(false)) {
@@ -29,6 +31,13 @@ public class SaveWriter {
 
 	private void buildHeader(StringBuilder builder) {
 		saveBuilder.append("WF Save File\n\n");
+	}
+
+	private void buildSaveVariables(StringBuilder builder) {
+		saveBuilder.append(SaveHeader.VARIABLES.toString() + "\n");
+		for (Map.Entry<String, String> entry : save.getVariables().entrySet()) {
+			builder.append(entry.getKey() + " = " + entry.getValue() + "\n");
+		}
 	}
 
 	private void buildPartySave(StringBuilder builder) {
