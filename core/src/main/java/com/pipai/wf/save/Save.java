@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import com.pipai.wf.unit.schema.MutableUnitSchema;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public class Save {
 
-	private List<UnitSchema> party;
+	private List<MutableUnitSchema> party;
 	private HashMap<String, String> variables;
 
 	public Save() {
@@ -17,12 +19,14 @@ public class Save {
 		variables = new HashMap<>();
 	}
 
-	public List<UnitSchema> getParty() {
+	public List<MutableUnitSchema> getParty() {
 		return party;
 	}
 
-	public void setParty(List<UnitSchema> party) {
-		this.party = party;
+	public void setParty(List<? extends UnitSchema> party) {
+		this.party = party.stream()
+				.map(MutableUnitSchema::new)
+				.collect(Collectors.toList());
 	}
 
 	public Optional<String> getVariable(String name) {

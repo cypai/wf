@@ -51,8 +51,11 @@ public class BattleMapGenerator {
 
 	/**
 	 * Generates a random GridPosition within the box specified by bl and ur
-	 * @param bl Bottom left corner
-	 * @param ur Upper right corner
+	 * 
+	 * @param bl
+	 *            Bottom left corner
+	 * @param ur
+	 *            Upper right corner
 	 */
 	private GridPosition randPos(GridPosition bl, GridPosition ur) {
 		int x = rng.randInt(bl.getX(), ur.getX());
@@ -67,7 +70,7 @@ public class BattleMapGenerator {
 		}
 	}
 
-	private void generatePartyPod(BattleMap map, List<UnitSchema> party) {
+	private void generatePartyPod(BattleMap map, List<? extends UnitSchema> party) {
 		AgentFactory factory = new AgentFactory();
 		GridPosition center = randPos(new GridPosition(1, 1), new GridPosition(map.getCols() - 2, 4));
 		for (int i = 0; i < partyRelativeStartingPositions.size() && i < party.size(); i++) {
@@ -91,7 +94,8 @@ public class BattleMapGenerator {
 		GridPosition center = randPos(new GridPosition(8, 8), new GridPosition(map.getCols() - 8, map.getRows() - 8));
 		List<GridPosition> enemyPos = new ArrayList<>();
 		for (int i = 0; i < amt; i++) {
-			enemyPos.add(randPos(new GridPosition(center.getX() - 2, center.getY() - 2), new GridPosition(center.getX() + 2, center.getY() + 2)));
+			enemyPos.add(randPos(new GridPosition(center.getX() - 2, center.getY() - 2),
+					new GridPosition(center.getX() + 2, center.getY() + 2)));
 		}
 		for (GridPosition pos : enemyPos) {
 			generateEnemyIfEmpty(map, pos);

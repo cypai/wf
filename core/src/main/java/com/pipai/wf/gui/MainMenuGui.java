@@ -99,7 +99,7 @@ public final class MainMenuGui extends Gui {
 		leftClickables.flushDeleteBuffer();
 	}
 
-	public void goToTestbed(List<UnitSchema> party) {
+	public void goToTestbed(List<? extends UnitSchema> party) {
 		switchGui(new PartyInfoGui(getGame(), party));
 	}
 

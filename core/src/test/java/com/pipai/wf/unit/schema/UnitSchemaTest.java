@@ -17,7 +17,7 @@ public class UnitSchemaTest {
 		a.setHP(3);
 		a.setMP(2);
 		a.setAP(0);
-		UnitSchema schema = new UnitSchema(a);
+		UnitSchema schema = new ImmutableUnitSchema(a);
 		// HP should stay unchanged
 		Assert.assertEquals(3, schema.getHP());
 		Assert.assertEquals(5, schema.getMaxHP());

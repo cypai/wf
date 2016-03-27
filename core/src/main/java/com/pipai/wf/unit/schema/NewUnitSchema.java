@@ -4,7 +4,7 @@ import com.pipai.wf.battle.inventory.AgentInventory;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.unit.ability.AbilityList;
 
-public abstract class NewUnitSchema extends UnitSchema {
+public abstract class NewUnitSchema extends ImmutableUnitSchema {
 
 	public NewUnitSchema(String name, BasicStats stats) {
 		super(name, stats);
@@ -23,18 +23,6 @@ public abstract class NewUnitSchema extends UnitSchema {
 	@Override
 	public int getExp() {
 		return 0;
-	}
-
-	@Override
-	public final void setLevel(int level) {
-		throw new UnsupportedOperationException("Cannot set level for a UnitSchema schematic detailing a new unit. "
-				+ "Instead, create a new UnitSchema(this) to use it as a prototype if you need to change it.");
-	}
-
-	@Override
-	public final void setExp(int exp) {
-		throw new UnsupportedOperationException("Cannot set exp for a UnitSchema schematic detailing a new unit. "
-				+ "Instead, create a new UnitSchema(this) to use it as a prototype if you need to change it.");
 	}
 
 	@Override

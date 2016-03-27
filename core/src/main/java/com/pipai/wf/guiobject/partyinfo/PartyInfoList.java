@@ -13,7 +13,8 @@ public class PartyInfoList extends UIList {
 	private ArrayList<UnitInfoListItem> list;
 	private float padding;
 
-	public PartyInfoList(Gui gui, List<UnitSchema> party, float x, float y, float width, float height, Color color) {
+	public PartyInfoList(Gui gui, List<? extends UnitSchema> party, float x, float y, float width, float height,
+			Color color) {
 		super(gui, x, y, width, height, color);
 		padding = 4;
 		list = new ArrayList<UnitInfoListItem>();

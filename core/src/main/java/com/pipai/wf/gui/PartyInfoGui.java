@@ -33,9 +33,9 @@ public final class PartyInfoGui extends Gui {
 
 	private OrthographicCamera camera;
 	private ArrayList<GuiRenderable> renderables, renderablesCreateBuffer, renderablesDelBuffer;
-	private List<UnitSchema> partySchema = new ArrayList<>();
+	private List<? extends UnitSchema> partySchema = new ArrayList<>();
 
-	public PartyInfoGui(WFGame game, List<UnitSchema> party) {
+	public PartyInfoGui(WFGame game, List<? extends UnitSchema> party) {
 		super(game);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, getScreenWidth(), getScreenHeight());

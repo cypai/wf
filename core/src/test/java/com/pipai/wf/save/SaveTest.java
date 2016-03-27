@@ -23,6 +23,8 @@ import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.misc.BasicStats;
 import com.pipai.wf.unit.ability.AbilityList;
 import com.pipai.wf.unit.ability.SuppressionAbility;
+import com.pipai.wf.unit.schema.ImmutableUnitSchema;
+import com.pipai.wf.unit.schema.MutableUnitSchema;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public class SaveTest extends GdxMockedTest {
@@ -61,7 +63,7 @@ public class SaveTest extends GdxMockedTest {
 		AgentInventory inventory = new AgentInventory(3);
 		inventory.setItem(new LeatherArmor(), 1);
 		inventory.setItem(new Pistol(), 2);
-		party.add(new UnitSchema(name, new BasicStats(hp, maxHP, mp, maxMP, ap, maxAP, aim, mobility, defense),
+		party.add(new ImmutableUnitSchema(name, new BasicStats(hp, maxHP, mp, maxMP, ap, maxAP, aim, mobility, defense),
 				new AbilityList(), inventory, 1, exp, 0));
 		save.setParty(party);
 		MANAGER.save(save, SAVE_SLOT);
@@ -91,7 +93,7 @@ public class SaveTest extends GdxMockedTest {
 		Save save = generator.generateNewSave();
 		MANAGER.save(save, SAVE_SLOT);
 		Save load = MANAGER.load(SAVE_SLOT);
-		List<UnitSchema> party = load.getParty();
+		List<MutableUnitSchema> party = load.getParty();
 		Assert.assertEquals(6, party.size());
 		UnitSchema tidus = party.get(0);
 		Assert.assertEquals(3, tidus.getAbilities().size());
@@ -104,11 +106,11 @@ public class SaveTest extends GdxMockedTest {
 	@Test
 	public void saveVariableTest() {
 		Save save = new Save();
-		final String SCENARIO = "scenario";
-		Assert.assertFalse(save.getVariable(SCENARIO).isPresent());
-		final String SCENARIO_VALUE = "test_scenario.txt";
-		save.setVariable(SCENARIO, SCENARIO_VALUE);
-		Assert.assertEquals(SCENARIO_VALUE, save.getVariable(SCENARIO).get());
+		final String scenario = "scenario";
+		Assert.assertFalse(save.getVariable(scenario).isPresent());
+		final String scenarioValue = "test_scenario.txt";
+		save.setVariable(scenario, scenarioValue);
+		Assert.assertEquals(scenarioValue, save.getVariable(scenario).get());
 	}
 
 	@Test
@@ -119,7 +121,7 @@ public class SaveTest extends GdxMockedTest {
 		File file = new File(url.getFile());
 		FileHandle handle = new FileHandle(file);
 		loader.load(handle);
-		List<UnitSchema> party = save.getParty();
+		List<MutableUnitSchema> party = save.getParty();
 		Assert.assertEquals(1, party.size());
 		UnitSchema schema = party.get(0);
 		Assert.assertEquals("Tidus", schema.getName());
@@ -149,16 +151,16 @@ public class SaveTest extends GdxMockedTest {
 	@Test
 	public void saveWriteVariablesTest() throws URISyntaxException, CorruptedSaveException, IOException {
 		Save save = new Save();
-		final String SCENARIO = "scenario";
-		final String SCENARIO_VALUE = "test.txt";
-		final String LABEL = "label";
-		final String LABEL_VALUE = "opening";
-		save.setVariable(SCENARIO, SCENARIO_VALUE);
-		save.setVariable(LABEL, LABEL_VALUE);
+		final String scenario = "scenario";
+		final String scenarioValue = "test.txt";
+		final String label = "label";
+		final String labelValue = "opening";
+		save.setVariable(scenario, scenarioValue);
+		save.setVariable(label, labelValue);
 		MANAGER.save(save, SAVE_SLOT);
 		Save load = MANAGER.load(SAVE_SLOT);
-		Assert.assertEquals(SCENARIO_VALUE, load.getVariable(SCENARIO).get());
-		Assert.assertEquals(LABEL_VALUE, load.getVariable(LABEL).get());
+		Assert.assertEquals(scenarioValue, load.getVariable(scenario).get());
+		Assert.assertEquals(labelValue, load.getVariable(label).get());
 	}
 
 }

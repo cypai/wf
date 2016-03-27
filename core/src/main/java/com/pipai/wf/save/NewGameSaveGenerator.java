@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import com.pipai.wf.WfConfiguration;
 import com.pipai.wf.unit.race.Race;
 import com.pipai.wf.unit.schema.FlameFairySchema;
+import com.pipai.wf.unit.schema.MutableUnitSchema;
 import com.pipai.wf.unit.schema.RaceTemplateSchema;
 import com.pipai.wf.unit.schema.TidusSchema;
-import com.pipai.wf.unit.schema.UnitSchema;
 
 public class NewGameSaveGenerator {
 
@@ -19,14 +19,14 @@ public class NewGameSaveGenerator {
 		return save;
 	}
 
-	private static ArrayList<UnitSchema> generateParty() {
-		ArrayList<UnitSchema> party = new ArrayList<>();
-		party.add(new UnitSchema(new TidusSchema()));
-		party.add(new UnitSchema(new RaceTemplateSchema(Race.HUMAN)));
-		party.add(new UnitSchema(new RaceTemplateSchema(Race.FAIRY)));
-		party.add(new UnitSchema(new RaceTemplateSchema(Race.CAT)));
-		party.add(new UnitSchema(new FlameFairySchema()));
-		party.add(new UnitSchema(new RaceTemplateSchema(Race.FOX)));
+	private static ArrayList<MutableUnitSchema> generateParty() {
+		ArrayList<MutableUnitSchema> party = new ArrayList<>();
+		party.add(new MutableUnitSchema(new TidusSchema()));
+		party.add(new MutableUnitSchema(new RaceTemplateSchema(Race.HUMAN)));
+		party.add(new MutableUnitSchema(new RaceTemplateSchema(Race.FAIRY)));
+		party.add(new MutableUnitSchema(new RaceTemplateSchema(Race.CAT)));
+		party.add(new MutableUnitSchema(new FlameFairySchema()));
+		party.add(new MutableUnitSchema(new RaceTemplateSchema(Race.FOX)));
 		return party;
 	}
 
