@@ -113,7 +113,8 @@ public class TerrainRenderingSystem extends IteratingSystem {
 		fogOfWarShader.begin();
 		fogOfWarShader.setUniformMatrix(u_projViewTrans, camera.combined);
 		fogOfWarShader.setUniformMatrix(u_worldTrans, new Matrix4());
-		DirectionalLightsAttribute envlights = (DirectionalLightsAttribute) environment.get(DirectionalLightsAttribute.Type);
+		DirectionalLightsAttribute envlights = (DirectionalLightsAttribute) environment
+				.get(DirectionalLightsAttribute.Type);
 		fogOfWarShader.setUniformf(u_lightColor, envlights.lights.first().color);
 		grassTexture.bind(0);
 		fogOfWarShader.setUniformi(u_texture, 0);

@@ -15,7 +15,8 @@ public class AgentFactory {
 		return a;
 	}
 
-	public Agent battleAgentFromStats(Team team, GridPosition position, int hp, int mp, int ap, int aim, int mobility, int defense) {
+	public Agent battleAgentFromStats(Team team, GridPosition position,
+			int hp, int mp, int ap, int aim, int mobility, int defense) {
 		Agent as = new Agent("No name", new BasicStats(hp, hp, mp, mp, ap, ap, aim, mobility, defense));
 		as.setTeam(team);
 		as.setState(State.NEUTRAL);

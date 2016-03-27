@@ -179,6 +179,19 @@
     <module name="UnnecessaryParentheses"/>
     <module name="ArrayTypeStyle"/>
     <module name="TrailingComment"/>
+    <module name="SingleBreakOrContinueCheck"/>
+    <module name="InterfaceTypeParameterNameCheck"/>
+    <module name="EnumValueNameCheck"/>
+    <module name="LineLengthExtended">
+      <property name="max" value="120"/>
+      <property name="tabWidth" value="4"/>
+    </module>
+    <module name="AnonInnerLength"/>
+    <module name="Regexp">
+      <property name="format" value="$System\.out\.print.+^"/>
+      <property name="message" value="Do not print to console directly"/>
+      <property name="illegalPattern" value="true"/>
+    </module>
   </module>
   <module name="RegexpSingleline">
     <property name="format" value="^.*System.out.print.*$"/>

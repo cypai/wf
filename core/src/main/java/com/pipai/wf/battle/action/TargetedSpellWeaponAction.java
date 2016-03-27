@@ -24,13 +24,15 @@ import com.pipai.wf.item.weapon.SpellWeapon;
 import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.spell.Spell;
 
-public class TargetedSpellWeaponAction extends OverwatchableTargetedAction implements DefaultApRequiredComponent, DefaultWeaponAccuracyMixin {
+public class TargetedSpellWeaponAction extends OverwatchableTargetedAction
+		implements DefaultApRequiredComponent, DefaultWeaponAccuracyMixin {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TargetedSpellWeaponAction.class);
 
 	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 
-	public TargetedSpellWeaponAction(BattleController controller, Agent performerAgent, Agent targetAgent, SpellWeapon weapon) {
+	public TargetedSpellWeaponAction(BattleController controller, Agent performerAgent, Agent targetAgent,
+			SpellWeapon weapon) {
 		super(controller, performerAgent, targetAgent);
 		setWeapon(weapon);
 	}
@@ -54,9 +56,12 @@ public class TargetedSpellWeaponAction extends OverwatchableTargetedAction imple
 		return Arrays.asList(
 				BaseVerifier.getInstance(),
 				new HasItemVerifier(getPerformer(), getWeapon()),
-				new PredicateVerifier<Weapon>(weapon -> weapon instanceof SpellWeapon, getWeapon(), "Not a spell weapon"),
-				new PredicateVerifier<Weapon>(weapon -> ((SpellWeapon) weapon).getSpell() != null, getWeapon(), "No readied spell"),
-				new PredicateVerifier<Weapon>(weapon -> ((SpellWeapon) weapon).getSpell().canTargetAgent(), getWeapon(), "Spell is not targetable"));
+				new PredicateVerifier<Weapon>(weapon -> weapon instanceof SpellWeapon, getWeapon(),
+						"Not a spell weapon"),
+				new PredicateVerifier<Weapon>(weapon -> ((SpellWeapon) weapon).getSpell() != null, getWeapon(),
+						"No readied spell"),
+				new PredicateVerifier<Weapon>(weapon -> ((SpellWeapon) weapon).getSpell().canTargetAgent(), getWeapon(),
+						"Spell is not targetable"));
 	}
 
 	@Override
@@ -66,7 +71,8 @@ public class TargetedSpellWeaponAction extends OverwatchableTargetedAction imple
 		Spell readiedSpell = w.getSpell();
 		LOGGER.debug("Performed by '" + getPerformer().getName() + "' on '" + getTarget()
 				+ "' with spell " + readiedSpell + " and owPenalty " + owPenalty);
-		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new SpellDamageFunction(readiedSpell), owPenalty);
+		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new SpellDamageFunction(readiedSpell),
+				owPenalty);
 		getPerformer().setAP(0);
 		w.cast();
 		getDamageDealer().doDamage(result, target);

@@ -36,7 +36,8 @@ public class BattleResultsTest extends GdxMockedTest {
 		player.setMP(2);
 		// Ensure enemy will be KOed and give exp
 		enemy.setHP(1);
-		OverwatchableTargetedAction atk = (RangedWeaponAttackAction) pistol.getParticularAction(RangedWeaponAttackAction.class, controller, player);
+		OverwatchableTargetedAction atk = (RangedWeaponAttackAction) pistol
+				.getParticularAction(RangedWeaponAttackAction.class, controller, player);
 		atk.setTarget(enemy);
 		try {
 			atk.perform();

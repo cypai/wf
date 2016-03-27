@@ -40,7 +40,8 @@ public class OverwatchActionTest extends GdxMockedTest {
 		player.getInventory().setItem(pistol, 1);
 		map.addAgent(player);
 		map.addAgent(WfTestUtils.createGenericAgent(Team.ENEMY, enemyPos));
-		OverwatchAction ow = new OverwatchAction(controller, player, pistol, new RangedWeaponAttackAction(controller, player, pistol));
+		OverwatchAction ow = new OverwatchAction(controller, player, pistol,
+				new RangedWeaponAttackAction(controller, player, pistol));
 		try {
 			ow.perform();
 			Assert.fail("Expected exception not thrown");
@@ -64,7 +65,8 @@ public class OverwatchActionTest extends GdxMockedTest {
 		map.addAgent(enemy);
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
-		OverwatchAction ow = new OverwatchAction(controller, player, pistol, new RangedWeaponAttackAction(controller, player, pistol));
+		OverwatchAction ow = new OverwatchAction(controller, player, pistol,
+				new RangedWeaponAttackAction(controller, player, pistol));
 		ow.perform();
 		OverwatchEvent ev = (OverwatchEvent) observer.getEvent();
 		Assert.assertEquals(player, ev.performer);
@@ -87,7 +89,8 @@ public class OverwatchActionTest extends GdxMockedTest {
 		Assert.assertEquals(1, owEv.getChainEvents().size());
 		RangedWeaponAttackEvent attackEvent = (RangedWeaponAttackEvent) owEv.getChainEvents().get(0);
 		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - attackEvent.damageResult.getDamage());
+		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(),
+				enemy.getMaxHP() - attackEvent.damageResult.getDamage());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
 	}
@@ -115,8 +118,10 @@ public class OverwatchActionTest extends GdxMockedTest {
 		MockGUIObserver observer = new MockGUIObserver();
 		controller.registerObserver(observer);
 		Agent enemy = map.getAgentAtPos(enemyPos);
-		new OverwatchAction(controller, player1, pistol1, new RangedWeaponAttackAction(controller, player1, pistol1)).perform();
-		new OverwatchAction(controller, player2, pistol2, new RangedWeaponAttackAction(controller, player2, pistol2)).perform();
+		new OverwatchAction(controller, player1, pistol1, new RangedWeaponAttackAction(controller, player1, pistol1))
+				.perform();
+		new OverwatchAction(controller, player2, pistol2, new RangedWeaponAttackAction(controller, player2, pistol2))
+				.perform();
 		// Test Overwatch Activation
 		LinkedList<GridPosition> path = new LinkedList<>();
 		GridPosition dest = new GridPosition(2, 1);

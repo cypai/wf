@@ -102,7 +102,8 @@ public class CastFireballTest extends GdxMockedTest {
 		Assert.assertTrue(spellWeapon.getSpell() instanceof FireballSpell);
 		// Hack to refresh AP
 		player.setAP(2);
-		new OverwatchAction(controller, player, spellWeapon, new TargetedSpellWeaponAction(controller, player, spellWeapon)).perform();
+		new OverwatchAction(controller, player, spellWeapon,
+				new TargetedSpellWeaponAction(controller, player, spellWeapon)).perform();
 		OverwatchEvent ev = (OverwatchEvent) observer.getEvent();
 		Assert.assertEquals(player, ev.performer);
 		Assert.assertEquals("Overwatch: Fireball", ev.overwatchName);
@@ -124,7 +125,8 @@ public class CastFireballTest extends GdxMockedTest {
 		Assert.assertEquals(1, owEv.getChainEvents().size());
 		RangedSpellAttackEvent spellAttackEvent = (RangedSpellAttackEvent) owEv.getChainEvents().get(0);
 		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - spellAttackEvent.damageResult.getDamage());
+		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(),
+				enemy.getMaxHP() - spellAttackEvent.damageResult.getDamage());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
 		Assert.assertEquals(null, spellWeapon.getSpell());

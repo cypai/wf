@@ -25,7 +25,9 @@ public class AbilityTreeDisplay extends GuiObject implements GuiRenderable, XYPo
 			List<AbilityTreeNode> nodes = abilityTree.getAbilitiesAtHeight(level);
 			float xVal = x;
 			for (AbilityTreeNode node : nodes) {
-				nodeInstances.add(new AbilityTreeNodeDisplay(node, xVal, y - AbilityTreeNodeDisplay.HEIGHT * (level - 1)));
+				AbilityTreeNodeDisplay displayNode = new AbilityTreeNodeDisplay(node, xVal,
+						y - AbilityTreeNodeDisplay.HEIGHT * (level - 1));
+				nodeInstances.add(displayNode);
 				xVal += AbilityTreeNodeDisplay.HEIGHT;
 			}
 		}

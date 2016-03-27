@@ -25,7 +25,8 @@ public class AbilityCooldownVerifier implements ActionVerifier {
 			return ActionVerificationResult.invalidResult("No ability specified");
 		}
 		if (!agent.getAbilities().hasAbility(abilityClass)) {
-			return ActionVerificationResult.invalidResult(agent.getName() + " does not have the required ability " + abilityClass.getName());
+			return ActionVerificationResult.invalidResult(agent.getName() + " does not have the required ability "
+					+ abilityClass.getName());
 		}
 		Ability ability = agent.getAbility(abilityClass);
 		if (ability instanceof CooldownComponent && ((CooldownComponent) ability).onCooldown()) {

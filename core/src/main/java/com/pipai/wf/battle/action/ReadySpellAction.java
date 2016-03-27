@@ -53,7 +53,8 @@ public class ReadySpellAction extends PerformerAction implements ApRequiredCompo
 		return Arrays.asList(BaseVerifier.getInstance(),
 				new HasSpellVerifier(getPerformer(), spell),
 				new SpellMpVerifier(getPerformer(), spell),
-				new PredicateVerifier<Weapon>(weapon -> weapon instanceof SpellWeapon, getWeapon(), "Weapon is not a spell weapon"));
+				new PredicateVerifier<Weapon>(weapon -> weapon instanceof SpellWeapon, getWeapon(),
+						"Weapon is not a spell weapon"));
 	}
 
 	@Override

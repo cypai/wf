@@ -75,7 +75,8 @@ public abstract class Weapon extends Item {
 			if (canFire) {
 				actions.add(new RangedWeaponAttackAction(controller, agent, this));
 				if (hasFlag(WeaponFlag.OVERWATCH)) {
-					OverwatchAction owAction = new OverwatchAction(controller, agent, this, new RangedWeaponAttackAction(controller, agent, this));
+					OverwatchAction owAction = new OverwatchAction(controller, agent, this,
+							new RangedWeaponAttackAction(controller, agent, this));
 					actions.add(owAction);
 				}
 			}

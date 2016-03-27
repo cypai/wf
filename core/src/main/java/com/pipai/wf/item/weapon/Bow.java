@@ -10,7 +10,8 @@ public class Bow extends Weapon {
 	public static final int BASE_AMMO = 3;
 
 	private static final ImmutableSet<WeaponFlag> FLAGS = ImmutableSet.<WeaponFlag>of(
-			WeaponFlag.BOW, WeaponFlag.NEEDS_AMMUNITION, WeaponFlag.OVERWATCH, WeaponFlag.PRECISE_SHOT, WeaponFlag.SUPPRESSION);
+			WeaponFlag.BOW, WeaponFlag.NEEDS_AMMUNITION, WeaponFlag.OVERWATCH, WeaponFlag.PRECISE_SHOT,
+			WeaponFlag.SUPPRESSION);
 
 	public Bow() {
 		super(BASE_AMMO);
@@ -38,7 +39,8 @@ public class Bow extends Weapon {
 		if (distance <= slightBonusRange && distance > betterBonusRange) {
 			return (int) (new LinearFunction(slightBonusRange, 0, betterBonusRange, slightBonusMax)).eval(distance);
 		} else if (distance <= betterBonusRange && distance > goodBonusRange) {
-			return (int) (new LinearFunction(betterBonusRange, slightBonusMax, goodBonusRange, betterBonusMax)).eval(distance);
+			return (int) (new LinearFunction(betterBonusRange, slightBonusMax, goodBonusRange, betterBonusMax))
+					.eval(distance);
 		} else if (distance <= goodBonusRange) {
 			return (int) (new LinearFunction(goodBonusRange, betterBonusMax, 0, goodBonusMax)).eval(distance);
 		}

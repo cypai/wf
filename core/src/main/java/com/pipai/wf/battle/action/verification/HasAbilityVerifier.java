@@ -24,7 +24,8 @@ public class HasAbilityVerifier implements ActionVerifier {
 			return ActionVerificationResult.invalidResult("No ability specified");
 		}
 		if (!agent.getAbilities().hasAbility(ability)) {
-			return ActionVerificationResult.invalidResult(agent.getName() + " does not have the required ability " + ability.getName());
+			return ActionVerificationResult
+					.invalidResult(agent.getName() + " does not have the required ability " + ability.getName());
 		}
 		return ActionVerificationResult.validResult();
 	}

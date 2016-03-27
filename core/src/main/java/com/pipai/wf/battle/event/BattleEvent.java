@@ -35,7 +35,9 @@ public abstract class BattleEvent implements Event {
 	}
 
 	/**
-	 * Should only be called during the build. Sets a special "name" to be indicated on the screen. Returns itself for chaining
+	 * Should only be called during the build. Sets a special "name" to be indicated on the screen. Returns itself for
+	 * chaining
+	 * 
 	 * @return itself for chaining
 	 */
 	public BattleEvent withActionName(String actionName) {

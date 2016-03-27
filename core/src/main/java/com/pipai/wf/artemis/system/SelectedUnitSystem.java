@@ -32,7 +32,8 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 
 	// private static final Logger LOGGER = LoggerFactory.getLogger(SelectedUnitSystem.class);
 
-	private static final Builder ASPECT_MATCHER = Aspect.all(PlayerUnitComponent.class, SelectedUnitComponent.class, XYZPositionComponent.class);
+	private static final Builder ASPECT_MATCHER = Aspect.all(PlayerUnitComponent.class, SelectedUnitComponent.class,
+			XYZPositionComponent.class);
 
 	private ComponentMapper<PlayerUnitComponent> mPlayerUnit;
 	private ComponentMapper<SelectedUnitComponent> mSelectedUnit;
@@ -118,7 +119,8 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 		boolean found = false;
 		for (Entity e : partyQueue) {
 			if (found) {
-				// Previous entity was selected, add selected component to next one, let inserted() deal with handling it
+				// Previous entity was selected, add selected component to next one, let inserted() deal with handling
+				// it
 				mSelectedUnit.create(e);
 				return;
 			}

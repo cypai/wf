@@ -164,7 +164,8 @@ public class PathfindingTest {
 		map.addAgent(factory.battleAgentFromStats(Team.PLAYER, new GridPosition(2, 1), 3, 5, 2, 5, 65, 0));
 		MapGraph graph = new MapGraph(map, new GridPosition(1, 1), 10, 1, 1);
 		Assert.assertFalse("Failed to return false on moving to solid tile", graph.canMoveTo(new GridPosition(3, 0)));
-		Assert.assertFalse("Failed to return false on moving to tile with other agent", graph.canMoveTo(new GridPosition(2, 1)));
+		Assert.assertFalse("Failed to return false on moving to tile with other agent",
+				graph.canMoveTo(new GridPosition(2, 1)));
 	}
 
 	@Test

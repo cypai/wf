@@ -24,7 +24,9 @@ public class AgentInventory implements DeepCopyable, DeepCopyableAsNew {
 	}
 
 	@JsonCreator
-	public AgentInventory(@JsonProperty("slots") int slots, @JsonProperty("items") Item[] items, @JsonProperty("equippedSlot") int equippedSlot) {
+	public AgentInventory(@JsonProperty("slots") int slots,
+			@JsonProperty("items") Item[] items,
+			@JsonProperty("equippedSlot") int equippedSlot) {
 		if (slots != items.length) {
 			throw new IllegalArgumentException("Size of inventory does not match item array size");
 		}

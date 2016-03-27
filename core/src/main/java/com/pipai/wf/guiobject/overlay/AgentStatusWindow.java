@@ -104,7 +104,9 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		BitmapFont f = batch.getFont();
 		spr.begin();
 		f.setColor(Color.WHITE);
-		f.draw(spr, targetedAction.getTarget().getName(), padding + width / 2, padding + height - f.getLineHeight(), 0, Align.center, true);
+		f.draw(spr, targetedAction.getTarget().getName(),
+				padding + width / 2, padding + height - f.getLineHeight(),
+				0, Align.center, true);
 		spr.end();
 		if (targetedAction instanceof HitAccuracyComponent) {
 			renderCalc(batch, padding * 2, height - f.getLineHeight() * 2,
@@ -117,7 +119,8 @@ public class AgentStatusWindow extends GuiObject implements GuiRenderable {
 		renderAbilities(batch, padding * 2, height - f.getLineHeight() * 12, targetedAction.getTarget());
 	}
 
-	private static void renderCalc(BatchHelper batch, float calcX, float calcY, PercentageModifierList pmList, String title) {
+	private static void renderCalc(BatchHelper batch, float calcX, float calcY, PercentageModifierList pmList,
+			String title) {
 		ShapeRenderer r = batch.getShapeRenderer();
 		SpriteBatch spr = batch.getSpriteBatch();
 		BitmapFont f = batch.getFont();

@@ -40,7 +40,8 @@ public class PrecisionShotAbilityTest {
 		player.getInventory().setItem(bow, 1);
 		map.addAgent(player);
 		BattleController controller = new BattleController(map, mockConfig);
-		PrecisionShotAbility ability = (PrecisionShotAbility) player.getAbilities().getAbility(PrecisionShotAbility.class);
+		PrecisionShotAbility ability = (PrecisionShotAbility) player.getAbilities()
+				.getAbility(PrecisionShotAbility.class);
 		new PrecisionShotAction(controller, player, mockTarget, bow).perform();
 		Assert.assertTrue(ability.onCooldown());
 		controller.endTurn();

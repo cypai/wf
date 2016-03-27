@@ -23,7 +23,8 @@ public class AgentCoverAndFlankingTest {
 		return factory.battleAgentFromStats(team, position, 1, 1, 1, 1, 1, 0);
 	}
 
-	private static BattleMap generateMap(String mapString, GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
+	private static BattleMap generateMap(String mapString, GridPosition playerPos, GridPosition enemyPos)
+			throws BadStateStringException {
 		BattleMap map = new BattleMap(new MapString(mapString));
 		map.addAgent(getDummyAgent(Team.PLAYER, playerPos));
 		map.addAgent(getDummyAgent(Team.ENEMY, enemyPos));

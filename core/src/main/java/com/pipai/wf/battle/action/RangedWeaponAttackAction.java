@@ -24,7 +24,8 @@ import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.item.weapon.WeaponFlag;
 import com.pipai.wf.unit.ability.ArrowRainAbility;
 
-public class RangedWeaponAttackAction extends OverwatchableTargetedAction implements DefaultApRequiredComponent, DefaultWeaponAccuracyMixin {
+public class RangedWeaponAttackAction extends OverwatchableTargetedAction
+		implements DefaultApRequiredComponent, DefaultWeaponAccuracyMixin {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RangedWeaponAttackAction.class);
 
@@ -35,7 +36,8 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction implem
 		setWeapon(weapon);
 	}
 
-	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent, Agent targetAgent, Weapon weapon) {
+	public RangedWeaponAttackAction(BattleController controller, Agent performerAgent, Agent targetAgent,
+			Weapon weapon) {
 		super(controller, performerAgent, targetAgent);
 		setWeapon(weapon);
 	}
@@ -58,8 +60,10 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction implem
 		Agent performer = getPerformer();
 		Weapon weapon = getWeapon();
 		Agent target = getTarget();
-		LOGGER.debug("Performed by '" + getPerformer().getName() + "' on '" + getTarget() + "' with owPenalty " + owPenalty);
-		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(weapon), owPenalty);
+		LOGGER.debug(
+				"Performed by '" + getPerformer().getName() + "' on '" + getTarget() + "' with owPenalty " + owPenalty);
+		DamageResult result = getDamageCalculator().rollDamageGeneral(this, new WeaponDamageFunction(weapon),
+				owPenalty);
 		if (weapon.hasFlag(WeaponFlag.BOW)
 				&& performer.getAbilities().hasAbility(ArrowRainAbility.class)
 				&& performer.getAP() == performer.getMaxAP()) {

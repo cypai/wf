@@ -6,7 +6,6 @@ import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.inventory.AgentInventory;
-import com.pipai.wf.battle.vision.AgentVisionCalculator;
 import com.pipai.wf.item.Item;
 
 public class ActionListGenerator {
@@ -19,7 +18,6 @@ public class ActionListGenerator {
 
 	public ArrayList<Action> generateWeaponActionList(Agent a) {
 		// TODO: Fix this
-		AgentVisionCalculator calc = new AgentVisionCalculator(controller.getBattleMap(), controller.getBattleConfiguration());
 		ArrayList<Action> list = new ArrayList<>();
 		AgentInventory inventory = a.getInventory();
 		for (int i = 1; i <= inventory.getSlots(); i++) {

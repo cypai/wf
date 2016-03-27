@@ -10,17 +10,28 @@ public class DirectionalCoverTest {
 	@Test
 	public void neededCoverDirectionsTest() {
 		GridPosition pos = new GridPosition(1, 1);
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.S));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.W));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 1)).contains(Direction.W));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.W));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.N));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(1, 2)).contains(Direction.N));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.N));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.E));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 1)).contains(Direction.E));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.E));
-		Assert.assertTrue(DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.S));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.S));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 0)).contains(Direction.W));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 1)).contains(Direction.W));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.W));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(0, 2)).contains(Direction.N));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(1, 2)).contains(Direction.N));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.N));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 2)).contains(Direction.E));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 1)).contains(Direction.E));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.E));
+		Assert.assertTrue(
+				DirectionalCoverSystem.getNeededCoverDirections(pos, new GridPosition(2, 0)).contains(Direction.S));
 	}
 
 	@Test

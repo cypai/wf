@@ -18,7 +18,8 @@ public class MoveEvent extends BattleEvent {
 
 	@Override
 	public String toString() {
-		return performer.getName() + " moved with path" + path.stream().map(tile -> tile.toString()).reduce("", (a, b) -> a + " " + b);
+		return performer.getName() + " moved with path"
+				+ path.stream().map(tile -> tile.toString()).reduce("", (a, b) -> a + " " + b);
 	}
 
 }

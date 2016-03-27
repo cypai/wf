@@ -32,7 +32,8 @@ public class EquipArmorAction extends PerformerAction implements DefaultApRequir
 	@Override
 	protected void performImpl() throws IllegalActionException {
 		Agent performer = getPerformer();
-		LOGGER.debug("Performed by '" + performer.getName() + "' equipping " + performer.getInventory().getItemName(slot) + " at slot " + slot);
+		LOGGER.debug("Performed by '" + performer.getName() + "' equipping "
+				+ performer.getInventory().getItemName(slot) + " at slot " + slot);
 		performer.getInventory().equipArmor(slot);
 		performer.setAP(0);
 		// logBattleEvent(event);

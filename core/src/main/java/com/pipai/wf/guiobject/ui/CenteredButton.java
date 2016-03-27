@@ -24,7 +24,8 @@ public abstract class CenteredButton extends GuiObject implements XYPositioned, 
 
 	private GlyphLayout glayout;
 
-	public CenteredButton(Gui gui, float x, float y, float width, float height, Color border, Color background, String label) {
+	public CenteredButton(Gui gui, float x, float y, float width, float height, Color border, Color background,
+			String label) {
 		super(gui);
 		position = new Vector2(x, y);
 		w = width;

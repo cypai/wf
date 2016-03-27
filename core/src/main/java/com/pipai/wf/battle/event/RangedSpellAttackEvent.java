@@ -17,7 +17,8 @@ public class RangedSpellAttackEvent extends PerformerTargetEvent {
 
 	@Override
 	public String toString() {
-		return performer.getName() + " attacked " + target.getName() + " with " + spell.getName() + " with result: [ " + damageResult + " ]";
+		return performer.getName() + " attacked " + target.getName() + " with " + spell.getName() + " with result: [ "
+				+ damageResult + " ]";
 	}
 
 }

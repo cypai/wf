@@ -50,7 +50,8 @@ public class SuppressionTest {
 		int toHit = new RangedWeaponAttackAction(controller, enemy, player, enemyBow).getHitCalculation().total();
 		new SuppressionAction(controller, player, enemy, playerBow).perform();
 		Assert.assertEquals(-30, enemy.getStatusEffects().aimModifierList().total());
-		int suppressedToHit = new RangedWeaponAttackAction(controller, enemy, player, enemyBow).getHitCalculation().total();
+		int suppressedToHit = new RangedWeaponAttackAction(controller, enemy, player, enemyBow).getHitCalculation()
+				.total();
 		Assert.assertEquals(toHit - 30, suppressedToHit);
 		Assert.assertEquals(0, player.getAP());
 		Assert.assertEquals(playerBow.baseAmmoCapacity() - 2, playerBow.getCurrentAmmo());

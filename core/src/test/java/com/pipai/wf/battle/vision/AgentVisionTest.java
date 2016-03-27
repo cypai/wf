@@ -27,7 +27,8 @@ public class AgentVisionTest extends GdxMockedTest {
 		return factory.battleAgentFromStats(team, position, 1, 1, 1, 1, 1, 0);
 	}
 
-	private static BattleMap generateMap(String mapString, GridPosition playerPos, GridPosition enemyPos) throws BadStateStringException {
+	private static BattleMap generateMap(String mapString, GridPosition playerPos, GridPosition enemyPos)
+			throws BadStateStringException {
 		BattleMap map = new BattleMap(new MapString(mapString));
 		map.addAgent(getDummyAgent(Team.PLAYER, playerPos));
 		map.addAgent(getDummyAgent(Team.ENEMY, enemyPos));
@@ -44,7 +45,8 @@ public class AgentVisionTest extends GdxMockedTest {
 		Assert.assertTrue(agentVisionCalc.canSee(enemy, player));
 	}
 
-	private static void performMutuallyNotVisibleTest(String rawMapString, GridPosition playerPos, GridPosition enemyPos)
+	private static void performMutuallyNotVisibleTest(String rawMapString, GridPosition playerPos,
+			GridPosition enemyPos)
 			throws BadStateStringException {
 		BattleMap map = generateMap(rawMapString, playerPos, enemyPos);
 		AgentVisionCalculator agentVisionCalc = new AgentVisionCalculator(map, getMockConfig());

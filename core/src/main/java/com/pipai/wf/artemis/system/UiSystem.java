@@ -101,8 +101,10 @@ public class UiSystem extends BaseSystem {
 		bottomTable.left();
 		bottomTable.bottom();
 		ButtonStyle buttonStyle = new ButtonStyle();
-		buttonStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("graphics/ui/button_up.png"))));
-		buttonStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("graphics/ui/button_down.png"))));
+		buttonStyle.up = new TextureRegionDrawable(
+				new TextureRegion(new Texture(Gdx.files.internal("graphics/ui/button_up.png"))));
+		buttonStyle.down = new TextureRegionDrawable(
+				new TextureRegion(new Texture(Gdx.files.internal("graphics/ui/button_down.png"))));
 		for (int i = 0; i < 3; i++) {
 			InventoryButton button = new InventoryButton(buttonStyle, labelStyle);
 			bottomTable.add(button).bottom();

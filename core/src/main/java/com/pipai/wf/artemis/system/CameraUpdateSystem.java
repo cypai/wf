@@ -32,7 +32,8 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 	private HeldKeys heldKeys;
 
 	public CameraUpdateSystem() {
-		super(Aspect.all(PerspectiveCameraComponent.class, XYZPositionComponent.class, SphericalCoordinateComponent.class));
+		super(Aspect.all(PerspectiveCameraComponent.class, XYZPositionComponent.class,
+				SphericalCoordinateComponent.class));
 		heldKeys = new HeldKeys();
 	}
 
@@ -59,7 +60,8 @@ public class CameraUpdateSystem extends IteratingSystem implements InputProcesso
 	}
 
 	private static Vector3 toCartesian(SphericalCoordinateComponent sphericalCoordinates) {
-		return new Vector3().setFromSpherical(sphericalCoordinates.theta, sphericalCoordinates.phi).scl(sphericalCoordinates.r);
+		return new Vector3().setFromSpherical(sphericalCoordinates.theta, sphericalCoordinates.phi)
+				.scl(sphericalCoordinates.r);
 	}
 
 	private Vector3 getTranslationVector(SphericalCoordinateComponent sphericalCoordinates) {

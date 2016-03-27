@@ -29,7 +29,8 @@ public class InterpolationMovementSystem extends IteratingSystem {
 		InterpolationComponent cInterpolation = mInterpolation.get(entityId);
 		EndpointsComponent cEndpoints = mEndpoints.get(entityId);
 		XYZPositionComponent xyz = mXyz.getSafe(entityId);
-		xyz.position.set(cEndpoints.start.cpy().interpolate(cEndpoints.end, alpha(cInterpolation), cInterpolation.interpolation));
+		xyz.position.set(cEndpoints.start.cpy().interpolate(cEndpoints.end, alpha(cInterpolation),
+				cInterpolation.interpolation));
 		// needsUpdateSystem.notify(entityId);
 		// LOGGER.debug("Entity " + entityId + " is at " + xyz.position);
 	}

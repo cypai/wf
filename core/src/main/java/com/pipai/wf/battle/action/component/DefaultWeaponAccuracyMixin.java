@@ -8,12 +8,14 @@ public interface DefaultWeaponAccuracyMixin extends ActionInterface, HasPerforme
 
 	@Override
 	default PercentageModifierList getHitCalculation() {
-		return getTargetedActionCalculator().baseHitCalculation(getBattleMap(), getPerformer(), getTarget(), getWeapon());
+		return getTargetedActionCalculator().baseHitCalculation(getBattleMap(), getPerformer(), getTarget(),
+				getWeapon());
 	}
 
 	@Override
 	default PercentageModifierList getCritCalculation() {
-		return getTargetedActionCalculator().baseCritCalculation(getBattleMap(), getPerformer(), getTarget(), getWeapon());
+		return getTargetedActionCalculator().baseCritCalculation(getBattleMap(), getPerformer(), getTarget(),
+				getWeapon());
 	}
 
 }

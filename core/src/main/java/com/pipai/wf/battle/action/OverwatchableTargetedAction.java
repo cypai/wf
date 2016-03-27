@@ -42,7 +42,8 @@ public abstract class OverwatchableTargetedAction extends TargetedAction impleme
 	@Override
 	protected void logBattleEvent(BattleEvent ev) {
 		if (fromOverwatch) {
-			overwatchEventParent.addChainEvent(new OverwatchActivationEvent(getPerformer(), getTarget(), getTarget().getPosition(), ev));
+			overwatchEventParent.addChainEvent(
+					new OverwatchActivationEvent(getPerformer(), getTarget(), getTarget().getPosition(), ev));
 		} else {
 			super.logBattleEvent(ev);
 		}

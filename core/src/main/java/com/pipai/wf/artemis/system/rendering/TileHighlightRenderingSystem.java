@@ -38,7 +38,8 @@ public class TileHighlightRenderingSystem extends IteratingSystem {
 		TileHighlightComponent cTileHighlight = mTileHighlight.get(entityId);
 		Decal highlightDecal = Decal.newDecal(new TextureRegion(highlightTexture), true);
 		highlightDecal.setColor(cTileHighlight.color);
-		highlightDecal.setPosition(new Vector3(cTileHighlight.tile.getX() * 40 + 20, cTileHighlight.tile.getY() * 40 + 20, 0.1f));
+		highlightDecal.setPosition(
+				new Vector3(cTileHighlight.tile.getX() * 40 + 20, cTileHighlight.tile.getY() * 40 + 20, 0.1f));
 		DecalBatch batch = batchRenderingSystem.getBatch().getDecalBatch();
 		batch.add(highlightDecal);
 	}

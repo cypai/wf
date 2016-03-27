@@ -24,7 +24,8 @@ public class OverwatchAction extends PerformerAction implements DefaultApRequire
 	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 	private OverwatchableTargetedAction overwatchAction;
 
-	public OverwatchAction(BattleController controller, Agent performerAgent, Weapon weapon, OverwatchableTargetedAction action) {
+	public OverwatchAction(BattleController controller, Agent performerAgent, Weapon weapon,
+			OverwatchableTargetedAction action) {
 		super(controller, performerAgent);
 		setWeapon(weapon);
 		overwatchAction = action;
@@ -54,7 +55,8 @@ public class OverwatchAction extends PerformerAction implements DefaultApRequire
 		// TODO: Check this, performer needs to specify weapon overwatch
 		performer.setOverwatch(overwatchAction);
 		logBattleEvent(new OverwatchEvent(getPerformer(),
-				overwatchAction instanceof RangedWeaponAttackAction ? getWeapon().getName() : overwatchAction.getName()));
+				overwatchAction instanceof RangedWeaponAttackAction ? getWeapon().getName()
+						: overwatchAction.getName()));
 	}
 
 	@Override

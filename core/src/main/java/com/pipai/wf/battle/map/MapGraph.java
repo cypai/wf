@@ -280,7 +280,8 @@ public class MapGraph {
 			String s = "Node: " + position + " Edges [ ";
 			for (Edge edge : edges) {
 				Node node = edge.getDestination();
-				s += "{" + node.getPosition() + " " + String.valueOf(node.isVisited()) + " " + String.valueOf(node.isAdded()) + "} ";
+				s += "{" + node.getPosition() + " " + String.valueOf(node.isVisited()) + " "
+						+ String.valueOf(node.isAdded()) + "} ";
 			}
 			s += "]";
 			return s;

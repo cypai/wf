@@ -5,7 +5,8 @@ import com.pipai.wf.misc.HasBasicStats;
 
 public enum Race implements HasBasicStats {
 
-	HUMAN(7, 5, 2, 65, 12, 0, "Human"), FAIRY(4, 10, 2, 65, 13, 0, "Fairy"), CAT(4, 3, 3, 65, 14, 5, "Cat"), FOX(5, 10, 2, 65, 13, 0, "Fox");
+	HUMAN(7, 5, 2, 65, 12, 0, "Human"), FAIRY(4, 10, 2, 65, 13, 0, "Fairy"), CAT(4, 3, 3, 65, 14, 5, "Cat"), FOX(5, 10,
+			2, 65, 13, 0, "Fox");
 
 	private final BasicStats basicStats;
 	private final String name;

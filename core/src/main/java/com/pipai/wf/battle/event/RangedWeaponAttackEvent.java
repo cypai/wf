@@ -17,7 +17,8 @@ public class RangedWeaponAttackEvent extends PerformerTargetEvent {
 
 	@Override
 	public String toString() {
-		return performer.getName() + " attacked " + target.getName() + " with " + weapon.getName() + " with result: [ " + damageResult + " ]";
+		return performer.getName() + " attacked " + target.getName() + " with " + weapon.getName() + " with result: [ "
+				+ damageResult + " ]";
 	}
 
 }

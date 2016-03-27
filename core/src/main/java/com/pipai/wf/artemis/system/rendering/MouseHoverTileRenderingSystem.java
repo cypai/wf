@@ -34,7 +34,8 @@ public class MouseHoverTileRenderingSystem extends IteratingSystem {
 	protected void process(int entityId) {
 		MouseHoverTileComponent cMouseTile = mMouseTile.get(entityId);
 		Decal highlightDecal = Decal.newDecal(new TextureRegion(mouseTileTexture), true);
-		highlightDecal.setPosition(new Vector3(cMouseTile.tile.getX() * 40 + 20, cMouseTile.tile.getY() * 40 + 20, 0.2f));
+		highlightDecal
+				.setPosition(new Vector3(cMouseTile.tile.getX() * 40 + 20, cMouseTile.tile.getY() * 40 + 20, 0.2f));
 		DecalBatch batch = batchRenderingSystem.getBatch().getDecalBatch();
 		batch.add(highlightDecal);
 	}

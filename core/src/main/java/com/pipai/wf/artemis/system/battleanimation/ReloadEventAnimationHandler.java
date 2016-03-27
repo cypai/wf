@@ -20,7 +20,8 @@ public class ReloadEventAnimationHandler extends NoProcessingSystem {
 	public void handleReloadEvent(ReloadEvent event) {
 		int id = world.create();
 		mText.create(id).text = "Reload";
-		mAnchoredPosition.create(id).anchor = TileGridPositionUtils.gridPositionToTileCenter(event.performer.getPosition());
+		mAnchoredPosition.create(id).anchor = TileGridPositionUtils
+				.gridPositionToTileCenter(event.performer.getPosition());
 		mTimedDestroy.create(id).time = 90;
 	}
 

@@ -24,7 +24,8 @@ import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.item.weapon.WeaponFlag;
 import com.pipai.wf.unit.ability.PrecisionShotAbility;
 
-public class PrecisionShotAction extends TargetedAction implements DefaultApRequiredComponent, DefaultWeaponAccuracyMixin {
+public class PrecisionShotAction extends TargetedAction
+		implements DefaultApRequiredComponent, DefaultWeaponAccuracyMixin {
 
 	private WeaponComponent weaponComponent = new WeaponComponentImpl();
 
@@ -58,7 +59,8 @@ public class PrecisionShotAction extends TargetedAction implements DefaultApRequ
 
 	@Override
 	public PercentageModifierList getCritCalculation() {
-		PercentageModifierList calc = getTargetedActionCalculator().baseCritCalculation(getBattleMap(), getPerformer(), getTarget(), getWeapon());
+		PercentageModifierList calc = getTargetedActionCalculator().baseCritCalculation(getBattleMap(), getPerformer(),
+				getTarget(), getWeapon());
 		calc.add(new PercentageModifier("Precision Shot", 30));
 		return calc;
 	}
