@@ -8,8 +8,8 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.Color;
 import com.pipai.wf.artemis.components.TileHighlightComponent;
 import com.pipai.wf.artemis.event.MovementTileUpdateEvent;
-import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
+import com.pipai.wf.util.GridPosition;
 
 import net.mostlyoriginal.api.event.common.Subscribe;
 

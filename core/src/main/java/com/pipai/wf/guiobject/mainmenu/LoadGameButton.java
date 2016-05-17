@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.pipai.wf.gui.MainMenuGui;
 import com.pipai.wf.guiobject.ui.CenteredButton;
 import com.pipai.wf.save.CorruptedSaveException;
-import com.pipai.wf.save.Save;
-import com.pipai.wf.save.SaveManager;
+import com.pipai.wf.save.WfSave;
+import com.pipai.wf.save.WfSaveManager;
 
 public class LoadGameButton extends CenteredButton {
 
@@ -23,9 +23,9 @@ public class LoadGameButton extends CenteredButton {
 
 	@Override
 	protected void onLeftClickImpl() {
-		SaveManager manager = new SaveManager();
+		WfSaveManager manager = new WfSaveManager();
 		try {
-			Save save = manager.load(1);
+			WfSave save = manager.load(1);
 			mainMenuGui.goToTestbed(save.getParty());
 		} catch (CorruptedSaveException e) {
 			LOGGER.error(e.getMessage(), e);

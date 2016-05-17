@@ -11,8 +11,8 @@ import com.pipai.wf.unit.schema.TidusSchema;
 
 public class NewGameSaveGenerator {
 
-	public Save generateNewSave() {
-		Save save = new Save();
+	public WfSave generateNewSave() {
+		WfSave save = new WfSave();
 		save.setParty(generateParty());
 		WfConfiguration config = new WfConfiguration();
 		save.setVariable("scenario", config.getScenario());

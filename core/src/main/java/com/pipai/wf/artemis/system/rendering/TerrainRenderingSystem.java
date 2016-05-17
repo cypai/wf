@@ -30,9 +30,9 @@ import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.CoverType;
 import com.pipai.wf.battle.map.EnvironmentObject;
-import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.guiobject.TerrainMeshGenerator;
+import com.pipai.wf.util.GridPosition;
 
 public class TerrainRenderingSystem extends IteratingSystem {
 

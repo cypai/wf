@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
-import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.util.GridPosition;
 
 public final class TileGridPositionUtils {
 

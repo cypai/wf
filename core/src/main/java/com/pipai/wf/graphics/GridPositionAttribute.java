@@ -2,7 +2,7 @@ package com.pipai.wf.graphics;
 
 import com.badlogic.gdx.graphics.g3d.Attribute;
 import com.badlogic.gdx.utils.NumberUtils;
-import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.util.GridPosition;
 
 public class GridPositionAttribute extends Attribute {
 	public static final String GRID_POSITION_ALIAS = "gridPosition";

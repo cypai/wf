@@ -3,7 +3,7 @@ package com.pipai.wf.guiobject;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.gui.Gui;
-import com.pipai.wf.util.RayMapper;
+import com.pipai.wf.utils.RayMapper;
 
 public abstract class AnchoredGuiObject extends GuiObject implements GuiRenderable {
 

@@ -11,9 +11,9 @@ import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
-import com.pipai.wf.battle.map.GridPosition;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.exception.IllegalActionException;
+import com.pipai.wf.util.GridPosition;
 
 import net.mostlyoriginal.api.event.common.Subscribe;
 

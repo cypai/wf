@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.pipai.wf.gui.MainMenuGui;
 import com.pipai.wf.guiobject.ui.CenteredButton;
 import com.pipai.wf.save.NewGameSaveGenerator;
-import com.pipai.wf.save.Save;
+import com.pipai.wf.save.WfSave;
 
 public class NewGameButton extends CenteredButton {
 
@@ -18,7 +18,7 @@ public class NewGameButton extends CenteredButton {
 	@Override
 	protected void onLeftClickImpl() {
 		NewGameSaveGenerator generator = new NewGameSaveGenerator();
-		Save save = generator.generateNewSave();
+		WfSave save = generator.generateNewSave();
 		mainMenuGui.goToTestbed(save.getParty());
 	}
 

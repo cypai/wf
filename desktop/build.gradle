@@ -30,6 +30,7 @@ task copyAssets(type: Copy) {
 
 task copyConfig(type: Copy) {
     from '../core/config/'
+    from '../mechanics/config/'
     into configDir
 }
 

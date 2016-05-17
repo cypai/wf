@@ -14,7 +14,7 @@ import com.pipai.wf.artemis.components.AnchoredPositionComponent;
 import com.pipai.wf.artemis.components.TextComponent;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
 import com.pipai.wf.gui.BatchHelper;
-import com.pipai.wf.util.RayMapper;
+import com.pipai.wf.utils.RayMapper;
 
 public class AnchoredTextRenderingSystem extends IteratingSystem {
 

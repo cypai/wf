@@ -22,8 +22,8 @@ import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;
 import com.pipai.wf.guiobject.partyinfo.AbilityTreeDisplay;
 import com.pipai.wf.guiobject.partyinfo.PartyInfoList;
-import com.pipai.wf.save.Save;
-import com.pipai.wf.save.SaveManager;
+import com.pipai.wf.save.WfSave;
+import com.pipai.wf.save.WfSaveManager;
 import com.pipai.wf.unit.abilitytree.UnitClassTree;
 import com.pipai.wf.unit.schema.UnitSchema;
 
@@ -93,9 +93,9 @@ public final class PartyInfoGui extends Gui {
 	@Override
 	public void onKeyDown(int keycode) {
 		if (keycode == Keys.ESCAPE) {
-			Save save = new Save();
+			WfSave save = new WfSave();
 			save.setParty(partySchema);
-			SaveManager manager = new SaveManager();
+			WfSaveManager manager = new WfSaveManager();
 			try {
 				LOGGER.debug("Saving game...");
 				manager.save(save, 1);

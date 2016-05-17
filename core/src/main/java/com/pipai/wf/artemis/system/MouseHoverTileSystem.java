@@ -7,7 +7,7 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.artemis.components.MouseHoverTileComponent;
 import com.pipai.wf.artemis.event.MouseHoverRayEvent;
-import com.pipai.wf.battle.map.GridPosition;
+import com.pipai.wf.util.GridPosition;
 
 import net.mostlyoriginal.api.event.common.Subscribe;
 
