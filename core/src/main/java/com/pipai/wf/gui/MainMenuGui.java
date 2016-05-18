@@ -2,6 +2,9 @@ package com.pipai.wf.gui;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.pipai.wf.WFGame;
@@ -16,6 +19,8 @@ import com.pipai.wf.scenario.VisualNovelScene;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public final class MainMenuGui extends Gui {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MainMenuGui.class);
 
 	private GuiObjectBuffers<GuiRenderable> renderables;
 	private GuiObjectBuffers<LeftClickable> leftClickables;
@@ -105,7 +110,9 @@ public final class MainMenuGui extends Gui {
 	}
 
 	public void goToIntro() {
-		switchGui(new VisualNovelScreen(getGame(), new VisualNovelScene(Gdx.files.internal("scenario/main.txt"))));
+		String scenario = getGame().getWfConfiguration().getScenario();
+		LOGGER.debug("Playing intro scenario: " + scenario);
+		switchGui(new VisualNovelScreen(getGame(), new VisualNovelScene(Gdx.files.internal(scenario))));
 	}
 
 }

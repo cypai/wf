@@ -9,6 +9,8 @@ import com.pipai.wf.gui.MainMenuGui;
 
 public class WFGame extends Game {
 
+	private WfConfiguration wfConfig;
+
 	private SpriteBatch spriteBatch;
 	private ShapeRenderer shapeRenderer;
 	private ModelBatch modelBatch;
@@ -16,6 +18,7 @@ public class WFGame extends Game {
 
 	@Override
 	public void create() {
+		wfConfig = new WfConfiguration();
 		spriteBatch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 		modelBatch = new ModelBatch();
@@ -34,6 +37,10 @@ public class WFGame extends Game {
 		shapeRenderer.dispose();
 		modelBatch.dispose();
 		font.dispose();
+	}
+
+	public WfConfiguration getWfConfiguration() {
+		return wfConfig;
 	}
 
 	public SpriteBatch getSpriteBatch() {
