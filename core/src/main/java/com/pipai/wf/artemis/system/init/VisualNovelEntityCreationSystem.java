@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.pipai.wf.artemis.components.OrthographicCameraComponent;
 import com.pipai.wf.artemis.components.PartialTextComponent;
 import com.pipai.wf.artemis.components.TextBoxComponent;
+import com.pipai.wf.artemis.components.TextListComponent;
+import com.pipai.wf.artemis.components.TextListIterationStrategyComponent;
+import com.pipai.wf.artemis.components.TextListIterationStrategyComponent.TextListIterationStrategy;
 import com.pipai.wf.artemis.components.XYPositionComponent;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.Tag;
@@ -22,6 +25,9 @@ public class VisualNovelEntityCreationSystem extends NoProcessingSystem {
 	private ComponentMapper<PartialTextComponent> mPartialText;
 	private ComponentMapper<TextBoxComponent> mTextBox;
 	private ComponentMapper<XYPositionComponent> mXy;
+
+	private ComponentMapper<TextListIterationStrategyComponent> mIterationStrategy;
+	private ComponentMapper<TextListComponent> mTextList;
 
 	private TagManager tagManager;
 
@@ -56,7 +62,7 @@ public class VisualNovelEntityCreationSystem extends NoProcessingSystem {
 		cPartialText.currentText = "";
 		cPartialText.fullText = vnScene.getSceneLines().isEmpty() ? "" : vnScene.getSceneLines().get(0);
 		cPartialText.textUpdateRate = 1;
-		cPartialText.timerSlowness = 2;
+		cPartialText.timerSlowness = 1;
 
 		TextBoxComponent cTextBox = mTextBox.create(textBoxId);
 		cTextBox.width = Gdx.graphics.getWidth();
@@ -64,6 +70,12 @@ public class VisualNovelEntityCreationSystem extends NoProcessingSystem {
 
 		XYPositionComponent cXy = mXy.create(textBoxId);
 		cXy.position.set(cTextBox.width / 2, cTextBox.height / 2);
+
+		TextListComponent cTextList = mTextList.create(textBoxId);
+		cTextList.textQueue = vnScene.getSceneLines();
+
+		TextListIterationStrategyComponent cIterationStrategy = mIterationStrategy.create(textBoxId);
+		cIterationStrategy.updateStrategy = TextListIterationStrategy.AUTO;
 	}
 
 }

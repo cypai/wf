@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.pipai.wf.WFGame;
+import com.pipai.wf.artemis.screen.VisualNovelScreen;
 import com.pipai.wf.gui.util.GuiObjectBuffers;
 import com.pipai.wf.guiobject.GuiObject;
 import com.pipai.wf.guiobject.GuiRenderable;

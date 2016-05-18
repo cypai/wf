@@ -1,4 +1,4 @@
-package com.pipai.wf.gui;
+package com.pipai.wf.artemis.screen;
 
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
@@ -12,10 +12,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.artemis.system.PartialTextBoxUpdateSystem;
+import com.pipai.wf.artemis.system.PartialTextListIterationSystem;
 import com.pipai.wf.artemis.system.init.VisualNovelEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.ExitInputProcessor;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.PartialTextBoxRenderingSystem;
+import com.pipai.wf.gui.BatchHelper;
 import com.pipai.wf.scenario.VisualNovelScene;
 
 import net.mostlyoriginal.api.event.common.EventSystem;
@@ -40,6 +42,7 @@ public class VisualNovelScreen implements Screen {
 						new EventSystem(),
 
 						new PartialTextBoxUpdateSystem(),
+						new PartialTextListIterationSystem(),
 						new VisualNovelEntityCreationSystem(batch, vnScene))
 				.withPassive(-1,
 						// Rendering
