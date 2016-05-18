@@ -12,6 +12,7 @@ import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.mainmenu.LoadGameButton;
 import com.pipai.wf.guiobject.mainmenu.NewGameButton;
 import com.pipai.wf.guiobject.mainmenu.QuitGameButton;
+import com.pipai.wf.scenario.VisualNovelScene;
 import com.pipai.wf.unit.schema.UnitSchema;
 
 public final class MainMenuGui extends Gui {
@@ -101,6 +102,10 @@ public final class MainMenuGui extends Gui {
 
 	public void goToTestbed(List<? extends UnitSchema> party) {
 		switchGui(new PartyInfoGui(getGame(), party));
+	}
+
+	public void goToIntro() {
+		switchGui(new VisualNovelScreen(getGame(), new VisualNovelScene(Gdx.files.internal("scenario/main.txt"))));
 	}
 
 }

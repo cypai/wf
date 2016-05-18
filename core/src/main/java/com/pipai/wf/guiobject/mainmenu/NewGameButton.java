@@ -19,7 +19,8 @@ public class NewGameButton extends CenteredButton {
 	protected void onLeftClickImpl() {
 		NewGameSaveGenerator generator = new NewGameSaveGenerator();
 		WfSave save = generator.generateNewSave();
-		mainMenuGui.goToTestbed(save.getParty());
+		mainMenuGui.goToIntro();
+		// mainMenuGui.goToTestbed(save.getParty());
 	}
 
 }
