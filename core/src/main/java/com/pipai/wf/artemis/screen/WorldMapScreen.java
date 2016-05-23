@@ -5,10 +5,8 @@ import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.artemis.system.init.WorldMapEntityCreationSystem;
@@ -20,18 +18,18 @@ import com.pipai.wf.gui.BatchHelper;
 import net.mostlyoriginal.api.event.common.EventSystem;
 
 // SUPPRESS CHECKSTYLE ClassComplexity This class is actually fairly simple
-public class WorldMapScreen implements Screen {
+public class WorldMapScreen extends SwitchableScreen {
 
-	private Game game;
 	private World world;
 	private BatchHelper batch;
 
 	private InputMultiplexer multiplexer;
 
 	public WorldMapScreen(WFGame game) {
+		super(game);
+
 		batch = new BatchHelper(game.getSpriteBatch(), game.getShapeRenderer(), game.getModelBatch(), game.getFont());
 
-		this.game = game;
 		WorldConfiguration config = new WorldConfigurationBuilder()
 				.with(
 						// Managers

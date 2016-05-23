@@ -5,9 +5,7 @@ import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -45,16 +43,16 @@ import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.plugin.ProfilerPlugin;
 
 // SUPPRESS CHECKSTYLE ClassComplexity This class is actually fairly simple
-public class ArtemisBattleScreen implements Screen {
+public class ArtemisBattleScreen extends SwitchableScreen {
 
-	private Game game;
 	private World world;
 	private BatchHelper batch;
 
 	public ArtemisBattleScreen(WFGame game, Battle battle) {
+		super(game);
+
 		batch = new BatchHelper(game.getSpriteBatch(), game.getShapeRenderer(), game.getModelBatch(), game.getFont());
 
-		this.game = game;
 		WorldConfiguration config = new WorldConfigurationBuilder()
 				.dependsOn(ProfilerPlugin.class)
 				// .withPassive(1, new NeedsUpdateSystem())
