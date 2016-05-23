@@ -8,8 +8,8 @@ import com.pipai.wf.artemis.components.OrthographicCameraComponent;
 import com.pipai.wf.artemis.components.PartialTextComponent;
 import com.pipai.wf.artemis.components.TextBoxComponent;
 import com.pipai.wf.artemis.components.TextListComponent;
-import com.pipai.wf.artemis.components.TextListIterationStrategyComponent;
-import com.pipai.wf.artemis.components.TextListIterationStrategyComponent.TextListIterationStrategy;
+import com.pipai.wf.artemis.components.TextListAdvancementStrategyComponent;
+import com.pipai.wf.artemis.components.TextListAdvancementStrategyComponent.TextListAdvancementStrategy;
 import com.pipai.wf.artemis.components.XYPositionComponent;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.Tag;
@@ -26,7 +26,7 @@ public class VisualNovelEntityCreationSystem extends NoProcessingSystem {
 	private ComponentMapper<TextBoxComponent> mTextBox;
 	private ComponentMapper<XYPositionComponent> mXy;
 
-	private ComponentMapper<TextListIterationStrategyComponent> mIterationStrategy;
+	private ComponentMapper<TextListAdvancementStrategyComponent> mIterationStrategy;
 	private ComponentMapper<TextListComponent> mTextList;
 
 	private TagManager tagManager;
@@ -74,8 +74,8 @@ public class VisualNovelEntityCreationSystem extends NoProcessingSystem {
 		TextListComponent cTextList = mTextList.create(textBoxId);
 		cTextList.textQueue = vnScene.getSceneLines();
 
-		TextListIterationStrategyComponent cIterationStrategy = mIterationStrategy.create(textBoxId);
-		cIterationStrategy.updateStrategy = TextListIterationStrategy.AUTO;
+		TextListAdvancementStrategyComponent cIterationStrategy = mIterationStrategy.create(textBoxId);
+		cIterationStrategy.advancementStrategy = TextListAdvancementStrategy.USER_INPUT;
 	}
 
 }

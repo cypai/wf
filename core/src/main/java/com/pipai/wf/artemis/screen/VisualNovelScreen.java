@@ -12,7 +12,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.artemis.system.PartialTextBoxUpdateSystem;
-import com.pipai.wf.artemis.system.PartialTextListIterationSystem;
+import com.pipai.wf.artemis.system.PartialTextListAdvancementSystem;
 import com.pipai.wf.artemis.system.init.VisualNovelEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.ExitInputProcessor;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
@@ -42,7 +42,7 @@ public class VisualNovelScreen implements Screen {
 						new EventSystem(),
 
 						new PartialTextBoxUpdateSystem(),
-						new PartialTextListIterationSystem(),
+						new PartialTextListAdvancementSystem(),
 						new VisualNovelEntityCreationSystem(batch, vnScene))
 				.withPassive(-1,
 						// Rendering
@@ -52,6 +52,7 @@ public class VisualNovelScreen implements Screen {
 		world = new World(config);
 		multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(new ExitInputProcessor());
+		multiplexer.addProcessor(world.getSystem(PartialTextListAdvancementSystem.class));
 		Gdx.input.setInputProcessor(multiplexer);
 	}
 
