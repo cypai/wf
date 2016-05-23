@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.pipai.wf.artemis.components.PartialTextComponent;
-import com.pipai.wf.artemis.components.TextBoxComponent;
 import com.pipai.wf.artemis.components.XYPositionComponent;
+import com.pipai.wf.artemis.components.textbox.PartialTextComponent;
+import com.pipai.wf.artemis.components.textbox.TextBoxComponent;
 
 public class PartialTextBoxRenderingSystem extends IteratingSystem {
 

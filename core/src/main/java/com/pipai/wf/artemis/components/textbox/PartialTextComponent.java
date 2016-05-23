@@ -1,4 +1,4 @@
-package com.pipai.wf.artemis.components;
+package com.pipai.wf.artemis.components.textbox;
 
 import com.artemis.Component;
 

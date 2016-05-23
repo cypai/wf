@@ -3,7 +3,7 @@ package com.pipai.wf.artemis.system;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
-import com.pipai.wf.artemis.components.PartialTextComponent;
+import com.pipai.wf.artemis.components.textbox.PartialTextComponent;
 import com.sun.javafx.util.Utils;
 
 public class PartialTextBoxUpdateSystem extends IteratingSystem {

@@ -5,9 +5,9 @@ import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.pipai.wf.artemis.components.PartialTextComponent;
-import com.pipai.wf.artemis.components.TextListComponent;
-import com.pipai.wf.artemis.components.TextListAdvancementStrategyComponent;
+import com.pipai.wf.artemis.components.textbox.PartialTextComponent;
+import com.pipai.wf.artemis.components.textbox.TextListAdvancementStrategyComponent;
+import com.pipai.wf.artemis.components.textbox.TextListComponent;
 
 public class PartialTextListAdvancementSystem extends IteratingSystem implements InputProcessor {
 
@@ -26,20 +26,36 @@ public class PartialTextListAdvancementSystem extends IteratingSystem implements
 	protected void process(int entityId) {
 		PartialTextComponent cPartialText = mPartialText.get(entityId);
 		TextListComponent cTextList = mTextList.get(entityId);
-		if (cTextList.index + 1 < cTextList.textQueue.size()
-				&& cPartialText.currentText.length() == cPartialText.fullText.length()) {
+
+		if (cPartialText.currentText.length() == cPartialText.fullText.length()) {
 			TextListAdvancementStrategyComponent cAdvancementStrategy = mAdvancementStrategy.get(entityId);
-			switch (cAdvancementStrategy.advancementStrategy) {
-			case AUTO:
-				goToNextText(cPartialText, cTextList);
-				break;
-			case USER_INPUT:
-				if (next) {
+
+			if (cTextList.index + 1 < cTextList.textQueue.size()) {
+				switch (cAdvancementStrategy.advancementStrategy) {
+				case AUTO:
 					goToNextText(cPartialText, cTextList);
+					break;
+				case USER_INPUT:
+					if (next) {
+						goToNextText(cPartialText, cTextList);
+					}
+					break;
+				default:
+					break;
 				}
-				break;
-			default:
-				break;
+			} else {
+				switch (cAdvancementStrategy.advancementStrategy) {
+				case AUTO:
+					cTextList.finishedDisplay = true;
+					break;
+				case USER_INPUT:
+					if (next) {
+						cTextList.finishedDisplay = true;
+					}
+					break;
+				default:
+					break;
+				}
 			}
 		}
 		next = false;

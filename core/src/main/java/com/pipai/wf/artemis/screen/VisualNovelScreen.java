@@ -5,7 +5,6 @@ import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.artemis.managers.GroupManager;
 import com.artemis.managers.TagManager;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.pipai.wf.WFGame;
 import com.pipai.wf.artemis.system.PartialTextBoxUpdateSystem;
 import com.pipai.wf.artemis.system.PartialTextListAdvancementSystem;
+import com.pipai.wf.artemis.system.VisualNovelNextScreenSystem;
 import com.pipai.wf.artemis.system.init.VisualNovelEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.ExitInputProcessor;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
@@ -22,18 +22,17 @@ import com.pipai.wf.scenario.VisualNovelScene;
 
 import net.mostlyoriginal.api.event.common.EventSystem;
 
-public class VisualNovelScreen implements Screen {
+public class VisualNovelScreen extends SwitchableScreen {
 
-	private Game game;
 	private World world;
 	private BatchHelper batch;
 
 	private InputMultiplexer multiplexer;
 
-	public VisualNovelScreen(WFGame game, VisualNovelScene vnScene) {
+	public VisualNovelScreen(WFGame game, VisualNovelScene vnScene, Screen nextScreen) {
+		super(game);
 		batch = new BatchHelper(game.getSpriteBatch(), game.getShapeRenderer(), game.getModelBatch(), game.getFont());
 
-		this.game = game;
 		WorldConfiguration config = new WorldConfigurationBuilder()
 				.with(
 						// Managers
@@ -43,7 +42,8 @@ public class VisualNovelScreen implements Screen {
 
 						new PartialTextBoxUpdateSystem(),
 						new PartialTextListAdvancementSystem(),
-						new VisualNovelEntityCreationSystem(batch, vnScene))
+						new VisualNovelNextScreenSystem(this),
+						new VisualNovelEntityCreationSystem(batch, vnScene, nextScreen))
 				.withPassive(-1,
 						// Rendering
 						new PartialTextBoxRenderingSystem(),

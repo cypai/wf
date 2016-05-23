@@ -16,6 +16,8 @@ import com.pipai.wf.guiobject.LeftClickable;
 import com.pipai.wf.guiobject.mainmenu.LoadGameButton;
 import com.pipai.wf.guiobject.mainmenu.NewGameButton;
 import com.pipai.wf.guiobject.mainmenu.QuitGameButton;
+import com.pipai.wf.save.NewGameSaveGenerator;
+import com.pipai.wf.save.WfSave;
 import com.pipai.wf.scenario.VisualNovelScene;
 import com.pipai.wf.unit.schema.UnitSchema;
 
@@ -110,10 +112,13 @@ public final class MainMenuGui extends Gui {
 		switchGui(new PartyInfoGui(getGame(), party));
 	}
 
-	public void goToIntro() {
+	public void goToNewGameIntro() {
+		NewGameSaveGenerator generator = new NewGameSaveGenerator();
+		WfSave save = generator.generateNewSave();
 		String scenario = getGame().getWfConfiguration().getScenario();
 		LOGGER.debug("Playing intro scenario: " + scenario);
-		switchGui(new VisualNovelScreen(getGame(), new VisualNovelScene(Gdx.files.internal(scenario))));
+		switchGui(new VisualNovelScreen(getGame(), new VisualNovelScene(Gdx.files.internal(scenario)),
+				new PartyInfoGui(getGame(), save.getParty())));
 	}
 
 }
