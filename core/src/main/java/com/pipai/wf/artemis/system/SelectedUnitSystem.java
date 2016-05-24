@@ -85,7 +85,7 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 
 	@Subscribe
 	public void clickListener(LeftClickEvent event) {
-		PlayerUnitComponent player = mPlayerUnit.getSafe(event.clickedEntityId);
+		PlayerUnitComponent player = mPlayerUnit.get(event.clickedEntityId);
 		if (player != null) {
 			mSelectedUnit.create(event.clickedEntityId);
 		}
@@ -119,13 +119,12 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 		boolean found = false;
 		for (Entity e : partyQueue) {
 			if (found) {
-				// Previous entity was selected, add selected component to next one, let inserted() deal with handling
-				// it
+				// Previous entity was selected, add selected component to next one, let inserted() handle it
 				mSelectedUnit.create(e);
 				return;
 			}
 			// Look for the currently selected entity
-			if (mSelectedUnit.getSafe(e) != null) {
+			if (mSelectedUnit.has(e)) {
 				found = true;
 			}
 		}

@@ -5,7 +5,6 @@ import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.pipai.wf.artemis.components.EndpointsComponent;
 import com.pipai.wf.artemis.components.InterpolationComponent;
-import com.pipai.wf.artemis.components.PerspectiveCameraComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 
 public class InterpolationMovementSystem extends IteratingSystem {
@@ -18,17 +17,15 @@ public class InterpolationMovementSystem extends IteratingSystem {
 
 	// private NeedsUpdateSystem needsUpdateSystem;
 
-	@SuppressWarnings("unchecked")
 	public InterpolationMovementSystem() {
-		super(Aspect.all(EndpointsComponent.class, InterpolationComponent.class)
-				.one(XYZPositionComponent.class, PerspectiveCameraComponent.class));
+		super(Aspect.all(EndpointsComponent.class, InterpolationComponent.class, XYZPositionComponent.class));
 	}
 
 	@Override
 	protected void process(int entityId) {
 		InterpolationComponent cInterpolation = mInterpolation.get(entityId);
 		EndpointsComponent cEndpoints = mEndpoints.get(entityId);
-		XYZPositionComponent xyz = mXyz.getSafe(entityId);
+		XYZPositionComponent xyz = mXyz.get(entityId);
 		xyz.position.set(cEndpoints.start.cpy().interpolate(cEndpoints.end, alpha(cInterpolation),
 				cInterpolation.interpolation));
 		// needsUpdateSystem.notify(entityId);
