@@ -5,17 +5,23 @@ import java.util.LinkedList;
 import com.artemis.ComponentMapper;
 import com.artemis.managers.TagManager;
 import com.badlogic.gdx.math.Interpolation;
+import com.pipai.wf.artemis.components.AgentComponent;
 import com.pipai.wf.artemis.components.EndpointsComponent;
 import com.pipai.wf.artemis.components.InterpolationComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.artemis.event.InterpolationEndEvent;
+import com.pipai.wf.artemis.event.MovementTileUpdateEvent;
 import com.pipai.wf.artemis.system.AgentEntitySystem;
+import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
+import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.event.MoveEvent;
+import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.util.GridPosition;
 
+import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class MoveEventAnimationHandler extends NoProcessingSystem {
@@ -25,9 +31,12 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 	private ComponentMapper<XYZPositionComponent> mXyz;
 	private ComponentMapper<EndpointsComponent> mEndpoints;
 	private ComponentMapper<InterpolationComponent> mInterpolation;
+	private ComponentMapper<AgentComponent> mAgent;
 
 	private TagManager tagManager;
+	private EventSystem eventSystem;
 	private AgentEntitySystem agentEntitySystem;
+	private BattleSystem battleSystem;
 
 	private LinkedList<GridPosition> path;
 
@@ -41,8 +50,15 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 
 	@Subscribe
 	public void handleInterpolationEndEvent(InterpolationEndEvent event) {
-		if (event.getKey() == interpolationEndEventKey && path.size() > 1) {
-			moveAgent(event.entityId, path.pollFirst(), path.peekFirst());
+		if (event.getKey() == interpolationEndEventKey) {
+			if (path.size() > 1) {
+				moveAgent(event.entityId, path.pollFirst(), path.peekFirst());
+			} else {
+				Agent cAgent = mAgent.get(event.entityId).agent;
+				MapGraph agentMovementMapGraph = new MapGraph(battleSystem.getBattleMap(),
+						cAgent.getPosition(), cAgent.getEffectiveMobility(), cAgent.getAP(), cAgent.getMaxAP());
+				eventSystem.dispatch(new MovementTileUpdateEvent(agentMovementMapGraph));
+			}
 		}
 	}
 
@@ -58,8 +74,10 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 		// t set to 1 to prevent choppiness between movements (otherwise it spends 2 frames at the same position)
 		cInterpolation.t = 1;
 		cInterpolation.maxT = 6;
+
 		cInterpolation.onEndEvent = new InterpolationEndEvent();
 		interpolationEndEventKey = cInterpolation.onEndEvent.getKey();
+
 		int cameraId = tagManager.getEntity(Tag.CAMERA.toString()).getId();
 		float cameraZ = mXyz.get(cameraId).position.z;
 		EndpointsComponent cCameraEndpoints = mEndpoints.create(cameraId);
