@@ -40,22 +40,19 @@ public class PartialTextBoxRenderingSystem extends IteratingSystem {
 			// float right = cXy.position.x + cTextBox.width / 2;
 			float up = cXy.position.y + cTextBox.height / 2;
 			float down = cXy.position.y - cTextBox.height / 2;
-			{
-				ShapeRenderer batch = batchRenderingSystem.getBatch().getShapeRenderer();
-				batch.begin(ShapeType.Filled);
-				batch.setColor(Color.DARK_GRAY);
-				batch.rect(left, down, cTextBox.width, cTextBox.height);
-				batch.end();
-			}
 
-			{
-				SpriteBatch spr = batchRenderingSystem.getBatch().getSpriteBatch();
-				BitmapFont font = batchRenderingSystem.getBatch().getFont();
-				spr.begin();
-				font.setColor(Color.WHITE);
-				font.draw(spr, cPartialText.currentText, left + 6, up - font.getLineHeight());
-				spr.end();
-			}
+			ShapeRenderer batch = batchRenderingSystem.getBatch().getShapeRenderer();
+			batch.begin(ShapeType.Filled);
+			batch.setColor(Color.DARK_GRAY);
+			batch.rect(left, down, cTextBox.width, cTextBox.height);
+			batch.end();
+
+			SpriteBatch spr = batchRenderingSystem.getBatch().getSpriteBatch();
+			BitmapFont font = batchRenderingSystem.getBatch().getFont();
+			spr.begin();
+			font.setColor(Color.WHITE);
+			font.draw(spr, cPartialText.currentText, left + 6, up - font.getLineHeight());
+			spr.end();
 
 		}
 	}

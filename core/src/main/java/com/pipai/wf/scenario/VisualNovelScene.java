@@ -7,14 +7,14 @@ import com.google.common.base.Splitter;
 
 public class VisualNovelScene {
 
-	private List<String> scenarioLines;
+	private List<String> sceneLines;
 
 	public VisualNovelScene(FileHandle scenarioFile) {
-		scenarioLines = Splitter.on("\n").splitToList(scenarioFile.readString());
+		sceneLines = Splitter.on("\n").splitToList(scenarioFile.readString());
 	}
 
 	public List<String> getSceneLines() {
-		return scenarioLines;
+		return sceneLines;
 	}
 
 }

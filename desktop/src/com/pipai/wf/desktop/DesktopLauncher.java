@@ -4,7 +4,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.pipai.wf.WFGame;
 
-public class DesktopLauncher {
+public final class DesktopLauncher {
+
+	private DesktopLauncher() {
+	}
+
+	// SUPPRESS CHECKSTYLE UncommentedMain Entry point
 	public static void main(String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1024;
