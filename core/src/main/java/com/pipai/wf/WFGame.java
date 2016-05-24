@@ -1,5 +1,8 @@
 package com.pipai.wf;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,6 +21,8 @@ public class WFGame extends Game {
 
 	@Override
 	public void create() {
+		ToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
+
 		wfConfiguration = new WfConfiguration();
 		spriteBatch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();

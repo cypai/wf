@@ -35,7 +35,7 @@ public class MoveActionSystem extends NoProcessingSystem {
 		try {
 			move.perform();
 		} catch (IllegalActionException e) {
-			LOGGER.error(e.getMessage(), e);
+			LOGGER.error("Could not perform move action - context: MoveAction {}", move, e);
 		}
 	}
 

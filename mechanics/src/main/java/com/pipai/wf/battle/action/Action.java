@@ -2,6 +2,8 @@ package com.pipai.wf.battle.action;
 
 import java.util.List;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.action.component.ActionInterface;
@@ -70,6 +72,7 @@ public abstract class Action implements HasName, HasDescription, ActionInterface
 
 	protected abstract List<ActionVerifier> getVerifiers();
 
+	@Override
 	public ActionVerificationResult verify() {
 		for (ActionVerifier verifier : getVerifiers()) {
 			ActionVerificationResult result = verifier.verify(this);
@@ -106,6 +109,11 @@ public abstract class Action implements HasName, HasDescription, ActionInterface
 		if (log != null) {
 			log.logEvent(ev);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return ReflectionToStringBuilder.toStringExclude(this, "battleController", "battleMap", "log", "damageDealer");
 	}
 
 }
