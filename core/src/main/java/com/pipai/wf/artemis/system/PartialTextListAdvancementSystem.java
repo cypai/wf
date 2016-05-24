@@ -3,6 +3,7 @@ package com.pipai.wf.artemis.system;
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.pipai.wf.artemis.components.textbox.PartialTextComponent;
@@ -92,7 +93,16 @@ public class PartialTextListAdvancementSystem extends IteratingSystem implements
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return false;
+		boolean processed = false;
+		switch (button) {
+		case Buttons.LEFT:
+			next = true;
+			processed = true;
+			break;
+		default:
+			break;
+		}
+		return processed;
 	}
 
 	@Override
