@@ -38,7 +38,7 @@ public class BattleEntityCreationSystem extends NoProcessingSystem {
 	private ComponentMapper<CircularShadowComponent> mCircularShadow;
 	private ComponentMapper<PlayerUnitComponent> mPlayerUnit;
 	private ComponentMapper<SelectedUnitComponent> mSelectedUnit;
-	private ComponentMapper<AgentComponent> mAgentInventory;
+	private ComponentMapper<AgentComponent> mAgent;
 	private ComponentMapper<PerspectiveCameraComponent> mPerspectiveCamera;
 	private ComponentMapper<OrthographicCameraComponent> mOrthoCamera;
 	private ComponentMapper<SphericalCoordinateComponent> mSphericalCoordinates;
@@ -95,8 +95,8 @@ public class BattleEntityCreationSystem extends NoProcessingSystem {
 			XYZPositionComponent xyz = mXyzPosition.create(id);
 			xyz.position.set(agent.getPosition().getX() * 40 + 20, agent.getPosition().getY() * 40 + 20, 20);
 			mCircularShadow.create(id);
-			AgentComponent cAgentInventory = mAgentInventory.create(id);
-			cAgentInventory.agent = agent;
+			AgentComponent cAgent = mAgent.create(id);
+			cAgent.agent = agent;
 			if (agent.getTeam().equals(Team.PLAYER)) {
 				mPlayerUnit.create(id);
 				mSphericalInteractable.create(id).radius = 16;
