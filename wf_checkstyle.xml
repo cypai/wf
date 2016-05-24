@@ -205,4 +205,7 @@
   <module name="SuppressionCommentFilter">
     <property name="offCommentFormat" value="CHECKSTYLE\:OFF \w+"/>
   </module>
+  <module name="SuppressionFilter">
+    <property name="file" value="${config_loc}/suppression.xml"/>
+  </module>
 </module>
