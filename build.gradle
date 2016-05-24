@@ -15,7 +15,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = 'wf'
-        gdxVersion = '1.8.0'
+        gdxVersion = '1.9.3'
         commonsLangVersion = '3.0'
         jacksonVersion = '2.6.3'
         logbackVersion = '1.1.3'
