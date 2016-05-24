@@ -55,7 +55,8 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 		cEndpoints.end.z = z;
 		InterpolationComponent cInterpolation = mInterpolation.create(id);
 		cInterpolation.interpolation = Interpolation.linear;
-		cInterpolation.t = 0;
+		// t set to 1 to prevent choppiness between movements (otherwise it spends 2 frames at the same position)
+		cInterpolation.t = 1;
 		cInterpolation.maxT = 6;
 		cInterpolation.onEndEvent = new InterpolationEndEvent();
 		interpolationEndEventKey = cInterpolation.onEndEvent.getKey();
@@ -68,7 +69,8 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 		cCameraEndpoints.end.z = cameraZ;
 		InterpolationComponent cCameraInterpolation = mInterpolation.create(cameraId);
 		cCameraInterpolation.interpolation = Interpolation.linear;
-		cCameraInterpolation.t = 0;
+		// t set to 1 to prevent choppiness between movements (otherwise it spends 2 frames at the same position)
+		cCameraInterpolation.t = 1;
 		cCameraInterpolation.maxT = 6;
 	}
 

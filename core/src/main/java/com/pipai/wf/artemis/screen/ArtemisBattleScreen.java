@@ -71,7 +71,6 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 						new KeysInputProcessorSystem(),
 
 						// Misc
-						new CameraUpdateSystem(),
 						new InterpolationMovementSystem(),
 						new InterpolationIncrementSystem(),
 						new VelocitySystem(),
@@ -90,6 +89,7 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 						new MoveEventAnimationHandler())
 				.withPassive(-1,
 						// Rendering
+						new CameraUpdateSystem(),
 						new TerrainRenderingSystem(batch, battle.getBattleMap()),
 						new CircleRenderingSystem(),
 						new CircularShadowRenderingSystem(),
