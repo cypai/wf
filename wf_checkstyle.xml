@@ -147,10 +147,7 @@
       <property name="severity" value="ignore"/>
       <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
     </module>
-    <module name="AbbreviationAsWordInName">
-      <property name="severity" value="ignore"/>
-      <metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
-    </module>
+    <module name="AbbreviationAsWordInName"/>
     <module name="TypeName"/>
     <module name="MethodName"/>
     <module name="LocalVariableName"/>
@@ -192,12 +189,15 @@
       <property name="message" value="Do not print to console directly"/>
       <property name="illegalPattern" value="true"/>
     </module>
+    <module name="CatchParameterName"/>
   </module>
   <module name="RegexpSingleline">
     <property name="format" value="^.*System.out.print.*$"/>
     <property name="message" value="Cannot use System.out.print"/>
   </module>
-  <module name="NewlineAtEndOfFile"/>
+  <module name="NewlineAtEndOfFile">
+    <property name="fileExtensions" value="java, gradle, xml"/>
+  </module>
   <module name="SuppressWithNearbyCommentFilter">
     <property name="commentFormat" value="SUPPRESS CHECKSTYLE (\w+) (\w+)"/>
     <property name="influenceFormat" value="1"/>
