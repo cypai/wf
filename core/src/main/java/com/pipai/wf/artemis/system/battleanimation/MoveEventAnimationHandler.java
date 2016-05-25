@@ -10,19 +10,15 @@ import com.pipai.wf.artemis.components.EndpointsComponent;
 import com.pipai.wf.artemis.components.InterpolationComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
 import com.pipai.wf.artemis.event.InterpolationEndEvent;
-import com.pipai.wf.artemis.event.MovementTileUpdateEvent;
 import com.pipai.wf.artemis.system.AgentEntitySystem;
-import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
+import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
 import com.pipai.wf.battle.Team;
-import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.event.MoveEvent;
-import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.util.GridPosition;
 
-import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class MoveEventAnimationHandler extends NoProcessingSystem {
@@ -35,9 +31,8 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 	private ComponentMapper<AgentComponent> mAgent;
 
 	private TagManager tagManager;
-	private EventSystem eventSystem;
 	private AgentEntitySystem agentEntitySystem;
-	private BattleSystem battleSystem;
+	private SelectedUnitSystem selectedUnitSystem;
 
 	private LinkedList<GridPosition> path;
 
@@ -55,12 +50,7 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 			if (path.size() > 1) {
 				moveAgent(event.entityId, path.pollFirst(), path.peekFirst());
 			} else {
-				Agent cAgent = mAgent.get(event.entityId).agent;
-				if (tagManager.getEntity(Tag.SELECTED_UNIT.toString()).getId() == event.entityId) {
-					MapGraph agentMovementMapGraph = new MapGraph(battleSystem.getBattleMap(),
-							cAgent.getPosition(), cAgent.getEffectiveMobility(), cAgent.getAP(), cAgent.getMaxAP());
-					eventSystem.dispatch(new MovementTileUpdateEvent(agentMovementMapGraph));
-				}
+				selectedUnitSystem.updateMapGraphForSelectedAgent();
 			}
 		}
 	}

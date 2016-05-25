@@ -5,6 +5,7 @@ import com.pipai.wf.artemis.components.AnchoredPositionComponent;
 import com.pipai.wf.artemis.components.TextComponent;
 import com.pipai.wf.artemis.components.TimedDestroyComponent;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
+import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
 import com.pipai.wf.battle.event.ReloadEvent;
 
@@ -16,6 +17,8 @@ public class ReloadEventAnimationHandler extends NoProcessingSystem {
 	private ComponentMapper<AnchoredPositionComponent> mAnchoredPosition;
 	private ComponentMapper<TimedDestroyComponent> mTimedDestroy;
 
+	private SelectedUnitSystem selectedUnitSystem;
+
 	@Subscribe
 	public void handleReloadEvent(ReloadEvent event) {
 		int id = world.create();
@@ -23,6 +26,8 @@ public class ReloadEventAnimationHandler extends NoProcessingSystem {
 		mAnchoredPosition.create(id).anchor = TileGridPositionUtils
 				.gridPositionToTileCenter(event.performer.getPosition());
 		mTimedDestroy.create(id).time = 90;
+
+		selectedUnitSystem.updateMapGraphForSelectedAgent();
 	}
 
 }
