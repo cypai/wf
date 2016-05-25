@@ -16,6 +16,7 @@ import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.event.MoveEvent;
 import com.pipai.wf.battle.map.MapGraph;
@@ -80,18 +81,19 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 		cInterpolation.onEndEvent = new InterpolationEndEvent();
 		interpolationEndEventKey = cInterpolation.onEndEvent.getKey();
 
-		int cameraId = tagManager.getEntity(Tag.CAMERA.toString()).getId();
-		float cameraZ = mXyz.get(cameraId).position.z;
-		EndpointsComponent cCameraEndpoints = mEndpoints.create(cameraId);
-		cCameraEndpoints.start = TileGridPositionUtils.gridPositionToTileCenter(start);
-		cCameraEndpoints.start.z = cameraZ;
-		cCameraEndpoints.end = TileGridPositionUtils.gridPositionToTileCenter(end);
-		cCameraEndpoints.end.z = cameraZ;
-		InterpolationComponent cCameraInterpolation = mInterpolation.create(cameraId);
-		cCameraInterpolation.interpolation = Interpolation.linear;
-		// t set to 1 to prevent choppiness between movements (otherwise it spends 2 frames at the same position)
-		cCameraInterpolation.t = 1;
-		cCameraInterpolation.maxT = 6;
+		if (mAgent.get(id).agent.getTeam().equals(Team.ENEMY)) {
+			int cameraId = tagManager.getEntity(Tag.CAMERA.toString()).getId();
+			float cameraZ = mXyz.get(cameraId).position.z;
+			EndpointsComponent cCameraEndpoints = mEndpoints.create(cameraId);
+			cCameraEndpoints.start = TileGridPositionUtils.gridPositionToTileCenter(start);
+			cCameraEndpoints.start.z = cameraZ;
+			cCameraEndpoints.end = TileGridPositionUtils.gridPositionToTileCenter(end);
+			cCameraEndpoints.end.z = cameraZ;
+			InterpolationComponent cCameraInterpolation = mInterpolation.create(cameraId);
+			cCameraInterpolation.interpolation = Interpolation.linear;
+			// t set to 1 to prevent choppiness between movements (otherwise it spends 2 frames at the same position)
+			cCameraInterpolation.t = 1;
+			cCameraInterpolation.maxT = 6;
+		}
 	}
-
 }
