@@ -1,4 +1,4 @@
-package com.pipai.wf.artemis.system;
+package com.pipai.wf.artemis.system.battleui;
 
 import com.artemis.BaseSystem;
 import com.badlogic.gdx.Gdx;
@@ -23,7 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
 import com.pipai.wf.battle.agent.Agent;
 
-public class UiSystem extends BaseSystem {
+public class BattleUnitStatusUiSystem extends BaseSystem {
 
 	private BatchRenderingSystem batchRenderingSystem;
 
@@ -36,7 +36,7 @@ public class UiSystem extends BaseSystem {
 	private ProgressBar agentMp;
 	private InventoryButton[] inventoryButtons;
 
-	public UiSystem() {
+	public BattleUnitStatusUiSystem() {
 		stage = new Stage(new ScreenViewport());
 		inventoryButtons = new InventoryButton[3];
 		labelStyle = new LabelStyle();

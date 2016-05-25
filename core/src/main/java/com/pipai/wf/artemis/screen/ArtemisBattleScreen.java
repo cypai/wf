@@ -15,7 +15,6 @@ import com.pipai.wf.artemis.system.InterpolationIncrementSystem;
 import com.pipai.wf.artemis.system.InterpolationMovementSystem;
 import com.pipai.wf.artemis.system.MouseHoverTileSystem;
 import com.pipai.wf.artemis.system.TimedDestroySystem;
-import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.battle.AgentEntitySystem;
 import com.pipai.wf.artemis.system.battle.AiSystem;
@@ -30,6 +29,7 @@ import com.pipai.wf.artemis.system.battleanimation.MoveEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.OverwatchEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.ReloadEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.StartTurnAnimationHandler;
+import com.pipai.wf.artemis.system.battleui.BattleUnitStatusUiSystem;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.BattleKeysInputProcessorSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
@@ -116,7 +116,7 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 						new AnchoredTextRenderingSystem())
 				.withPassive(-3,
 						// Rendering
-						new UiSystem())
+						new BattleUnitStatusUiSystem())
 				.build();
 		world = new World(config);
 	}
@@ -142,8 +142,8 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 				.setProjectionMatrix(orthoCamera.combined);
 		world.getSystem(BatchRenderingSystem.class).getBatch().getShapeRenderer()
 				.setProjectionMatrix(orthoCamera.combined);
-		world.getSystem(UiSystem.class).getStage().getViewport().setCamera(orthoCamera);
-		world.getSystem(UiSystem.class).getStage().getViewport().update(width, height, false);
+		world.getSystem(BattleUnitStatusUiSystem.class).getStage().getViewport().setCamera(orthoCamera);
+		world.getSystem(BattleUnitStatusUiSystem.class).getStage().getViewport().update(width, height, false);
 	}
 
 	@Override

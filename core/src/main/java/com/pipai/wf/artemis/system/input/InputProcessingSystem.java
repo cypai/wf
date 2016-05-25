@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
-import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
+import com.pipai.wf.artemis.system.battleui.BattleUnitStatusUiSystem;
 
 public class InputProcessingSystem extends NoProcessingSystem {
 
@@ -15,7 +15,7 @@ public class InputProcessingSystem extends NoProcessingSystem {
 	@Override
 	protected void initialize() {
 		multiplexer = new InputMultiplexer();
-		multiplexer.addProcessor(world.getSystem(UiSystem.class).getStage());
+		multiplexer.addProcessor(world.getSystem(BattleUnitStatusUiSystem.class).getStage());
 		multiplexer.addProcessor(new ExitInputProcessor());
 		multiplexer.addProcessor(world.getSystem(SelectedUnitSystem.class));
 		multiplexer.addProcessor(world.getSystem(CameraUpdateSystem.class));
