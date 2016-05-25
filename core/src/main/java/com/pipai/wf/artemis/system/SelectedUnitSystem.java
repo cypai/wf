@@ -58,10 +58,6 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 		processing = true;
 	}
 
-	public MapGraph getSelectedMapGraph() {
-		return selectedMapGraph;
-	}
-
 	@Override
 	protected boolean checkProcessing() {
 		return processing;

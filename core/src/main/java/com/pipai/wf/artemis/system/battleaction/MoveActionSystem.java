@@ -28,8 +28,10 @@ public class MoveActionSystem extends NoProcessingSystem {
 	public void processRightClickRayEvent(RightClickRayEvent event) {
 		Ray ray = event.pickRay;
 		GridPosition tile = TileGridPositionUtils.getIntersectedTile(ray);
-		MapGraph graph = selectedUnitSystem.getSelectedMapGraph();
 		Agent selectedAgent = selectedUnitSystem.getSelectedAgent();
+		MapGraph graph = new MapGraph(battleSystem.getBattleMap(),
+				selectedAgent.getPosition(), selectedAgent.getEffectiveMobility(),
+				selectedAgent.getAP(), selectedAgent.getMaxAP());
 		MoveAction move = new MoveAction(battleSystem.getBattleController(), selectedAgent,
 				graph.getPath(tile), graph.apRequiredToMoveTo(tile));
 		try {

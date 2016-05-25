@@ -55,9 +55,11 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 				moveAgent(event.entityId, path.pollFirst(), path.peekFirst());
 			} else {
 				Agent cAgent = mAgent.get(event.entityId).agent;
-				MapGraph agentMovementMapGraph = new MapGraph(battleSystem.getBattleMap(),
-						cAgent.getPosition(), cAgent.getEffectiveMobility(), cAgent.getAP(), cAgent.getMaxAP());
-				eventSystem.dispatch(new MovementTileUpdateEvent(agentMovementMapGraph));
+				if (tagManager.getEntity(Tag.SELECTED_UNIT.toString()).getId() == event.entityId) {
+					MapGraph agentMovementMapGraph = new MapGraph(battleSystem.getBattleMap(),
+							cAgent.getPosition(), cAgent.getEffectiveMobility(), cAgent.getAP(), cAgent.getMaxAP());
+					eventSystem.dispatch(new MovementTileUpdateEvent(agentMovementMapGraph));
+				}
 			}
 		}
 	}
