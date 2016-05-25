@@ -1,6 +1,7 @@
 package com.pipai.wf.battle.action;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pipai.wf.battle.BattleController;
@@ -12,16 +13,19 @@ public interface HasActions {
 	List<Action> getAvailableActions(BattleController controller, Agent agent);
 
 	/**
-	 * Gets an action of the actionClass. Returns null if not found.
+	 * Gets an action of the actionClass.
 	 */
+	@SuppressWarnings("unchecked")
 	@JsonIgnore
-	default Action getParticularAction(Class<? extends Action> actionClass, BattleController controller, Agent agent) {
+	default <T extends Action> Optional<T> getParticularAction(Class<T> actionClass, BattleController controller,
+			Agent agent) {
+
 		for (Action action : getAvailableActions(controller, agent)) {
 			if (actionClass.isInstance(action)) {
-				return action;
+				return Optional.of((T) action);
 			}
 		}
-		return null;
+		return Optional.empty();
 	}
 
 }

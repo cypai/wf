@@ -52,8 +52,9 @@ public class OverwatchAI extends AI {
 
 			try {
 				if (w.hasFlag(WeaponFlag.OVERWATCH)) {
-					OverwatchAction ow = (OverwatchAction) w.getParticularAction(OverwatchAction.class,
-							getBattleController(), a);
+					OverwatchAction ow = w.getParticularAction(OverwatchAction.class, getBattleController(), a)
+							.orElseThrow(() -> new IllegalStateException("Weapon " + w.getClass().getSimpleName()
+									+ " has OVERWATCH flag set but does not have an OverwatchAction"));
 					ow.perform();
 				} else {
 					new WaitAction(getBattleController(), a).perform();

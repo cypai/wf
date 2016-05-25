@@ -50,7 +50,7 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 			if (path.size() > 1) {
 				moveAgent(event.entityId, path.pollFirst(), path.peekFirst());
 			} else {
-				selectedUnitSystem.updateMapGraphForSelectedAgent();
+				selectedUnitSystem.updateForSelectedAgent();
 			}
 		}
 	}

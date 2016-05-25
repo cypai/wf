@@ -20,7 +20,7 @@ public class InputProcessingSystem extends NoProcessingSystem {
 		multiplexer.addProcessor(world.getSystem(SelectedUnitSystem.class));
 		multiplexer.addProcessor(world.getSystem(CameraUpdateSystem.class));
 		multiplexer.addProcessor(world.getSystem(RayPickingInputSystem.class));
-		multiplexer.addProcessor(world.getSystem(KeysInputProcessorSystem.class));
+		multiplexer.addProcessor(world.getSystem(BattleKeysInputProcessorSystem.class));
 		Gdx.input.setInputProcessor(multiplexer);
 		inactiveMultiplexer = new InputMultiplexer();
 		inactiveMultiplexer.addProcessor(new ExitInputProcessor());

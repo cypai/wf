@@ -7,11 +7,11 @@ import com.pipai.wf.artemis.components.TimedDestroyComponent;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
-import com.pipai.wf.battle.event.ReloadEvent;
+import com.pipai.wf.battle.event.OverwatchEvent;
 
 import net.mostlyoriginal.api.event.common.Subscribe;
 
-public class ReloadEventAnimationHandler extends NoProcessingSystem {
+public class OverwatchEventAnimationHandler extends NoProcessingSystem {
 
 	private ComponentMapper<TextComponent> mText;
 	private ComponentMapper<AnchoredPositionComponent> mAnchoredPosition;
@@ -20,9 +20,9 @@ public class ReloadEventAnimationHandler extends NoProcessingSystem {
 	private SelectedUnitSystem selectedUnitSystem;
 
 	@Subscribe
-	public void handleReloadEvent(ReloadEvent event) {
+	public void handleOverwatchEvent(OverwatchEvent event) {
 		int id = world.create();
-		mText.create(id).text = "Reload";
+		mText.create(id).text = "Overwatch";
 		mAnchoredPosition.create(id).anchor = TileGridPositionUtils
 				.gridPositionToTileCenter(event.performer.getPosition());
 		mTimedDestroy.create(id).time = 90;

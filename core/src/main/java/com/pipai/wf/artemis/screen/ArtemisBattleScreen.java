@@ -23,10 +23,11 @@ import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.battleaction.MoveActionSystem;
 import com.pipai.wf.artemis.system.battleanimation.MoveEventAnimationHandler;
+import com.pipai.wf.artemis.system.battleanimation.OverwatchEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.ReloadEventAnimationHandler;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
+import com.pipai.wf.artemis.system.input.BattleKeysInputProcessorSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
-import com.pipai.wf.artemis.system.input.KeysInputProcessorSystem;
 import com.pipai.wf.artemis.system.input.RayPickingInputSystem;
 import com.pipai.wf.artemis.system.rendering.AnchoredTextRenderingSystem;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
@@ -68,7 +69,7 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 						// Input
 						new InputProcessingSystem(),
 						new RayPickingInputSystem(),
-						new KeysInputProcessorSystem(),
+						new BattleKeysInputProcessorSystem(),
 
 						// Misc
 						new InterpolationMovementSystem(),
@@ -86,6 +87,7 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 
 						// Animation Handlers
 						new ReloadEventAnimationHandler(),
+						new OverwatchEventAnimationHandler(),
 						new MoveEventAnimationHandler())
 				.withPassive(-1,
 						// Rendering
