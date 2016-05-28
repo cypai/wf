@@ -21,9 +21,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pipai.wf.artemis.system.rendering.BatchRenderingSystem;
+import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.agent.Agent;
 
-public class BattleUnitStatusUiSystem extends BaseSystem {
+public class BattleUiSystem extends BaseSystem {
 
 	private BatchRenderingSystem batchRenderingSystem;
 
@@ -36,7 +37,7 @@ public class BattleUnitStatusUiSystem extends BaseSystem {
 	private ProgressBar agentMp;
 	private InventoryButton[] inventoryButtons;
 
-	public BattleUnitStatusUiSystem() {
+	public BattleUiSystem() {
 		stage = new Stage(new ScreenViewport());
 		inventoryButtons = new InventoryButton[3];
 		labelStyle = new LabelStyle();
@@ -111,6 +112,11 @@ public class BattleUnitStatusUiSystem extends BaseSystem {
 			bottomTable.row();
 			inventoryButtons[i] = button;
 		}
+
+		Button actionBtn = ActionButtonFactory.createActionButton(buttonStyle,
+				new OverwatchAction(null, null, null, null));
+		// actionBtn.setPosition(100, 100);
+		bottomTable.add(actionBtn);
 		stage.addActor(bottomTable);
 	}
 

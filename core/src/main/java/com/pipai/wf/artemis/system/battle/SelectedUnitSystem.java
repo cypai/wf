@@ -26,7 +26,7 @@ import com.pipai.wf.artemis.event.LeftClickEvent;
 import com.pipai.wf.artemis.event.MovementTileUpdateEvent;
 import com.pipai.wf.artemis.system.Group;
 import com.pipai.wf.artemis.system.Tag;
-import com.pipai.wf.artemis.system.battleui.BattleUnitStatusUiSystem;
+import com.pipai.wf.artemis.system.battleui.BattleUiSystem;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.MapGraph;
 
@@ -51,7 +51,7 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 	private GroupManager groupManager;
 	private EventSystem eventSystem;
 
-	private BattleUnitStatusUiSystem uiSystem;
+	private BattleUiSystem uiSystem;
 	private BattleSystem battleSystem;
 
 	private MapGraph selectedMapGraph;
