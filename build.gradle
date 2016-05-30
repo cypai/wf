@@ -89,12 +89,26 @@ project(":mechanics") {
     }
 }
 
+project(":ai") {
+    apply plugin: "java"
+
+    dependencies {
+        compile project(":utils")
+        compile project(":mechanics")
+        compile "ch.qos.logback:logback-classic:$logbackVersion"
+        compile "net.mostlyoriginal.artemis-odb:contrib-eventbus:$artemisContribVersion"
+        compile "com.google.guava:guava:$guavaVersion"
+        testCompile project(":test")
+    }
+}
+
 project(":core") {
     apply plugin: "java"
 
     dependencies {
         compile project(":utils")
         compile project(":mechanics")
+        compile project(":ai")
         compile project(":save")
         compile "ch.qos.logback:logback-classic:$logbackVersion"
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"

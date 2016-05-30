@@ -11,18 +11,19 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.ai.utils.ActionListGenerator;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.util.GridPosition;
 import com.pipai.wf.util.Rng;
 
-public class RandomAI extends AI {
+public class RandomAi extends Ai {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RandomAI.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RandomAi.class);
 
 	private LinkedList<Agent> enemyAgents, playerAgents, toAct;
 
-	public RandomAI(BattleController battleController) {
+	public RandomAi(BattleController battleController) {
 		super(battleController);
 		enemyAgents = new LinkedList<Agent>();
 		playerAgents = new LinkedList<Agent>();

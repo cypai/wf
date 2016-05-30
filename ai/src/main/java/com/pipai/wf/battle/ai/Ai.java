@@ -6,14 +6,14 @@ import com.pipai.wf.battle.BattleObserver;
 import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.battle.map.BattleMap;
 
-public abstract class AI implements BattleObserver {
+public abstract class Ai implements BattleObserver {
 
 	private BattleController battleController;
 	private BattleConfiguration battleConfiguration;
 	private BattleMap battleMap;
 	private boolean done;
 
-	public AI(BattleController battleController) {
+	public Ai(BattleController battleController) {
 		this.battleController = battleController;
 		this.battleController.registerObserver(this);
 		battleConfiguration = battleController.getBattleConfiguration();

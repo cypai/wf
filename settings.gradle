@@ -1,1 +1,1 @@
-include 'desktop', 'core', 'mechanics', 'utils', 'test', 'save'
+include 'desktop', 'core', 'mechanics', 'ai', 'utils', 'test', 'save'

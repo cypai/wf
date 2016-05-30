@@ -6,15 +6,16 @@ import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.ai.utils.ActionScore;
 import com.pipai.wf.battle.map.BattleMap;
 
-public abstract class ModularAI {
+public abstract class AbstractModularAi {
 
 	private BattleController battleController;
 	private BattleMap battleMap;
 	private Agent aiAgent;
 
-	public ModularAI(BattleController controller, Agent a) {
+	public AbstractModularAi(BattleController controller, Agent a) {
 		this.battleController = controller;
 		battleMap = controller.getBattleMap();
 		aiAgent = a;

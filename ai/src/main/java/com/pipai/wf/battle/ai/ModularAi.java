@@ -8,16 +8,18 @@ import org.slf4j.LoggerFactory;
 import com.pipai.wf.battle.BattleController;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.ai.modules.GenericAiModule;
+import com.pipai.wf.battle.ai.utils.ActionScore;
 import com.pipai.wf.exception.IllegalActionException;
 
-public class TopModularAI extends AI {
+public class ModularAi extends Ai {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TopModularAI.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ModularAi.class);
 
 	private ArrayList<Agent> enemyAgents, playerAgents;
-	private ArrayList<ModularAI> ais;
+	private ArrayList<AbstractModularAi> ais;
 
-	public TopModularAI(BattleController battleController) {
+	public ModularAi(BattleController battleController) {
 		super(battleController);
 		enemyAgents = new ArrayList<Agent>();
 		playerAgents = new ArrayList<Agent>();
@@ -31,10 +33,10 @@ public class TopModularAI extends AI {
 	}
 
 	private void resetAIModules() {
-		ais = new ArrayList<ModularAI>();
+		ais = new ArrayList<AbstractModularAi>();
 		for (Agent a : enemyAgents) {
 			if (!a.isKO() && a.getAP() > 0) {
-				ais.add(new GeneralModularAI(getBattleController(), a));
+				ais.add(new GenericAiModule(getBattleController(), a));
 			}
 		}
 	}
@@ -47,7 +49,7 @@ public class TopModularAI extends AI {
 			return;
 		}
 		ActionScore best = null;
-		for (ModularAI ai : ais) {
+		for (AbstractModularAi ai : ais) {
 			ActionScore as = ai.getBestMove();
 			best = as.compareAndReturnBetter(best);
 		}

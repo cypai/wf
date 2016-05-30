@@ -10,17 +10,18 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.WaitAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.ai.utils.AiHelper;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Weapon;
 import com.pipai.wf.item.weapon.WeaponFlag;
 
-public class OverwatchAI extends AI {
+public class OverwatchAi extends Ai {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(OverwatchAI.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OverwatchAi.class);
 
 	private LinkedList<Agent> enemyAgents, toAct;
 
-	public OverwatchAI(BattleController battleController) {
+	public OverwatchAi(BattleController battleController) {
 		super(battleController);
 		enemyAgents = new LinkedList<Agent>();
 		for (Agent a : getBattleMap().getAgents()) {

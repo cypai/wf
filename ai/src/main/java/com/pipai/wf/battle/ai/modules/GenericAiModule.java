@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.ai;
+package com.pipai.wf.battle.ai.modules;
 
 import java.util.ArrayList;
 
@@ -7,20 +7,22 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.action.WaitAction;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.ai.AbstractModularAi;
+import com.pipai.wf.battle.ai.utils.ActionScore;
 import com.pipai.wf.battle.map.AgentCoverCalculator;
 import com.pipai.wf.battle.map.BattleMap;
 import com.pipai.wf.battle.map.DirectionalCoverSystem;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.util.GridPosition;
 
-public class GeneralModularAI extends ModularAI {
+public class GenericAiModule extends AbstractModularAi {
 
 	private AgentCoverCalculator coverCalc;
 	// private AgentVisionCalculator agentVisionCalc;
 	private ArrayList<Agent> playerAgents;
 	private MapGraph mapgraph;
 
-	public GeneralModularAI(BattleController controller, Agent a) {
+	public GenericAiModule(BattleController controller, Agent a) {
 		super(controller, a);
 		coverCalc = new AgentCoverCalculator(getBattleMap(), getBattleConfiguration());
 		// agentVisionCalc = new AgentVisionCalculator(getBattleMap(), getBattleConfiguration());

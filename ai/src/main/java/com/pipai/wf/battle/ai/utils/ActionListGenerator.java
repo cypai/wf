@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.ai;
+package com.pipai.wf.battle.ai.utils;
 
 import java.util.ArrayList;
 

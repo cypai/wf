@@ -1,4 +1,4 @@
-package com.pipai.wf.battle.ai;
+package com.pipai.wf.battle.ai.utils;
 
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.item.Item;
