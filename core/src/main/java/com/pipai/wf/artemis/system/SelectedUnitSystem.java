@@ -1,6 +1,8 @@
 package com.pipai.wf.artemis.system;
 
-import java.util.PriorityQueue;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.artemis.Aspect;
 import com.artemis.Aspect.Builder;
@@ -40,7 +42,7 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 	private ComponentMapper<InterpolationComponent> mInterpolation;
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
 	private ComponentMapper<EndpointsComponent> mEndpoints;
-	private ComponentMapper<AgentComponent> mAgentInventory;
+	private ComponentMapper<AgentComponent> mAgent;
 
 	private TagManager tagManager;
 	private GroupManager groupManager;
@@ -66,7 +68,12 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 					cAgent.getPosition(), cAgent.getEffectiveMobility(), cAgent.getAP(), cAgent.getMaxAP());
 			eventSystem.dispatch(new MovementTileUpdateEvent(selectedMapGraph));
 		} else {
-			selectNext();
+			List<Entity> party = getSortedAvailablePlayerParty();
+			if (party.isEmpty()) {
+				battleSystem.getBattleController().endTurn();
+			} else {
+				selectNext(party);
+			}
 		}
 	}
 
@@ -119,10 +126,9 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 		// LOGGER.debug("Camera is moving to " + cEndpoints.end);
 	}
 
-	private void selectNext() {
-		PriorityQueue<Entity> partyQueue = getSortedPlayerParty();
+	private void selectNext(List<Entity> party) {
 		boolean found = false;
-		for (Entity e : partyQueue) {
+		for (Entity e : party) {
 			if (found) {
 				// Previous entity was selected, add selected component to next one, let inserted() handle it
 				mSelectedUnit.create(e);
@@ -134,32 +140,35 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 			}
 		}
 		// Select the first one - selected unit was the last one
-		mSelectedUnit.create(partyQueue.peek());
+		mSelectedUnit.create(party.get(0));
 	}
 
-	private PriorityQueue<Entity> getSortedPlayerParty() {
-		ImmutableBag<Entity> party = groupManager.getEntities(Group.PLAYER_PARTY.toString());
-		PriorityQueue<Entity> queue = new PriorityQueue<>(party.size(),
-				(e1, e2) -> {
-					int i1 = mPlayerUnit.get(e1).index;
-					int i2 = mPlayerUnit.get(e2).index;
-					return i1 > i2 ? 1 : (i1 < i2 ? -1 : 0);
-				});
-		for (Entity e : party) {
-			queue.add(e);
+	private List<Entity> getSortedAvailablePlayerParty() {
+		ImmutableBag<Entity> partyEntities = groupManager.getEntities(Group.PLAYER_PARTY.toString());
+		List<Entity> party = new ArrayList<>();
+		for (Entity e : partyEntities) {
+			party.add(e);
 		}
-		return queue;
+		party.sort((e1, e2) -> {
+			int i1 = mPlayerUnit.get(e1).index;
+			int i2 = mPlayerUnit.get(e2).index;
+			return i1 > i2 ? 1 : (i1 < i2 ? -1 : 0);
+		});
+		List<Entity> filteredParty = party.stream()
+				.filter((e) -> mAgent.get(e).agent.getAP() > 0)
+				.collect(Collectors.toList());
+		return filteredParty;
 	}
 
 	public Agent getSelectedAgent() {
 		Entity selected = tagManager.getEntity(Tag.SELECTED_UNIT.toString());
-		return mAgentInventory.get(selected).agent;
+		return mAgent.get(selected).agent;
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.SHIFT_LEFT) {
-			selectNext();
+			selectNext(getSortedAvailablePlayerParty());
 			return true;
 		} else {
 			return false;
