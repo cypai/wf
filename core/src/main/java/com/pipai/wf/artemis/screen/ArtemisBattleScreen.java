@@ -18,6 +18,7 @@ import com.pipai.wf.artemis.system.TimedDestroySystem;
 import com.pipai.wf.artemis.system.UiSystem;
 import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.battle.AgentEntitySystem;
+import com.pipai.wf.artemis.system.battle.AiSystem;
 import com.pipai.wf.artemis.system.battle.BattleSystem;
 import com.pipai.wf.artemis.system.battle.MovableTileHighlightSystem;
 import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
@@ -76,6 +77,7 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 						new InterpolationIncrementSystem(),
 						new VelocitySystem(),
 						new TimedDestroySystem(),
+						new TimerSystem(),
 
 						// Battle Related
 						new BattleSystem(battle),
@@ -84,6 +86,8 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 						new MovableTileHighlightSystem(),
 						new MouseHoverTileSystem(),
 						new MoveActionSystem(),
+
+						new AiSystem(),
 
 						// Animation Handlers
 						new ReloadEventAnimationHandler(),

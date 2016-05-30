@@ -56,6 +56,7 @@ public class ModularAi extends Ai {
 		try {
 			// may be null if ais is empty
 			if (best != null) {
+				LOGGER.debug("AI Selection: {}", best);
 				best.getAction().perform();
 			}
 		} catch (IllegalActionException e) {

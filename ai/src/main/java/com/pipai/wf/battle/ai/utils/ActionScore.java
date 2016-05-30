@@ -28,4 +28,9 @@ public class ActionScore {
 		return score;
 	}
 
+	@Override
+	public String toString() {
+		return "ActionScore [ " + action + " , " + score + " ]";
+	}
+
 }

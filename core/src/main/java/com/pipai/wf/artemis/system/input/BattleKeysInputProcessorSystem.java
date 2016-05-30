@@ -10,6 +10,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.battle.BattleSystem;
 import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.exception.IllegalActionException;
@@ -25,17 +26,21 @@ public class BattleKeysInputProcessorSystem extends NoProcessingSystem implement
 
 	@Override
 	public boolean keyDown(int keycode) {
-		boolean processed = true;
-		switch (keycode) {
-		case Keys.R:
-			performReload();
-			break;
-		case Keys.Y:
-			performOverwatch();
-			break;
-		default:
-			processed = false;
-			break;
+		boolean processed = false;
+
+		if (battleSystem.getBattleController().getCurrentTeam().equals(Team.PLAYER)) {
+			switch (keycode) {
+			case Keys.R:
+				performReload();
+				processed = true;
+				break;
+			case Keys.Y:
+				performOverwatch();
+				processed = true;
+				break;
+			default:
+				break;
+			}
 		}
 		return processed;
 	}
