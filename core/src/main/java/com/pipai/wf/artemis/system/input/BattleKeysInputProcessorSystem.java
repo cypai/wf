@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
-import com.pipai.wf.artemis.system.SelectedUnitSystem;
+import com.pipai.wf.artemis.system.battle.BattleSystem;
+import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
 import com.pipai.wf.battle.action.OverwatchAction;
 import com.pipai.wf.battle.action.ReloadAction;
 import com.pipai.wf.exception.IllegalActionException;

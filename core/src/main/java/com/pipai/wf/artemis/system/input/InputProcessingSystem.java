@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.pipai.wf.artemis.system.CameraUpdateSystem;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
-import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.UiSystem;
+import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
 
 public class InputProcessingSystem extends NoProcessingSystem {
 

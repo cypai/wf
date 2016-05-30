@@ -5,10 +5,10 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.math.collision.Ray;
 import com.pipai.wf.artemis.event.RightClickRayEvent;
-import com.pipai.wf.artemis.system.BattleSystem;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
-import com.pipai.wf.artemis.system.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
+import com.pipai.wf.artemis.system.battle.BattleSystem;
+import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
 import com.pipai.wf.battle.action.MoveAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.map.MapGraph;

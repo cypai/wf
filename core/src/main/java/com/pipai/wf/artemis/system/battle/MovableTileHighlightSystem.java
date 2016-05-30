@@ -1,4 +1,4 @@
-package com.pipai.wf.artemis.system;
+package com.pipai.wf.artemis.system.battle;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.Color;
 import com.pipai.wf.artemis.components.TileHighlightComponent;
 import com.pipai.wf.artemis.event.MovementTileUpdateEvent;
+import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.battle.map.MapGraph;
 import com.pipai.wf.util.GridPosition;
 

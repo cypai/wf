@@ -1,8 +1,9 @@
-package com.pipai.wf.artemis.system;
+package com.pipai.wf.artemis.system.battle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.battle.Battle;
 import com.pipai.wf.battle.BattleConfiguration;
 import com.pipai.wf.battle.BattleController;

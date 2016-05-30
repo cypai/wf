@@ -9,6 +9,7 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.artemis.components.VelocityComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
+import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
 
 public class VelocitySystem extends IteratingSystem {
 

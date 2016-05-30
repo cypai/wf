@@ -1,10 +1,12 @@
-package com.pipai.wf.artemis.system;
+package com.pipai.wf.artemis.system.battle;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.managers.GroupManager;
 import com.artemis.utils.ImmutableBag;
 import com.pipai.wf.artemis.components.AgentComponent;
+import com.pipai.wf.artemis.system.Group;
+import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.battle.agent.Agent;
 
 /**
