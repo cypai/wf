@@ -8,10 +8,9 @@ import com.pipai.wf.battle.event.BattleLog;
 import com.pipai.wf.battle.event.StartTurnEvent;
 import com.pipai.wf.battle.map.BattleMap;
 
-/*
+/**
  * Controls the flow of battle as an interface between the Player/AIs
  */
-
 public class BattleController {
 
 	private BattleMap battleMap;

@@ -24,11 +24,25 @@ public class BattleKeysInputProcessorSystem extends NoProcessingSystem implement
 	private SelectedUnitSystem selectedUnitSystem;
 	private BattleSystem battleSystem;
 
+	private boolean readInput;
+
+	public BattleKeysInputProcessorSystem() {
+		readInput = true;
+	}
+
+	public void disable() {
+		readInput = false;
+	}
+
+	public void enable() {
+		readInput = true;
+	}
+
 	@Override
 	public boolean keyDown(int keycode) {
 		boolean processed = false;
 
-		if (battleSystem.getBattleController().getCurrentTeam().equals(Team.PLAYER)) {
+		if (readInput && battleSystem.getBattleController().getCurrentTeam().equals(Team.PLAYER)) {
 			switch (keycode) {
 			case Keys.R:
 				performReload();

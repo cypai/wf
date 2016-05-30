@@ -9,6 +9,7 @@ import com.pipai.wf.artemis.components.AgentComponent;
 import com.pipai.wf.artemis.components.EndpointsComponent;
 import com.pipai.wf.artemis.components.InterpolationComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
+import com.pipai.wf.artemis.event.AnimationEndEvent;
 import com.pipai.wf.artemis.event.InterpolationEndEvent;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.Tag;
@@ -19,6 +20,7 @@ import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.event.MoveEvent;
 import com.pipai.wf.util.GridPosition;
 
+import net.mostlyoriginal.api.event.common.EventSystem;
 import net.mostlyoriginal.api.event.common.Subscribe;
 
 public class MoveEventAnimationHandler extends NoProcessingSystem {
@@ -30,6 +32,7 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 	private ComponentMapper<InterpolationComponent> mInterpolation;
 	private ComponentMapper<AgentComponent> mAgent;
 
+	private EventSystem eventSystem;
 	private TagManager tagManager;
 	private AgentEntitySystem agentEntitySystem;
 	private SelectedUnitSystem selectedUnitSystem;
@@ -51,6 +54,7 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 				moveAgent(event.entityId, path.pollFirst(), path.peekFirst());
 			} else {
 				selectedUnitSystem.updateForSelectedAgent();
+				eventSystem.dispatch(new AnimationEndEvent());
 			}
 		}
 	}
