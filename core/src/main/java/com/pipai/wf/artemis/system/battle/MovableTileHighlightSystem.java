@@ -30,7 +30,7 @@ public class MovableTileHighlightSystem extends NoProcessingSystem {
 		addAllMovementTileHighlights(event.mapgraph);
 	}
 
-	private void removeAllTileHighlights() {
+	public void removeAllTileHighlights() {
 		IntBag entities = world.getAspectSubscriptionManager()
 				.get(Aspect.all(TileHighlightComponent.class))
 				.getEntities();

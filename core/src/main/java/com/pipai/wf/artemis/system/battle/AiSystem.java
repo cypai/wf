@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import com.artemis.ComponentMapper;
 import com.pipai.wf.artemis.components.TimerComponent;
+import com.pipai.wf.artemis.event.AiNextEvent;
 import com.pipai.wf.artemis.event.TimerEvent;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.battle.Team;
@@ -43,11 +44,20 @@ public class AiSystem extends NoProcessingSystem {
 		currentTeam = event.team;
 		if (currentTeam.equals(Team.ENEMY)) {
 			ai.startTurn();
-			int timerId = getWorld().create();
-			TimerComponent cTimer = mTimer.create(timerId);
-			cTimer.timer = AI_MOVE_WAIT_TIME;
-			key = cTimer.key;
+			startTimerForAi();
 		}
+	}
+
+	@Subscribe
+	public void handleAiNextEvent(AiNextEvent event) {
+		startTimerForAi();
+	}
+
+	private void startTimerForAi() {
+		int timerId = getWorld().create();
+		TimerComponent cTimer = mTimer.create(timerId);
+		cTimer.timer = AI_MOVE_WAIT_TIME;
+		key = cTimer.key;
 	}
 
 	@Subscribe

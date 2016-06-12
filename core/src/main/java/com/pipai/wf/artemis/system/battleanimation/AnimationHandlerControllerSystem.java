@@ -5,9 +5,12 @@ import java.util.LinkedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pipai.wf.artemis.event.AiNextEvent;
 import com.pipai.wf.artemis.event.AnimationEndEvent;
 import com.pipai.wf.artemis.system.NoProcessingSystem;
+import com.pipai.wf.artemis.system.battle.BattleSystem;
 import com.pipai.wf.artemis.system.input.BattleKeysInputProcessorSystem;
+import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.event.BattleEvent;
 
 import net.mostlyoriginal.api.event.common.EventSystem;
@@ -20,6 +23,7 @@ public class AnimationHandlerControllerSystem extends NoProcessingSystem {
 	private EventSystem eventSystem;
 
 	private BattleKeysInputProcessorSystem keysInputSystem;
+	private BattleSystem battleSystem;
 
 	private LinkedList<BattleEvent> currentEvents;
 
@@ -36,9 +40,13 @@ public class AnimationHandlerControllerSystem extends NoProcessingSystem {
 
 	@Subscribe
 	public void handleAnimationEnd(AnimationEndEvent event) {
+		LOGGER.debug("Received animation end event");
 		currentEvents.pop();
 		if (currentEvents.isEmpty()) {
 			keysInputSystem.enable();
+			if (battleSystem.getBattleController().getCurrentTeam().equals(Team.ENEMY)) {
+				eventSystem.dispatch(new AiNextEvent());
+			}
 		}
 	}
 

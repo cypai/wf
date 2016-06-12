@@ -29,6 +29,7 @@ import com.pipai.wf.artemis.system.battleanimation.IgnoreEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.MoveEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.OverwatchEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.ReloadEventAnimationHandler;
+import com.pipai.wf.artemis.system.battleanimation.StartTurnAnimationHandler;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.BattleKeysInputProcessorSystem;
 import com.pipai.wf.artemis.system.input.InputProcessingSystem;
@@ -96,6 +97,7 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 						new AnimationHandlerControllerSystem(),
 						new IgnoreEventAnimationHandler(),
 						new AgentTextBattleEventAnimationHandler(),
+						new StartTurnAnimationHandler(),
 						new ReloadEventAnimationHandler(),
 						new OverwatchEventAnimationHandler(),
 						new MoveEventAnimationHandler())
