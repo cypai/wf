@@ -8,6 +8,8 @@ import com.pipai.wf.battle.action.component.DefaultApRequiredComponent;
 import com.pipai.wf.battle.action.verification.ActionVerifier;
 import com.pipai.wf.battle.action.verification.BaseVerifier;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.event.AgentTextBattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class WaitAction extends PerformerAction implements DefaultApRequiredComponent {
@@ -22,8 +24,9 @@ public class WaitAction extends PerformerAction implements DefaultApRequiredComp
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected BattleEvent performImpl() throws IllegalActionException {
 		getPerformer().setAP(0);
+		return new AgentTextBattleEvent(getPerformer(), "Wait");
 	}
 
 	@Override

@@ -11,6 +11,8 @@ import com.pipai.wf.battle.action.component.HasPerformerComponent;
 import com.pipai.wf.battle.action.verification.ActionVerifier;
 import com.pipai.wf.battle.action.verification.BaseVerifier;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.event.AgentTextBattleEvent;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.exception.IllegalActionException;
 
 public class EquipArmorAction extends PerformerAction implements DefaultApRequiredComponent, HasPerformerComponent {
@@ -30,13 +32,13 @@ public class EquipArmorAction extends PerformerAction implements DefaultApRequir
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected BattleEvent performImpl() throws IllegalActionException {
 		Agent performer = getPerformer();
 		LOGGER.debug("Performed by '" + performer.getName() + "' equipping "
 				+ performer.getInventory().getItemName(slot) + " at slot " + slot);
 		performer.getInventory().equipArmor(slot);
 		performer.setAP(0);
-		// logBattleEvent(event);
+		return new AgentTextBattleEvent(performer, " Equip: " + performer.getInventory().getItemName(slot));
 	}
 
 	@Override

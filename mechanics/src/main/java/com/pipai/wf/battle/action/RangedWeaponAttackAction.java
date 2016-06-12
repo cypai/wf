@@ -18,6 +18,7 @@ import com.pipai.wf.battle.action.verification.WeaponAmmoVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.WeaponDamageFunction;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.battle.event.RangedWeaponAttackEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Weapon;
@@ -56,7 +57,7 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction
 	}
 
 	@Override
-	protected void performImpl(int owPenalty) throws IllegalActionException {
+	protected BattleEvent performImpl(int owPenalty) throws IllegalActionException {
 		Agent performer = getPerformer();
 		Weapon weapon = getWeapon();
 		Agent target = getTarget();
@@ -72,7 +73,7 @@ public class RangedWeaponAttackAction extends OverwatchableTargetedAction
 			performer.setAP(0);
 		}
 		getDamageDealer().doDamage(result, target);
-		logBattleEvent(new RangedWeaponAttackEvent(performer, target, weapon, result));
+		return new RangedWeaponAttackEvent(performer, target, weapon, result);
 	}
 
 	@Override

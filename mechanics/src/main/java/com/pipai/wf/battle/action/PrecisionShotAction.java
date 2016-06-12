@@ -18,6 +18,7 @@ import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.PercentageModifier;
 import com.pipai.wf.battle.damage.PercentageModifierList;
 import com.pipai.wf.battle.damage.WeaponDamageFunction;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.battle.event.RangedWeaponAttackEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Weapon;
@@ -66,7 +67,7 @@ public class PrecisionShotAction extends TargetedAction
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected BattleEvent performImpl() throws IllegalActionException {
 		Agent attacker = getPerformer();
 		PrecisionShotAbility ability = (PrecisionShotAbility) attacker.getAbility(PrecisionShotAbility.class);
 		if (ability == null) {
@@ -89,7 +90,7 @@ public class PrecisionShotAction extends TargetedAction
 		getDamageDealer().doDamage(adjustedResult, target);
 		attacker.setAP(0);
 		ability.startCooldown();
-		logBattleEvent(new RangedWeaponAttackEvent(attacker, target, w, adjustedResult).withActionName(getName()));
+		return new RangedWeaponAttackEvent(attacker, target, w, adjustedResult).withActionName(getName());
 	}
 
 	@Override

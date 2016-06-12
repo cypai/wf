@@ -13,6 +13,7 @@ import com.pipai.wf.battle.action.verification.ActionVerifier;
 import com.pipai.wf.battle.action.verification.BaseVerifier;
 import com.pipai.wf.battle.action.verification.HasItemVerifier;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.battle.event.ReloadEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Weapon;
@@ -41,7 +42,7 @@ public class ReloadAction extends PerformerAction
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected BattleEvent performImpl() throws IllegalActionException {
 		Agent agent = getPerformer();
 		Weapon weapon = getWeapon();
 		weapon.reload();
@@ -51,7 +52,7 @@ public class ReloadAction extends PerformerAction
 		} else {
 			agent.setAP(0);
 		}
-		logBattleEvent(new ReloadEvent(agent, weapon));
+		return new ReloadEvent(agent, weapon);
 	}
 
 	@Override

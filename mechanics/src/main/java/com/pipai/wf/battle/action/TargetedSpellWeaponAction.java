@@ -18,6 +18,7 @@ import com.pipai.wf.battle.action.verification.PredicateVerifier;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.battle.damage.DamageResult;
 import com.pipai.wf.battle.damage.SpellDamageFunction;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.battle.event.RangedSpellAttackEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.SpellWeapon;
@@ -65,7 +66,7 @@ public class TargetedSpellWeaponAction extends OverwatchableTargetedAction
 	}
 
 	@Override
-	protected void performImpl(int owPenalty) throws IllegalActionException {
+	protected BattleEvent performImpl(int owPenalty) throws IllegalActionException {
 		Agent target = getTarget();
 		SpellWeapon w = (SpellWeapon) getWeapon();
 		Spell readiedSpell = w.getSpell();
@@ -76,7 +77,7 @@ public class TargetedSpellWeaponAction extends OverwatchableTargetedAction
 		getPerformer().setAP(0);
 		w.cast();
 		getDamageDealer().doDamage(result, target);
-		logBattleEvent(new RangedSpellAttackEvent(getPerformer(), target, readiedSpell, result));
+		return new RangedSpellAttackEvent(getPerformer(), target, readiedSpell, result);
 	}
 
 	@Override

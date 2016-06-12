@@ -52,6 +52,9 @@ public class BattleKeysInputProcessorSystem extends NoProcessingSystem implement
 				performOverwatch();
 				processed = true;
 				break;
+			case Keys.BACKSPACE:
+				battleSystem.getBattleController().endTurn();
+				break;
 			default:
 				break;
 			}

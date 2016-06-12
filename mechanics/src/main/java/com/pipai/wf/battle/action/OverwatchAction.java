@@ -14,6 +14,7 @@ import com.pipai.wf.battle.action.verification.HasItemVerifier;
 import com.pipai.wf.battle.action.verification.WeaponAmmoVerifier;
 import com.pipai.wf.battle.action.verification.WeaponFlagVerifier;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.battle.event.OverwatchEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.Weapon;
@@ -50,13 +51,15 @@ public class OverwatchAction extends PerformerAction implements DefaultApRequire
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected BattleEvent performImpl() throws IllegalActionException {
 		Agent performer = getPerformer();
 		// TODO: Check this, performer needs to specify weapon overwatch
 		performer.setOverwatch(overwatchAction);
-		logBattleEvent(new OverwatchEvent(getPerformer(),
-				overwatchAction instanceof RangedWeaponAttackAction ? getWeapon().getName()
-						: overwatchAction.getName()));
+
+		String overwatchName = overwatchAction instanceof RangedWeaponAttackAction
+				? getWeapon().getName()
+				: overwatchAction.getName();
+		return new OverwatchEvent(performer, overwatchName);
 	}
 
 	@Override

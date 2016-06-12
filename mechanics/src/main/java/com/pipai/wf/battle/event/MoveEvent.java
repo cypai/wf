@@ -10,6 +10,7 @@ public class MoveEvent extends BattleEvent {
 
 	public final Agent performer;
 	public final LinkedList<GridPosition> path;
+	private boolean koDuringMovement;
 
 	public MoveEvent(Agent performer, List<GridPosition> path) {
 		this.performer = performer;

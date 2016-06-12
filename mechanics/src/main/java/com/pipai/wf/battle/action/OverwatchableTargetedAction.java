@@ -9,9 +9,6 @@ import com.pipai.wf.exception.IllegalActionException;
 
 public abstract class OverwatchableTargetedAction extends TargetedAction implements TargetedComponentAggregate {
 
-	private boolean fromOverwatch;
-	private BattleEvent overwatchEventParent;
-
 	public OverwatchableTargetedAction(BattleController controller, Agent performerAgent, Agent targetAgent) {
 		super(controller, performerAgent, targetAgent);
 	}
@@ -25,28 +22,31 @@ public abstract class OverwatchableTargetedAction extends TargetedAction impleme
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
-		fromOverwatch = false;
-		performImpl(0);
+	protected BattleEvent performImpl() throws IllegalActionException {
+		return performImpl(0);
 	}
 
-	protected abstract void performImpl(int owPenalty) throws IllegalActionException;
+	/**
+	 * Same as {@link Action#performImpl()}, but with an overwatch penalty.
+	 *
+	 * @see Action#performImpl()
+	 * @param owPenalty
+	 *            amount of times the overwatch penalty is to be applied
+	 */
+	protected abstract BattleEvent performImpl(int owPenalty) throws IllegalActionException;
 
+	/**
+	 * Performs this action on Overwatch. Modifies the parent BattleEvent by adding the chain event to it.
+	 *
+	 * @param parent
+	 *            the parent event, which is modified by adding a chain event of the overwatch event details
+	 * @param target
+	 * @throws IllegalActionException
+	 */
 	public final void performOnOverwatch(BattleEvent parent, Agent target) throws IllegalActionException {
-		fromOverwatch = true;
-		overwatchEventParent = parent;
 		setTarget(target);
-		performImpl(1);
-	}
-
-	@Override
-	protected void logBattleEvent(BattleEvent ev) {
-		if (fromOverwatch) {
-			overwatchEventParent.addChainEvent(
-					new OverwatchActivationEvent(getPerformer(), getTarget(), getTarget().getPosition(), ev));
-		} else {
-			super.logBattleEvent(ev);
-		}
+		BattleEvent currentEvent = performImpl(1);
+		parent.addChainEvent(new OverwatchActivationEvent(getPerformer(), target, target.getPosition(), currentEvent));
 	}
 
 }

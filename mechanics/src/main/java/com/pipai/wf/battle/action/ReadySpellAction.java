@@ -14,6 +14,7 @@ import com.pipai.wf.battle.action.verification.HasSpellVerifier;
 import com.pipai.wf.battle.action.verification.PredicateVerifier;
 import com.pipai.wf.battle.action.verification.SpellMpVerifier;
 import com.pipai.wf.battle.agent.Agent;
+import com.pipai.wf.battle.event.BattleEvent;
 import com.pipai.wf.battle.event.ReadySpellEvent;
 import com.pipai.wf.exception.IllegalActionException;
 import com.pipai.wf.item.weapon.SpellWeapon;
@@ -58,7 +59,7 @@ public class ReadySpellAction extends PerformerAction implements ApRequiredCompo
 	}
 
 	@Override
-	protected void performImpl() throws IllegalActionException {
+	protected BattleEvent performImpl() throws IllegalActionException {
 		Agent a = getPerformer();
 		int actLevel = a.getAbilities().getActualizationLevel(spell.element());
 		if (actLevel == 0) {
@@ -71,7 +72,7 @@ public class ReadySpellAction extends PerformerAction implements ApRequiredCompo
 			quicken = false;
 		}
 		((SpellWeapon) getWeapon()).setSpell(spell);
-		logBattleEvent(new ReadySpellEvent(a, spell, quicken));
+		return new ReadySpellEvent(a, spell, quicken);
 	}
 
 	@Override

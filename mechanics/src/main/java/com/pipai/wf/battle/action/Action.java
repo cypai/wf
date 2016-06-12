@@ -1,6 +1,7 @@
 package com.pipai.wf.battle.action;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
@@ -88,7 +89,8 @@ public abstract class Action implements HasName, HasDescription, ActionInterface
 		if (!verification.isValid()) {
 			throw new IllegalActionException(verification.getReason());
 		}
-		performImpl();
+		BattleEvent ev = performImpl();
+		logBattleEvent(ev);
 		battleController.performPostActionNotifications();
 		if (this instanceof PerformerComponent) {
 			((PerformerComponent) this).getPerformer().onAction(this);
@@ -96,7 +98,13 @@ public abstract class Action implements HasName, HasDescription, ActionInterface
 		postPerform();
 	}
 
-	protected abstract void performImpl() throws IllegalActionException;
+	/**
+	 * The actual implementation of the action.
+	 * 
+	 * @return A BattleEvent containing the details of the implementation for logging
+	 * @throws IllegalActionException
+	 */
+	protected abstract BattleEvent performImpl() throws IllegalActionException;
 
 	/**
 	 * Override if anything needs to be done after the action is complete
@@ -106,6 +114,7 @@ public abstract class Action implements HasName, HasDescription, ActionInterface
 	}
 
 	protected void logBattleEvent(BattleEvent ev) {
+		Objects.requireNonNull(ev, "BattleEvent cannot be null, check actionEvent() in " + getClass());
 		if (log != null) {
 			log.logEvent(ev);
 		}
