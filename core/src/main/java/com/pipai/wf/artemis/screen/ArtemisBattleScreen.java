@@ -20,6 +20,7 @@ import com.pipai.wf.artemis.system.VelocitySystem;
 import com.pipai.wf.artemis.system.battle.AgentEntitySystem;
 import com.pipai.wf.artemis.system.battle.AiSystem;
 import com.pipai.wf.artemis.system.battle.BattleSystem;
+import com.pipai.wf.artemis.system.battle.CameraInterpolationMovementSystem;
 import com.pipai.wf.artemis.system.battle.MovableTileHighlightSystem;
 import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
 import com.pipai.wf.artemis.system.battleaction.MoveActionSystem;
@@ -27,8 +28,6 @@ import com.pipai.wf.artemis.system.battleanimation.AgentTextBattleEventAnimation
 import com.pipai.wf.artemis.system.battleanimation.AnimationHandlerControllerSystem;
 import com.pipai.wf.artemis.system.battleanimation.IgnoreEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.MoveEventAnimationHandler;
-import com.pipai.wf.artemis.system.battleanimation.OverwatchEventAnimationHandler;
-import com.pipai.wf.artemis.system.battleanimation.ReloadEventAnimationHandler;
 import com.pipai.wf.artemis.system.battleanimation.StartTurnAnimationHandler;
 import com.pipai.wf.artemis.system.init.BattleEntityCreationSystem;
 import com.pipai.wf.artemis.system.input.BattleKeysInputProcessorSystem;
@@ -93,13 +92,13 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 
 						new AiSystem(),
 
+						new CameraInterpolationMovementSystem(),
+
 						// Animation Handlers
 						new AnimationHandlerControllerSystem(),
 						new IgnoreEventAnimationHandler(),
 						new AgentTextBattleEventAnimationHandler(),
 						new StartTurnAnimationHandler(),
-						new ReloadEventAnimationHandler(),
-						new OverwatchEventAnimationHandler(),
 						new MoveEventAnimationHandler())
 				.withPassive(-1,
 						// Rendering

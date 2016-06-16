@@ -15,6 +15,8 @@ import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
 import com.pipai.wf.artemis.system.battle.AgentEntitySystem;
+import com.pipai.wf.artemis.system.battle.CameraInterpolationMovementSystem;
+import com.pipai.wf.artemis.system.battle.MovableTileHighlightSystem;
 import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
 import com.pipai.wf.battle.Team;
 import com.pipai.wf.battle.event.MoveEvent;
@@ -36,6 +38,8 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 	private TagManager tagManager;
 	private AgentEntitySystem agentEntitySystem;
 	private SelectedUnitSystem selectedUnitSystem;
+	private CameraInterpolationMovementSystem cameraInterpolationMovementSystem;
+	private MovableTileHighlightSystem movableTileHighlightSystem;
 
 	private LinkedList<GridPosition> path;
 
@@ -44,7 +48,17 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 	@Subscribe
 	public void handleMoveEvent(MoveEvent event) {
 		path = event.path;
-		moveAgent(agentEntitySystem.getAgentEntity(event.performer), path.pollFirst(), path.peekFirst());
+
+		if (event.performer.getTeam().equals(Team.ENEMY)) {
+			cameraInterpolationMovementSystem.addOneTimeCallbackOnFinish(() -> {
+				moveAgent(agentEntitySystem.getAgentEntity(event.performer), path.pollFirst(), path.peekFirst());
+			});
+			cameraInterpolationMovementSystem
+					.beginMovingCamera(TileGridPositionUtils.gridPositionToTileCenter(path.peekFirst()));
+		} else {
+			movableTileHighlightSystem.removeAllTileHighlights();
+			moveAgent(agentEntitySystem.getAgentEntity(event.performer), path.pollFirst(), path.peekFirst());
+		}
 	}
 
 	@Subscribe

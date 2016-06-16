@@ -14,11 +14,7 @@ import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Vector3;
 import com.pipai.wf.artemis.components.AgentComponent;
-import com.pipai.wf.artemis.components.EndpointsComponent;
-import com.pipai.wf.artemis.components.InterpolationComponent;
 import com.pipai.wf.artemis.components.PlayerUnitComponent;
 import com.pipai.wf.artemis.components.SelectedUnitComponent;
 import com.pipai.wf.artemis.components.XYZPositionComponent;
@@ -42,9 +38,7 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 
 	private ComponentMapper<PlayerUnitComponent> mPlayerUnit;
 	private ComponentMapper<SelectedUnitComponent> mSelectedUnit;
-	private ComponentMapper<InterpolationComponent> mInterpolation;
 	private ComponentMapper<XYZPositionComponent> mXyzPosition;
-	private ComponentMapper<EndpointsComponent> mEndpoints;
 	private ComponentMapper<AgentComponent> mAgent;
 
 	private TagManager tagManager;
@@ -53,6 +47,7 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 
 	private UiSystem uiSystem;
 	private BattleSystem battleSystem;
+	private CameraInterpolationMovementSystem cameraInterpolationMovementSystem;
 
 	private MapGraph selectedMapGraph;
 
@@ -109,24 +104,9 @@ public class SelectedUnitSystem extends IteratingSystem implements InputProcesso
 	@Override
 	protected void process(int entityId) {
 		if (processing) {
-			beginMovingCamera(mXyzPosition.get(entityId).position);
+			cameraInterpolationMovementSystem.beginMovingCamera(mXyzPosition.get(entityId).position);
 			processing = false;
 		}
-	}
-
-	private void beginMovingCamera(Vector3 destination) {
-		Entity camera = tagManager.getEntity(Tag.CAMERA.toString());
-		XYZPositionComponent cXyz = mXyzPosition.get(camera);
-		InterpolationComponent cInterpolation = mInterpolation.create(camera);
-		EndpointsComponent cEndpoints = mEndpoints.create(camera);
-		cEndpoints.start = cXyz.position.cpy();
-		cEndpoints.end = destination.cpy();
-		cEndpoints.end.z = cXyz.position.z;
-		cInterpolation.interpolation = Interpolation.sineOut;
-		// Reset t if interpolation pre-exists
-		cInterpolation.t = 0;
-		cInterpolation.maxT = 20;
-		// LOGGER.debug("Camera is moving to " + cEndpoints.end);
 	}
 
 	private void selectNext(List<Entity> party) {
