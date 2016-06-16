@@ -15,6 +15,7 @@ import com.pipai.wf.artemis.system.NoProcessingSystem;
 import com.pipai.wf.artemis.system.Tag;
 import com.pipai.wf.artemis.system.TileGridPositionUtils;
 import com.pipai.wf.artemis.system.battle.AgentEntitySystem;
+import com.pipai.wf.artemis.system.battle.BattleSystem;
 import com.pipai.wf.artemis.system.battle.CameraInterpolationMovementSystem;
 import com.pipai.wf.artemis.system.battle.MovableTileHighlightSystem;
 import com.pipai.wf.artemis.system.battle.SelectedUnitSystem;
@@ -36,6 +37,7 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 
 	private EventSystem eventSystem;
 	private TagManager tagManager;
+	private BattleSystem battleSystem;
 	private AgentEntitySystem agentEntitySystem;
 	private SelectedUnitSystem selectedUnitSystem;
 	private CameraInterpolationMovementSystem cameraInterpolationMovementSystem;
@@ -67,7 +69,9 @@ public class MoveEventAnimationHandler extends NoProcessingSystem {
 			if (path.size() > 1) {
 				moveAgent(event.entityId, path.pollFirst(), path.peekFirst());
 			} else {
-				selectedUnitSystem.updateForSelectedAgent();
+				if (battleSystem.getBattleController().getCurrentTeam().equals(Team.PLAYER)) {
+					selectedUnitSystem.updateForSelectedAgent();
+				}
 				eventSystem.dispatch(new AnimationEndEvent());
 			}
 		}
