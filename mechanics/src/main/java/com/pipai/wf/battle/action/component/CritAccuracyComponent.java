@@ -9,7 +9,7 @@ public interface CritAccuracyComponent {
 
 	default int toCrit() {
 		int critProb = getCritCalculation().total();
-		return UtilFunctions.clamp(1, 100, critProb);
+		return UtilFunctions.clamp(critProb, 1, 100);
 	}
 
 }

@@ -22,7 +22,7 @@ public class SlimeSchema extends NewUnitSchema {
 	public AbilityList getAbilities() {
 		AbilityList l = new AbilityList();
 		RegenerationAbility regen = new RegenerationAbility();
-		regen.setLevel(UtilFunctions.clamp(1, 5, level / 2));
+		regen.setLevel(UtilFunctions.clamp(level / 2, 1, 5));
 		l.add(regen);
 		FireActualizationAbility fireAbility = new FireActualizationAbility();
 		fireAbility.setLevel(1);

@@ -8,7 +8,7 @@ import com.pipai.wf.battle.action.Action;
 import com.pipai.wf.battle.action.EquipArmorAction;
 import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.item.Item;
-import com.sun.javafx.util.Utils;
+import com.pipai.wf.util.UtilFunctions;
 
 public abstract class Armor extends Item {
 
@@ -37,7 +37,7 @@ public abstract class Armor extends Item {
 	}
 
 	public void setHP(int hp) {
-		this.hp = Utils.clamp(0, hp, maxHP());
+		this.hp = UtilFunctions.clamp(hp, 0, maxHP());
 	}
 
 	/**

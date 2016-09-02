@@ -55,7 +55,7 @@ public class RangedWeaponAttackActionTest {
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Player has 1000 aim, cannot miss
 		Assert.assertTrue(ev.damageResult.isHit());
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.damageResult.getDamage());
+		int expectedHP = UtilFunctions.clamp(enemy.getMaxHP() - ev.damageResult.getDamage(), 0, enemy.getMaxHP());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
 	}

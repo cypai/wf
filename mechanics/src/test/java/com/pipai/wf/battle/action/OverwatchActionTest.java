@@ -89,8 +89,8 @@ public class OverwatchActionTest extends GdxMockedTest {
 		Assert.assertEquals(1, owEv.getChainEvents().size());
 		RangedWeaponAttackEvent attackEvent = (RangedWeaponAttackEvent) owEv.getChainEvents().get(0);
 		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(),
-				enemy.getMaxHP() - attackEvent.damageResult.getDamage());
+		int expectedHP = UtilFunctions.clamp(enemy.getMaxHP() - attackEvent.damageResult.getDamage(), 0,
+				enemy.getMaxHP());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
 	}
@@ -144,9 +144,9 @@ public class OverwatchActionTest extends GdxMockedTest {
 		Assert.assertEquals(1, owEv2.getChainEvents().size());
 		RangedWeaponAttackEvent attackEvent2 = (RangedWeaponAttackEvent) owEv2.getChainEvents().get(0);
 		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
-		int expectedHP = UtilFunctions.clamp(0,
-				enemy.getMaxHP(),
-				enemy.getMaxHP() - attackEvent1.damageResult.getDamage() - attackEvent2.damageResult.getDamage());
+		int expectedHP = UtilFunctions.clamp(enemy.getMaxHP() - attackEvent1.damageResult.getDamage() - attackEvent2.damageResult.getDamage(),
+				0,
+				enemy.getMaxHP());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 	}
 

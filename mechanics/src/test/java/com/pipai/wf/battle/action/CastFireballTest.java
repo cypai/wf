@@ -68,7 +68,7 @@ public class CastFireballTest extends GdxMockedTest {
 		Assert.assertEquals(0, ev.getChainEvents().size());
 		// Player has 1000 aim, cannot miss
 		Assert.assertTrue(ev.damageResult.isHit());
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(), enemy.getMaxHP() - ev.damageResult.getDamage());
+		int expectedHP = UtilFunctions.clamp(enemy.getMaxHP() - ev.damageResult.getDamage(), 0, enemy.getMaxHP());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
 		Assert.assertEquals(null, spellWeapon.getSpell());
@@ -125,8 +125,8 @@ public class CastFireballTest extends GdxMockedTest {
 		Assert.assertEquals(1, owEv.getChainEvents().size());
 		RangedSpellAttackEvent spellAttackEvent = (RangedSpellAttackEvent) owEv.getChainEvents().get(0);
 		// Overwatch will always have a chance to miss since it clamps before applying aim penalty
-		int expectedHP = UtilFunctions.clamp(0, enemy.getMaxHP(),
-				enemy.getMaxHP() - spellAttackEvent.damageResult.getDamage());
+		int expectedHP = UtilFunctions.clamp(enemy.getMaxHP() - spellAttackEvent.damageResult.getDamage(), 0,
+				enemy.getMaxHP());
 		Assert.assertEquals(expectedHP, enemy.getHP());
 		Assert.assertEquals(player.getMaxHP(), player.getHP());
 		Assert.assertEquals(null, spellWeapon.getSpell());

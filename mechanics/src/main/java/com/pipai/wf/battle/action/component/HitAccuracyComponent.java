@@ -9,7 +9,7 @@ public interface HitAccuracyComponent {
 
 	default int toHit() {
 		int totalAim = getHitCalculation().total();
-		return UtilFunctions.clamp(1, 100, totalAim);
+		return UtilFunctions.clamp(totalAim, 1, 100);
 	}
 
 }

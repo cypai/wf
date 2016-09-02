@@ -14,13 +14,17 @@ public final class UtilFunctions {
 		return isInRectangle(centerX - width / 2, centerY - height / 2, width, height, x, y);
 	}
 
-	public static int clamp(int min, int max, int value) {
+	public static int clamp(int value, int min, int max) {
 		if (value > max) {
 			return max;
 		} else if (value < min) {
 			return min;
 		}
 		return value;
+	}
+
+	public static int clampMax(int value, int max) {
+		return value > max ? max : value;
 	}
 
 	public static float gridPositionDistance(GridPosition pos1, GridPosition pos2) {

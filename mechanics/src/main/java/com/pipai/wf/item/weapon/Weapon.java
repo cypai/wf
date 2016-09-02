@@ -14,7 +14,7 @@ import com.pipai.wf.battle.agent.Agent;
 import com.pipai.wf.item.Item;
 import com.pipai.wf.unit.ability.Ability;
 import com.pipai.wf.unit.ability.AbilityList;
-import com.sun.javafx.util.Utils;
+import com.pipai.wf.util.UtilFunctions;
 
 public abstract class Weapon extends Item {
 
@@ -53,7 +53,7 @@ public abstract class Weapon extends Item {
 	}
 
 	public void setCurrentAmmo(int ammo) {
-		currentAmmo = Utils.clamp(0, ammo, baseAmmoCapacity());
+		currentAmmo = UtilFunctions.clamp(ammo, 0, baseAmmoCapacity());
 	}
 
 	public void reload() {

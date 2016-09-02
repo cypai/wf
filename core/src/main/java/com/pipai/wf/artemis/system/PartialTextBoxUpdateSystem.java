@@ -4,7 +4,7 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.pipai.wf.artemis.components.textbox.PartialTextComponent;
-import com.sun.javafx.util.Utils;
+import com.pipai.wf.util.UtilFunctions;
 
 public class PartialTextBoxUpdateSystem extends IteratingSystem {
 
@@ -21,7 +21,7 @@ public class PartialTextBoxUpdateSystem extends IteratingSystem {
 			cPartialText.timer -= 1;
 			if (cPartialText.timer <= 0) {
 				cPartialText.timer = cPartialText.timerSlowness;
-				int end = Utils.clampMax(cPartialText.currentText.length() + cPartialText.textUpdateRate,
+				int end = UtilFunctions.clampMax(cPartialText.currentText.length() + cPartialText.textUpdateRate,
 						cPartialText.fullText.length());
 				cPartialText.currentText = cPartialText.fullText.substring(0, end);
 			}

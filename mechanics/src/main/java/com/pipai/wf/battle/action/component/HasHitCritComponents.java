@@ -8,13 +8,13 @@ public interface HasHitCritComponents extends HitAccuracyComponent, CritAccuracy
 	@Override
 	default int toHit() {
 		int totalAim = getHitCalculation().total();
-		return UtilFunctions.clamp(1, 100, totalAim);
+		return UtilFunctions.clamp(totalAim, 1, 100);
 	}
 
 	@Override
 	default int toCrit() {
 		int critProb = getCritCalculation().total();
-		return UtilFunctions.clamp(1, 100, critProb);
+		return UtilFunctions.clamp(critProb, 1, 100);
 	}
 
 }
