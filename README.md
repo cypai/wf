@@ -45,3 +45,8 @@ If you intend to do development on this project, make sure you import wf_formatt
 
 You can probably open it in IntelliJ IDEA or other IDEs as well, but I guarantee nothing.
 
+## License
+
+This software is licensed under the terms in the file named "LICENSE" in this directory.
+
+The tree models are under a different license in the file named "LICENSE-GRAPHICS" in this directory.
