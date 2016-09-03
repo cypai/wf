@@ -45,7 +45,6 @@ import com.pipai.wf.battle.Battle;
 import com.pipai.wf.gui.BatchHelper;
 
 import net.mostlyoriginal.api.event.common.EventSystem;
-import net.mostlyoriginal.plugin.ProfilerPlugin;
 
 // SUPPRESS CHECKSTYLE ClassComplexity This class is actually fairly simple
 public class ArtemisBattleScreen extends SwitchableScreen {
@@ -59,7 +58,7 @@ public class ArtemisBattleScreen extends SwitchableScreen {
 		batch = new BatchHelper(game.getSpriteBatch(), game.getShapeRenderer(), game.getModelBatch(), game.getFont());
 
 		WorldConfiguration config = new WorldConfigurationBuilder()
-				.dependsOn(ProfilerPlugin.class)
+				// .dependsOn(ProfilerPlugin.class) // disabled because of exception on constructor init, likely due to artemis-odb update
 				// .withPassive(1, new NeedsUpdateSystem())
 				.with(
 						// Managers
